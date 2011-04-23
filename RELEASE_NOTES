@@ -1,6 +1,14 @@
 Minimum Profit Release Notes
 ============================
 
+5.2.1
+-----
+
+ - New configuration options:
+   - `mp.config.smart_bol': if set to nonzero, the `move_bol' action
+     now moves to the first non-blank character in the line, not to
+     column 0.
+
 5.2.0
 -----
 
