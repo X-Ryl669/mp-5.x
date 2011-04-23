@@ -4,6 +4,12 @@ Minimum Profit Release Notes
 5.2.1
 -----
 
+ - New features:
+   - ~/.mp_templates can be a directory. If it is, the `global' file
+   there is always read (and those templates put at the top) and it
+   will also read a file named like the current syntax highlight
+   definition (so different templates appear if your editing C, Perl,
+   etc.).
  - New configuration options:
    - `mp.config.smart_bol': if set to nonzero, the `move_bol' action
      now moves to the first non-blank character in the line, not to
