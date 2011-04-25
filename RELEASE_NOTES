@@ -4,6 +4,9 @@ Minimum Profit Release Notes
 5.2.1
 -----
 
+ - New actions:
+   - `indent_block': Indents the current line or the selected block.
+   - `unindent_block': Reverse of `indent_block'.
  - New features:
    - ~/.mp_templates can be a directory. If it is, the `global' file
    there is always read (and those templates put at the top) and it
