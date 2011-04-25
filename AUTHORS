@@ -3,7 +3,8 @@
 
 Angel Ortega - Main coding
 Jeremy Cowgar - Sessions, file sections, smart BOL,
-                templates as a directory
+                templates as a directory, indent/outdent blocks,
+                GTK fixes
 Eric Welser - Rectangular blocks
 Sebastian Vöcking - GTK improvements
 ozo Patriarch - Updated Russian translation, Russian shortcuts
