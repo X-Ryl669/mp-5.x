@@ -4,6 +4,8 @@ Minimum Profit Release Notes
 5.2.1
 -----
 
+ - Some operations are now done in separate threads, like
+   - Hexadecimal viewer loading
  - New actions:
    - `indent_block': Indents the current line or the selected block.
    - `unindent_block': Reverse of `indent_block'.

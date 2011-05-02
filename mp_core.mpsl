@@ -3,7 +3,7 @@
     Minimum Profit 5.x
     A Programmer's Text Editor
 
-    Copyright (C) 1991-2010 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -59,7 +59,7 @@ else
 mp.config.status_format = "%m%n %x,%y [%l] %R%O %s %e %t";
 mp.status_line_info = {
 	'%V'	=>	mp.VERSION,
-	'%m'	=>	sub { mp.active.txt.mod && '*' || ''; },
+	'%m'	=>	sub { mp.active.disk_op && '!' || (mp.active.txt.mod && '*' || ''); },
 	'%x'	=>	sub { mp.active.txt.x + 1; },
 	'%y'	=>	sub { mp.active.txt.y + 1; },
 	'%l'	=>	sub { size(mp.active.txt.lines); },
