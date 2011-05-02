@@ -549,7 +549,7 @@ sub mp.open(filename)
 }
 
 
-sub mp.hex_view_th(f, d)
+sub mp.hex_view_th(filename, d)
 /* mp.hex_view() helper */
 {
     local c;
@@ -557,6 +557,8 @@ sub mp.hex_view_th(f, d)
     local offset = 0;
 
     local lines = d.txt.lines;
+
+    local f = open(filename, 'rb');
 
     while (1) {
         if ((c = getchar(f)) != NULL)
@@ -609,14 +611,14 @@ sub mp.hex_view(filename)
     local d = NULL;
 
     if ((f = open(filename, "rb")) != NULL) {
-        local lines =   [];
+        close(f);
 
-        d = mp.new('<' ~ filename ~ ' hex view>', lines);
+        d = mp.new('<' ~ filename ~ ' hex view>', []);
         d.read_only = 1;
         d.syntax = mp.syntax.hex_view;
         d.disk_op = 1;
 
-        &mp.hex_view_th(f, d);
+        &mp.hex_view_th(filename, d);
     }
 
     return d;
