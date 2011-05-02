@@ -549,60 +549,71 @@ sub mp.open(filename)
 }
 
 
+sub mp.hex_view_th(f, d)
+/* mp.hex_view() helper */
+{
+    local c;
+    local l      = [];
+    local offset = 0;
+
+    local lines = d.txt.lines;
+
+    while (1) {
+        if ((c = getchar(f)) != NULL)
+            push(l, c);
+
+        if (size(l) == 16 || c == NULL) {
+            local h = '';
+            local a = ' ';
+
+            /* add hex view */
+            foreach (v, l) {
+                h = h ~ sprintf(' %02X', ord(v));
+
+                if (ord(v) == 0x0a)
+                    v = "\x{00b6}";
+                else
+                if (ord(v) < 32 || ord(v) > 126)
+                    v = "\x{00b7}";
+
+                a = a ~ v;
+            }
+
+            local n = 16 - size(l);
+
+            /* fill up to 16 */
+            while (n--) {
+                h = h ~ '   ';
+                a = a ~ ' ';
+            }
+
+            push(lines, join([ sprintf('| %06X', offset), h, a, ''], ' |'));
+            offset += 16;
+            l = [];
+
+            if (c == NULL)
+                break;
+        }
+    }
+
+    close(f);
+}
+
+
 sub mp.hex_view(filename)
 /* shows a file as an hex dump */
 {
-    local f, c;
+    local f;
     local d = NULL;
 
     if ((f = open(filename, "rb")) != NULL) {
         local lines =   [];
-        local l =       [];
-        local offset =  0;
 
         d = mp.new('<' ~ filename ~ ' hex view>', lines);
         d.read_only = 1;
         d.syntax = mp.syntax.hex_view;
 
-        while (1) {
-            if ((c = getchar(f)) != NULL)
-                push(l, c);
-
-            if (size(l) == 16 || c == NULL) {
-                local h = '';
-                local a = ' ';
-
-                /* add hex view */
-                foreach (v, l) {
-                    h = h ~ sprintf(' %02X', ord(v));
-
-                    if (ord(v) == 0x0a)
-                        v = "\x{00b6}";
-                    else
-                    if (ord(v) < 32 || ord(v) > 126)
-                        v = "\x{00b7}";
-
-                    a = a ~ v;
-                }
-
-                local n = 16 - size(l);
-
-                /* fill up to 16 */
-                while (n--) {
-                    h = h ~ '   ';
-                    a = a ~ ' ';
-                }
-
-                push(lines, join([ sprintf('| %06X', offset), h, a, ''], ' |'));
-                offset += 16;
-                l = [];
-
-                if (c == NULL)
-                    break;
-            }
-        }
-
-        close(f);
+        mp.hex_view_th(f, d);
     }
 
     return d;
