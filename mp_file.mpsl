@@ -332,6 +332,8 @@ sub mp.save_th(f, doc)
 {
     local nl = 0;
 
+    doc.disk_op = 1;
+
     /* save as a plain text file */
     foreach (l, doc.txt.lines) {
         /* write a line separator if it's not the first line */
@@ -341,6 +343,8 @@ sub mp.save_th(f, doc)
         write(f, l);
         nl++;
     }
+
+    doc.disk_op = 0;
 
     close(f);
 
