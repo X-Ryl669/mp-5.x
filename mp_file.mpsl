@@ -331,6 +331,7 @@ sub mp.save_th(f, doc)
 /* mp.save() helper */
 {
     local nl = 0;
+    local eol = doc.eol || mp.config.eol;
 
     doc.disk_op = 1;
 
@@ -338,7 +339,7 @@ sub mp.save_th(f, doc)
     foreach (l, doc.txt.lines) {
         /* write a line separator if it's not the first line */
         if (nl)
-            write(f, doc.eol || mp.config.eol);
+            write(f, eol);
 
         write(f, l);
         nl++;
