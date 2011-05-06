@@ -372,11 +372,13 @@ sub mp.save(doc)
         ret = -1;
     }
     else {
+        ret = 0;
+
         /* if the document has a password, save it encrypted */
         if (doc.password)
-            ret = mp.crypt1_save(f, doc.txt.lines, doc.password);
+            mp.crypt1_save(f, doc.txt.lines, doc.password);
         else
-            ret = mp.save_th(f, doc);
+            mp.save_th(f, doc);
     
         doc.txt.mod = 0;
     
