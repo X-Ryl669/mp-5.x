@@ -168,6 +168,8 @@ sub mp.crypt1_save(fd, lines, password)
 		nl++;
 	}
 
+    close(fd);
+
 	return nl;
 }
 
