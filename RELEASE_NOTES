@@ -19,6 +19,10 @@ Minimum Profit Release Notes
    - `mp.config.smart_bol': if set to nonzero, the `move_bol' action
      now moves to the first non-blank character in the line instead of
      to column 0 (unless the cursor is already on the first non-blank).
+ - Other improvements:
+   - The following actions accept additional arguments when called
+     as functions:
+     - `exec_command'
 
 5.2.0
 -----

@@ -133,55 +133,62 @@ mp.actions['sync'] = sub (d) {
 		mp.actions.save(d);
 };
 
-mp.actions['exec_command']	= sub (d) {
+mp.actions['exec_command']	= sub (d, cmd) {
 
-	local t = mp.form( [
-		{ 'label' => L("System command:"),
-		  'type' => 'text',
-		  'history' => 'system' }
-		]);
+    if (cmd == NULL) {
+        local t = mp.form(
+            [
+                {
+                    'label' => L("System command:"),
+                    'type' => 'text',
+                    'history' => 'system'
+                }
+            ]
+        );
 
-	if (t != NULL) {
-		local cmd = t[0];
+        if (t != NULL)
+            cmd = t[0];
+    }
+    
+    if (cmd != NULL) {
+        /* does it start with a pipe? */
+        if (regex(cmd, '/^\|/')) {
+            local p;
 
-		/* does it start with a pipe? */
-		if (regex(cmd, '/^\|/')) {
-			local p;
+            /* yes; current document should be fed to it */
+            cmd = sregex(cmd, '/^\|/');
 
-			/* yes; current document should be fed to it */
-			cmd = sregex(cmd, '/^\|/');
+            if ((p = popen(cmd, "w")) != NULL) {
+                foreach (l, mp.get_active_area(d))
+                    write(p, l ~ mp.config.eol);
 
-			if ((p = popen(cmd, "w")) != NULL) {
-				foreach (l, mp.get_active_area(d))
-					write(p, l ~ mp.config.eol);
+                pclose(p);
+            }
+            else
+                mp.drv.alert(
+                    sprintf(L("Error writing to command '%s'"), cmd));
+        }
+        else {
+            /* no; execute command and insert into cursor */
+            local p;
 
-				pclose(p);
-			}
-			else
-				mp.drv.alert(
-					sprintf(L("Error writing to command '%s'"), cmd));
-		}
-		else {
-			/* no; execute command and insert into cursor */
-			local p;
+            if ((p = popen(cmd, "r")) != NULL) {
+                local l;
 
-			if ((p = popen(cmd, "r")) != NULL) {
-				local l;
+                mp.store_undo(d);
 
-				mp.store_undo(d);
+                while ((l = read(p)) != NULL) {
+                    mp.insert(d, mp.chomp(l));
+                    mp.insert_newline(d);
+                }
 
-				while ((l = read(p)) != NULL) {
-					mp.insert(d, mp.chomp(l));
-					mp.insert_newline(d);
-				}
-
-				pclose(p);
-			}
-			else
-				mp.drv.alert(
-					sprintf(L("Error reading from command '%s'"), cmd));
-		}
-	}
+                pclose(p);
+            }
+            else
+                mp.drv.alert(
+                    sprintf(L("Error reading from command '%s'"), cmd));
+        }
+    }
 };
 
 mp.actions['filter_selection'] = sub (d) {
