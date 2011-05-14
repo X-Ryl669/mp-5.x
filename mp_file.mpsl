@@ -189,6 +189,8 @@ mp.actions['exec_command']	= sub (d, cmd) {
                     sprintf(L("Error reading from command '%s'"), cmd));
         }
     }
+
+    return d;
 };
 
 mp.actions['filter_selection'] = sub (d) {
