@@ -28,14 +28,16 @@
 /** editor actions **/
 
 mp.actions['new']	= sub (d) {
-	d = mp.find_file_by_name(L("<unnamed>"));
+    d = mp.find_file_by_name(L("<unnamed>"));
 
-	if (d != -1) {
-		mp.active_i = d;
-		d = mp.active();
-	}
-	else
-		d = mp.new();
+    if (d != -1) {
+        mp.active_i = d;
+        d = mp.active();
+    }
+    else
+        d = mp.new();
+
+    return d;
 };
 
 mp.actions['next']	= sub (d) { mp.next(); };
@@ -61,78 +63,83 @@ mp.actions['save_as']	= sub (d, newname) {
 
 mp.actions['save']	= sub (d) {
 
-	/* name is <unnamed> or something similar; ask for one */
-	if (regex(d.name, "/^<.+>$/"))
-		mp.actions.save_as(d);
-	else
-	if (mp.long_op(mp.save, d) == -1)
-		mp.alert(sprintf(L("Error saving file: %s"), ERRNO));
+    /* name is <unnamed> or something similar; ask for one */
+    if (regex(d.name, "/^<.+>$/"))
+        mp.actions.save_as(d);
+    else
+    if (mp.long_op(mp.save, d) == -1)
+        mp.alert(sprintf(L("Error saving file: %s"), ERRNO));
+
+    return d;
 };
 
 mp.actions['close']	= sub (d) {
 
-	if (d.txt.mod) {
-		local r;
-		r = mp.confirm(L("File has changed. Save changes?"));
+    if (d.txt.mod) {
+        local r;
+        r = mp.confirm(L("File has changed. Save changes?"));
 
-		/* cancel? don't close */
-		if (r == 0)
-			return;
-		if (r == 1)
-			mp.actions.save(d);
-	}
+        /* cancel? don't close */
+        if (r == 0)
+            return;
+        if (r == 1)
+            mp.actions.save(d);
+    }
 
-	mp.close();
+    mp.close();
 };
 
 mp.actions['exit']	= sub (d) {
+    if (mp.config.auto_sessions)
+        mp.save_session();
 
-	local s;
-
-	if (mp.config.auto_sessions)
-		mp.save_session();
-
-	if (mp.actions.close_all())
-		mp.exit();
+    if (mp.actions.close_all())
+        mp.exit();
 };
 
 mp.actions['open']	= sub (d) {
 
-	local n;
+    local n;
 
-	if ((n = mp.openfile(L("File to open:"))) != NULL && n ne "")
-		if (mp.long_op(mp.open, n) == NULL && ERRNO != NULL)
-			mp.alert(sprintf("Error opening '%s': %s", n, ERRNO));
+    if ((n = mp.openfile(L("File to open:"))) != NULL && n ne "")
+        if (mp.long_op(mp.open, n) == NULL && ERRNO != NULL)
+            mp.alert(sprintf("Error opening '%s': %s", n, ERRNO));
+
+    return n;
 };
 
 mp.actions['revert']	= sub (d) {
-	/* save current name */
-	local p = d.name;
+    /* save current name */
+    local p = d.name;
 
-	if (d.txt.mod) {
-		local r;
-		r = mp.confirm(L("File has changed. Are you sure?"));
+    if (d.txt.mod) {
+        local r;
+        r = mp.confirm(L("File has changed. Are you sure?"));
 
-		/* cancel? don't close */
-		if (r == 0 || r == 2)
-			return;
-	}
+        /* cancel? don't close */
+        if (r == 0 || r == 2)
+            return d;
+    }
 
-	mp.close();
-	if (mp.long_op(mp.open, p) == NULL && ERRNO != NULL)
-		mp.alert(sprintf("Error opening '%s': %s", p, ERRNO));
+    mp.close();
+    if (mp.long_op(mp.open, p) == NULL && ERRNO != NULL)
+        mp.alert(sprintf("Error opening '%s': %s", p, ERRNO));
+
+    return d;
 };
 
 mp.actions['open_config_file']	= sub (d) {
 
-	mp.open(HOMEDIR ~ ".mp.mpsl");
+    mp.open(HOMEDIR ~ ".mp.mpsl");
 };
 
 mp.actions['sync'] = sub (d) {
 
-	/* save all modified documents */
-	foreach (d, grep(mp.docs, sub (e) { e.txt.mod; }))
-		mp.actions.save(d);
+    /* save all modified documents */
+    foreach (d, grep(mp.docs, sub (e) { e.txt.mod; }))
+        mp.actions.save(d);
+
+    return d;
 };
 
 mp.actions['exec_command']	= sub (d, cmd) {
@@ -247,60 +254,67 @@ mp.actions['filter_selection'] = sub (d, cmd) {
 
 mp.actions['close_all'] = sub {
 
-	local s;
+    local s;
 
-	while (s = size(mp.docs)) {
-		local doc = mp.docs[mp.active_i];
+    while (s = size(mp.docs)) {
+        local doc = mp.docs[mp.active_i];
 		
-		/* close current document */
-		mp.actions.close(doc);
+        /* close current document */
+        mp.actions.close(doc);
 
-		/* if the size of the list hasn't changed,
-		   action was cancelled, so don't exit */
-		if (s == size(mp.docs))
-			return 0;
-	}
+        /* if the size of the list hasn't changed,
+            action was cancelled, so don't exit */
+        if (s == size(mp.docs))
+            return 0;
+    }
 
-	return 1;
+    return 1;
 };
 
 mp.actions['open_under_cursor'] = sub (d) {
-	local w;
+    	local w;
 
-	/* is the word under cursor file:line: ? */
-	if ((w = mp.get_word(d, '/[a-z\._0-9\/ :-]+:[0-9]+: ?/i')) != NULL) {
-		w = split(w, ':');
+    /* is the word under cursor file:line: ? */
+    if ((w = mp.get_word(d, '/[a-z\._0-9\/ :-]+:[0-9]+: ?/i')) != NULL) {
+        w = split(w, ':');
 
-		/* drop garbage */
-		pop(w);
+        /* drop garbage */
+        pop(w);
 
-		/* pick the line */
-		local l = pop(w) - 1;
+        /* pick the line */
+        local l = pop(w) - 1;
 
-		/* open the file, rejoining with : */
-		local n = mp.open(join(w, ':'));
+        /* open the file, rejoining with : */
+        local n = mp.open(join(w, ':'));
 
-		/* now move to the line */
-		mp.search_set_y(n, l);
-	}
-	else
-	if ((w = mp.get_word(d, '/[a-z\._0-9\/:-]+/i')) != NULL) {
-		mp.open(w);
-	}
+        /* now move to the line */
+        mp.search_set_y(n, l);
+
+        d = n;
+    }
+    else
+    if ((w = mp.get_word(d, '/[a-z\._0-9\/:-]+/i')) != NULL) {
+        d = mp.open(w);
+    }
+
+    return d;
 };
 
 mp.actions['hex_view']	= sub (d) {
-
 	local n;
 
 	if ((n = mp.openfile(L("File to open:"))) != NULL && n ne "")
 		if (mp.long_op(mp.hex_view, n) == NULL && ERRNO != NULL)
 			mp.alert(sprintf("Error opening '%s': %s", n, ERRNO));
+        else
+            d = n;
+
+    return d;
 };
 
 mp.actions['open_dropped_files'] = sub (d) {
-	while (size(mp.dropped_files))
-		mp.open(shift(mp.dropped_files));
+    while (size(mp.dropped_files))
+        mp.open(shift(mp.dropped_files));
 };
 
 
