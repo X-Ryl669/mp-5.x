@@ -5,7 +5,7 @@
 
     Movement.
 
-    Copyright (C) 1991-2007 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -27,24 +27,23 @@
 
 /** editor actions **/
 
-mp.actions['move_left']	 	= sub (d) { mp.move(d, mp.move_left); };
-mp.actions['move_right'] 	= sub (d) { mp.move(d, mp.move_right); };
-mp.actions['move_up']		= sub (d) { mp.move(d, mp.move_up); };
-mp.actions['move_down']		= sub (d) { mp.move(d, mp.move_down); };
-mp.actions['move_pgup']		= sub (d) { mp.move(d, mp.move_pgup); };
-mp.actions['move_pgdn']		= sub (d) { mp.move(d, mp.move_pgdn); };
-mp.actions['move_bol']		= sub (d) { 
-	if (mp.config.smart_bol) {
-		mp.move(d, mp.move_bol_smart); 
-	} else {
-		mp.move(d, mp.move_bol); 
-	}
+mp.actions['move_left']         = sub (d) { mp.move(d, mp.move_left); };
+mp.actions['move_right']        = sub (d) { mp.move(d, mp.move_right); };
+mp.actions['move_up']           = sub (d) { mp.move(d, mp.move_up); };
+mp.actions['move_down']         = sub (d) { mp.move(d, mp.move_down); };
+mp.actions['move_pgup']         = sub (d) { mp.move(d, mp.move_pgup); };
+mp.actions['move_pgdn']         = sub (d) { mp.move(d, mp.move_pgdn); };
+mp.actions['move_bol']          = sub (d) { 
+    if (mp.config.smart_bol)
+        mp.move(d, mp.move_bol_smart); 
+    else
+        mp.move(d, mp.move_bol); 
 };
-mp.actions['move_eol']		= sub (d) { mp.move(d, mp.move_eol); };
-mp.actions['move_bof']		= sub (d) { mp.move(d, mp.move_bof); };
-mp.actions['move_eof']		= sub (d) { mp.move(d, mp.move_eof); };
-mp.actions['move_word_left']	= sub (d) { mp.move(d, mp.move_word_left); };
-mp.actions['move_word_right']	= sub (d) { mp.move(d, mp.move_word_right); };
+mp.actions['move_eol']          = sub (d) { mp.move(d, mp.move_eol); };
+mp.actions['move_bof']          = sub (d) { mp.move(d, mp.move_bof); };
+mp.actions['move_eof']          = sub (d) { mp.move(d, mp.move_eof); };
+mp.actions['move_word_left']    = sub (d) { mp.move(d, mp.move_word_left); };
+mp.actions['move_word_right']   = sub (d) { mp.move(d, mp.move_word_right); };
 
 mp.actions['goto']		= sub (d) {
 	local y = mp.form( [
@@ -60,44 +59,51 @@ mp.actions['goto']		= sub (d) {
 };
 
 mp.actions['move_to_mouse_position']	= sub (d) {
+    /* move the cursor there */
+    mp.move_to_coords_xy(d, mp.mouse_x, mp.mouse_y);
 
-	/* move the cursor there */
-	mp.move_to_coords_xy(d, mp.mouse_x, mp.mouse_y);
+    /* mouse click always unmarks */
+    mp.unmark(d);
 
-	/* mouse click always unmarks */
-	mp.unmark(d);
+    return d;
 };
 
 mp.actions['move_mouse_wheel_up']	= sub (d) {
-	mp.move(d, sub (d) {
-		mp.move_up(d);
-		mp.move_up(d);
-		mp.move_up(d);
-		mp.move_up(d);
-	});
+    mp.move(d, sub (d) {
+        mp.move_up(d);
+        mp.move_up(d);
+        mp.move_up(d);
+        mp.move_up(d);
+    });
 };
 
 mp.actions['move_mouse_wheel_down']	= sub (d) {
-	mp.move(d, sub(d) {
-		mp.move_down(d);
-		mp.move_down(d);
-		mp.move_down(d);
-		mp.move_down(d);
-	});
+    mp.move(d, sub(d) {
+        mp.move_down(d);
+        mp.move_down(d);
+        mp.move_down(d);
+        mp.move_down(d);
+    });
 };
 
 mp.actions['document_list'] = sub (d) {
+    local r = mp.form(
+        [
+            {
+                'label' => L("Document list"),
+                'type'  => 'list',
+                'list'  => mp.get_doc_names(60),
+                'value' => mp.active_i
+            }
+        ]
+    );
 
-	local r = mp.form( [
-		{ 'label'	=>	L("Document list"),
-		  'type'	=>	'list',
-		  'list'	=>	mp.get_doc_names(60),
-		  'value'	=>	mp.active_i
-		} ]
-	);
+    if (r[0] != NULL) {
+        mp.active_i = r[0];
+        d = mp.active();
+    }
 
-	if (r[0] != NULL)
-		mp.active_i = r[0];
+    return d;
 };
 
 /** default key bindings **/
