@@ -45,17 +45,28 @@ mp.actions['move_eof']          = sub (d) { mp.move(d, mp.move_eof); };
 mp.actions['move_word_left']    = sub (d) { mp.move(d, mp.move_word_left); };
 mp.actions['move_word_right']   = sub (d) { mp.move(d, mp.move_word_right); };
 
-mp.actions['goto']		= sub (d) {
-	local y = mp.form( [
-		{ 'label'	=> L("Line to go to:"),
-		  'type'	=> 'text',
-		  'history'	=> 'goto' }
-		]);
+mp.actions['goto']		= sub (d, line) {
+    if (line == NULL) {
+        local t = mp.form(
+            [
+                {
+                    'label'     => L("Line to go to:"),
+                    'type'      => 'text',
+                    'history'   => 'goto'
+                }
+            ]
+        );
 
-	if (y != NULL && y[0] >= 1) {
-		d.txt.x = 0;
-		mp.set_y(d, y[0] - 1);
-	}
+        if (t != NULL && t[0] >= 1)
+            line = t[0];
+    }
+
+    if (line != NULL) {
+        d.txt.x = 0;
+        mp.set_y(d, line - 1);
+    }
+
+    return d;
 };
 
 mp.actions['move_to_mouse_position']	= sub (d) {
