@@ -41,20 +41,22 @@ mp.actions['new']	= sub (d) {
 mp.actions['next']	= sub (d) { mp.next(); };
 mp.actions['prev']	= sub (d) { mp.prev(); };
 
-mp.actions['save_as']	= sub (d) {
+mp.actions['save_as']	= sub (d, newname) {
 
-	local t;
+    if (newname == NULL)
+        newname = mp.savefile(L("Save file as:"));
 
-	if ((t = mp.savefile(L("Save file as:"))) == NULL)
-		return;
+    if (newname != NULL) {
+        /* store new name */
+        d.name = newname;
 
-	/* store new name */
-	d.name = t;
+        if (mp.long_op(mp.save, d) == -1)
+            mp.alert(sprintf(L("Error saving file: %s"), ERRNO));
+        else
+            mp.detect_syntax(d);
+    }
 
-	if (mp.long_op(mp.save, d) == -1)
-		mp.alert(sprintf(L("Error saving file: %s"), ERRNO));
-	else
-		mp.detect_syntax(d);
+    return d;
 };
 
 mp.actions['save']	= sub (d) {
