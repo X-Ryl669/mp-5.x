@@ -29,10 +29,13 @@
 /** editor actions **/
 
 mp.actions['insert_line']	= sub (d) {
-	mp.store_undo(d);
-	mp.insert_newline(d);
+    mp.store_undo(d);
+    mp.insert_newline(d);
 
-	if (d.syntax == NULL) mp.detect_syntax(d);
+    if (d.syntax == NULL)
+        mp.detect_syntax(d);
+
+    return d;
 };
 
 mp.actions['delete_line']       = sub (d) { mp.store_undo(d); mp.delete_line(d); };
@@ -42,86 +45,93 @@ mp.actions['insert_real_tab']   = sub (d) { mp.store_undo(d); mp.insert(d, "\t")
 mp.actions['delete']            = sub (d) { mp.store_undo(d); mp.delete_char(d); };
 
 mp.actions['delete_left']	= sub (d) {
-	if (d.txt.x + d.txt.y) {
-		mp.store_undo(d);
-		mp.move_left(d);
-		mp.delete_char(d);
-	}
+    if (d.txt.x + d.txt.y) {
+        mp.store_undo(d);
+        mp.move_left(d);
+        mp.delete_char(d);
+    }
+
+    return d;
 };
 
 mp.actions['indent_block'] = sub (d) {
-	mp.store_undo(d);
+    mp.store_undo(d);
 
-	if (d.txt.mark == NULL) {
-		mp.move(d, mp.move_bol);
-		mp.insert_tab(d);
-		return;
-	}
+    if (d.txt.mark == NULL) {
+        mp.move(d, mp.move_bol);
+        mp.insert_tab(d);
+    }
+	else {
+        local currentY = d.txt.y;
+        local startY   = d.txt.mark.by;
+        local endY     = d.txt.mark.ey;
+        local times    = endY - startY;
 	
-	local currentY = d.txt.y;
-	local startY   = d.txt.mark.by;
-	local endY     = d.txt.mark.ey;
-	local times    = endY - startY;
+        mp.unmark(d);
 	
-	mp.unmark(d);
-	
-	mp.set_y(d, startY);
-	/* use to be while d.txt.y <= endY, but that entered an endless loop when
-	   you were indenting a block including the very last line in the file */
-	while (times >= 0) {
-		mp.move(d, mp.move_bol);
-		mp.insert_tab(d);
-		mp.move(d, mp.move_down);
+        mp.set_y(d, startY);
+
+        /* use to be while d.txt.y <= endY, but that entered an endless loop when
+            you were indenting a block including the very last line in the file */
+        while (times >= 0) {
+            mp.move(d, mp.move_bol);
+            mp.insert_tab(d);
+            mp.move(d, mp.move_down);
 		
-		times--;
-	}
+            times--;
+        }
 	
-	mp.set_y(d, startY);
-	mp.move(d, mp.move_bol);
-	mp.mark(d);
+        mp.set_y(d, startY);
+        mp.move(d, mp.move_bol);
+        mp.mark(d);
 	
-	mp.set_y(d, endY);
-	mp.move(d.mp_move_eol);
-	mp.mark(d);
+        mp.set_y(d, endY);
+        mp.move(d.mp_move_eol);
+        mp.mark(d);
 	
-	mp.set_y(d, currentY);
+        mp.set_y(d, currentY);
+    }
+
+    return d;
 };
 
 mp.actions['unindent_block'] = sub(d) {
-	mp.store_undo(d);
+    mp.store_undo(d);
 
-	if (d.txt.mark == NULL) {
-		mp.unindent_line(d);
-		return;
-	}
+    if (d.txt.mark == NULL) {
+        mp.unindent_line(d);
+    }
+    else {
+        local currentY = d.txt.y;
+        local startY   = d.txt.mark.by;
+        local endY     = d.txt.mark.ey;
+        local times    = endY - startY;
 	
-	local currentY = d.txt.y;
-	local startY   = d.txt.mark.by;
-	local endY     = d.txt.mark.ey;
-	local times    = endY - startY;
+        mp.unmark(d);
 	
-	mp.unmark(d);
+        mp.set_y(d, startY);
 	
-	mp.set_y(d, startY);
-	
-	/* use to be while d.txt.y <= endY, but that entered an endless loop when
-	   you were unindenting a block including the very last line in the file */
-	while (times >= 0) {
-		mp.unindent_line(d);
-		mp.move(d, mp.move_down);
+        /* use to be while d.txt.y <= endY, but that entered an endless loop when
+            you were unindenting a block including the very last line in the file */
+        while (times >= 0) {
+            mp.unindent_line(d);
+            mp.move(d, mp.move_down);
 		
-		times--;
-	}
+            times--;
+        }
 	
-	mp.set_y(d, startY);
-	mp.move(d, mp.move_bol);
-	mp.mark(d);
+        mp.set_y(d, startY);
+        mp.move(d, mp.move_bol);
+        mp.mark(d);
 	
-	mp.set_y(d, endY);
-	mp.move(d.mp_move_eol);
-	mp.mark(d);
+        mp.set_y(d, endY);
+        mp.move(d.mp_move_eol);
+        mp.mark(d);
 	
-	mp.set_y(d, currentY);
+        mp.set_y(d, currentY);
+    }
+
+    return d;
 };
 
 mp.actions['undo']		= sub (d) { mp.undo(d); };
@@ -150,6 +160,8 @@ mp.actions['join_paragraph'] = sub (d) {
     }
     else
         mp.join_paragraph(d);
+
+    return d;
 };
 
 mp.actions['word_wrap_paragraph'] = sub (d) {
@@ -180,6 +192,8 @@ mp.actions['word_wrap_paragraph'] = sub (d) {
         else
             mp.word_wrap_paragraph(d);
     }
+
+    return d;
 };
 
 mp.actions['line_options']	= sub (d) {
@@ -733,4 +747,6 @@ sub mp.unindent_line(d)
 			i++;
 		}
 	}
+
+    return d;
 }
