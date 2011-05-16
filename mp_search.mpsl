@@ -5,7 +5,7 @@
 
     Search and replace.
 
-    Copyright (C) 1991-2009 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -34,115 +34,146 @@ mp.config.recursive_grep = 0;
 /** editor actions **/
 
 mp.actions['seek'] 	= sub (d) {
-	local t = mp.form( [
-		{ 'label'	=> L("Text to seek:"),
-		  'type'	=> 'text',
-		  'history'	=> 'search' },
-		{ 'label'	=> L("Case sensitive") ~ ':',
-		  'type'	=> 'checkbox',
-		  'value'	=> mp.config.case_sensitive_search }
-	] );
+    local t = mp.form(
+        [
+            {
+                'label'     => L("Text to seek:"),
+                'type'      => 'text',
+                'history'   => 'search'
+            },
+            {
+                'label'     => L("Case sensitive") ~ ':',
+                'type'      => 'checkbox',
+                'value'     => mp.config.case_sensitive_search
+            }
+        ]
+    );
 
-	if (t != NULL) {
-		mp.config.case_sensitive_search = t[1];
+    if (t != NULL) {
+        mp.config.case_sensitive_search = t[1];
 
-		mp.long_op(mp.search, d, mp.backslash_codes(t[0])) ||
-			mp.alert(L("Text not found."));
-	}
+        mp.long_op(mp.search, d, mp.backslash_codes(t[0])) ||
+            mp.alert(L("Text not found."));
+    }
+
+    return d;
 };
 
-mp.actions['seek_next']	= sub (d) { mp.long_op(mp.search, d, NULL) ||
-		mp.alert(L("Text not found."));
-	};
+mp.actions['seek_next']	= sub (d) {
+    mp.long_op(mp.search, d, NULL) || mp.alert(L("Text not found."));
 
-mp.actions['seek_prev']	= sub (d) { mp.long_op(mp.search_back, d, NULL) ||
-		mp.alert(L("Text not found."));
-	};
+    return d;
+};
+
+mp.actions['seek_prev']	= sub (d) {
+    mp.long_op(mp.search_back, d, NULL) || mp.alert(L("Text not found."));
+
+    return d;
+};
 
 mp.actions['replace']	= sub (d) {
+    local r = mp.form(
+        [
+            {
+                'label'     => L("Replace text:"),
+                'type'      => 'text',
+                'history'   => 'search'
+            },
+            {
+                'label'     => L("Replace with:"),
+                'type'      => 'text',
+                'history'   => 'replace'
+            },
+            {
+                'label'     => L("Case sensitive") ~ ':',
+                'type'      => 'checkbox',
+                'value'     => mp.config.case_sensitive_search
+            },
+            {
+                'label'     => L("Global replace:"),
+                'type'      => 'checkbox',
+                'value'     => mp.config.global_replace
+            }
+        ]
+    );
 
-	local r = mp.form( [
-		{ 'label'	=> L("Replace text:"),
-		  'type'	=> 'text',
-		  'history'	=> 'search'},
-		{ 'label'	=> L("Replace with:"),
-		  'type'	=> 'text',
-		  'history'	=> 'replace'},
-		{ 'label'	=> L("Case sensitive") ~ ':',
-		  'type'	=> 'checkbox',
-		  'value'	=> mp.config.case_sensitive_search },
-		{ 'label'	=> L("Global replace:"),
-		  'type'	=> 'checkbox',
-		  'value'	=> mp.config.global_replace }
-	] );
+    if (r != NULL) {
+        mp.config.case_sensitive_search = r[2];
+        mp.config.global_replace = r[3];
 
-	if (r != NULL) {
-		mp.config.case_sensitive_search = r[2];
-		mp.config.global_replace = r[3];
+        mp.store_undo(d);
+        mp.long_op(mp.replace, d, mp.backslash_codes(r[0]), mp.backslash_codes(r[1]));
+    }
 
-		mp.store_undo(d);
-		mp.long_op(mp.replace, d, mp.backslash_codes(r[0]), mp.backslash_codes(r[1]));
-	}
+    return d;
 };
 
 mp.actions['seek_next_char'] = sub (d) { mp.seek_prev_or_next_char(d, mp.search); };
 mp.actions['seek_prev_char'] = sub (d) { mp.seek_prev_or_next_char(d, mp.search_back); };
 
 mp.actions['grep']	= sub (d) {
+    local r = mp.form(
+        [
+            {
+                'label'     => L("Text to seek:"),
+                'type'      => 'text',
+                'history'   => 'search'
+            },
+            {
+                'label'     => L("Files to grep (empty, all):"),
+                'type'      => 'text',
+                'history'   => 'grep'
+            },
+            {
+                'label'     => L("Base directory (empty, current):"),
+                'type'      => 'text',
+                'history'   => 'grep_base'
+            },
+            {
+                'label'     => L("Recursive?"),
+                'type'      => 'checkbox',
+                'value'     => mp.config.recursive_grep
+            }
+        ]
+    );
 
-	local r = mp.form( [
-		{ 'label'	=> L("Text to seek:"),
-		  'type'	=> 'text',
-		  'history'	=> 'search' },
-		{ 'label'	=> L("Files to grep (empty, all):"),
-		  'type'	=> 'text',
-		  'history'	=> 'grep' },
-		{ 'label'	=> L("Base directory (empty, current):"),
-		  'type'	=> 'text',
-		  'history'	=> 'grep_base' },
-		{ 'label'	=> L("Recursive?"),
-		  'type'	=> 'checkbox',
-		  'value'	=> mp.config.recursive_grep }
-	] );
+    if (r != NULL && r[0] ne '') {
+        mp.config.recursive_grep = r[3];
 
-	if (r != NULL && r[0] ne '') {
+        local t = '<grep ' ~ r[0] ~ ' ' ~ r[1] ~ '>';
 
-		mp.config.recursive_grep = r[3];
+        if ((r = mp.long_op(mp.grep, '/' ~ r[0] ~ '/', r[1], r[2], r[3])) == NULL)
+            mp.alert(L("File(s) not found."));
+        else
+        if (size(r) == 0)
+            mp.alert(L("Text not found."));
+        else {
+            local l = mp.open(t);
 
-		local t = '<grep ' ~ r[0] ~ ' ' ~ r[1] ~ '>';
+            l.txt.lines = [];
+            mp.move_bof(l);
 
-		if ((r = mp.long_op(mp.grep, '/' ~ r[0] ~ '/',
-			r[1], r[2], r[3])) == NULL)
-			mp.alert(L("File(s) not found."));
-		else
-		if (size(r) == 0)
-			mp.alert(L("Text not found."));
-		else {
-			local l = mp.open(t);
+            foreach (e, r)
+                mp.insert(l, sprintf("%s:%d: %s\n", e[0], e[1] + 1, e[2]));
 
-			l.txt.lines = [];
-			mp.move_bof(l);
+            mp.move_bof(l);
 
-			foreach (e, r)
-				mp.insert(l, sprintf("%s:%d: %s\n",
-						e[0], e[1] + 1, e[2]));
+            l.txt.mod = 0;
+            l.read_only = 1;
+        }
+    }
 
-			mp.move_bof(l);
-
-			l.txt.mod = 0;
-			l.read_only = 1;
-		}
-	}
+    return d;
 };
 
 /** default key bindings **/
 
-mp.keycodes['f3']		= 'seek_next';
-mp.keycodes['ctrl-f3']		= 'seek_prev';
-mp.keycodes['ctrl-f']		= 'seek';
-mp.keycodes['ctrl-r']		= 'replace';
-mp.keycodes['ctrl-page-down']	= 'seek_next_char';
-mp.keycodes['ctrl-page-up']	= 'seek_prev_char';
+mp.keycodes['f3']               = 'seek_next';
+mp.keycodes['ctrl-f3']          = 'seek_prev';
+mp.keycodes['ctrl-f']           = 'seek';
+mp.keycodes['ctrl-r']           = 'replace';
+mp.keycodes['ctrl-page-down']   = 'seek_next_char';
+mp.keycodes['ctrl-page-up']     = 'seek_prev_char';
 
 /** action descriptions **/
 
