@@ -193,17 +193,24 @@ mp.actions['exec_command']	= sub (d, cmd) {
     return d;
 };
 
-mp.actions['filter_selection'] = sub (d) {
-    local t = mp.form( [
-        { 'label' => L("System command:"),
-            'type' => 'text',
-            'history' => 'system2'
-        }
-    ]);
+mp.actions['filter_selection'] = sub (d, cmd) {
 
-    if (t != NULL) {
-        local cmd = t[0];
+    if (cmd == NULL) {
+        local t = mp.form(
+            [
+                {
+                    'label'     => L("System command:"),
+                    'type'      => 'text',
+                    'history'   => 'system2'
+                }
+            ]
+        );
 
+        if (t != NULL)
+            cmd = t[0];
+    }
+
+    if (cmd != NULL) {
         mp.store_undo(d);
 
         /* if there is no selection, take full document */
@@ -232,6 +239,8 @@ mp.actions['filter_selection'] = sub (d) {
             pclose(p[0]);
         }
     }
+
+    return d;
 };
 
 mp.actions['close_all'] = sub {

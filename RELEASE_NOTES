@@ -21,8 +21,9 @@ Minimum Profit Release Notes
      to column 0 (unless the cursor is already on the first non-blank).
  - Other improvements:
    - The following actions accept additional arguments when called
-     as functions:
+     as functions (and do not ask for them, if present):
      - `exec_command'
+     - `filter_selection'
 
 5.2.0
 -----
