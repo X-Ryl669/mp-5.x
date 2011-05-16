@@ -32,44 +32,53 @@ mp.actions['mark']          = sub (d) { mp.mark(d); };
 mp.actions['mark_vertical'] = sub (d) { mp.mark_vertical(d); };
 
 mp.actions['copy_mark']	= sub (d) {
-					mp.busy(1);
-					mp.copy(d);
-					mp.unmark(d);
-					mp.busy(0);
-				};
+    mp.busy(1);
+    mp.copy(d);
+    mp.unmark(d);
+    mp.busy(0);
+
+    return d;
+};
 
 mp.actions['paste_mark'] = sub (d) {
-					mp.busy(1);
-					mp.store_undo(d);
-					mp.paste(d);
-					mp.busy(0);
-				};
+    mp.busy(1);
+    mp.store_undo(d);
+    mp.paste(d);
+    mp.busy(0);
 
-mp.actions['cut_mark']	= sub (d) {
-					mp.busy(1);
-					mp.store_undo(d);
-					mp.cut(d);
-					mp.busy(0);
-				};
+    return d;
+};
+
+mp.actions['cut_mark']  = sub (d) {
+    mp.busy(1);
+    mp.store_undo(d);
+    mp.cut(d);
+    mp.busy(0);
+
+    return d;
+};
 
 mp.actions['delete_mark'] = sub (d) {
-					mp.busy(1);
-					mp.store_undo(d);
-					mp.delete_mark(d);
-					mp.busy(0);
-				};
+    mp.busy(1);
+    mp.store_undo(d);
+    mp.delete_mark(d);
+    mp.busy(0);
+
+    return d;
+};
 
 mp.actions['mouse_drag_mark'] = sub (d) {
+    /* no selection yet? move to initial click and mark */
+    if (d.txt.mark == NULL)
+        mp.mark(d);
 
-	/* no selection yet? move to initial click and mark */
-	if (d.txt.mark == NULL)
-		mp.mark(d);
+    /* move to drag position */
+    mp.move_to_coords_xy(d, mp.mouse_to_x, mp.mouse_to_y);
 
-	/* move to drag position */
-	mp.move_to_coords_xy(d, mp.mouse_to_x, mp.mouse_to_y);
+    /* and mark */
+    mp.mark(d);
 
-	/* and mark */
-	mp.mark(d);
+    return d;
 };
 
 mp.actions['mark_all'] = sub (d) {
@@ -80,21 +89,34 @@ mp.actions['mark_all'] = sub (d) {
     mp.move_eof(d);
     mp.move_eol(d);
     mp.mark(d);
+
+    return d;
 };
 
-mp.actions['cut_lines_with_string'] = sub (d) {
-    local r = mp.form([
-        { 'label'   => L("Cut lines containing:"),
-          'type'    => 'text',
-          'history' => 'cut_lines_with_string' }
-        ]);
+mp.actions['cut_lines_with_string'] = sub (d, str) {
+    if (str == NULL) {
+        local r = mp.form(
+            [
+                {
+                    'label'   => L("Cut lines containing:"),
+                    'type'    => 'text',
+                    'history' => 'cut_lines_with_string'
+                }
+            ]
+        );
 
-    if (r != NULL) {
+        if (r != NULL)
+            str = r[0];
+    }
+
+    if (str != NULL) {
         mp.busy(1);
         mp.store_undo(d);
-        mp.cut_lines_with_string(d, r[0]);
+        mp.cut_lines_with_string(d, str);
         mp.busy(0);
     }
+
+    return d;
 };
 
 
