@@ -29,7 +29,7 @@ version:
 $(MPDM)/libmpdm.a:
 	( cd $(MPDM); $(MAKE) )
 
-$(MPSL)/libmpsl.a:
+$(MPSL)/libmpsl.a: $(MPDM)/libmpdm.a
 	( cd $(MPSL); $(MAKE) )
 
 dep:
