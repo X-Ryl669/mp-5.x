@@ -78,11 +78,15 @@ mp.actions['exec_action'] = sub(d) {
 
     l = map(l, sub (e) { e ~ ' - ' ~ L(mp.actdesc[e] || ''); });
 
-    local r = mp.form( [
-        { 'label'   => L("Select action to execute:"),
-          'type'    => 'list',
-          'list'    => l }
-        ]);
+    local r = mp.form(
+        [
+            {
+                label:  L("Select action to execute:"),
+                type:   'list',
+                list:   l
+            }
+        ]
+    );
 
     if (r != NULL) {
         local a = regex(l[r[0]], '/^[^ ]+/');
