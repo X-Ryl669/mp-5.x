@@ -100,15 +100,19 @@ mp.actions['exec_action'] = sub(d) {
 };
 
 mp.actions['encoding']	= sub (d) {
-	local t = mp.form( [
-		{ 'label' => L("Encoding (utf-8, iso8859-1, etc.; empty, current locale)") ~ ':',
-		  'type' => 'text',
-		  'history' => 'encoding' }
-		]);
+    local t = mp.form(
+        [
+            {
+                label:   L("Encoding (utf-8, iso8859-1, etc.; empty, current locale)") ~ ':',
+                type:    'text',
+                history: 'encoding'
+            }
+        ]
+    );
 
-	if (t != NULL)
-		if (encoding(t[0]) == -1)
-			mp.alert(L("Invalid encoding ") ~ t[0]);
+    if (t != NULL)
+        if (encoding(t[0]) == -1)
+            mp.alert(L("Invalid encoding ") ~ t[0]);
 };
 
 mp.actions['zoom_in'] 	= sub (d) {
