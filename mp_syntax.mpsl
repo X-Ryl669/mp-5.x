@@ -5,7 +5,7 @@
 
     Syntax highlight definitions.
 
-    Copyright (C) 1991-2010 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -256,16 +256,20 @@ mp.syntax.mpsl = {
 		],
 		'word2',	[
 				"/(NULL|local|this)/",
-				'/[-=<>:\?\+\*\/\!\%&\|]+/'
+				'/[-=<>\?\+\*\/\!\%&\|]+/'
 		],
 		'quotes',	[
-			/* from http://ad.hominem.org/log/2005/05/quoted_strings.php */
-			"/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/",	/* double-quoted strings */
-			"/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",		/* single-quoted strings */
-			"/\b-?[0-9]+\b/",			/* numbers */
-			"/\b0x[0-9a-f]+\b/i",			/* hex numbers */
-			"/\b[0-9[:upper:]_]+\b/"		/* all-caps words */
-		],
+            /* from http://ad.hominem.org/log/2005/05/quoted_strings.php */
+            "/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/", /* double-quoted strings */
+            "/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",     /* single-quoted strings */
+            "/\b-?[0-9]+\b/",                           /* numbers */
+            "/\b0x[0-9a-f]+\b/i",                       /* hex numbers */
+            '/\w+\s*:/',                                /* JS-type hashes */
+            "/\b[0-9[:upper:]_]+\b/"                    /* all-caps words */
+        ],
+        'word2',    [
+            '/:/'
+        ],
 		'comments',	[
 			[ '|/\*|', '|\*/|' ]			/* C-like */
 		],
