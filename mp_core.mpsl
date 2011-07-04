@@ -582,10 +582,7 @@ sub mp.setup_language()
 sub mp.normalize_version(vs)
 /* converts a version string to something usable with cmp() */
 {
-	map(
-		split(sregex(vs, '/-.+$/'), '.'),
-		sub(e) { sprintf("%03d", e); }
-	);
+    vs->sregex('/-.+$/')->split('.')->map(sub(e) { sprintf("%03d", e); });
 }
 
 
