@@ -255,7 +255,7 @@ mp.syntax.mpsl = {
 				'/[\{\}]/'
 		],
 		'word2',	[
-				"/(NULL|local)/",
+				"/(NULL|local|this)/",
 				'/[-=<>:\?\+\*\/\!\%&\|]+/'
 		],
 		'quotes',	[
