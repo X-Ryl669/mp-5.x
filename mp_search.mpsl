@@ -37,14 +37,14 @@ mp.actions['seek'] 	= sub (d) {
     local t = mp.form(
         [
             {
-                'label'     => L("Text to seek:"),
-                'type'      => 'text',
-                'history'   => 'search'
+                label:   L("Text to seek:"),
+                type:    'text',
+                history: 'search'
             },
             {
-                'label'     => L("Case sensitive") ~ ':',
-                'type'      => 'checkbox',
-                'value'     => mp.config.case_sensitive_search
+                label:   L("Case sensitive") ~ ':',
+                type:    'checkbox',
+                value:   mp.config.case_sensitive_search
             }
         ]
     );
