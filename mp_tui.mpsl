@@ -31,7 +31,10 @@ mp.tui = {};
 
 /** colors **/
 
-mp.colors.menu = { 'text' => [ 'white', 'blue' ], 'flags' => [ 'bright' ] };
+mp.colors.menu = {
+    text:   [ 'white', 'blue' ],
+    flags:  [ 'bright' ]
+};
 
 /** code **/
 
