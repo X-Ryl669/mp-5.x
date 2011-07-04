@@ -431,24 +431,20 @@ sub mp.save(doc)
 sub mp.create(filename, lines)
 /* creates a document */
 {
-	local doc, txt;
-
-	txt = {};
-	txt.x = 0;
-	txt.y = 0;
-	txt.vx = 0;
-	txt.vy = 0;
-	txt.lines = lines || [ '' ];
-	txt.mod = 0;
-
-	doc = {};
-	doc.name = filename || L("<unnamed>");
-	doc.txt = txt;
-
-	doc.undo = [];
-	doc.redo = [];
-
-	doc.syntax = NULL;
+    local doc = {
+        txt: {
+            x:      0,
+            y:      0,
+            vx:     0,
+            vy:     0,
+            mod:    0,
+            lines:  lines || [ '' ]
+        },
+        name:   filename || L("<unnamed>"),
+        undo:   [],
+        redo:   [],
+        syntax: NULL
+    };
 
 	return doc;
 }
