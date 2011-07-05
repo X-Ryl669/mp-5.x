@@ -165,58 +165,58 @@ mp.alert_log = [];
 /** the menu **/
 
 mp.menu = [
-	[
-		LL("&File"),
-		[ 'new', 'open', 'save', 'save_as', 'close', 'revert',
-			'open_under_cursor',
-			'-', 'hex_view',
-			'-', 'set_password',
-			'-', 'open_config_file', 'open_templates_file',
-			'-', 'sync',
-			'-', 'save_session', 'load_session',
-			'-', 'exit'
-		]
-	],
-	[
-		LL("&Edit"),
-		[ 'undo', 'redo', '-',
-			'cut_mark', 'copy_mark', 'paste_mark', 'delete_mark',
-			'delete_line', 'cut_lines_with_string', '-',
-			'mark',	'mark_vertical', 'unmark', 'mark_all', '-',
-			'insert_template', 'insert_next_item', '-',
-			'word_wrap_paragraph', 'join_paragraph', '-',
-			'exec_command', 'filter_selection', '-',
-			'exec_action', 'eval', 'eval_doc'
-		]
-	],
-	[
-		LL("&Search"),
-		[ 'seek', 'seek_next', 'seek_prev', 'replace', '-',
-			'complete', '-',
-			'seek_misspelled', 'ignore_last_misspell', '-',
-			'seek_repeated_word', '-',
-			'find_tag', 'complete_symbol', '-', 'grep'
-		]
-	],
-	[
-		LL("&Go to"),
-		[ 'next', 'prev',
-			'move_bof', 'move_eof', 'move_bol', 'move_eol',
-			'goto', 'move_word_right', 'move_word_left',
-			'section_list',
-			'-', 'document_list'
-		]
-	],
-	[
-		LL("&Options"),
-		[ 'record_macro', 'play_macro', '-',
-			'encoding', 'tab_options', 'line_options', 'repeated_words_options',
-			'toggle_spellcheck', '-',
-			'word_count', '-',
-			'zoom_in', 'zoom_out', '-',
-			'about'
-		]
-	]
+    [
+        LL("&File"), [
+            'new', 'open', 'save', 'save_as', 'close', 'revert',
+            'open_under_cursor',
+            '-', 'hex_view',
+            '-', 'set_password',
+            '-', 'open_config_file', 'open_templates_file',
+            '-', 'sync',
+            '-', 'save_session', 'load_session',
+            '-', 'exit'
+        ]
+    ],
+    [
+        LL("&Edit"), [
+            'undo', 'redo', '-',
+            'cut_mark', 'copy_mark', 'paste_mark', 'delete_mark',
+            'delete_line', 'cut_lines_with_string', '-',
+            'mark',	'mark_vertical', 'unmark', 'mark_all', '-',
+            'insert_template', 'insert_next_item', '-',
+            'word_wrap_paragraph', 'join_paragraph', '-',
+            'exec_command', 'filter_selection', '-',
+            'exec_action', 'eval', 'eval_doc'
+        ]
+    ],
+    [
+        LL("&Search"), [
+            'seek', 'seek_next', 'seek_prev', 'replace', '-',
+            'complete', '-',
+            'seek_misspelled', 'ignore_last_misspell', '-',
+            'seek_repeated_word', '-',
+            'find_tag', 'complete_symbol', '-', 'grep'
+        ]
+    ],
+    [
+        LL("&Go to"), [
+            'next', 'prev',
+            'move_bof', 'move_eof', 'move_bol', 'move_eol',
+            'goto', 'move_word_right', 'move_word_left',
+            'section_list',
+            '-', 'document_list'
+        ]
+    ],
+    [
+        LL("&Options"), [
+            'record_macro', 'play_macro', '-',
+            'encoding', 'tab_options', 'line_options',
+            'repeated_words_options', 'toggle_spellcheck', '-',
+            'word_count', '-',
+            'zoom_in', 'zoom_out', '-',
+            'about'
+        ]
+    ]
 ];
 
 mp.actions_by_menu_label = {};
