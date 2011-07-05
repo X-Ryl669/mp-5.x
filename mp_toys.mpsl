@@ -137,7 +137,7 @@ sub mp.maze(doc, keycode)
 	if (maze.map[y][x] eq 'X') {
 		mp.alert("You won!");
 		doc.maze = NULL;
-		return doc;
+		return mp.maze(doc);
 	}
 
 	if (maze.map[y][x] eq ' ') {
