@@ -33,21 +33,22 @@ sub LL(x) { x; }
 
 /* configuration */
 
-mp.config = {};
-mp.config.undo_levels = 100;
-mp.config.word_wrap = 0;
-mp.config.auto_indent = 0;
-mp.config.tab_size = 8;
-mp.config.tabs_as_spaces = 0;
-mp.config.dynamic_tabs = 0;
-mp.config.unlink = 1;
-mp.config.case_sensitive_search = 1;
-mp.config.global_replace = 0;
-mp.config.preread_lines = 60;
-mp.config.mark_eol = 0;
-mp.config.maximize = 0;
-mp.config.keep_eol = 1;
-mp.config.smart_bol = 0;
+mp.config = {
+    undo_levels:            100,
+    word_wrap:              0,
+    auto_indent:            0,
+    tab_size:               8,
+    tabs_as_spaces:         0,
+    dynamic_tabs:           0,
+    unlink:                 1,
+    case_sensitive_search:  1,
+    global_replace:         0,
+    preread_lines:          60,
+    mark_eol:               0,
+    maximize:               0,
+    keep_eol:               1,
+    smart_bol:              0
+};
 
 /* default end of line, system dependent */
 if (mp.drv.id eq 'win32')
