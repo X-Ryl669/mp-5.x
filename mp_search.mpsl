@@ -321,20 +321,20 @@ sub mp.search_back(doc, str)
 }
 
 
-sub mp.replace_1(doc, this, that)
-/* searches 'this' and replaces it with 'that', once */
+sub mp.replace_1(doc, org, dst)
+/* searches 'org' and replaces it with 'dst', once */
 {
 	local c;
 
-	if ((c = mp.search(doc, this)) != NULL) {
+	if ((c = mp.search(doc, org)) != NULL) {
 		local txt, l;
 
 		txt = doc.txt;
 
 		/* substitute */
 		txt.lines[txt.y] = sregex(txt.lines[txt.y],
-                                mp.prefix_regex(this),
-                                that, c[0]
+                                mp.prefix_regex(org),
+                                dst, c[0]
                             );
 
 		/* move to correct position */
@@ -348,12 +348,12 @@ sub mp.replace_1(doc, this, that)
 }
 
 
-sub mp.replace(doc, this, that)
-/* replaces 'this' with 'that', may be globally */
+sub mp.replace(doc, org, dst)
+/* replaces 'org' with 'that', may be globally */
 {
 	local cnt = 0;
 
-	while (mp.replace_1(doc, this, that)) {
+	while (mp.replace_1(doc, org, dst)) {
 		cnt++;
 
 		if (!mp.config.global_replace)
