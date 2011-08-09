@@ -6,6 +6,8 @@ Release Critical Bugs
 
  * 1281: The multithreaded hex viewer crashes (seemingly only
    in multicore machines).
+ * 1282: The timer function in the Curses driver does not work
+   while pressing keys.
 
 Open Bugs
 ---------
