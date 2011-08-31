@@ -28,8 +28,6 @@ Open Bugs
  * 1242: There cannot be two tags with the same name, as they are
    stored as hash keys.
  * 1249: Change TUI dialogs to be really dialogs.
- * 1259: Apply Jeremy's indent_block().
- * 1260: Apply Jeremy's outdent_block().
  * 1271: Section marks should be multiline.
  * 1278: The Qt driver do not accept Qt-specific command line
    arguments.
@@ -344,5 +342,7 @@ Closed
    (Tue, 24 Nov 2009 12:50:32 +0100).
  * 1166: Add a file open navigator to TUI
    (Thu, 25 Nov 2010 10:33:52 +0100).
+ * 1259: Apply Jeremy's indent_block() (Wed, 31 Aug 2011 12:49:38 +0200).
+ * 1260: Apply Jeremy's outdent_block() (Wed, 31 Aug 2011 12:49:38 +0200).
 
 Email bugs to angel@triptico.com
