@@ -8,6 +8,7 @@ Release Critical Bugs
    in multicore machines).
  * 1282: The timer function in the Curses driver does not work
    while pressing keys.
+ * 1283: Add Jeremy's smart-bol to the "Line options..." form.
 
 Open Bugs
 ---------
