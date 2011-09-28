@@ -53,6 +53,7 @@ Pending Enhancements
  * 1280: Study a way to convert MP to a "portable" application, i.e.
    to be formed by just the executable with all MPSL code embedded
    (mainly aimed towards MS Windows).
+ * 1284: Add version control support (git, svn, etc).
 
 Closed
 ------
