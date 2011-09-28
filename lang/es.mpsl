@@ -247,5 +247,9 @@ __I18N__ = {
 	"Execute action on document..." => "Ejecutar acci\x{00f3}n sobre el documento...",
 	"Cut lines containing:" => "Cortar l\x{00ed}neas que contengan:",
 	"Cut lines containing a string..." => "Cortar l\x{00ed}neas que contengan una cadena...",
+	"Insert real tab character" => "Insertar tabulador de verdad",
+	"Indent block" => "Indentar bloque",
+	"Unindent block" => "Desindentar bloque",
+	"Template file to edit:" => "Fichero de plantillas a editar:",
 	"-" => "-"
 };
