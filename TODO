@@ -4,8 +4,6 @@ Minimum Profit 5 TODO / Bug List
 Release Critical Bugs
 ---------------------
 
- * 1281: The multithreaded hex viewer crashes (seemingly only
-   in multicore machines).
  * 1282: The timer function in the Curses driver does not work
    while pressing keys.
  * 1283: Add Jeremy's smart-bol to the "Line options..." form.
@@ -346,5 +344,8 @@ Closed
    (Thu, 25 Nov 2010 10:33:52 +0100).
  * 1259: Apply Jeremy's indent_block() (Wed, 31 Aug 2011 12:49:38 +0200).
  * 1260: Apply Jeremy's outdent_block() (Wed, 31 Aug 2011 12:49:38 +0200).
+ * 1281: The multithreaded hex viewer crashes (seemingly only
+   in multicore machines)
+   (Option removed; Sat, 15 Oct 2011 09:24:16 +0200).
 
 Email bugs to angel@triptico.com

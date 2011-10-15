@@ -666,7 +666,7 @@ sub mp.hex_view(filename)
         d.syntax = mp.syntax.hex_view;
         d.disk_op = 1;
 
-        &mp.hex_view_th(filename, d);
+        mp.hex_view_th(filename, d);
     }
 
     return d;
