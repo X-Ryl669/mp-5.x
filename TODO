@@ -4,8 +4,6 @@ Minimum Profit 5 TODO / Bug List
 Release Critical Bugs
 ---------------------
 
- * 1282: The timer function in the Curses driver does not work
-   while pressing keys.
  * 1283: Add Jeremy's smart-bol to the "Line options..." form.
 
 Open Bugs
@@ -28,8 +26,10 @@ Open Bugs
    stored as hash keys.
  * 1249: Change TUI dialogs to be really dialogs.
  * 1271: Section marks should be multiline.
- * 1278: The Qt driver do not accept Qt-specific command line
+ * 1278: The Qt driver does not accept Qt-specific command line
    arguments.
+ * 1282: The timer function in the Curses driver does not work
+   while pressing keys.
 
 Pending Enhancements
 --------------------
