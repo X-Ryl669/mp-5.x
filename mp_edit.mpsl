@@ -198,35 +198,53 @@ mp.actions['word_wrap_paragraph'] = sub (d) {
 
 mp.actions['line_options']	= sub (d) {
 
-	/* convert special characters on end of line */
-	local lt = mp.backslash_codes(mp.config.eol, 1);
+    /* convert special characters on end of line */
+    local lt = mp.backslash_codes(mp.config.eol, 1);
 
-	local t = mp.form( [
-		{ 'label'	=> L("Word wrap on column (0, no word wrap):"),
-		  'type'	=> 'text',
-		  'value'	=> mp.config.word_wrap,
-		  'history'	=> 'wordwrap' },
-		{ 'label'	=> L("Automatic indentation") ~ ':',
-		  'type'	=> 'checkbox',
-		  'value'	=> mp.config.auto_indent },
-		{ 'label'	=> L("Line termination") ~ ':',
-		  'value'	=> lt,
-		  'type'	=> 'text' },
-		{ 'label'	=> L("Keep original end of lines") ~ ':',
-		  'value'	=> mp.config.keep_eol,
-		  'type'	=> 'checkbox' },
-		{ 'label'	=> L("Mark end of lines") ~ ':',
-		  'value'	=> mp.config.mark_eol,
-		  'type'	=> 'checkbox' }
-	] );
+    local t = mp.form(
+        [
+            {
+                label:      L("Word wrap on column (0, no word wrap):"),
+                type:       'text',
+                value:      mp.config.word_wrap,
+                history:    'wordwrap'
+            },
+            {
+                label:      L("Automatic indentation") ~ ':',
+                type:       'checkbox',
+                value:      mp.config.auto_indent
+            },
+            {
+                label:      L("Line termination") ~ ':',
+                value:      lt,
+                type:       'text'
+            },
+            {
+                label:      L("Keep original end of lines") ~ ':',
+                value:      mp.config.keep_eol,
+                type:       'checkbox'
+            },
+            {
+                label:      L("Mark end of lines") ~ ':',
+                value:      mp.config.mark_eol,
+                type:       'checkbox'
+            },
+            {
+                label:      L("'Smart' move to beginning of line:"),
+                value:      mp.config.smart_bol,
+                type:       'checkbox'
+            }
+        ]
+    );
 
-	if (t != NULL) {
-		mp.config.word_wrap = t[0];
-		mp.config.auto_indent = t[1];
-		mp.config.eol = mp.backslash_codes(t[2], 0);
-		mp.config.keep_eol = t[3];
-		mp.config.mark_eol = t[4];
-	}
+    if (t != NULL) {
+        mp.config.word_wrap     = t[0];
+        mp.config.auto_indent   = t[1];
+        mp.config.eol           = mp.backslash_codes(t[2], 0);
+        mp.config.keep_eol      = t[3];
+        mp.config.mark_eol      = t[4];
+        mp.config.smart_bol     = t[5];
+    }
 };
 
 mp.actions['tab_options']	= sub (d) {

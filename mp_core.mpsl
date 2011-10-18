@@ -47,7 +47,7 @@ mp.config = {
     mark_eol:               0,
     maximize:               0,
     keep_eol:               1,
-    smart_bol:              0
+    smart_bol:              1
 };
 
 /* default end of line, system dependent */

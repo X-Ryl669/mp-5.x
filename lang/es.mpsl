@@ -251,5 +251,6 @@ __I18N__ = {
 	"Indent block" => "Indentar bloque",
 	"Unindent block" => "Desindentar bloque",
 	"Template file to edit:" => "Fichero de plantillas a editar:",
+	"'Smart' move to beginning of line:" => "Saltar al principio de la l\x{00ed}nea 'inteligente':",
 	"-" => "-"
 };

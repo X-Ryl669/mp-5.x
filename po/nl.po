@@ -96,7 +96,7 @@ msgstr "In welke bestanden te zoeken (leeg, alles):"
 msgid "Tag to seek:"
 msgstr "Zoek markering:"
 
-#: mp_edit.mpsl:205
+#: mp_edit.mpsl:207
 msgid "Word wrap on column (0, no word wrap):"
 msgstr "Aantal tekens per regel (0, geen nieuwe regels):"
 
@@ -262,11 +262,11 @@ msgstr "Pagina omlaag"
 msgid "Go to line..."
 msgstr "Ga naar regel..."
 
-#: mp_edit.mpsl:275
+#: mp_edit.mpsl:293
 msgid "Insert line"
 msgstr "Voeg regel toe"
 
-#: mp_edit.mpsl:278
+#: mp_edit.mpsl:296
 msgid "Insert tab"
 msgstr "Voeg tab toe"
 
@@ -276,7 +276,7 @@ msgstr "Wis het teken onder de aanwijzer"
 msgid "Delete char to the left of cursor"
 msgstr "Wis het teken links van de aanwijzer"
 
-#: mp_edit.mpsl:276
+#: mp_edit.mpsl:294
 msgid "Delete line"
 msgstr "Wis regel"
 
@@ -365,7 +365,7 @@ msgstr "Bewaar tabs"
 msgid "Save LF as CR/LF"
 msgstr "Bewaar LF als CR/LF"
 
-#: mp_edit.mpsl:209
+#: mp_edit.mpsl:213
 msgid "Automatic indentation"
 msgstr "Automatisch inspringen"
 
@@ -614,27 +614,27 @@ msgstr ""
 msgid "Word wrapping must be set"
 msgstr ""
 
-#: mp_edit.mpsl:277
+#: mp_edit.mpsl:295
 msgid "Insert space"
 msgstr ""
 
-#: mp_edit.mpsl:280
+#: mp_edit.mpsl:298
 msgid "Delete character"
 msgstr ""
 
-#: mp_edit.mpsl:281
+#: mp_edit.mpsl:299
 msgid "Delete character to the left"
 msgstr ""
 
-#: mp_edit.mpsl:284
+#: mp_edit.mpsl:302
 msgid "Undo"
 msgstr ""
 
-#: mp_edit.mpsl:286
+#: mp_edit.mpsl:304
 msgid "Join a paragraph in one line"
 msgstr ""
 
-#: mp_edit.mpsl:287
+#: mp_edit.mpsl:305
 msgid "Word-wrap a paragraph"
 msgstr ""
 
@@ -744,23 +744,23 @@ msgstr ""
 msgid "Template to insert:"
 msgstr ""
 
-#: mp_edit.mpsl:212
+#: mp_edit.mpsl:218
 msgid "Line termination"
 msgstr ""
 
-#: mp_edit.mpsl:235
+#: mp_edit.mpsl:253
 msgid "Tab size"
 msgstr ""
 
-#: mp_edit.mpsl:239
+#: mp_edit.mpsl:257
 msgid "Convert tabs to spaces"
 msgstr ""
 
-#: mp_edit.mpsl:288
+#: mp_edit.mpsl:306
 msgid "Line options..."
 msgstr ""
 
-#: mp_edit.mpsl:289
+#: mp_edit.mpsl:307
 msgid "Tab options..."
 msgstr ""
 
@@ -843,7 +843,7 @@ msgstr ""
 msgid "Error writing to command '%s'"
 msgstr ""
 
-#: mp_edit.mpsl:285
+#: mp_edit.mpsl:303
 msgid "Redo"
 msgstr ""
 
@@ -874,7 +874,7 @@ msgstr ""
 msgid "Unknown action '%s'"
 msgstr ""
 
-#: mp_edit.mpsl:634
+#: mp_edit.mpsl:652
 #, c-format
 msgid "Unbound keystroke '%s'"
 msgstr ""
@@ -903,7 +903,7 @@ msgstr ""
 msgid "Mark using mouse dragging"
 msgstr ""
 
-#: mp_edit.mpsl:218
+#: mp_edit.mpsl:228
 msgid "Mark end of lines"
 msgstr ""
 
@@ -998,7 +998,7 @@ msgstr ""
 msgid "Delete block"
 msgstr ""
 
-#: mp_edit.mpsl:215
+#: mp_edit.mpsl:223
 msgid "Keep original end of lines"
 msgstr ""
 
@@ -1030,7 +1030,7 @@ msgid ""
 "Mailing list: mp-subscribe@lists.triptico.com\n"
 msgstr ""
 
-#: mp_edit.mpsl:242
+#: mp_edit.mpsl:260
 msgid "Use previous line for tab columns"
 msgstr ""
 
@@ -1087,7 +1087,7 @@ msgstr ""
 msgid "Insert next item"
 msgstr ""
 
-#: mp_edit.mpsl:290
+#: mp_edit.mpsl:308
 msgid "Toggle insert/overwrite mode"
 msgstr ""
 
@@ -1115,15 +1115,15 @@ msgstr ""
 msgid "Cut lines containing a string..."
 msgstr ""
 
-#: mp_edit.mpsl:279
+#: mp_edit.mpsl:297
 msgid "Insert real tab character"
 msgstr ""
 
-#: mp_edit.mpsl:282
+#: mp_edit.mpsl:300
 msgid "Indent block"
 msgstr ""
 
-#: mp_edit.mpsl:283
+#: mp_edit.mpsl:301
 msgid "Unindent block"
 msgstr ""
 
@@ -1157,4 +1157,8 @@ msgstr ""
 
 #: mp_templates.mpsl:60
 msgid "Template file to edit:"
+msgstr ""
+
+#: mp_edit.mpsl:233
+msgid "'Smart' move to beginning of line:"
 msgstr ""

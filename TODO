@@ -4,7 +4,7 @@ Minimum Profit 5 TODO / Bug List
 Release Critical Bugs
 ---------------------
 
- * 1283: Add Jeremy's smart-bol to the "Line options..." form.
+None!
 
 Open Bugs
 ---------
@@ -347,5 +347,7 @@ Closed
  * 1281: The multithreaded hex viewer crashes (seemingly only
    in multicore machines)
    (Option removed; Sat, 15 Oct 2011 09:24:16 +0200).
+ * 1283: Add Jeremy's smart-bol to the "Line options..." form
+   (Tue, 18 Oct 2011 14:42:26 +0200).
 
 Email bugs to angel@triptico.com
