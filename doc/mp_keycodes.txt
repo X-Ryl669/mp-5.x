@@ -8,9 +8,9 @@ Table with Minimum Profit's keycodes and their default assigned actions.
  +---------------------+------------------------+
  |               alt-a |                   menu |
  +---------------------+------------------------+
- |     alt-cursor-left |         move_word_left |
+ |     alt-cursor-left |         unindent_block |
  +---------------------+------------------------+
- |    alt-cursor-right |        move_word_right |
+ |    alt-cursor-right |           indent_block |
  +---------------------+------------------------+
  |             alt-end |               move_eof |
  +---------------------+------------------------+

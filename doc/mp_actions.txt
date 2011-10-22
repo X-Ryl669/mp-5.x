@@ -237,6 +237,14 @@ _Ignore last misspelled word_
 Ignores the last misspelled word found by `seek_misspelled' by adding it
 to a whitelist so it won't be found again.
 
+indent_block
+------------
+
+_Indent block_ (`alt-cursor-right')
+
+Indents the block by one tab space, or the current line if the is no
+selected block.
+
 insert_line
 -----------
 
@@ -714,6 +722,14 @@ undo
 _Undo_ (`ctrl-z')
 
 Undoes the last operation.
+
+unindent_block
+--------------
+
+_Unindent block_ (`alt-cursor-left')
+
+Unindents the block by one tab space, or the current line if the is no
+selected block.
 
 unmark
 ------
