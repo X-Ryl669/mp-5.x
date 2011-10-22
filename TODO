@@ -30,6 +30,7 @@ Open Bugs
    arguments.
  * 1282: The timer function in the Curses driver does not work
    while pressing keys.
+ * 1285: Fix KDE build.
 
 Pending Enhancements
 --------------------
