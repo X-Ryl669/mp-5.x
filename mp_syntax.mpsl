@@ -519,7 +519,7 @@ mp.syntax.diff = {
 		'word2',	[ '/^\-.+$/m' ],
 		'quotes',	[ '/^@@.+@@$/m' ]
 	],
-	'section'	=>	[ '/^--- ' ]
+	'section'	=>	[ '/^--- ', '/^@@/' ]
 };
 
 mp.syntax.commit_msg = {
