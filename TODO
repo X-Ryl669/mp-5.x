@@ -6,7 +6,6 @@ Release Critical Bugs
 
  * 1286: Add `move-to-next-section' action.
  * 1287: Add `move-to-prev-section' action.
- * 1288: Add an option to set the selected item in form lists.
  * 1289: Remember the last Makefile target (needs #1288 fixed).
  * 1290: In the `section-list' action, select the item nearest to
    current cursor position (needs #1288 fixed).
@@ -355,5 +354,7 @@ Closed
    (Option removed; Sat, 15 Oct 2011 09:24:16 +0200).
  * 1283: Add Jeremy's smart-bol to the "Line options..." form
    (Tue, 18 Oct 2011 14:42:26 +0200).
+ * 1288: Add an option to set the selected item in form lists
+   (Option already exists, you moron; Wed, 02 Nov 2011 19:49:13 +0000).
 
 Email bugs to angel@triptico.com
