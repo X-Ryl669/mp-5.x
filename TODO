@@ -6,6 +6,10 @@ Release Critical Bugs
 
  * 1286: Add `move-to-next-section' action.
  * 1287: Add `move-to-prev-section' action.
+ * 1288: Add an option to set the selected item in form lists.
+ * 1289: Remember the last Makefile target (needs #1288 fixed).
+ * 1290: In the `section-list' action, select the item nearest to
+   current cursor position (needs #1288 fixed).
 
 Open Bugs
 ---------
