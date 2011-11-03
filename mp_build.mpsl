@@ -29,46 +29,52 @@
 
 mp.actions['build']	= sub(doc) {
 
-	local t, target;
+    local t, target;
 
-	if ((t = mp.build_get_targets()) == NULL) {
-		mp.alert(L("No Makefile targets found."));
-		return;
-	}
+    if ((t = mp.build_get_targets()) == NULL)
+        mp.alert(L("No Makefile targets found."));
+    else {
+        /* more than one target? ask user to pick one */
+        if (size(t) > 1) {
+            local r = mp.form(
+                [
+                    {
+                        label:  L("Makefile target") ~ ':',
+                        type:   'list',
+                        list:   t,
+                        value:  mp.makefile_target
+                    }
+                ]
+            );
 
-	/* more than one target? ask user to pick one */
-	if (size(t) > 1) {
-		local r = mp.form( [
-			{ 'label'	=> L("Makefile target") ~ ':',
-			  'type'	=> 'list',
-			  'list'	=> t }
-			]);
+            if (r != NULL) {
+                mp.makefile_target = r[0];
 
-		if (r == NULL)
-			return;
+                if (mp.makefile_target == 0)
+                    target = '';
+                else
+                    target = t[mp.makefile_target];
+            }
+        }
 
-		if (r[0] == 0)
-			target = '';
-		else
-			target = t[r[0]];
-	}
-
-	mp.long_op(mp.build_execute, target);
+        if (target != NULL)
+            mp.long_op(mp.build_execute, target);
+    }
 };
 
 
 mp.actions['insert_next_item'] = sub(doc) {
-	local n = 0;
+    local n = 0;
 
-	foreach (l, doc.txt.lines) {
-		local r = regex(l, ['/^ \* /', '/[0-9]+/', '/: /']);
+    foreach (l, doc.txt.lines) {
+        local r = regex(l, ['/^ \* /', '/[0-9]+/', '/: /']);
 
-		if (r[1] > n)
-			n = r[1];
-	}
+        if (r[1] > n)
+            n = r[1];
+    }
 
-	mp.store_undo(doc);
-	mp.insert(doc, ' * ' ~ (n + 1) ~ ': ');
+    mp.store_undo(doc);
+    mp.insert(doc, ' * ' ~ (n + 1) ~ ': ');
 };
 
 /** Default key bindings **/
@@ -77,63 +83,63 @@ mp.keycodes['f2'] = "build";
 
 /** action descriptions **/
 
-mp.actdesc['build'] = LL("Build project...");
-mp.actdesc['insert_next_item'] = LL("Insert next item");
+mp.actdesc['build']             = LL("Build project...");
+mp.actdesc['insert_next_item']  = LL("Insert next item");
 
 
 /** code **/
 
 sub mp.build_get_targets
 {
-	local r, f;
+    local r, f;
 
-	if ((f = open('Makefile', 'r')) != NULL) {
-		local l;
+    if ((f = open('Makefile', 'r')) != NULL) {
+        local l;
 
-		r = [ '<default>' ];
+        r = [ '<default>' ];
 
-		while (l = read(f)) {
-			local t;
+        while (l = read(f)) {
+            local t;
 
-			if (t = regex(l, '/^[A-Za-z0-9_\.-]+:/'))
-				push(r, sregex(t, '/:/', ''));
-		}
+            if (t = regex(l, '/^[A-Za-z0-9_\.-]+:/'))
+                push(r, sregex(t, '/:/', ''));
+        }
 
-		close(f);
-	}
+        close(f);
+    }
 
-	return r;
+    return r;
 }
 
 
 sub mp.build_execute(target)
 {
-	local log = mp.open('<make output>');
+    local log = mp.open('<make output>');
 
-	log.txt.lines = [];
-	log.txt.y = 0;
+    log.txt.lines = [];
+    log.txt.y = 0;
 
-	/* pipe through make */
-	local p;
-	if ((p = popen('make ' ~ target, 'r')) != NULL) {
-		local l;
+    /* pipe through make */
+    local p;
+    if ((p = popen('make ' ~ target, 'r')) != NULL) {
+        local l;
 
-		while (l = read(p))
-			mp.insert(log, l);
+        while (l = read(p))
+            mp.insert(log, l);
 
-		pclose(p);
+        pclose(p);
 
-		log.txt.mod = 0;
-		log.read_only = 1;
+        log.txt.mod = 0;
+        log.read_only = 1;
 
-		log.syntax = mp.syntax.make_output;
+        log.syntax = mp.syntax.make_output;
 
-		mp.move_bof(log);
+        mp.move_bof(log);
 
-		/* set the last search regex to match file:line strings,
-		   so that calling seek-next and seek-prev moves there */
-		mp.last_search = '/^[a-z\.\_0-9\/-]+:[0-9]+:/m';
+        /* set the last search regex to match file:line strings,
+            so that calling seek-next and seek-prev moves there */
+        mp.last_search = '/^[a-z\.\_0-9\/-]+:[0-9]+:/m';
 
         mp.redraw();
-	}
+    }
 }
