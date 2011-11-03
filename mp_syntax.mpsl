@@ -27,64 +27,79 @@
 
 /** editor actions **/
 
-mp.actions['help']	=	sub (d) {
-	local w, h, r;
+sub mp.actions.help(d) {
+    local w, h, r;
 
-	/* get the special word regex separator for help (if any) */
-	r = d.syntax.help_word_regex;
+    /* get the special word regex separator for help (if any) */
+    r = d.syntax.help_word_regex;
 
-	/* if there is a word at the cursor position,
-	   try searching for help */
-	if ((w = mp.get_word(d, r)) != NULL)
-		h = mp.help(d, w);
+    /* if there is a word at the cursor position,
+        try searching for help */
+    if ((w = mp.get_word(d, r)) != NULL)
+        h = mp.help(d, w);
 
-	if (h == NULL)
-		mp.alert(sprintf(L("No help for '%s'."), w));
-	else {
-		local d;
+    if (h == NULL)
+        mp.alert(sprintf(L("No help for '%s'."), w));
+    else {
+        local d;
 
-		d = mp.new(sprintf(L("<help on '%s'>"), w), h);
-		d.read_only = 1;
-	}
+        d = mp.new(sprintf(L("<help on '%s'>"), w), h);
+        d.read_only = 1;
+    }
 };
 
-mp.actions['section_list'] = sub (d) {
-	local l = mp.section_list(d);
+sub mp.actions.section_list(d) {
+    local l = mp.section_list(d);
 
-	if (l == NULL)
-		mp.alert(L("No detection for sections for this mode."));
-	else {
-		if (size(l) == 0)
-			mp.alert(L("No sections were found in this document."));
-		else {
-			local r = mp.form( [
-			{
-				'label'	=> L("Section list"),
-				'type'	=> 'list',
-				'list'	=> map(l, sub (e) { e[0]; }),
-				'value'	=> 0
-			}
-			]);
+    if (l == NULL)
+        mp.alert(L("No detection for sections for this mode."));
+    else {
+        if (size(l) == 0)
+            mp.alert(L("No sections were found in this document."));
+        else {
+            local pos = -1;
 
-			if (r != NULL) {
-				mp.search_set_y(d, l[r[0]][1]);
-				mp.set_x(d, 0);
-			}
-		}
-	}
+            /* set pos to the section nearest the cursor */
+            foreach (e, l) {
+                if (e[1] > d.txt.y)
+                    break;
+
+                pos++;
+            }
+
+            if (pos < 0 || pos > size(l))
+                pos = 0;
+
+            local r = mp.form(
+                [
+                    {
+                        label:  L("Section list"),
+                        type:   'list',
+                        list:   map(l, sub (e) { e[0]; }),
+                        value:  pos
+                    }
+                ]
+            );
+
+            if (r != NULL) {
+                mp.search_set_y(d, l[r[0]][1]);
+                mp.set_x(d, 0);
+            }
+        }
+    }
 };
 
 /** default key bindings **/
 
-mp.keycodes['f1']	=	"help";
-mp.keycodes['ctrl-d']	=	"section_list";
+mp.keycodes['f1']       = "help";
+mp.keycodes['ctrl-d']   = "section_list";
 
 /** action descriptions **/
 
-mp.actdesc['help']		= LL("Help on word over cursor");
-mp.actdesc['section_list']	= LL("Section list...");
+mp.actdesc['help']          = LL("Help on word over cursor");
+mp.actdesc['section_list']  = LL("Section list...");
 
-/* data */
+/** data **/
 
 mp.syntax = {};
 
@@ -743,24 +758,24 @@ sub mp.help(doc, word)
  */
 sub mp.section_list(doc)
 {
-	local r;
+    local r;
 
-	if (doc.syntax.section) {
-		local n, l;
+    if (doc.syntax.section) {
+        local n, l;
 
-		r = [];
+        r = [];
 
-		while ((l = doc.txt.lines[n]) != NULL) {
-			foreach (ex, doc.syntax.section) {
-				if (regex(l, ex)) {
-					push(r, [ l, n ]);
-					break;
-				}
-			}
+        while ((l = doc.txt.lines[n]) != NULL) {
+            foreach (ex, doc.syntax.section) {
+                if (regex(l, ex)) {
+                    push(r, [ l, n ]);
+                    break;
+                }
+            }
 
-			n++;
-		}
-	}
+            n++;
+        }
+    }
 
-	return r;
+    return r;
 }
