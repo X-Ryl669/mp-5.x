@@ -293,7 +293,7 @@ mp.syntax.mpsl = {
 			'/^/\*\*.*\*\*/$/m'			/* section mark */
 		]
 	],
-	'section'	=>	[ '/(^sub \w+|^\/\*\*.*\*\*\/$)/' ]
+	'section'	=>	[ '/(^[A-Za-z_]|^\/\*\*.*\*\*\/$)/' ]
 };
 
 mp.syntax.sh = {
