@@ -6,6 +6,8 @@ Release Critical Bugs
 
  * 1286: Add an action to move to previous section.
  * 1287: Add an action to move to next section.
+ * 1291: In C and MPSL the help action should search for
+   mp_doccer-style documentation code.
 
 Open Bugs
 ---------
