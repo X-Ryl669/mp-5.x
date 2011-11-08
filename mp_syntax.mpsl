@@ -739,6 +739,9 @@ sub mp.help(doc, word)
 			break;
 	}
 
+    if (h == NULL && doc.syntax.help_func)
+        h = doc.syntax.help_func(word);
+
 	return h;
 }
 
