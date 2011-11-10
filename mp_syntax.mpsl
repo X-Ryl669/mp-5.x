@@ -41,10 +41,15 @@ sub mp.actions.help(d) {
     if (h == NULL)
         mp.alert(sprintf(L("No help for '%s'."), w));
     else {
-        local d;
+        local hd;
 
-        d = mp.new(sprintf(L("<help on '%s'>"), w), h);
-        d.read_only = 1;
+        hd = mp.open(sprintf(L("<help on '%s'>"), w));
+
+        hd.txt.lines    = h;
+        hd.txt.y        = 0;
+        hd.read_only    = 1;
+
+        hd.syntax = d.syntax;
     }
 };
 
@@ -113,6 +118,7 @@ mp.syntax.c = {
 	'filenames'	=>	[ '/\.c$/i', '/\.h$/i', '/\.l$/i', '/\.y$/i', '/\.d$/i',
 				'/\.cpp$/i', '/\.hpp$/i', '/\.c++$/i', '/\.cxx$/i', '/\.xpm$/i' ],
 	'help'		=>	[ "man 2 %s", "man 3 %s" ],
+    'help_func' =>  sub (w) { mp.c_gather_help(w, "*.[ch]"); },
 	'defs'		=>	[
 		'word1',	[
 				mp.syn_token_list( [
@@ -742,6 +748,9 @@ sub mp.help(doc, word)
     if (h == NULL && doc.syntax.help_func)
         h = doc.syntax.help_func(word);
 
+    if (h)
+        mp.last_search = mp.prefix_regex(word);
+
 	return h;
 }
 
@@ -781,4 +790,96 @@ sub mp.section_list(doc)
     }
 
     return r;
+}
+
+
+/**
+ * mp.c_gather_help - Gathers help in C-style files
+ * @word: the help term
+ * @files: filespec
+ *
+ * Searches in all @files for code snippets that may
+ * conform help for @word (mp_doccer style help, struct or
+ * function definitions, etc).
+ *
+ * Returns an array of text with the gathered information.
+ */
+sub mp.c_gather_help(word, files)
+{
+    local h = [];
+
+    foreach (fn, glob(files)) {
+        local f;
+
+        if ((f = open(fn, "r")) != NULL) {
+            local l;
+            local n = 0;
+
+            while ((l = read(f)) != NULL) {
+                n++;
+                local where = fn ~ ':' ~ n ~ ':';
+
+                l = mp.chomp(l);
+
+                if (regex(l, "/^\\s*#define\\s+" ~ word ~ "/")) {
+                    /* it's a CPP define */
+                    push(h, where);
+                    push(h, l);
+                }
+                else
+                if (regex(l, "/^[A-Za-z_]+.*\s+" ~ word ~ "\s*\(.*/")) {
+                    /* it's a function definition or prototype */
+                    push(h, where);
+                    push(h, l);
+                }
+                else
+                if (regex(l, "/^(typedef\s*|static\s*)?struct\s+.*" ~ word ~ ".*\{/")) {
+                    /* it's a structure definition */
+                    push(h, where);
+                    push(h, l);
+
+                    /* add up to the end of the struct */
+                    while ((l = read(f)) != NULL) {
+                        n++;
+                        push(h, l);
+
+                        if (regex(l, "/^\};/"))
+                            break;
+                    }
+                }
+                else
+                if (regex(l, "/^\/\*\*$/")) {
+                    /* mp_doccer help: is it for this word? */
+                    l = read(f);
+                    n++;
+
+                    if (regex(l, "/ \* " ~ word ~ " - /")) {
+                        /* it is; dump up to a ; */
+                        push(h, where);
+                        push(h, '/' ~ '**');
+                        push(h, l);
+
+                        while ((l = read(f)) != NULL) {
+                            n++;
+                            if (regex(l, "/^\{/"))
+                                break;
+
+                            push(h, l);
+                        }
+                    }
+                }
+            }
+
+            close(f);
+        }
+    }
+
+    if (size(h)) {
+        ins(h, sprintf(L("Gathered information on %s:"), word), 0);
+        ins(h, '', 1);
+    }
+    else
+        h = NULL;
+
+    return h;
 }
