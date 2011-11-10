@@ -832,19 +832,19 @@ sub mp.c_gather_help(word)
 
                 l = mp.chomp(l);
 
-                if (regex(l, "/^\\s*#define\\s+" ~ word ~ "/")) {
+                if (regex(l, "/^[ \t]*#define[ \t]+" ~ word ~ "/")) {
                     /* it's a CPP define */
                     push(h, where);
                     push(h, l);
                 }
                 else
-                if (regex(l, "/^[A-Za-z_]+.*\s+" ~ word ~ "\s*\(.*/")) {
+                if (regex(l, "/^[A-Za-z_]+.*[ \t]+" ~ word ~ "[ \t]*\(.*/")) {
                     /* it's a function definition or prototype */
                     push(h, where);
                     push(h, l);
                 }
                 else
-                if (regex(l, "/^(typedef\s*|static\s*)?struct\s+.*" ~ word ~ ".*\{/")) {
+                if (regex(l, "/^(typedef[ \]*|static[ \]*)?struct[ \t]+.*" ~ word ~ ".*\{/")) {
                     /* it's a structure definition */
                     push(h, where);
                     push(h, l);
