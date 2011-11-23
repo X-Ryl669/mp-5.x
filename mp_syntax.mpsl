@@ -751,9 +751,6 @@ sub mp.help(doc, word)
     if (h == NULL && doc.syntax.help_func)
         h = doc.syntax.help_func(word);
 
-    if (h)
-        mp.last_search = mp.prefix_regex(word);
-
 	return h;
 }
 
