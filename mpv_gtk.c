@@ -383,7 +383,7 @@ static void build_menu(void)
 
 /** main area drawing functions **/
 
-static void switch_page(GtkNotebook * notebook, GtkNotebookPage * page,
+static void switch_page(GtkNotebook * notebook, gpointer * page,
                         gint pg_num, gpointer data)
 /* 'switch_page' handler (filetabs) */
 {
@@ -443,7 +443,7 @@ static void draw_filetabs(void)
     mpdm_unref(names);
 
     /* set the active one */
-    gtk_notebook_set_page(GTK_NOTEBOOK(file_tabs),
+    gtk_notebook_set_current_page(GTK_NOTEBOOK(file_tabs),
                           mpdm_ival(mpdm_hget_s(mp, L"active_i")));
 
     /* reconnect signal */
@@ -498,7 +498,7 @@ static gint scroll_event(GtkWidget * widget, GdkEventScroll * event)
 static void value_changed(GtkAdjustment * adj, gpointer * data)
 /* 'value_changed' handler (scrollbar) */
 {
-    int i = (int) adj->value;
+    int i = (int) gtk_adjustment_get_value(adj);
     mpdm_t doc;
     mpdm_t txt;
     int y;
@@ -543,11 +543,11 @@ static void draw_scrollbar(void)
     g_signal_handlers_disconnect_by_func(G_OBJECT(adjustment),
                                          G_CALLBACK(value_changed), NULL);
 
-    adjustment->step_increment = (gfloat) 1;
-    adjustment->upper = (gfloat) max;
-    adjustment->page_size = (gfloat) size;
-    adjustment->page_increment = (gfloat) size;
-    adjustment->value = (gfloat) pos;
+    gtk_adjustment_set_step_increment(adjustment, (gdouble) 1);
+    gtk_adjustment_set_upper(adjustment, (gdouble) max);
+    gtk_adjustment_set_page_size(adjustment, (gdouble) size);
+    gtk_adjustment_set_page_increment(adjustment, (gdouble) size);
+    gtk_adjustment_set_value(adjustment, (gdouble) pos);
 
     gtk_range_set_adjustment(GTK_RANGE(scrollbar), adjustment);
 
@@ -1465,7 +1465,7 @@ static void realize(GtkWidget * widget)
 {
     im = gtk_im_multicontext_new();
     g_signal_connect(im, "commit", G_CALLBACK(commit), NULL);
-    gtk_im_context_set_client_window(im, widget->window);
+    gtk_im_context_set_client_window(im, gtk_widget_get_window(widget));
 }
 
 
@@ -1543,9 +1543,9 @@ static void selection_received(GtkWidget * widget,
 {
     mpdm_t d;
 
-    if (sel->data != NULL) {
+    if (gtk_selection_data_get_data(sel) != NULL) {
         /* get selection */
-        wchar_t *wptr = utf8_to_wcs((char *) sel->data);
+        wchar_t *wptr = utf8_to_wcs((char *) gtk_selection_data_get_data(sel));
         d = MPDM_S(wptr);
         g_free(wptr);
 
@@ -1627,7 +1627,7 @@ static void clicked_ok(GtkWidget * widget, gpointer data)
             mpdm_t h;
 
             if (wcscmp(wptr, L"text") == 0)
-                gw = GTK_COMBO(widget)->entry;
+                gw = gtk_bin_get_child(GTK_BIN(widget));
 
             if ((ptr =
                  gtk_editable_get_chars(GTK_EDITABLE(gw), 0, -1)) != NULL
@@ -1725,7 +1725,7 @@ static mpdm_t gtk_drv_alert(mpdm_t a, mpdm_t ctxt)
         return NULL;
 
     dlg = gtk_message_dialog_new(GTK_WINDOW(window), GTK_DIALOG_MODAL,
-                                 GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, ptr);
+                                 GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, "%s", ptr);
     gtk_window_set_title(GTK_WINDOW(dlg), "mp " VERSION);
     g_free(ptr);
 
@@ -1751,7 +1751,7 @@ static mpdm_t gtk_drv_confirm(mpdm_t a, mpdm_t ctxt)
 
     dlg = gtk_message_dialog_new(GTK_WINDOW(window), GTK_DIALOG_MODAL,
                                  GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
-                                 ptr);
+                                 "%s", ptr);
     gtk_window_set_title(GTK_WINDOW(dlg), "mp " VERSION);
     g_free(ptr);
 
@@ -1790,7 +1790,7 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
     gtk_dialog_set_default_response(GTK_DIALOG(dlg), GTK_RESPONSE_OK);
     gtk_container_set_border_width(GTK_CONTAINER(dlg), 5);
 
-    content_area = GTK_DIALOG(dlg)->vbox;
+    content_area = gtk_dialog_get_content_area(GTK_DIALOG(dlg));
     gtk_box_set_spacing(GTK_BOX(content_area), 2);
 
     table = gtk_table_new(mpdm_size(a), 2, FALSE);
@@ -2041,11 +2041,11 @@ static mpdm_t gtk_drv_timer(mpdm_t a, mpdm_t ctxt)
 
     /* previously defined one? remove */
     if (timer_func != NULL)
-        gtk_timeout_remove(prev);
+        g_source_remove(prev);
 
     /* if msecs and func are set, program timer */
     if (msecs > 0 && func != NULL)
-        prev = gtk_timeout_add(msecs, timer_callback, NULL);
+        prev = g_timeout_add(msecs, timer_callback, NULL);
 
     mpdm_ref(func);
     mpdm_unref(timer_func);
@@ -2059,7 +2059,7 @@ static mpdm_t gtk_drv_busy(mpdm_t a, mpdm_t ctxt)
 {
     int onoff = mpdm_ival(mpdm_aget(a, 0));
 
-    gdk_window_set_cursor(window->window,
+    gdk_window_set_cursor(gtk_widget_get_window(window),
                           gdk_cursor_new(onoff ? GDK_WATCH :
                                          GDK_LEFT_PTR));
 
