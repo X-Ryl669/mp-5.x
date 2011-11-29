@@ -55,9 +55,7 @@ static GtkWidget *area = NULL;
 static GtkWidget *scrollbar = NULL;
 static GtkWidget *status = NULL;
 static GtkWidget *menu_bar = NULL;
-static GdkGC *gc = NULL;
 static GtkIMContext *im = NULL;
-static GdkPixmap *pixmap = NULL;
 
 /* character read from the keyboard */
 static wchar_t im_char[2];
@@ -171,11 +169,6 @@ static void update_window_size(void)
     mpdm_hset_s(v, L"ty", MPDM_I(ty));
 
     /* rebuild the pixmap for the double buffer */
-    if (pixmap != NULL)
-        gdk_pixmap_unref(pixmap);
-
-    pixmap = gdk_pixmap_new(area->window,
-                            area->allocation.width, font_height, -1);
 }
 
 
@@ -565,6 +558,7 @@ static void gtk_drv_paint(mpdm_t doc, int optimize)
 /* GTK document draw function */
 {
     GdkRectangle gr;
+    cairo_t *cr;
     mpdm_t d = NULL;
     int n, m;
 
@@ -572,9 +566,6 @@ static void gtk_drv_paint(mpdm_t doc, int optimize)
         gtk_window_maximize(GTK_WINDOW(window));
 
     /* no gc? create it */
-    if (gc == NULL)
-        gc = gdk_gc_new(area->window);
-
     if (font == NULL)
         build_fonts();
 
@@ -588,6 +579,7 @@ static void gtk_drv_paint(mpdm_t doc, int optimize)
     gr.width = area->allocation.width;
     gr.height = font_height;
 
+    cr = gdk_cairo_create(gtk_widget_get_window(area));
     for (n = 0; n < mpdm_size(d); n++) {
         PangoLayout *pl;
         PangoAttrList *pal;
@@ -666,20 +658,20 @@ static void gtk_drv_paint(mpdm_t doc, int optimize)
         free(str);
 
         /* draw the background */
-        gdk_gc_set_foreground(gc, &papers[normal_attr]);
-        gdk_draw_rectangle(pixmap, gc, TRUE, 0, 0, gr.width, gr.height);
+        gdk_cairo_set_source_color(cr, &papers[normal_attr]);
+        cairo_rectangle(cr, 0, n * font_height, gr.width, gr.height);
+        cairo_fill(cr);
 
         /* draw the text */
-        gtk_paint_layout(area->style, pixmap,
-                         GTK_STATE_NORMAL, TRUE, &gr, area, "", 2, 0, pl);
+        cairo_move_to(cr, 2, n * font_height);
+        pango_cairo_show_layout(cr, pl);
 
         /* dump the pixmap */
-        gdk_draw_pixmap(area->window, gc, pixmap,
-                        0, 0, 0, n * font_height, gr.width, gr.height);
 
         g_object_unref(pl);
     }
 
+    cairo_destroy(cr);
     mpdm_unref(d);
 
     draw_filetabs();
