@@ -4,7 +4,7 @@
 
     GTK driver.
 
-    Copyright (C) 1991-2010 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -1627,7 +1627,7 @@ static void clicked_ok(GtkWidget * widget, gpointer data)
             mpdm_t h;
 
             if (wcscmp(wptr, L"text") == 0)
-                gw = gtk_bin_get_child(GTK_BIN(widget));
+                gw = GTK_COMBO(widget)->entry;
 
             if ((ptr =
                  gtk_editable_get_chars(GTK_EDITABLE(gw), 0, -1)) != NULL
