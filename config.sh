@@ -352,20 +352,34 @@ else
 	echo "#include <gdk/gdkkeysyms.h>" >> .tmp.c
 	echo "int main(void) { gtk_main(); return 0; } " >> .tmp.c
 
-	# Try first GTK 2.0
-	TMP_CFLAGS=`sh -c 'pkg-config --cflags gtk+-2.0' 2>/dev/null`
-	TMP_LDFLAGS=`sh -c 'pkg-config --libs gtk+-2.0' 2>/dev/null`
+	# Try first GTK 3.0
+	TMP_CFLAGS=`sh -c 'pkg-config --cflags gtk+-3.0' 2>/dev/null`
+	TMP_LDFLAGS=`sh -c 'pkg-config --libs gtk+-3.0' 2>/dev/null`
 
 	$CC $TMP_CFLAGS .tmp.c $TMP_LDFLAGS -o .tmp.o 2>> .config.log
 	if [ $? = 0 ] ; then
-		echo "#define CONFOPT_GTK 2" >> config.h
+		echo "#define CONFOPT_GTK 3" >> config.h
 		echo "$TMP_CFLAGS " >> config.cflags
 		echo "$TMP_LDFLAGS " >> config.ldflags
-		echo "OK (2.0)"
+		echo "OK (3.0)"
 		DRIVERS="gtk $DRIVERS"
 		DRV_OBJS="mpv_gtk.o $DRV_OBJS"
 	else
-		echo "No"
+		# Try now GTK 2.0
+		TMP_CFLAGS=`sh -c 'pkg-config --cflags gtk+-2.0' 2>/dev/null`
+		TMP_LDFLAGS=`sh -c 'pkg-config --libs gtk+-2.0' 2>/dev/null`
+
+		$CC $TMP_CFLAGS .tmp.c $TMP_LDFLAGS -o .tmp.o 2>> .config.log
+		if [ $? = 0 ] ; then
+			echo "#define CONFOPT_GTK 2" >> config.h
+			echo "$TMP_CFLAGS " >> config.cflags
+			echo "$TMP_LDFLAGS " >> config.ldflags
+			echo "OK (2.0)"
+			DRIVERS="gtk $DRIVERS"
+			DRV_OBJS="mpv_gtk.o $DRV_OBJS"
+		else
+			echo "No"
+		fi
 	fi
 fi
 
