@@ -131,7 +131,7 @@ mp.actions['zoom_out'] 	= sub (d) {
 
 mp.actions['about'] = sub (d) {
 	local msg = L(
-	"\nMinimum Profit %s - Programmer Text Editor\n\n"\
+	"Minimum Profit %s (%s) - Programmer Text Editor\n\n"\
 	"Components: MPDM %s, MPSL %s\n\n"\
 	"Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com>\n"\
 	"\n"\
@@ -153,7 +153,7 @@ mp.actions['about'] = sub (d) {
 	"Mailing list: mp-subscribe@lists.triptico.com\n");
 
 	local mpdm = MPDM();
-	msg = sprintf(msg, mp.VERSION, mpdm.version, MPSL.VERSION);
+	msg = sprintf(msg, mp.VERSION, (mp.drv.id || 'unknown'), mpdm.version, MPSL.VERSION);
 
 	d = mp.open("<about>");
 

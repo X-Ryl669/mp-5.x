@@ -2613,7 +2613,6 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
     return NULL;
 }
 
-
 int gtk_drv_detect(int *argc, char ***argv)
 {
     mpdm_t drv;
@@ -2629,7 +2628,13 @@ int gtk_drv_detect(int *argc, char ***argv)
         return 0;
 
     drv = mpdm_hget_s(mp, L"drv");
-    mpdm_hset_s(drv, L"id", MPDM_LS(L"gtk"));
+
+#if CONFOPT_GTK == 3
+    mpdm_hset_s(drv, L"id", MPDM_LS(L"gtk3"));
+#else
+    mpdm_hset_s(drv, L"id", MPDM_LS(L"gtk2"));
+#endif
+
     mpdm_hset_s(drv, L"startup", MPDM_X(gtk_drv_startup));
 
     return 1;
