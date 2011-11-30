@@ -160,8 +160,15 @@ static void update_window_size(void)
     g_object_unref(pa);
 
     /* calculate the size in chars */
+#if CONFOPT_GTK == 2
     tx = (area->allocation.width / font_width);
     ty = (area->allocation.height / font_height) + 1;
+#endif
+
+#if CONFOPT_GTK == 3
+    tx = (gtk_widget_get_allocated_width(area) / font_width);
+    ty = (gtk_widget_get_allocated_height(area) / font_height) + 1;
+#endif
 
     /* store the 'window' size */
     v = mpdm_hget_s(mp, L"window");
@@ -218,8 +225,11 @@ static void build_color(GdkColor * gdkcolor, int rgb)
     gdkcolor->blue = (rgb & 0x000000ff) << 8;
     gdkcolor->green = (rgb & 0x0000ff00);
     gdkcolor->red = (rgb & 0x00ff0000) >> 8;
+
+#if CONFOPT_GTK == 2
     gdk_colormap_alloc_color(gdk_colormap_get_system(), gdkcolor, FALSE,
                              TRUE);
+#endif
 }
 
 
@@ -311,7 +321,13 @@ static void build_submenu(GtkWidget * menu, mpdm_t labels)
             g_free(ptr);
         }
 
+#if CONFOPT_GTK == 2
         gtk_menu_append(GTK_MENU(menu), menu_item);
+#endif
+#if CONFOPT_GTK == 3
+        gtk_menu_shell_append(GTK_MENU_SHELL(menu), menu_item);
+#endif
+
         g_signal_connect_swapped(G_OBJECT(menu_item), "activate",
                                  G_CALLBACK(menu_item_callback), v);
         gtk_widget_show(menu_item);
@@ -366,7 +382,13 @@ static void build_menu(void)
 
         gtk_widget_show(menu_item);
         gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu_item), menu);
+
+#if CONFOPT_GTK == 2
         gtk_menu_bar_append(GTK_MENU_BAR(menu_bar), menu_item);
+#endif
+#if CONFOPT_GTK == 3
+        gtk_menu_shell_append(GTK_MENU_SHELL(menu_bar), menu_item);
+#endif
 
         /* now loop the items */
         build_submenu(menu, mpdm_aget(mi, 1));
@@ -1908,7 +1930,12 @@ static void clicked_ok(GtkWidget * widget, gpointer data)
             mpdm_t h;
 
             if (wcscmp(wptr, L"text") == 0)
+#if CONFOPT_GTK == 2
                 gw = GTK_COMBO(widget)->entry;
+#endif
+#if CONFOPT_GTK == 3
+                gw = gtk_bin_get_child(GTK_BIN(widget));
+#endif
 
             if ((ptr =
                  gtk_editable_get_chars(GTK_EDITABLE(gw), 0, -1)) != NULL
@@ -2112,13 +2139,22 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
             GList *combo_items = NULL;
             mpdm_t h;
 
+#if CONFOPT_GTK == 2
             widget = gtk_combo_new();
-            gtk_widget_set_size_request(widget, 300, -1);
             gtk_combo_set_use_arrows_always(GTK_COMBO(widget), TRUE);
             gtk_combo_set_case_sensitive(GTK_COMBO(widget), TRUE);
             gtk_entry_set_activates_default(GTK_ENTRY
                                             (GTK_COMBO(widget)->entry),
                                             TRUE);
+#endif
+#if CONFOPT_GTK == 3
+            widget = gtk_combo_box_text_new_with_entry();
+            gtk_entry_set_activates_default(GTK_ENTRY
+                                            (gtk_bin_get_child(GTK_BIN(widget))),
+                                            TRUE);
+#endif
+
+            gtk_widget_set_size_request(widget, 300, -1);
 
             if ((h = mpdm_hget_s(w, L"history")) != NULL) {
                 int i;
@@ -2130,6 +2166,10 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
                     ptr = v_to_utf8(mpdm_aget(h, i));
 
                     combo_items = g_list_prepend(combo_items, ptr);
+
+#if CONFOPT_GTK == 3
+                    gtk_combo_box_text_prepend_text(GTK_COMBO_BOX_TEXT(widget), ptr);
+#endif
                 }
             }
 
@@ -2137,9 +2177,14 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
                 ptr = v_to_utf8(t);
 
                 combo_items = g_list_prepend(combo_items, ptr);
+#if CONFOPT_GTK == 3
+                gtk_combo_box_text_prepend_text(GTK_COMBO_BOX_TEXT(widget), ptr);
+#endif
             }
 
+#if CONFOPT_GTK == 2
             gtk_combo_set_popdown_strings(GTK_COMBO(widget), combo_items);
+#endif
             g_list_free(combo_items);
         }
         else
@@ -2402,8 +2447,13 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
 {
     GtkWidget *vbox;
     GtkWidget *hbox;
+#if CONFOPT_GTK == 2
     GdkPixmap *pixmap;
     GdkPixmap *mask;
+#endif
+#if CONFOPT_GTK == 3
+    GdkPixbuf *pixmap;
+#endif
     GdkScreen *screen;
     mpdm_t v;
     int w, h;
@@ -2440,7 +2490,13 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
     /* file tabs */
     file_tabs = gtk_notebook_new();
     gtk_notebook_set_tab_pos(GTK_NOTEBOOK(file_tabs), GTK_POS_TOP);
+
+#if CONFOPT_GTK == 2
     GTK_WIDGET_UNSET_FLAGS(file_tabs, GTK_CAN_FOCUS);
+#endif
+#if CONFOPT_GTK == 3
+    gtk_widget_set_can_focus(file_tabs, FALSE);
+#endif
     gtk_notebook_set_scrollable(GTK_NOTEBOOK(file_tabs), 1);
 
     vbox = gtk_vbox_new(FALSE, 2);
@@ -2472,7 +2528,12 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
     g_signal_connect(G_OBJECT(area), "configure_event",
                      G_CALLBACK(configure_event), NULL);
 
+#if CONFOPT_GTK == 2
     g_signal_connect(G_OBJECT(area), "expose_event",
+#endif
+#if CONFOPT_GTK == 3
+    g_signal_connect(G_OBJECT(area), "draw",
+#endif
                      G_CALLBACK(expose_event), NULL);
 
     g_signal_connect(G_OBJECT(area), "realize", G_CALLBACK(realize), NULL);
@@ -2533,9 +2594,15 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
     gtk_widget_show_all(window);
 
     /* set application icon */
+#if CONFOPT_GTK == 2
     pixmap = gdk_pixmap_create_from_xpm_d(window->window,
                                           &mask, NULL, mp_xpm);
     gdk_window_set_icon(window->window, NULL, pixmap, mask);
+#endif
+#if CONFOPT_GTK == 3
+    pixmap = gdk_pixbuf_new_from_xpm_data((const char **)mp_xpm);
+    gtk_window_set_icon(GTK_WINDOW(window), pixmap);
+#endif
 
     build_colors();
 
