@@ -133,7 +133,7 @@ mp.actions['about'] = sub (d) {
 	local msg = L(
 	"Minimum Profit %s (%s) - Programmer Text Editor\n\n"\
 	"Components: MPDM %s, MPSL %s\n\n"\
-	"Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com>\n"\
+	"Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com> and others\n"\
 	"\n"\
 	"This program is free software; you can redistribute it and/or\n"\
 	"modify it under the terms of the GNU General Public License\n"\
@@ -149,7 +149,7 @@ mp.actions['about'] = sub (d) {
 	"along with this program; if not, write to the Free Software Foundation,\n"\
 	"Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.\n"\
 	"\n"\
-	"Home page: http://www.triptico.com/software/mp.html\n"\
+	"Home page: http://triptico.com/software/mp.html\n"\
 	"Mailing list: mp-subscribe@lists.triptico.com\n");
 
 	local mpdm = MPDM();

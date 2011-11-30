@@ -643,17 +643,17 @@ msgstr "Buscar en ficheros (grep)"
 msgid "Search previous"
 msgstr "Buscar anterior"
 
-#: mp_syntax.mpsl:42
+#: mp_syntax.mpsl:45
 #, c-format
 msgid "No help for '%s'."
 msgstr "No hay ayuda para '%s'."
 
-#: mp_syntax.mpsl:46
+#: mp_syntax.mpsl:49
 #, c-format
 msgid "<help on '%s'>"
 msgstr "<ayuda para '%s'>"
 
-#: mp_syntax.mpsl:84
+#: mp_syntax.mpsl:107
 msgid "Help on word over cursor"
 msgstr "Ayuda sobre la tecla bajo el cursor"
 
@@ -830,7 +830,7 @@ msgstr "No se encontraron errores ni advertencias."
 msgid "Errors and Warnings"
 msgstr "Errores y advertencias"
 
-#: mp_build.mpsl:80
+#: mp_build.mpsl:86
 msgid "Build project..."
 msgstr "Construir proyecto..."
 
@@ -842,19 +842,19 @@ msgstr "Documento de sólo lectura"
 msgid "Mark vertical block"
 msgstr "Marcar bloque vertical"
 
-#: mp_syntax.mpsl:55
+#: mp_syntax.mpsl:63
 msgid "No detection for sections for this mode."
 msgstr "No hay forma de detectar secciones en este modo."
 
-#: mp_syntax.mpsl:58
+#: mp_syntax.mpsl:66
 msgid "No sections were found in this document."
 msgstr "No se encontraron secciones en este documento."
 
-#: mp_syntax.mpsl:62
+#: mp_syntax.mpsl:84
 msgid "Section list"
 msgstr "Lista de secciones"
 
-#: mp_syntax.mpsl:85
+#: mp_syntax.mpsl:108
 msgid "Section list..."
 msgstr "Lista de secciones..."
 
@@ -954,7 +954,7 @@ msgstr ""
 "Página web: http://triptico.com/software/mp.html\n"
 "Lista de distribución: mp-subscribe@lists.triptico.com\n"
 
-#: mp_build.mpsl:81
+#: mp_build.mpsl:87
 msgid "Insert next item"
 msgstr "Insertar nuevo elemento"
 
@@ -998,15 +998,22 @@ msgstr "Indentar bloque"
 msgid "Unindent block"
 msgstr "Desindentar bloque"
 
+#: mp_templates.mpsl:60
+msgid "Template file to edit:"
+msgstr "Fichero de plantillas a editar:"
+
+#: mp_edit.mpsl:233
+msgid "'Smart' move to beginning of line:"
+msgstr "Saltar al principio de la línea 'inteligente':"
+
 #: mp_misc.mpsl:134
 #, c-format
 msgid ""
-"\n"
-"Minimum Profit %s - Programmer Text Editor\n"
+"Minimum Profit %s (%s) - Programmer Text Editor\n"
 "\n"
 "Components: MPDM %s, MPSL %s\n"
 "\n"
-"Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com>\n"
+"Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com> and others\n"
 "\n"
 "This program is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -1022,14 +1029,11 @@ msgid ""
 "along with this program; if not, write to the Free Software Foundation,\n"
 "Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.\n"
 "\n"
-"Home page: http://www.triptico.com/software/mp.html\n"
+"Home page: http://triptico.com/software/mp.html\n"
 "Mailing list: mp-subscribe@lists.triptico.com\n"
 msgstr ""
 
-#: mp_templates.mpsl:60
-msgid "Template file to edit:"
-msgstr "Fichero de plantillas a editar:"
-
-#: mp_edit.mpsl:233
-msgid "'Smart' move to beginning of line:"
-msgstr "Saltar al principio de la línea 'inteligente':"
+#: mp_syntax.mpsl:904
+#, c-format
+msgid "Gathered information on %s:"
+msgstr ""

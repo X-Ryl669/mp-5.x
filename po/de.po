@@ -730,17 +730,17 @@ msgstr ""
 msgid "Search previous"
 msgstr ""
 
-#: mp_syntax.mpsl:42
+#: mp_syntax.mpsl:45
 #, c-format
 msgid "No help for '%s'."
 msgstr ""
 
-#: mp_syntax.mpsl:46
+#: mp_syntax.mpsl:49
 #, c-format
 msgid "<help on '%s'>"
 msgstr ""
 
-#: mp_syntax.mpsl:84
+#: mp_syntax.mpsl:107
 msgid "Help on word over cursor"
 msgstr ""
 
@@ -949,7 +949,7 @@ msgstr ""
 msgid "Errors and Warnings"
 msgstr ""
 
-#: mp_build.mpsl:80
+#: mp_build.mpsl:86
 msgid "Build project..."
 msgstr ""
 
@@ -961,19 +961,19 @@ msgstr ""
 msgid "Mark vertical block"
 msgstr ""
 
-#: mp_syntax.mpsl:55
+#: mp_syntax.mpsl:63
 msgid "No detection for sections for this mode."
 msgstr ""
 
-#: mp_syntax.mpsl:58
+#: mp_syntax.mpsl:66
 msgid "No sections were found in this document."
 msgstr ""
 
-#: mp_syntax.mpsl:62
+#: mp_syntax.mpsl:84
 msgid "Section list"
 msgstr ""
 
-#: mp_syntax.mpsl:85
+#: mp_syntax.mpsl:108
 msgid "Section list..."
 msgstr ""
 
@@ -1107,7 +1107,7 @@ msgid ""
 "Mailing list: mp-subscribe@lists.triptico.com\n"
 msgstr ""
 
-#: mp_build.mpsl:81
+#: mp_build.mpsl:87
 msgid "Insert next item"
 msgstr ""
 
@@ -1151,8 +1151,6 @@ msgstr ""
 msgid "Unindent block"
 msgstr ""
 
-#: mp_misc.mpsl:134
-#, c-format
 msgid ""
 "\n"
 "Minimum Profit %s - Programmer Text Editor\n"
@@ -1185,4 +1183,36 @@ msgstr ""
 
 #: mp_edit.mpsl:233
 msgid "'Smart' move to beginning of line:"
+msgstr ""
+
+#: mp_misc.mpsl:134
+#, c-format
+msgid ""
+"Minimum Profit %s (%s) - Programmer Text Editor\n"
+"\n"
+"Components: MPDM %s, MPSL %s\n"
+"\n"
+"Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com> and others\n"
+"\n"
+"This program is free software; you can redistribute it and/or\n"
+"modify it under the terms of the GNU General Public License\n"
+"as published by the Free Software Foundation; either version 2\n"
+"of the License, or (at your option) any later version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
+"See the GNU General Public License for more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License\n"
+"along with this program; if not, write to the Free Software Foundation,\n"
+"Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.\n"
+"\n"
+"Home page: http://triptico.com/software/mp.html\n"
+"Mailing list: mp-subscribe@lists.triptico.com\n"
+msgstr ""
+
+#: mp_syntax.mpsl:904
+#, c-format
+msgid "Gathered information on %s:"
 msgstr ""
