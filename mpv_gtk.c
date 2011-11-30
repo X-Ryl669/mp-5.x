@@ -2063,8 +2063,7 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
     build_form_data(mpdm_aget(a, 0));
 
     dlg = gtk_dialog_new_with_buttons("mp " VERSION, GTK_WINDOW(window),
-                                      GTK_DIALOG_MODAL |
-                                      GTK_DIALOG_NO_SEPARATOR,
+                                      GTK_DIALOG_MODAL,
                                       GTK_STOCK_CANCEL,
                                       GTK_RESPONSE_CANCEL, GTK_STOCK_OK,
                                       GTK_RESPONSE_OK, NULL);
