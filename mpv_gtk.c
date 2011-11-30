@@ -1750,7 +1750,7 @@ static void realize(GtkWidget * widget)
 }
 
 
-static gint expose_event(GtkWidget * widget, GdkEventExpose * event)
+static gint expose_event(GtkWidget * widget, cairo_t *event)
 /* 'expose_event' handler */
 {
     redraw();
