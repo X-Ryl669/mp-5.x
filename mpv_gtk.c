@@ -719,6 +719,290 @@ static gint key_release_event(GtkWidget * widget, GdkEventKey * event,
 }
 
 
+#if CONFOPT_GTK == 2
+#define MP_KEY_Up GDK_Up
+#define MP_KEY_Down GDK_Down
+#define MP_KEY_Left GDK_Left
+#define MP_KEY_Right GDK_Right
+#define MP_KEY_Prior GDK_Prior
+#define MP_KEY_Next GDK_Next
+#define MP_KEY_Home GDK_Home
+#define MP_KEY_End GDK_End
+#define MP_KEY_space GDK_space
+#define MP_KEY_KP_Add GDK_KP_Add
+#define MP_KEY_KP_Subtract GDK_KP_Subtract
+#define MP_KEY_KP_Multiply GDK_KP_Multiply
+#define MP_KEY_KP_Divide GDK_KP_Divide
+#define MP_KEY_F1 GDK_F1
+#define MP_KEY_F2 GDK_F2
+#define MP_KEY_F3 GDK_F3
+#define MP_KEY_F4 GDK_F4
+#define MP_KEY_F5 GDK_F5
+#define MP_KEY_F6 GDK_F6
+#define MP_KEY_F7 GDK_F7
+#define MP_KEY_F8 GDK_F8
+#define MP_KEY_F9 GDK_F9
+#define MP_KEY_F10 GDK_F10
+#define MP_KEY_F11 GDK_F11
+#define MP_KEY_F12 GDK_F12
+#define MP_KEY_KP_Enter GDK_KP_Enter
+#define MP_KEY_Return GDK_Return
+#define MP_KEY_Cyrillic_ve GDK_Cyrillic_ve
+#define MP_KEY_Cyrillic_a GDK_Cyrillic_a
+#define MP_KEY_Cyrillic_tse GDK_Cyrillic_tse
+#define MP_KEY_Cyrillic_de GDK_Cyrillic_de
+#define MP_KEY_Cyrillic_ie GDK_Cyrillic_ie
+#define MP_KEY_Cyrillic_ef GDK_Cyrillic_ef
+#define MP_KEY_Cyrillic_ghe GDK_Cyrillic_ghe
+#define MP_KEY_Cyrillic_i GDK_Cyrillic_i
+#define MP_KEY_Cyrillic_shorti GDK_Cyrillic_shorti
+#define MP_KEY_Cyrillic_ka GDK_Cyrillic_ka
+#define MP_KEY_Cyrillic_el GDK_Cyrillic_el
+#define MP_KEY_Cyrillic_em GDK_Cyrillic_em
+#define MP_KEY_Cyrillic_en GDK_Cyrillic_en
+#define MP_KEY_Cyrillic_o GDK_Cyrillic_o
+#define MP_KEY_Cyrillic_pe GDK_Cyrillic_pe
+#define MP_KEY_Cyrillic_ya GDK_Cyrillic_ya
+#define MP_KEY_Cyrillic_er GDK_Cyrillic_er
+#define MP_KEY_Cyrillic_es GDK_Cyrillic_es
+#define MP_KEY_Cyrillic_te GDK_Cyrillic_te
+#define MP_KEY_Cyrillic_softsign GDK_Cyrillic_softsign
+#define MP_KEY_Cyrillic_yeru GDK_Cyrillic_yeru
+#define MP_KEY_Cyrillic_ze GDK_Cyrillic_ze
+#define MP_KEY_Cyrillic_sha GDK_Cyrillic_sha
+#define MP_KEY_Cyrillic_e GDK_Cyrillic_e
+#define MP_KEY_Cyrillic_shcha GDK_Cyrillic_shcha
+#define MP_KEY_Cyrillic_che GDK_Cyrillic_che
+#define MP_KEY_Up GDK_Up
+#define MP_KEY_Down GDK_Down
+#define MP_KEY_Left GDK_Left
+#define MP_KEY_Right GDK_Right
+#define MP_KEY_Prior GDK_Prior
+#define MP_KEY_Next GDK_Next
+#define MP_KEY_Home GDK_Home
+#define MP_KEY_End GDK_End
+#define MP_KEY_space GDK_space
+#define MP_KEY_KP_Add GDK_KP_Add
+#define MP_KEY_KP_Subtract GDK_KP_Subtract
+#define MP_KEY_KP_Multiply GDK_KP_Multiply
+#define MP_KEY_KP_Divide GDK_KP_Divide
+#define MP_KEY_F1 GDK_F1
+#define MP_KEY_F2 GDK_F2
+#define MP_KEY_F3 GDK_F3
+#define MP_KEY_F4 GDK_F4
+#define MP_KEY_F5 GDK_F5
+#define MP_KEY_F6 GDK_F6
+#define MP_KEY_F7 GDK_F7
+#define MP_KEY_F8 GDK_F8
+#define MP_KEY_F9 GDK_F9
+#define MP_KEY_F10 GDK_F10
+#define MP_KEY_F11 GDK_F11
+#define MP_KEY_F12 GDK_F12
+#define MP_KEY_KP_Enter GDK_KP_Enter
+#define MP_KEY_Return GDK_Return
+#define MP_KEY_Cyrillic_ve GDK_Cyrillic_ve
+#define MP_KEY_Cyrillic_a GDK_Cyrillic_a
+#define MP_KEY_Cyrillic_tse GDK_Cyrillic_tse
+#define MP_KEY_Cyrillic_de GDK_Cyrillic_de
+#define MP_KEY_Cyrillic_ie GDK_Cyrillic_ie
+#define MP_KEY_Cyrillic_ef GDK_Cyrillic_ef
+#define MP_KEY_Cyrillic_ghe GDK_Cyrillic_ghe
+#define MP_KEY_Cyrillic_i GDK_Cyrillic_i
+#define MP_KEY_Cyrillic_shorti GDK_Cyrillic_shorti
+#define MP_KEY_Cyrillic_ka GDK_Cyrillic_ka
+#define MP_KEY_Cyrillic_el GDK_Cyrillic_el
+#define MP_KEY_Cyrillic_em GDK_Cyrillic_em
+#define MP_KEY_Cyrillic_en GDK_Cyrillic_en
+#define MP_KEY_Cyrillic_o GDK_Cyrillic_o
+#define MP_KEY_Cyrillic_pe GDK_Cyrillic_pe
+#define MP_KEY_Cyrillic_ya GDK_Cyrillic_ya
+#define MP_KEY_Cyrillic_er GDK_Cyrillic_er
+#define MP_KEY_Cyrillic_es GDK_Cyrillic_es
+#define MP_KEY_Cyrillic_te GDK_Cyrillic_te
+#define MP_KEY_Cyrillic_softsign GDK_Cyrillic_softsign
+#define MP_KEY_Cyrillic_yeru GDK_Cyrillic_yeru
+#define MP_KEY_Cyrillic_ze GDK_Cyrillic_ze
+#define MP_KEY_Cyrillic_sha GDK_Cyrillic_sha
+#define MP_KEY_Cyrillic_e GDK_Cyrillic_e
+#define MP_KEY_Cyrillic_shcha GDK_Cyrillic_shcha
+#define MP_KEY_Cyrillic_che GDK_Cyrillic_che
+#define MP_KEY_Up GDK_Up
+#define MP_KEY_Down GDK_Down
+#define MP_KEY_Left GDK_Left
+#define MP_KEY_Right GDK_Right
+#define MP_KEY_Prior GDK_Prior
+#define MP_KEY_Next GDK_Next
+#define MP_KEY_Home GDK_Home
+#define MP_KEY_End GDK_End
+#define MP_KEY_space GDK_space
+#define MP_KEY_KP_Add GDK_KP_Add
+#define MP_KEY_KP_Subtract GDK_KP_Subtract
+#define MP_KEY_KP_Multiply GDK_KP_Multiply
+#define MP_KEY_KP_Divide GDK_KP_Divide
+#define MP_KEY_F1 GDK_F1
+#define MP_KEY_F2 GDK_F2
+#define MP_KEY_F3 GDK_F3
+#define MP_KEY_F4 GDK_F4
+#define MP_KEY_F5 GDK_F5
+#define MP_KEY_F6 GDK_F6
+#define MP_KEY_F7 GDK_F7
+#define MP_KEY_F8 GDK_F8
+#define MP_KEY_F9 GDK_F9
+#define MP_KEY_F10 GDK_F10
+#define MP_KEY_F11 GDK_F11
+#define MP_KEY_F12 GDK_F12
+#define MP_KEY_Insert GDK_Insert
+#define MP_KEY_BackSpace GDK_BackSpace
+#define MP_KEY_Delete GDK_Delete
+#define MP_KEY_KP_Enter GDK_KP_Enter
+#define MP_KEY_Return GDK_Return
+#define MP_KEY_Tab GDK_Tab
+#define MP_KEY_ISO_Left_Tab GDK_ISO_Left_Tab
+#define MP_KEY_Escape GDK_Escape
+#endif /* CONFOPT_GTK == 2 */
+
+#if CONFOPT_GTK == 3
+#define MP_KEY_Up GDK_KEY_Up
+#define MP_KEY_Down GDK_KEY_Down
+#define MP_KEY_Left GDK_KEY_Left
+#define MP_KEY_Right GDK_KEY_Right
+#define MP_KEY_Prior GDK_KEY_Prior
+#define MP_KEY_Next GDK_KEY_Next
+#define MP_KEY_Home GDK_KEY_Home
+#define MP_KEY_End GDK_KEY_End
+#define MP_KEY_space GDK_KEY_space
+#define MP_KEY_KP_Add GDK_KEY_KP_Add
+#define MP_KEY_KP_Subtract GDK_KEY_KP_Subtract
+#define MP_KEY_KP_Multiply GDK_KEY_KP_Multiply
+#define MP_KEY_KP_Divide GDK_KEY_KP_Divide
+#define MP_KEY_F1 GDK_KEY_F1
+#define MP_KEY_F2 GDK_KEY_F2
+#define MP_KEY_F3 GDK_KEY_F3
+#define MP_KEY_F4 GDK_KEY_F4
+#define MP_KEY_F5 GDK_KEY_F5
+#define MP_KEY_F6 GDK_KEY_F6
+#define MP_KEY_F7 GDK_KEY_F7
+#define MP_KEY_F8 GDK_KEY_F8
+#define MP_KEY_F9 GDK_KEY_F9
+#define MP_KEY_F10 GDK_KEY_F10
+#define MP_KEY_F11 GDK_KEY_F11
+#define MP_KEY_F12 GDK_KEY_F12
+#define MP_KEY_KP_Enter GDK_KEY_KP_Enter
+#define MP_KEY_Return GDK_KEY_Return
+#define MP_KEY_Cyrillic_ve GDK_KEY_Cyrillic_ve
+#define MP_KEY_Cyrillic_a GDK_KEY_Cyrillic_a
+#define MP_KEY_Cyrillic_tse GDK_KEY_Cyrillic_tse
+#define MP_KEY_Cyrillic_de GDK_KEY_Cyrillic_de
+#define MP_KEY_Cyrillic_ie GDK_KEY_Cyrillic_ie
+#define MP_KEY_Cyrillic_ef GDK_KEY_Cyrillic_ef
+#define MP_KEY_Cyrillic_ghe GDK_KEY_Cyrillic_ghe
+#define MP_KEY_Cyrillic_i GDK_KEY_Cyrillic_i
+#define MP_KEY_Cyrillic_shorti GDK_KEY_Cyrillic_shorti
+#define MP_KEY_Cyrillic_ka GDK_KEY_Cyrillic_ka
+#define MP_KEY_Cyrillic_el GDK_KEY_Cyrillic_el
+#define MP_KEY_Cyrillic_em GDK_KEY_Cyrillic_em
+#define MP_KEY_Cyrillic_en GDK_KEY_Cyrillic_en
+#define MP_KEY_Cyrillic_o GDK_KEY_Cyrillic_o
+#define MP_KEY_Cyrillic_pe GDK_KEY_Cyrillic_pe
+#define MP_KEY_Cyrillic_ya GDK_KEY_Cyrillic_ya
+#define MP_KEY_Cyrillic_er GDK_KEY_Cyrillic_er
+#define MP_KEY_Cyrillic_es GDK_KEY_Cyrillic_es
+#define MP_KEY_Cyrillic_te GDK_KEY_Cyrillic_te
+#define MP_KEY_Cyrillic_softsign GDK_KEY_Cyrillic_softsign
+#define MP_KEY_Cyrillic_yeru GDK_KEY_Cyrillic_yeru
+#define MP_KEY_Cyrillic_ze GDK_KEY_Cyrillic_ze
+#define MP_KEY_Cyrillic_sha GDK_KEY_Cyrillic_sha
+#define MP_KEY_Cyrillic_e GDK_KEY_Cyrillic_e
+#define MP_KEY_Cyrillic_shcha GDK_KEY_Cyrillic_shcha
+#define MP_KEY_Cyrillic_che GDK_KEY_Cyrillic_che
+#define MP_KEY_Up GDK_KEY_Up
+#define MP_KEY_Down GDK_KEY_Down
+#define MP_KEY_Left GDK_KEY_Left
+#define MP_KEY_Right GDK_KEY_Right
+#define MP_KEY_Prior GDK_KEY_Prior
+#define MP_KEY_Next GDK_KEY_Next
+#define MP_KEY_Home GDK_KEY_Home
+#define MP_KEY_End GDK_KEY_End
+#define MP_KEY_space GDK_KEY_space
+#define MP_KEY_KP_Add GDK_KEY_KP_Add
+#define MP_KEY_KP_Subtract GDK_KEY_KP_Subtract
+#define MP_KEY_KP_Multiply GDK_KEY_KP_Multiply
+#define MP_KEY_KP_Divide GDK_KEY_KP_Divide
+#define MP_KEY_F1 GDK_KEY_F1
+#define MP_KEY_F2 GDK_KEY_F2
+#define MP_KEY_F3 GDK_KEY_F3
+#define MP_KEY_F4 GDK_KEY_F4
+#define MP_KEY_F5 GDK_KEY_F5
+#define MP_KEY_F6 GDK_KEY_F6
+#define MP_KEY_F7 GDK_KEY_F7
+#define MP_KEY_F8 GDK_KEY_F8
+#define MP_KEY_F9 GDK_KEY_F9
+#define MP_KEY_F10 GDK_KEY_F10
+#define MP_KEY_F11 GDK_KEY_F11
+#define MP_KEY_F12 GDK_KEY_F12
+#define MP_KEY_KP_Enter GDK_KEY_KP_Enter
+#define MP_KEY_Return GDK_KEY_Return
+#define MP_KEY_Cyrillic_ve GDK_KEY_Cyrillic_ve
+#define MP_KEY_Cyrillic_a GDK_KEY_Cyrillic_a
+#define MP_KEY_Cyrillic_tse GDK_KEY_Cyrillic_tse
+#define MP_KEY_Cyrillic_de GDK_KEY_Cyrillic_de
+#define MP_KEY_Cyrillic_ie GDK_KEY_Cyrillic_ie
+#define MP_KEY_Cyrillic_ef GDK_KEY_Cyrillic_ef
+#define MP_KEY_Cyrillic_ghe GDK_KEY_Cyrillic_ghe
+#define MP_KEY_Cyrillic_i GDK_KEY_Cyrillic_i
+#define MP_KEY_Cyrillic_shorti GDK_KEY_Cyrillic_shorti
+#define MP_KEY_Cyrillic_ka GDK_KEY_Cyrillic_ka
+#define MP_KEY_Cyrillic_el GDK_KEY_Cyrillic_el
+#define MP_KEY_Cyrillic_em GDK_KEY_Cyrillic_em
+#define MP_KEY_Cyrillic_en GDK_KEY_Cyrillic_en
+#define MP_KEY_Cyrillic_o GDK_KEY_Cyrillic_o
+#define MP_KEY_Cyrillic_pe GDK_KEY_Cyrillic_pe
+#define MP_KEY_Cyrillic_ya GDK_KEY_Cyrillic_ya
+#define MP_KEY_Cyrillic_er GDK_KEY_Cyrillic_er
+#define MP_KEY_Cyrillic_es GDK_KEY_Cyrillic_es
+#define MP_KEY_Cyrillic_te GDK_KEY_Cyrillic_te
+#define MP_KEY_Cyrillic_softsign GDK_KEY_Cyrillic_softsign
+#define MP_KEY_Cyrillic_yeru GDK_KEY_Cyrillic_yeru
+#define MP_KEY_Cyrillic_ze GDK_KEY_Cyrillic_ze
+#define MP_KEY_Cyrillic_sha GDK_KEY_Cyrillic_sha
+#define MP_KEY_Cyrillic_e GDK_KEY_Cyrillic_e
+#define MP_KEY_Cyrillic_shcha GDK_KEY_Cyrillic_shcha
+#define MP_KEY_Cyrillic_che GDK_KEY_Cyrillic_che
+#define MP_KEY_Up GDK_KEY_Up
+#define MP_KEY_Down GDK_KEY_Down
+#define MP_KEY_Left GDK_KEY_Left
+#define MP_KEY_Right GDK_KEY_Right
+#define MP_KEY_Prior GDK_KEY_Prior
+#define MP_KEY_Next GDK_KEY_Next
+#define MP_KEY_Home GDK_KEY_Home
+#define MP_KEY_End GDK_KEY_End
+#define MP_KEY_space GDK_KEY_space
+#define MP_KEY_KP_Add GDK_KEY_KP_Add
+#define MP_KEY_KP_Subtract GDK_KEY_KP_Subtract
+#define MP_KEY_KP_Multiply GDK_KEY_KP_Multiply
+#define MP_KEY_KP_Divide GDK_KEY_KP_Divide
+#define MP_KEY_F1 GDK_KEY_F1
+#define MP_KEY_F2 GDK_KEY_F2
+#define MP_KEY_F3 GDK_KEY_F3
+#define MP_KEY_F4 GDK_KEY_F4
+#define MP_KEY_F5 GDK_KEY_F5
+#define MP_KEY_F6 GDK_KEY_F6
+#define MP_KEY_F7 GDK_KEY_F7
+#define MP_KEY_F8 GDK_KEY_F8
+#define MP_KEY_F9 GDK_KEY_F9
+#define MP_KEY_F10 GDK_KEY_F10
+#define MP_KEY_F11 GDK_KEY_F11
+#define MP_KEY_F12 GDK_KEY_F12
+#define MP_KEY_Insert GDK_KEY_Insert
+#define MP_KEY_BackSpace GDK_KEY_BackSpace
+#define MP_KEY_Delete GDK_KEY_Delete
+#define MP_KEY_KP_Enter GDK_KEY_KP_Enter
+#define MP_KEY_Return GDK_KEY_Return
+#define MP_KEY_Tab GDK_KEY_Tab
+#define MP_KEY_ISO_Left_Tab GDK_KEY_ISO_Left_Tab
+#define MP_KEY_Escape GDK_KEY_Escape
+#endif /* CONFOPT_GTK == 3 */
+
 static gint key_press_event(GtkWidget * widget, GdkEventKey * event,
                             gpointer data)
 /* 'key_press_event' handler */
@@ -737,161 +1021,161 @@ static gint key_press_event(GtkWidget * widget, GdkEventKey * event,
 
     if (event->state & (GDK_CONTROL_MASK)) {
         switch (event->keyval) {
-        case GDK_Up:
+        case MP_KEY_Up:
             ptr = L"ctrl-cursor-up";
             break;
-        case GDK_Down:
+        case MP_KEY_Down:
             ptr = L"ctrl-cursor-down";
             break;
-        case GDK_Left:
+        case MP_KEY_Left:
             ptr = L"ctrl-cursor-left";
             break;
-        case GDK_Right:
+        case MP_KEY_Right:
             ptr = L"ctrl-cursor-right";
             break;
-        case GDK_Prior:
+        case MP_KEY_Prior:
             ptr = L"ctrl-page-up";
             break;
-        case GDK_Next:
+        case MP_KEY_Next:
             ptr = L"ctrl-page-down";
             break;
-        case GDK_Home:
+        case MP_KEY_Home:
             ptr = L"ctrl-home";
             break;
-        case GDK_End:
+        case MP_KEY_End:
             ptr = L"ctrl-end";
             break;
-        case GDK_space:
+        case MP_KEY_space:
             ptr = L"ctrl-space";
             break;
-        case GDK_KP_Add:
+        case MP_KEY_KP_Add:
             ptr = L"ctrl-kp-plus";
             break;
-        case GDK_KP_Subtract:
+        case MP_KEY_KP_Subtract:
             ptr = L"ctrl-kp-minus";
             break;
-        case GDK_KP_Multiply:
+        case MP_KEY_KP_Multiply:
             ptr = L"ctrl-kp-multiply";
             break;
-        case GDK_KP_Divide:
+        case MP_KEY_KP_Divide:
             ptr = L"ctrl-kp-divide";
             break;
-        case GDK_F1:
+        case MP_KEY_F1:
             ptr = L"ctrl-f1";
             break;
-        case GDK_F2:
+        case MP_KEY_F2:
             ptr = L"ctrl-f2";
             break;
-        case GDK_F3:
+        case MP_KEY_F3:
             ptr = L"ctrl-f3";
             break;
-        case GDK_F4:
+        case MP_KEY_F4:
             ptr = L"ctrl-f4";
             break;
-        case GDK_F5:
+        case MP_KEY_F5:
             ptr = L"ctrl-f5";
             break;
-        case GDK_F6:
+        case MP_KEY_F6:
             ptr = L"ctrl-f6";
             break;
-        case GDK_F7:
+        case MP_KEY_F7:
             ptr = L"ctrl-f7";
             break;
-        case GDK_F8:
+        case MP_KEY_F8:
             ptr = L"ctrl-f8";
             break;
-        case GDK_F9:
+        case MP_KEY_F9:
             ptr = L"ctrl-f9";
             break;
-        case GDK_F10:
+        case MP_KEY_F10:
             ptr = L"ctrl-f10";
             break;
-        case GDK_F11:
+        case MP_KEY_F11:
             ptr = L"ctrl-f11";
             break;
-        case GDK_F12:
+        case MP_KEY_F12:
             ptr = L"ctrl-f12";
             break;
-        case GDK_KP_Enter:
-        case GDK_Return:
+        case MP_KEY_KP_Enter:
+        case MP_KEY_Return:
             ptr = L"ctrl-enter";
             break;
-        case GDK_Cyrillic_ve:
+        case MP_KEY_Cyrillic_ve:
             ptr = L"ctrl-d";
             break;
-        case GDK_Cyrillic_a:
+        case MP_KEY_Cyrillic_a:
             ptr = L"ctrl-f";
             break;
-        case GDK_Cyrillic_tse:
+        case MP_KEY_Cyrillic_tse:
             ptr = L"ctrl-w";
             break;
-        case GDK_Cyrillic_de:
+        case MP_KEY_Cyrillic_de:
             ptr = L"ctrl-l";
             break;
-        case GDK_Cyrillic_ie:
+        case MP_KEY_Cyrillic_ie:
             ptr = L"ctrl-t";
             break;
-        case GDK_Cyrillic_ef:
+        case MP_KEY_Cyrillic_ef:
             ptr = L"ctrl-a";
             break;
-        case GDK_Cyrillic_ghe:
+        case MP_KEY_Cyrillic_ghe:
             ptr = L"ctrl-u";
             break;
-        case GDK_Cyrillic_i:
+        case MP_KEY_Cyrillic_i:
             ptr = L"ctrl-b";
             break;
-        case GDK_Cyrillic_shorti:
+        case MP_KEY_Cyrillic_shorti:
             ptr = L"ctrl-q";
             break;
-        case GDK_Cyrillic_ka:
+        case MP_KEY_Cyrillic_ka:
             ptr = L"ctrl-r";
             break;
-        case GDK_Cyrillic_el:
+        case MP_KEY_Cyrillic_el:
             ptr = L"ctrl-k";
             break;
-        case GDK_Cyrillic_em:
+        case MP_KEY_Cyrillic_em:
             ptr = L"ctrl-v";
             break;
-        case GDK_Cyrillic_en:
+        case MP_KEY_Cyrillic_en:
             ptr = L"ctrl-y";
             break;
-        case GDK_Cyrillic_o:
+        case MP_KEY_Cyrillic_o:
             ptr = L"ctrl-j";
             break;
-        case GDK_Cyrillic_pe:
+        case MP_KEY_Cyrillic_pe:
             ptr = L"ctrl-g";
             break;
-        case GDK_Cyrillic_ya:
+        case MP_KEY_Cyrillic_ya:
             ptr = L"ctrl-z";
             break;
-        case GDK_Cyrillic_er:
+        case MP_KEY_Cyrillic_er:
             ptr = L"ctrl-h";
             break;
-        case GDK_Cyrillic_es:
+        case MP_KEY_Cyrillic_es:
             ptr = L"ctrl-c";
             break;
-        case GDK_Cyrillic_te:
+        case MP_KEY_Cyrillic_te:
             ptr = L"ctrl-n";
             break;
-        case GDK_Cyrillic_softsign:
+        case MP_KEY_Cyrillic_softsign:
             ptr = L"ctrl-m";
             break;
-        case GDK_Cyrillic_yeru:
+        case MP_KEY_Cyrillic_yeru:
             ptr = L"ctrl-s";
             break;
-        case GDK_Cyrillic_ze:
+        case MP_KEY_Cyrillic_ze:
             ptr = L"ctrl-p";
             break;
-        case GDK_Cyrillic_sha:
+        case MP_KEY_Cyrillic_sha:
             ptr = L"ctrl-i";
             break;
-        case GDK_Cyrillic_e:
+        case MP_KEY_Cyrillic_e:
             ptr = L"ctrl-t";
             break;
-        case GDK_Cyrillic_shcha:
+        case MP_KEY_Cyrillic_shcha:
             ptr = L"ctrl-o";
             break;
-        case GDK_Cyrillic_che:
+        case MP_KEY_Cyrillic_che:
             ptr = L"ctrl-x";
             break;
         }
@@ -984,161 +1268,161 @@ static gint key_press_event(GtkWidget * widget, GdkEventKey * event,
     else
     if (event->state & (GDK_MOD1_MASK)) {
         switch (event->keyval) {
-        case GDK_Up:
+        case MP_KEY_Up:
             ptr = L"alt-cursor-up";
             break;
-        case GDK_Down:
+        case MP_KEY_Down:
             ptr = L"alt-cursor-down";
             break;
-        case GDK_Left:
+        case MP_KEY_Left:
             ptr = L"alt-cursor-left";
             break;
-        case GDK_Right:
+        case MP_KEY_Right:
             ptr = L"alt-cursor-right";
             break;
-        case GDK_Prior:
+        case MP_KEY_Prior:
             ptr = L"alt-page-up";
             break;
-        case GDK_Next:
+        case MP_KEY_Next:
             ptr = L"alt-page-down";
             break;
-        case GDK_Home:
+        case MP_KEY_Home:
             ptr = L"alt-home";
             break;
-        case GDK_End:
+        case MP_KEY_End:
             ptr = L"alt-end";
             break;
-        case GDK_space:
+        case MP_KEY_space:
             ptr = L"alt-space";
             break;
-        case GDK_KP_Add:
+        case MP_KEY_KP_Add:
             ptr = L"alt-kp-plus";
             break;
-        case GDK_KP_Subtract:
+        case MP_KEY_KP_Subtract:
             ptr = L"alt-kp-minus";
             break;
-        case GDK_KP_Multiply:
+        case MP_KEY_KP_Multiply:
             ptr = L"alt-kp-multiply";
             break;
-        case GDK_KP_Divide:
+        case MP_KEY_KP_Divide:
             ptr = L"alt-kp-divide";
             break;
-        case GDK_F1:
+        case MP_KEY_F1:
             ptr = L"alt-f1";
             break;
-        case GDK_F2:
+        case MP_KEY_F2:
             ptr = L"alt-f2";
             break;
-        case GDK_F3:
+        case MP_KEY_F3:
             ptr = L"alt-f3";
             break;
-        case GDK_F4:
+        case MP_KEY_F4:
             ptr = L"alt-f4";
             break;
-        case GDK_F5:
+        case MP_KEY_F5:
             ptr = L"alt-f5";
             break;
-        case GDK_F6:
+        case MP_KEY_F6:
             ptr = L"alt-f6";
             break;
-        case GDK_F7:
+        case MP_KEY_F7:
             ptr = L"alt-f7";
             break;
-        case GDK_F8:
+        case MP_KEY_F8:
             ptr = L"alt-f8";
             break;
-        case GDK_F9:
+        case MP_KEY_F9:
             ptr = L"alt-f9";
             break;
-        case GDK_F10:
+        case MP_KEY_F10:
             ptr = L"alt-f10";
             break;
-        case GDK_F11:
+        case MP_KEY_F11:
             ptr = L"alt-f11";
             break;
-        case GDK_F12:
+        case MP_KEY_F12:
             ptr = L"alt-f12";
             break;
-        case GDK_KP_Enter:
-        case GDK_Return:
+        case MP_KEY_KP_Enter:
+        case MP_KEY_Return:
             ptr = L"alt-enter";
             break;
-        case GDK_Cyrillic_ve:
+        case MP_KEY_Cyrillic_ve:
             ptr = L"alt-d";
             break;
-        case GDK_Cyrillic_a:
+        case MP_KEY_Cyrillic_a:
             ptr = L"alt-f";
             break;
-        case GDK_Cyrillic_tse:
+        case MP_KEY_Cyrillic_tse:
             ptr = L"alt-w";
             break;
-        case GDK_Cyrillic_de:
+        case MP_KEY_Cyrillic_de:
             ptr = L"alt-l";
             break;
-        case GDK_Cyrillic_ie:
+        case MP_KEY_Cyrillic_ie:
             ptr = L"alt-t";
             break;
-        case GDK_Cyrillic_ef:
+        case MP_KEY_Cyrillic_ef:
             ptr = L"alt-a";
             break;
-        case GDK_Cyrillic_ghe:
+        case MP_KEY_Cyrillic_ghe:
             ptr = L"alt-u";
             break;
-        case GDK_Cyrillic_i:
+        case MP_KEY_Cyrillic_i:
             ptr = L"alt-b";
             break;
-        case GDK_Cyrillic_shorti:
+        case MP_KEY_Cyrillic_shorti:
             ptr = L"alt-q";
             break;
-        case GDK_Cyrillic_ka:
+        case MP_KEY_Cyrillic_ka:
             ptr = L"alt-r";
             break;
-        case GDK_Cyrillic_el:
+        case MP_KEY_Cyrillic_el:
             ptr = L"alt-k";
             break;
-        case GDK_Cyrillic_em:
+        case MP_KEY_Cyrillic_em:
             ptr = L"alt-v";
             break;
-        case GDK_Cyrillic_en:
+        case MP_KEY_Cyrillic_en:
             ptr = L"alt-y";
             break;
-        case GDK_Cyrillic_o:
+        case MP_KEY_Cyrillic_o:
             ptr = L"alt-j";
             break;
-        case GDK_Cyrillic_pe:
+        case MP_KEY_Cyrillic_pe:
             ptr = L"alt-g";
             break;
-        case GDK_Cyrillic_ya:
+        case MP_KEY_Cyrillic_ya:
             ptr = L"alt-z";
             break;
-        case GDK_Cyrillic_er:
+        case MP_KEY_Cyrillic_er:
             ptr = L"alt-h";
             break;
-        case GDK_Cyrillic_es:
+        case MP_KEY_Cyrillic_es:
             ptr = L"alt-c";
             break;
-        case GDK_Cyrillic_te:
+        case MP_KEY_Cyrillic_te:
             ptr = L"alt-n";
             break;
-        case GDK_Cyrillic_softsign:
+        case MP_KEY_Cyrillic_softsign:
             ptr = L"alt-m";
             break;
-        case GDK_Cyrillic_yeru:
+        case MP_KEY_Cyrillic_yeru:
             ptr = L"alt-s";
             break;
-        case GDK_Cyrillic_ze:
+        case MP_KEY_Cyrillic_ze:
             ptr = L"alt-p";
             break;
-        case GDK_Cyrillic_sha:
+        case MP_KEY_Cyrillic_sha:
             ptr = L"alt-i";
             break;
-        case GDK_Cyrillic_e:
+        case MP_KEY_Cyrillic_e:
             ptr = L"alt-t";
             break;
-        case GDK_Cyrillic_shcha:
+        case MP_KEY_Cyrillic_shcha:
             ptr = L"alt-o";
             break;
-        case GDK_Cyrillic_che:
+        case MP_KEY_Cyrillic_che:
             ptr = L"alt-x";
             break;
         }
@@ -1230,101 +1514,101 @@ static gint key_press_event(GtkWidget * widget, GdkEventKey * event,
     }
     else {
         switch (event->keyval) {
-        case GDK_Up:
+        case MP_KEY_Up:
             ptr = L"cursor-up";
             break;
-        case GDK_Down:
+        case MP_KEY_Down:
             ptr = L"cursor-down";
             break;
-        case GDK_Left:
+        case MP_KEY_Left:
             ptr = L"cursor-left";
             break;
-        case GDK_Right:
+        case MP_KEY_Right:
             ptr = L"cursor-right";
             break;
-        case GDK_Prior:
+        case MP_KEY_Prior:
             ptr = L"page-up";
             break;
-        case GDK_Next:
+        case MP_KEY_Next:
             ptr = L"page-down";
             break;
-        case GDK_Home:
+        case MP_KEY_Home:
             ptr = L"home";
             break;
-        case GDK_End:
+        case MP_KEY_End:
             ptr = L"end";
             break;
-        case GDK_space:
+        case MP_KEY_space:
             ptr = L"space";
             break;
-        case GDK_KP_Add:
+        case MP_KEY_KP_Add:
             ptr = L"kp-plus";
             break;
-        case GDK_KP_Subtract:
+        case MP_KEY_KP_Subtract:
             ptr = L"kp-minus";
             break;
-        case GDK_KP_Multiply:
+        case MP_KEY_KP_Multiply:
             ptr = L"kp-multiply";
             break;
-        case GDK_KP_Divide:
+        case MP_KEY_KP_Divide:
             ptr = L"kp-divide";
             break;
-        case GDK_F1:
+        case MP_KEY_F1:
             ptr = L"f1";
             break;
-        case GDK_F2:
+        case MP_KEY_F2:
             ptr = L"f2";
             break;
-        case GDK_F3:
+        case MP_KEY_F3:
             ptr = L"f3";
             break;
-        case GDK_F4:
+        case MP_KEY_F4:
             ptr = L"f4";
             break;
-        case GDK_F5:
+        case MP_KEY_F5:
             ptr = L"f5";
             break;
-        case GDK_F6:
+        case MP_KEY_F6:
             ptr = L"f6";
             break;
-        case GDK_F7:
+        case MP_KEY_F7:
             ptr = L"f7";
             break;
-        case GDK_F8:
+        case MP_KEY_F8:
             ptr = L"f8";
             break;
-        case GDK_F9:
+        case MP_KEY_F9:
             ptr = L"f9";
             break;
-        case GDK_F10:
+        case MP_KEY_F10:
             ptr = L"f10";
             break;
-        case GDK_F11:
+        case MP_KEY_F11:
             ptr = L"f11";
             break;
-        case GDK_F12:
+        case MP_KEY_F12:
             ptr = L"f12";
             break;
-        case GDK_Insert:
+        case MP_KEY_Insert:
             ptr = L"insert";
             break;
-        case GDK_BackSpace:
+        case MP_KEY_BackSpace:
             ptr = L"backspace";
             break;
-        case GDK_Delete:
+        case MP_KEY_Delete:
             ptr = L"delete";
             break;
-        case GDK_KP_Enter:
-        case GDK_Return:
+        case MP_KEY_KP_Enter:
+        case MP_KEY_Return:
             ptr = L"enter";
             break;
-        case GDK_Tab:
+        case MP_KEY_Tab:
             ptr = L"tab";
             break;
-        case GDK_ISO_Left_Tab:
+        case MP_KEY_ISO_Left_Tab:
             ptr = L"shift-tab";
             break;
-        case GDK_Escape:
+        case MP_KEY_Escape:
             ptr = L"escape";
             break;
         }
