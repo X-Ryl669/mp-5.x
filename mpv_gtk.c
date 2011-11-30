@@ -576,7 +576,14 @@ static void gtk_drv_paint(mpdm_t doc, int optimize)
 
     gr.x = 0;
     gr.y = 0;
+
+#if CONFOPT_GTK == 2
     gr.width = area->allocation.width;
+#endif
+#if CONFOPT_GTK == 3
+    gr.width = gtk_widget_get_allocated_width(area);
+#endif
+
     gr.height = font_height;
 
     cr = gdk_cairo_create(gtk_widget_get_window(area));
@@ -665,8 +672,6 @@ static void gtk_drv_paint(mpdm_t doc, int optimize)
         /* draw the text */
         cairo_move_to(cr, 2, n * font_height);
         pango_cairo_show_layout(cr, pl);
-
-        /* dump the pixmap */
 
         g_object_unref(pl);
     }
