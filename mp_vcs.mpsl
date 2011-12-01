@@ -31,12 +31,12 @@ mp.vcs = [
     {
         id:     'git',
         check:  '.git',
-        opts:   [ 'git diff', 'git status' ]
+        opts:   [ 'git diff', 'git status', 'git log' ]
     },
     {
         id:     'SVN',
         check:  '.svn',
-        opts:   [ 'svn diff', 'svn status' ]
+        opts:   [ 'svn diff', 'svn status', 'svn log' ]
     }
 ];
 
@@ -63,13 +63,15 @@ mp.actions['vcs'] = sub (d) {
                     label:  sprintf(L("Available %s commands"), v.id),
                     type:   'list',
                     list:   l,
-                    value:  0
+                    value:  mp.vcs_target
                 }
             ]
         );
 
         if (t != NULL) {
-            local cmd = l[t[0]];
+            mp.vcs_target = t[0];
+
+            local cmd = l[mp.vcs_target];
 
             local log = mp.open(sprintf(L("<%s output>"), cmd));
 

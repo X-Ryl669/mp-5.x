@@ -168,10 +168,13 @@ mp.actions['exec_command']	= sub (d, cmd) {
             cmd = sregex(cmd, '/^\|/');
 
             if ((p = popen(cmd, "w")) != NULL) {
+                mp.busy(1);
+
                 foreach (l, mp.get_active_area(d))
                     write(p, l ~ mp.config.eol);
 
                 pclose(p);
+                mp.busy(0);
             }
             else
                 mp.drv.alert(
@@ -185,6 +188,7 @@ mp.actions['exec_command']	= sub (d, cmd) {
                 local l;
 
                 mp.store_undo(d);
+                mp.busy(1);
 
                 while ((l = read(p)) != NULL) {
                     mp.insert(d, mp.chomp(l));
@@ -192,6 +196,7 @@ mp.actions['exec_command']	= sub (d, cmd) {
                 }
 
                 pclose(p);
+                mp.busy(0);
             }
             else
                 mp.drv.alert(
