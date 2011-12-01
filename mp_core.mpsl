@@ -639,24 +639,25 @@ sub mp.test_versions()
 /** modules **/
 
 local mp_modules = [
-    "drv",
-    "move",
-    "edit",
-    "file",
-    "clipboard",
-    "search",
-    "tags",
-    "syntax",
-    "macro",
-    "templates",
-    "spell",
-    "misc",
-    "crypt",
-    "keyseq",
-    "session",
-    "build",
-    "writing",
-    "toys"
+    'drv',
+    'move',
+    'edit',
+    'file',
+    'clipboard',
+    'search',
+    'tags',
+    'syntax',
+    'macro',
+    'templates',
+    'spell',
+    'misc',
+    'crypt',
+    'keyseq',
+    'session',
+    'build',
+    'writing',
+    'toys',
+    'vcs'
 ];
 
 foreach (m, mp_modules) {
