@@ -27,13 +27,62 @@
 
 /** data **/
 
+mp.vcs = [
+    {
+        id:     'git',
+        check:  '.git',
+        opts:   [ 'git diff' ]
+    },
+    {
+        id:     'SVN',
+        check:  '.svn',
+        opts:   [ 'svn diff' ]
+    }
+];
+
 /** editor actions **/
 
 mp.actions['vcs'] = sub (d) {
-    if (stat('.git') == NULL)
+    local v = NULL;
+
+    foreach (n, mp.vcs) {
+        if (stat(n.check) != NULL) {
+            v = n;
+            break;
+        }
+    }
+
+    if (v == NULL)
         mp.alert(L("This directory is not under a supported version control system"));
-    else
-        mp.alert("YOU HAVE GIT");
+    else {
+        local l = v.opts;
+
+        local t = mp.form(
+            [
+                {
+                    label:  sprintf(L("Available %s commands"), v.id),
+                    type:   'list',
+                    list:   l,
+                    value:  0
+                }
+            ]
+        );
+
+        if (t != NULL) {
+            local cmd = l[t];
+
+            local log = mp.open(sprintf(L("<%s output>"), cmd));
+
+            log.txt.lines   = [];
+            log.txt.y       = 0;
+
+            mp.actions.exec_command(log, cmd);
+            mp.detect_syntax(log);
+
+            mp.move_bof(log);
+            log.txt.mod = 0;
+        }
+    }
 };
 
 /** default key bindings **/
