@@ -5,7 +5,11 @@ Minimum Profit Release Notes
 -----
 
  - Major improvements:
-   - Support for GTK 3.x.
+   - GTK library detection: Uses 3.x if available, then 2.x.
+   - Added Version Control commands (bound by default to `ctrl-p').
+     The supported systems are (adding new ones is very easy):
+     - Git
+     - Subversion
  - Minor improvements:
    - The `build' action remembers the last Makefile target.
    - The `section_list' action sets the list selector to the most
