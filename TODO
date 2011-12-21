@@ -6,6 +6,7 @@ Release Critical Bugs
 
  * 1286: Add an action to move to previous section.
  * 1287: Add an action to move to next section.
+ * 1292: Insert new documents after the current one.
 
 Open Bugs
 ---------
