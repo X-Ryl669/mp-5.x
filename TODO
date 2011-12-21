@@ -6,7 +6,6 @@ Release Critical Bugs
 
  * 1286: Add an action to move to previous section.
  * 1287: Add an action to move to next section.
- * 1292: Insert new documents after the current one.
 
 Open Bugs
 ---------
@@ -362,5 +361,7 @@ Closed
  * 1291: In C and MPSL the help action should search for
    mp_doccer-style documentation code
    (Thu, 10 Nov 2011 13:34:55 +0100).
+ * 1292: Insert new documents after the current one
+   (Wed, 21 Dec 2011 16:09:50 +0100).
 
 Email bugs to angel@triptico.com
