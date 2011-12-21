@@ -30,7 +30,7 @@
 mp.vcs = [
     {
         id:     'git',
-        check:  '.git',
+        check:  [ '.git', '../.git', '../../.git' ],
         opts:   [
             'git diff',
             'git status',
@@ -42,7 +42,7 @@ mp.vcs = [
     },
     {
         id:     'SVN',
-        check:  '.svn',
+        check:  [ '.svn' ],
         opts:   [
             'svn diff',
             'svn status',
@@ -60,10 +60,15 @@ mp.actions['vcs'] = sub (d) {
     local v = NULL;
 
     foreach (n, mp.vcs) {
-        if (stat(n.check) != NULL) {
-            v = n;
-            break;
+        foreach (d, n.check) {
+            if (stat(d) != NULL) {
+                v = n;
+                break;
+            }
         }
+
+        if (v != NULL)
+            break;
     }
 
     if (v == NULL)
