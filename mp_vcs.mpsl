@@ -37,6 +37,7 @@ mp.vcs = [
             'git log',
             'git diff %s',
             'git log %s',
+            'git add %s',
             'git blame %s'
         ]
     },
@@ -49,6 +50,7 @@ mp.vcs = [
             'svn log',
             'svn diff %s',
             'svn log %s',
+            'svn add %s',
             'svn annotate %s'
         ]
     }
