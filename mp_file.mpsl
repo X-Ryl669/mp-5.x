@@ -75,15 +75,12 @@ mp.actions['save']	= sub (d) {
 
 mp.actions['close']	= sub (d) {
 
-    if (d.txt.mod) {
-        local r;
-        r = mp.confirm(L("File has changed. Save changes?"));
+    /* call all 'on_close' functions */
+    foreach (f, d.on_close) {
 
-        /* cancel? don't close */
-        if (r == 0)
+        /* if it returns 0, cancel close */
+        if (f(d) == 0)
             return;
-        if (r == 1)
-            mp.actions.save(d);
     }
 
     mp.close();
@@ -433,6 +430,23 @@ sub mp.save(doc)
 }
 
 
+sub mp.save_on_close(doc)
+/* on_close function to save modified files */
+{
+    local r = 1;
+
+    if (doc.txt.mod) {
+        r = mp.confirm(L("File has changed. Save changes?"));
+
+        /* confirm? save */
+        if (r == 1)
+            mp.actions.save(d);
+    }
+
+    return r;
+}
+
+
 sub mp.create(filename, lines)
 /* creates a document */
 {
@@ -445,10 +459,11 @@ sub mp.create(filename, lines)
             mod:    0,
             lines:  lines || [ '' ]
         },
-        name:   filename || L("<unnamed>"),
-        undo:   [],
-        redo:   [],
-        syntax: NULL
+        name:       filename || L("<unnamed>"),
+        undo:       [],
+        redo:       [],
+        syntax:     NULL,
+        on_close:   [ mp.save_on_close ]
     };
 
 	return doc;
