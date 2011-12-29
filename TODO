@@ -54,6 +54,7 @@ Pending Enhancements
    to be formed by just the executable with all MPSL code embedded
    (mainly aimed towards MS Windows).
  * 1284: Add version control support (git, svn, etc).
+ * 1293: Add a mp.plumber() game.
 
 Closed
 ------
