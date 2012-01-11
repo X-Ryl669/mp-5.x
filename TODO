@@ -11,8 +11,6 @@ Open Bugs
 ---------
 
  * 1150: The GTK menu is not rebuilt when calling mp.update_ui().
- * 1170: The curses driver doesn't redraw when the terminal window
-   is resized.
  * 1176: Add interface to set the undo levels.
  * 1189: mp.drv.form() cannot be used from the command line in win32.
  * 1199: On GTK, the default font (Mono 12, seemingly an alias to an
@@ -54,7 +52,7 @@ Pending Enhancements
    to be formed by just the executable with all MPSL code embedded
    (mainly aimed towards MS Windows).
  * 1284: Add version control support (git, svn, etc).
- * 1293: Add a mp.plumber() game.
+ * 1293: Add a mp.pipes() game.
 
 Closed
 ------
@@ -364,5 +362,7 @@ Closed
    (Thu, 10 Nov 2011 13:34:55 +0100).
  * 1292: Insert new documents after the current one
    (Wed, 21 Dec 2011 16:09:50 +0100).
+ * 1170: The curses driver doesn't redraw when the terminal window
+   is resized (Wed, 11 Jan 2012 10:01:52 +0100).
 
 Email bugs to angel@triptico.com

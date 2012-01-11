@@ -4,7 +4,7 @@
 
     Curses driver.
 
-    Copyright (C) 1991-2010 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -77,28 +77,12 @@ static void set_attr(void)
 }
 
 
+#ifndef NCURSES_VERSION
+
 static void nc_sigwinch(int s)
 /* SIGWINCH signal handler */
 {
     mpdm_t v;
-
-#ifdef NCURSES_VERSION
-    /* Make sure that window size changes... */
-    struct winsize ws;
-
-    int fd = open("/dev/tty", O_RDWR);
-
-    if (fd == -1)
-        return;                 /* This should never have to happen! */
-
-    if (ioctl(fd, TIOCGWINSZ, &ws) == 0)
-        resizeterm(ws.ws_row, ws.ws_col);
-
-    close(fd);
-#else
-    /* restart curses */
-    /* ... */
-#endif
 
     /* invalidate main window */
     clearok(stdscr, 1);
@@ -112,6 +96,8 @@ static void nc_sigwinch(int s)
     /* reattach */
     signal(SIGWINCH, nc_sigwinch);
 }
+
+#endif
 
 
 #ifdef CONFOPT_WGET_WCH
@@ -500,6 +486,17 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
         case ctrl('z'):
             f = L"ctrl-z";
             break;
+        case KEY_RESIZE:
+
+            /* handle ncurses resizing */
+            f = NULL;
+            {
+                mpdm_t v = mpdm_hget_s(mp, L"window");
+                mpdm_hset_s(v, L"tx", MPDM_I(COLS));
+                mpdm_hset_s(v, L"ty", MPDM_I(LINES));
+            }
+
+            break;
         case L'\e':
             shift = 1;
             f = NULL;
@@ -830,7 +827,9 @@ static mpdm_t ncursesw_drv_startup(mpdm_t a)
     mpdm_hset_s(v, L"tx", MPDM_I(COLS));
     mpdm_hset_s(v, L"ty", MPDM_I(LINES));
 
+#ifndef NCURSES_VERSION
     signal(SIGWINCH, nc_sigwinch);
+#endif
 
     cw = stdscr;
 
