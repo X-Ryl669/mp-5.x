@@ -72,8 +72,8 @@ static mpdm_t timer_func = NULL;
 static void set_attr(void)
 /* set the current and fill attributes */
 {
-    if (wattrset(cw, nc_attrs[last_attr]) == OK)
-        wbkgdset(cw, ' ' | nc_attrs[last_attr]);
+    wattrset(cw, nc_attrs[last_attr]);
+    wbkgdset(cw, ' ' | nc_attrs[last_attr]);
 }
 
 
@@ -565,8 +565,8 @@ static mpdm_t nc_doc_draw(mpdm_t args, mpdm_t ctxt)
             attr = mpdm_ival(mpdm_aget(l, m++));
             s = mpdm_aget(l, m);
 
-            if (wattrset(cw, nc_attrs[attr]) == OK)
-                nc_addwstr(s);
+            wattrset(cw, nc_attrs[attr]);
+            nc_addwstr(s);
         }
     }
 
