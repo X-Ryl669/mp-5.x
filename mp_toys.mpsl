@@ -207,11 +207,40 @@ sub mp.pipes(doc, keycode)
             ]
         };
 
+        pipes.map = map([1 .. wy],
+            sub {map([1 .. wx], sub { random(size(pipes.pieces)); });}
+        );
+
         doc.pipes = pipes;
 
         /* handlers */
         doc.keypress    = sub (d, k) { mp.pipes(d, k); };
-        doc.paint       = sub (d) { [ [ 0, 'pipes' ] ]; };
+
+        doc.paint       = sub (d) {
+            local out = [];
+            local pipes = d.pipes;
+
+            foreach (n, [0 .. pipes.wy]) {
+                local l0 = [];
+                local l1 = [];
+                local l2 = [];
+
+                foreach (m, [0 .. pipes.wx]) {
+                    local p = pipes.map[n][m];
+                    local s = pipes.pieces[p].shape;
+
+                    push(l0, s[0]);
+                    push(l1, s[1]);
+                    push(l2, s[2]);
+                }
+
+                push(out, [0, join('', l0)]);
+                push(out, [0, join('', l1)]);
+                push(out, [0, join('', l2)]);
+            }
+
+            return out;
+        };
     }
 
     return doc;
