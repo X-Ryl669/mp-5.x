@@ -147,6 +147,8 @@ sub mp.maze(doc, keycode)
 
 	maze.map[maze.y][maze.x] = '@';
 
+    mp.undo(doc);
+
 	return doc;
 }
 
@@ -258,9 +260,16 @@ sub mp.pipes(doc, keycode)
 		x--;
 	if (keycode eq 'cursor-right' && x < pipes.wx - 1)
 		x++;
+    if (keycode eq 'enter') {
+        local n = pipes.map[y][x];
+
+        pipes.map[y][x] = pipes.pieces[n].next;
+    }
 
     pipes.x = x;
     pipes.y = y;
+
+    mp.undo(doc);
 
     return doc;
 }
