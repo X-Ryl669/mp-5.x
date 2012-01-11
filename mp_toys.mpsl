@@ -162,7 +162,7 @@ sub mp.pipes(doc, keycode)
     local pipes = doc.pipes;
 
     if (pipes == NULL || pipes.tx != tx || pipes.ty != ty) {
-        local wx = 6;
+        local wx = 20;
         local wy = 6;
 
         pipes = {
@@ -220,28 +220,47 @@ sub mp.pipes(doc, keycode)
             local out = [];
             local pipes = d.pipes;
 
-            foreach (n, [0 .. pipes.wy]) {
+            foreach (n, [0 .. (pipes.wy - 1)]) {
                 local l0 = [];
                 local l1 = [];
                 local l2 = [];
 
-                foreach (m, [0 .. pipes.wx]) {
+                foreach (m, [0 .. (pipes.wx - 1)]) {
                     local p = pipes.map[n][m];
                     local s = pipes.pieces[p].shape;
+                    local c;
 
-                    push(l0, s[0]);
-                    push(l1, s[1]);
-                    push(l2, s[2]);
+                    if (n == pipes.y && m == pipes.x)
+                        c = mp.colors.cursor.attr;
+                    else
+                        c = mp.colors.normal.attr;
+
+                    push(l0, c);    push(l0, s[0]);
+                    push(l1, c);    push(l1, s[1]);
+                    push(l2, c);    push(l2, s[2]);
                 }
 
-                push(out, [0, join('', l0)]);
-                push(out, [0, join('', l1)]);
-                push(out, [0, join('', l2)]);
+                push(out, l0); push(out, l1); push(out, l2);
             }
 
             return out;
         };
     }
+
+	local x = pipes.x;
+	local y = pipes.y;
+
+	if (keycode eq 'cursor-up' && y > 0)
+		y--;
+	if (keycode eq 'cursor-down'&& y < pipes.wy - 1)
+		y++;
+	if (keycode eq 'cursor-left' && x > 0)
+		x--;
+	if (keycode eq 'cursor-right' && x < pipes.wx - 1)
+		x++;
+
+    pipes.x = x;
+    pipes.y = y;
 
     return doc;
 }
