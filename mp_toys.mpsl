@@ -262,12 +262,12 @@ sub mp.pipes(doc, keycode)
                     else
                         c = mp.colors.normal.attr;
 
-                    push(l0, c);    push(l0, s[0]);
-                    push(l1, c);    push(l1, s[1]);
-                    push(l2, c);    push(l2, s[2]);
+                    push(l0, c, s[0]);
+                    push(l1, c, s[1]);
+                    push(l2, c, s[2]);
                 }
 
-                push(out, l0); push(out, l1); push(out, l2);
+                push(out, l0, l1, l2);
             }
 
             return out;

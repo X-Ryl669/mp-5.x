@@ -849,20 +849,17 @@ sub mp.c_gather_help(word)
 
                 if (regex(l, "/^[ \t]*#define[ \t]+" ~ word ~ "/")) {
                     /* it's a CPP define */
-                    push(h, where);
-                    push(h, l);
+                    push(h, where, l);
                 }
                 else
                 if (regex(l, "/^[A-Za-z_]+.*[ \t]+" ~ word ~ "[ \t]*\(.*/")) {
                     /* it's a function definition or prototype */
-                    push(h, where);
-                    push(h, l);
+                    push(h, where, l);
                 }
                 else
                 if (regex(l, "/^(typedef[ \]*|static[ \]*)?struct[ \t]+.*" ~ word ~ ".*\{/")) {
                     /* it's a structure definition */
-                    push(h, where);
-                    push(h, l);
+                    push(h, where, l);
 
                     /* add up to the end of the struct */
                     while ((l = read(f)) != NULL) {
@@ -881,9 +878,7 @@ sub mp.c_gather_help(word)
 
                     if (regex(l, "/ \* " ~ word ~ " - /")) {
                         /* it is; dump up to a ; */
-                        push(h, where);
-                        push(h, '/' ~ '**');
-                        push(h, l);
+                        push(h, where, '/' ~ '**', l);
 
                         while ((l = read(f)) != NULL) {
                             n++;
