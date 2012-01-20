@@ -118,9 +118,19 @@ mp.actions['revert']	= sub (d) {
             return d;
     }
 
+    local x     = d.txt.x;
+    local y     = d.txt.y;
+    local vy    = d.txt.vy;
+
     mp.close();
     if (mp.long_op(mp.open, p) == NULL && ERRNO != NULL)
         mp.alert(sprintf("Error opening '%s': %s", p, ERRNO));
+
+    d = mp.active();
+
+    mp.set_y(d, y);
+    d.txt.vy = vy;
+    mp.set_x(d, x);
 
     return d;
 };
