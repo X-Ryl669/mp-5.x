@@ -252,7 +252,7 @@ sub mp.pipes(doc, keycode)
             local out = [];
             local pipes = d.pipes;
 
-            foreach (n, [0 .. (pipes.wy)]) {
+            foreach (n, [0 .. pipes.wy]) {
                 local l0 = [];
                 local l1 = [];
                 local l2 = [];
@@ -300,7 +300,7 @@ sub mp.pipes(doc, keycode)
     pipes.y = y;
 
     /* reset attributes */
-    pipes.attr = map([1 .. pipes.wy], sub { [];});
+    pipes.attr = map([0 .. pipes.wy], sub { [];});
 
     /* the water input is blue */
     pipes.attr[0][pipes.sx] = mp.colors.quotes.attr;
