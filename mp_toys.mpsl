@@ -164,8 +164,8 @@ sub mp.pipes(doc, keycode)
     local pipes = doc.pipes;
 
     if (pipes == NULL || pipes.tx != tx || pipes.ty != ty) {
-        local wx = 26;
-        local wy = 7;
+        local wx = int((tx - 2) / 3);
+        local wy = int(((ty - 1) / 3) - 1);
 
         pipes = {
             x:      0,
