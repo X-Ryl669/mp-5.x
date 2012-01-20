@@ -294,9 +294,27 @@ sub mp.pipes(doc, keycode)
     pipes.x = x;
     pipes.y = y;
 
-    /* fill the attributes */
-    pipes.attr = map([1..wy], sub { [];});
+    /* reset attributes */
+    pipes.attr = map([1 .. pipes.wy], sub { [];});
+
+    /* the water input is blue */
     pipes.attr[0][pipes.sx] = mp.colors.quotes.attr;
+
+    /* calculate the path */
+    local px = pipes.sx;
+    local py = 0;
+    local c = 2; /* downwards */
+    local p;
+
+    /* while there is a valid path */
+    while ((p = pipes.pieces[pipes.map[py][px]]) && (c = p.out[c]) >= 0) {
+        /* mark as valid path */
+        pipes.attr[py][px] = mp.colors.quotes.attr;
+
+        /* move in new direction */
+        px += pipes.dir[c][0];
+        py += pipes.dir[c][1];
+    }
 
     mp.undo(doc);
 
