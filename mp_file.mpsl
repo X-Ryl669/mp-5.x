@@ -706,3 +706,21 @@ sub mp.hex_view(filename)
 
     return d;
 }
+
+
+sub mp.test_mtime(doc)
+/* tests for a file's mtime (uses GUI) */
+{
+    if (doc.mtime) {
+        local s;
+
+        if ((s = stat(doc.name)) != NULL && s[9] > doc.mtime) {
+            if (mp.confirm(L("File was changed externally. Reload?")) == 1)
+                mp.actions.revert(doc);
+ 
+            doc.mtime = s[9];
+        }
+    }
+
+    return doc;
+}
