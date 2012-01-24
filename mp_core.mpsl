@@ -289,6 +289,8 @@ sub mp.process_event(k)
         local d, a;
 
         d = mp.active();
+
+        mp.test_mtime(d);
     
         if (mp.keycodes_t == NULL)
             mp.keycodes_t = mp.keycodes;
