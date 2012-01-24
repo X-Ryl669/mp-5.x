@@ -3,7 +3,7 @@
     Minimum Profit 5.x
     A Programmer's Text Editor
 
-    Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -265,70 +265,68 @@ sub mp.active()
 sub mp.process_action(a)
 /* processes an action */
 {
-	local f, d;
+    local f, d;
 
-	d = mp.active();
+    d = mp.active();
 
-	if ((f = mp.actions[a]) != NULL)
-		f(d);
-	else {
-		mp.message = {
-			'timeout'	=> time() + 2,
-			'string'	=> sprintf(L("Unknown action '%s'"), a)
-		};
-	}
+    if ((f = mp.actions[a]) != NULL)
+        f(d);
+    else {
+        mp.message = {
+            timeout:    time() + 2,
+            string:     sprintf(L("Unknown action '%s'"), a)
+        };
+    }
 
-	return NULL;
+    return NULL;
 }
 
 
 sub mp.process_event(k)
 /* processes a key event */
 {
-	local d, a;
+    if (size(mp.docs)) {
+        local d, a;
 
-	/* empty document list? do nothing */
-	if (size(mp.docs) == 0)
-		return;
+        d = mp.active();
+    
+        if (mp.keycodes_t == NULL)
+            mp.keycodes_t = mp.keycodes;
+    
+        /* get the action asociated to the keycode */
+        if ((a = mp.keycodes_t[k]) != NULL) {
+    
+            /* if it's a hash, store for further testing */
+            if (is_hash(a))
+                mp.keycodes_t = a;
+            else {
+                /* if it's executable, run it */
+                if (is_exec(a))
+                    a(d);
+                else
+                /* if it's an array, process it sequentially */
+                if (is_array(a))
+                    foreach(l, a)
+                        mp.process_action(l);
+                else
+                    mp.process_action(a);
+    
+                mp.keycodes_t = NULL;
+            }
+        }
+        else {
+            mp.insert_keystroke(d, k);
+            mp.keycodes_t = NULL;
+        }
+    
+        mp.shift_pressed = NULL;
+    
+        /* if there is a keypress notifier function, call it */
+        if (is_exec(d.keypress))
+            d.keypress(d, k);
+    }
 
-	d = mp.active();
-
-	if (mp.keycodes_t == NULL)
-		mp.keycodes_t = mp.keycodes;
-
-	/* get the action asociated to the keycode */
-	if ((a = mp.keycodes_t[k]) != NULL) {
-
-		/* if it's a hash, store for further testing */
-		if (is_hash(a))
-			mp.keycodes_t = a;
-		else {
-			/* if it's executable, run it */
-			if (is_exec(a))
-				a(d);
-			else
-			/* if it's an array, process it sequentially */
-			if (is_array(a))
-				foreach(l, a)
-					mp.process_action(l);
-			else
-				mp.process_action(a);
-
-			mp.keycodes_t = NULL;
-		}
-	}
-	else {
-		mp.insert_keystroke(d, k);
-		mp.keycodes_t = NULL;
-	}
-
-	mp.shift_pressed = NULL;
-
-	/* if there is a keypress notifier function, call it */
-	if (is_exec(d.keypress))
-		d.keypress(d, k);
-
-	return NULL;
+    return NULL;
 }
 
 
