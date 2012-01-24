@@ -212,7 +212,7 @@ bool MPWindow::event(QEvent * event)
 static mpdm_t qt4_drv_alert(mpdm_t a, mpdm_t ctxt)
 {
     /* 1# arg: prompt */
-    QMessageBox::information(0, "mp " VERSION,
+    QMessageBox::information(window, "mp " VERSION,
                              str_to_qstring(mpdm_aget(a, 0)));
 
     return NULL;
@@ -224,7 +224,7 @@ static mpdm_t qt4_drv_confirm(mpdm_t a, mpdm_t ctxt)
     int r;
 
     /* 1# arg: prompt */
-    r = QMessageBox::question(0, "mp" VERSION,
+    r = QMessageBox::question(window, "mp" VERSION,
                               str_to_qstring(mpdm_aget(a, 0)),
                               QMessageBox::Yes | QMessageBox::
                               No | QMessageBox::Cancel);
