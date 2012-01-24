@@ -38,7 +38,10 @@ mp.vcs = [
             "git diff '%s'",
             "git log '%s'",
             "git add '%s'",
-            "git blame '%s'"
+            "git blame '%s'",
+            "git checkout '%s'",
+            "git stash",
+            "git stash apply"
         ]
     },
     {

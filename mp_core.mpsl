@@ -295,7 +295,7 @@ sub mp.test_mtime(doc)
             doc.mtime = s[9];
         }
 
-        mp.mtime_test = time() + 10;
+        mp.mtime_test = time() + 2;
     }
 
     return doc;
