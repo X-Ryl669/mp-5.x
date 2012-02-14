@@ -51,7 +51,6 @@ Pending Enhancements
  * 1280: Study a way to convert MP to a "portable" application, i.e.
    to be formed by just the executable with all MPSL code embedded
    (mainly aimed towards MS Windows).
- * 1284: Add version control support (git, svn, etc).
 
 Closed
 ------
@@ -364,5 +363,7 @@ Closed
  * 1170: The curses driver doesn't redraw when the terminal window
    is resized (Wed, 11 Jan 2012 10:01:52 +0100).
  * 1293: Add a mp.pipes() game (Fri, 20 Jan 2012 12:58:44 +0100).
+ * 1284: Add version control support (git, svn, etc)
+   (Tue, 14 Feb 2012 12:25:04 +0100).
 
 Email bugs to angel@triptico.com
