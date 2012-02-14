@@ -98,7 +98,8 @@ mp.vcs = [
             "svn diff '%s'"     => NULL,
             "svn log '%s'"      => NULL,
             "svn add '%s'"      => NULL,
-            "svn annotate '%s'" => NULL
+            "svn annotate '%s'" => NULL,
+            "svn update"        => NULL
         }
     }
 ];
