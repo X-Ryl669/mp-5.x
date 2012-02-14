@@ -5,7 +5,7 @@
 
     Version Control System support
 
-    Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -31,31 +31,31 @@ mp.vcs = [
     {
         id:     'git',
         check:  [ '.git', '../.git', '../../.git' ],
-        opts:   [
-            'git diff',
-            'git status',
-            'git log',
-            "git diff '%s'",
-            "git log '%s'",
-            "git add '%s'",
-            "git blame '%s'",
-            "git checkout '%s'",
-            "git stash",
-            "git stash apply"
-        ]
+        opts:   {
+            'git diff'          => NULL,
+            'git status'        => NULL,
+            'git log'           => NULL,
+            "git diff '%s'"     => NULL,
+            "git log '%s'"      => NULL,
+            "git add '%s'"      => NULL,
+            "git blame '%s'"    => NULL,
+            "git checkout '%s'" => NULL,
+            "git stash"         => NULL,
+            "git stash apply"   => NULL
+        }
     },
     {
         id:     'SVN',
         check:  [ '.svn' ],
-        opts:   [
-            'svn diff',
-            'svn status',
-            'svn log',
-            "svn diff '%s'",
-            "svn log '%s'",
-            "svn add '%s'",
-            "svn annotate '%s'"
-        ]
+        opts:   {
+            'svn diff'          => NULL,
+            'svn status'        => NULL,
+            'svn log'           => NULL,
+            "svn diff '%s'"     => NULL,
+            "svn log '%s'"      => NULL,
+            "svn add '%s'"      => NULL,
+            "svn annotate '%s'" => NULL
+        }
     }
 ];
 
@@ -79,7 +79,7 @@ mp.actions['vcs'] = sub (d) {
     if (v == NULL)
         mp.alert(L("This directory is not under a supported version control system"));
     else {
-        local l = v.opts;
+        local l = sort(keys(v.opts));
 
         local t = mp.form(
             [
