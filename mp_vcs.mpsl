@@ -29,7 +29,7 @@
 
 mp.vcs = {
     git: {
-        id:     'git',
+        id:     'Git',
         check:  [ '.git', '../.git', '../../.git' ],
         opts:   {
             'git diff'          => NULL,
@@ -66,6 +66,26 @@ mp.vcs = {
             "svn commit"        => {
                 pre:    sub (doc) {
                     mp.vcs_commit_on_close(doc, "svn commit -F '%s'");
+                }
+            }
+        }
+    },
+    mercurial: {
+        id:     'Mercurial',
+        check:  [ '.hg', '../.hg', '../../.hg' ],
+        opts:   {
+            'hg diff'          => NULL,
+            'hg status'        => NULL,
+            'hg log'           => NULL,
+            "hg diff '%s'"     => NULL,
+            "hg log '%s'"      => NULL,
+            "hg add '%s'"      => NULL,
+            "hg push"          => NULL,
+            "hg pull"          => NULL,
+            "hg annotate '%s'" => NULL,
+            "hg commit -A"     => {
+                pre:    sub (doc) {
+                    mp.vcs_commit_on_close(doc, "hg commit -A -l '%s'");
                 }
             }
         }

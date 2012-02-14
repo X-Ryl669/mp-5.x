@@ -9,6 +9,7 @@ Minimum Profit Release Notes
      The supported systems are (adding new ones is very easy):
      - Git
      - Subversion
+     - Mercurial
    - If any file being edited is modified externally, the situation
      is detected and the user is prompted for file reloading.
    - GTK library detection: Uses 3.x if available, then 2.x.
