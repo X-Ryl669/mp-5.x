@@ -42,6 +42,8 @@ mp.vcs = [
             "git checkout '%s'" => NULL,
             "git stash"         => NULL,
             "git stash apply"   => NULL,
+            "git push"          => NULL,
+            "git pull"          => NULL,
             "git commit -a"     => {
                 pre:    sub (doc) {
                         /* create a commit message */
