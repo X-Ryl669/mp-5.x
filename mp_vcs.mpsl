@@ -45,8 +45,8 @@ mp.vcs = [
             "git commit -a"     => {
                 pre:    sub (doc) {
                         /* create a commit message */
-                        unlink('.COMMIT_MESSAGE');
-                        local ci = mp.open('.COMMIT_MESSAGE');
+                        unlink(doc.name);
+                        local ci = mp.open(doc.name);
                         mp.actions.exec_command(ci, 'git status');
 
                         /* ensure all lines start with # */
@@ -72,22 +72,21 @@ mp.vcs = [
                         push(ci.on_close,
                             sub (doc) {
                                 if (stat(doc.name)) {
-                                    local log = mp.open('<git commit output>');
-
-                                    log.txt.lines   = [ '' ];
-                                    log.txt.y       = 0;
-                                    mp.actions.exec_command(log,
+                                    doc.txt.lines   = [ '' ];
+                                    doc.txt.y       = 0;
+                                    mp.actions.exec_command(doc,
                                         "git commit -a -F '" ~ doc.name ~ "'"
                                     );
 
-                                    mp.detect_syntax(log);
-                                    mp.move_bof(log);
-                                    log.txt.mod     = 0;
-                                    log.undo        = [];
-                                    log.read_only   = 1;
+                                    mp.detect_syntax(doc);
+                                    mp.move_bof(doc);
+                                    doc.txt.mod     = 0;
+                                    doc.undo        = [];
+                                    doc.read_only   = 1;
                                 }
 
                                 unlink(doc.name);
+
                                 return 1;
                             }
                         );
