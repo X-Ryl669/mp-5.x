@@ -46,44 +46,7 @@ mp.vcs = [
             "git pull"          => NULL,
             "git commit -a"     => {
                 pre:    sub (doc) {
-                        /* create a commit message */
-                        unlink('.COMMIT_MESSAGE');
-                        local ci = mp.open('.COMMIT_MESSAGE');
-
-                        /* and add an on_close handler */
-                        push(ci.on_close,
-                            sub (doc) {
-                                local ret = 1;
-
-                                if (stat(doc.name)) {
-                                    doc.txt.lines   = [ '' ];
-                                    doc.txt.y       = 0;
-                                    mp.actions.exec_command(doc,
-                                        "git commit -a -F '" ~ doc.name ~ "'"
-                                    );
-
-                                    mp.detect_syntax(doc);
-                                    mp.move_bof(doc);
-                                    doc.txt.mod     = 0;
-                                    doc.undo        = [];
-                                    doc.read_only   = 1;
-
-                                    doc.name = L("<git commit -a output>");
-
-                                    /* reject closing (file has been modified) */
-                                    ret = 0;
-                                }
-
-                                unlink('.COMMIT_MESSAGE');
-
-                                /* delete this on_close handler */
-                                pop(doc.on_close);
-
-                                return ret;
-                            }
-                        );
-
-                        return NULL;
+                    mp.vcs_commit_on_close(doc, "git commit -a -F '%s'");
                 }
             }
         }
@@ -178,3 +141,46 @@ mp.keycodes['vcs'] = LL("Version Control...");
 
 /** code **/
 
+sub mp.vcs_commit_on_close(doc, cmd)
+/* on_close handler for commit message documents */
+{
+    local msg_file = '.COMMIT_MESSAGE';
+
+    /* create a commit message */
+    local ci = mp.open(msg_file);
+
+    ci.commit_cmd = cmd;
+
+    /* and add an on_close handler */
+    push(ci.on_close,
+        sub (doc) {
+            local ret = 1;
+
+            if (stat(doc.name)) {
+                doc.txt.lines   = [ '' ];
+                doc.txt.y       = 0;
+                mp.actions.exec_command(doc, sprintf(doc.commit_cmd, doc.name));
+
+                mp.detect_syntax(doc);
+                mp.move_bof(doc);
+                doc.txt.mod     = 0;
+                doc.undo        = [];
+                doc.read_only   = 1;
+
+                doc.name = sprintf(L("<%s output>"), doc.commit_cmd);
+
+                /* reject closing (file has been modified) */
+                ret = 0;
+            }
+
+            unlink(msg_file);
+
+            /* delete this on_close handler */
+            pop(doc.on_close);
+
+            return ret;
+        }
+    );
+
+    return NULL;
+}
