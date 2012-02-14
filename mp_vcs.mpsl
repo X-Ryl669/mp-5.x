@@ -62,7 +62,12 @@ mp.vcs = [
             "svn log '%s'"      => NULL,
             "svn add '%s'"      => NULL,
             "svn annotate '%s'" => NULL,
-            "svn update"        => NULL
+            "svn update"        => NULL,
+            "svn commit"        => {
+                pre:    sub (doc) {
+                    mp.vcs_commit_on_close(doc, "svn commit -F '%s'");
+                }
+            }
         }
     }
 ];
