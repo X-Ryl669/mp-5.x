@@ -45,26 +45,14 @@ mp.vcs = [
             "git commit -a"     => {
                 pre:    sub (doc) {
                         /* create a commit message */
-                        unlink(doc.name);
-                        local ci = mp.open(doc.name);
+                        unlink('.COMMIT_MESSAGE');
+                        local ci = mp.open('.COMMIT_MESSAGE');
                         mp.actions.exec_command(ci, 'git status');
 
-                        /* ensure all lines start with # */
-                        ci.txt.lines = ci.txt.lines->map(
-                            sub (e) {
-                                if (!regex(e, '/^#/'))
-                                    e = '# ' ~ e;
+                        ci.txt.lines = [ '', '# enter your commit description' ];
 
-                                return e;
-                            }
-                        );
-
-                        /* insert an empty line at the top
-                           and move there */
                         mp.move_bof(ci);
                         mp.move_bol(ci);
-                        mp.insert(ci, "\n");
-                        mp.move_bof(ci);
 
                         ci.txt.mod = 0;
 
