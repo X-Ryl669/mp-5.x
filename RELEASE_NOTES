@@ -10,6 +10,8 @@ Minimum Profit Release Notes
      The supported systems are (adding new ones is very easy):
      - Git
      - Subversion
+   - If any file in edition is modified externally, the situation
+     is detected and the user is prompted for file reloading.
  - Minor improvements:
    - The `build' action remembers the last Makefile target.
    - The `section_list' action sets the list selector to the most
