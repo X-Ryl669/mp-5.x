@@ -77,7 +77,7 @@ mp.vcs = [
                                     log.txt.lines   = [ '' ];
                                     log.txt.y       = 0;
                                     mp.actions.exec_command(log,
-                                        'git commit -a -m .COMMIT_MESSAGE'
+                                        "git commit -a -F '" ~ doc.name ~ "'"
                                     );
 
                                     mp.detect_syntax(log);
