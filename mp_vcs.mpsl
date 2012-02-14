@@ -47,14 +47,6 @@ mp.vcs = [
                         /* create a commit message */
                         unlink('.COMMIT_MESSAGE');
                         local ci = mp.open('.COMMIT_MESSAGE');
-                        mp.actions.exec_command(ci, 'git status');
-
-                        ci.txt.lines = [ '', '# enter your commit description' ];
-
-                        mp.move_bof(ci);
-                        mp.move_bol(ci);
-
-                        ci.txt.mod = 0;
 
                         /* and add an on_close handler */
                         push(ci.on_close,
