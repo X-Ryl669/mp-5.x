@@ -144,10 +144,8 @@ mp.keycodes['vcs'] = LL("Version Control...");
 sub mp.vcs_commit_on_close(doc, cmd)
 /* on_close handler for commit message documents */
 {
-    local msg_file = '.COMMIT_MESSAGE';
-
     /* create a commit message */
-    local ci = mp.open(msg_file);
+    local ci = mp.open('.COMMIT_MESSAGE');
 
     ci.commit_cmd = cmd;
 
@@ -173,7 +171,7 @@ sub mp.vcs_commit_on_close(doc, cmd)
                 ret = 0;
             }
 
-            unlink(msg_file);
+            unlink('.COMMIT_MESSAGE');
 
             /* delete this on_close handler */
             pop(doc.on_close);
