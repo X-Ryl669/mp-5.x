@@ -27,8 +27,8 @@
 
 /** data **/
 
-mp.vcs = [
-    {
+mp.vcs = {
+    git: {
         id:     'git',
         check:  [ '.git', '../.git', '../../.git' ],
         opts:   {
@@ -51,7 +51,7 @@ mp.vcs = [
             }
         }
     },
-    {
+    svn: {
         id:     'SVN',
         check:  [ '.svn' ],
         opts:   {
@@ -70,14 +70,16 @@ mp.vcs = [
             }
         }
     }
-];
+};
 
 /** editor actions **/
 
 mp.actions['vcs'] = sub (d) {
     local v = NULL;
 
-    foreach (n, mp.vcs) {
+    foreach (k, keys(mp.vcs)) {
+        local n = mp.vcs[k];
+
         foreach (d, n.check) {
             if (stat(d) != NULL) {
                 v = n;
