@@ -67,7 +67,11 @@ mp.vcs = [
 
                                 unlink(doc.name);
 
-                                return 1;
+                                /* delete this on_close handler */
+                                pop(doc.on_close);
+
+                                /* reject closing */
+                                return 0;
                             }
                         );
 
