@@ -51,6 +51,8 @@ mp.vcs = [
                         /* and add an on_close handler */
                         push(ci.on_close,
                             sub (doc) {
+                                local ret = 1;
+
                                 if (stat(doc.name)) {
                                     doc.txt.lines   = [ '' ];
                                     doc.txt.y       = 0;
@@ -63,15 +65,19 @@ mp.vcs = [
                                     doc.txt.mod     = 0;
                                     doc.undo        = [];
                                     doc.read_only   = 1;
+
+                                    doc.name = '<git commit -a output>';
+
+                                    /* reject closing (file has been modified) */
+                                    ret = 0;
                                 }
 
-                                unlink(doc.name);
+                                unlink('.COMMIT_MESSAGE');
 
                                 /* delete this on_close handler */
                                 pop(doc.on_close);
 
-                                /* reject closing */
-                                return 0;
+                                return ret;
                             }
                         );
 
