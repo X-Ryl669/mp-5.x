@@ -41,7 +41,59 @@ mp.vcs = [
             "git blame '%s'"    => NULL,
             "git checkout '%s'" => NULL,
             "git stash"         => NULL,
-            "git stash apply"   => NULL
+            "git stash apply"   => NULL,
+            "git commit -a"     => {
+                pre:    sub (doc) {
+                        /* create a commit message */
+                        unlink('.COMMIT_MESSAGE');
+                        local ci = mp.open('.COMMIT_MESSAGE');
+                        mp.actions.exec_command(ci, 'git status');
+
+                        /* ensure all lines start with # */
+                        ci.txt.lines = ci.txt.lines->map(
+                            sub (e) {
+                                if (!regex(e, '/^#/'))
+                                    e = '# ' ~ e;
+
+                                return e;
+                            }
+                        );
+
+                        /* insert an empty line at the top
+                           and move there */
+                        mp.move_bof(ci);
+                        mp.move_bol(ci);
+                        mp.insert(ci, "\n");
+                        mp.move_bof(ci);
+
+                        ci.txt.mod = 0;
+
+                        /* and add an on_close handler */
+                        push(ci.on_close,
+                            sub (doc) {
+                                if (stat(doc.name)) {
+                                    local log = mp.open('<git commit output>');
+
+                                    log.txt.lines   = [ '' ];
+                                    log.txt.y       = 0;
+                                    mp.actions.exec_command(log,
+                                        'git commit -a -m .COMMIT_MESSAGE'
+                                    );
+
+                                    mp.detect_syntax(log);
+                                    mp.move_bof(log);
+                                    log.txt.mod     = 0;
+                                    log.undo        = [];
+                                    log.read_only   = 1;
+                                }
+
+                                unlink(doc.name);
+                            }
+                        );
+
+                        return NULL;
+                }
+            }
         }
     },
     {
@@ -97,18 +149,28 @@ mp.actions['vcs'] = sub (d) {
 
             local cmd = sprintf(l[mp.vcs_target], d.name);
 
-            local log = mp.open(sprintf(L("<%s output>"), cmd));
+            /* if a 'pre' hook exists, run it and get the
+               cmd to be executed (NULL if none) */
+            if (v.opts[cmd].pre) {
+                cmd = v.opts[cmd].pre(d);
+            }
 
-            log.txt.lines   = [ '' ];
-            log.txt.y       = 0;
+            if (cmd != NULL) {
+                local log = mp.open(sprintf(L("<%s output>"), cmd));
 
-            mp.actions.exec_command(log, cmd);
-            mp.detect_syntax(log);
+                log.txt.lines   = [ '' ];
+                log.txt.y       = 0;
 
-            mp.move_bof(log);
-            log.txt.mod     = 0;
-            log.undo        = [];
-            log.read_only   = 1;
+                if (v.opts[cmd] == NULL) {
+                    mp.actions.exec_command(log, cmd);
+                }
+
+                mp.detect_syntax(log);
+                mp.move_bof(log);
+                log.txt.mod     = 0;
+                log.undo        = [];
+                log.read_only   = 1;
+            }
         }
     }
 };
