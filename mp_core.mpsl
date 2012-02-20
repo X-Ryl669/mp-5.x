@@ -490,8 +490,8 @@ sub mp.process_cmdline()
 
 	mp.load_tags();
 
-	/* skip ARGV[0] */
-	shift(ARGV);
+    /* skip ARGV[0] */
+    mp.binary_name = shift(ARGV);
 
 	while (o = shift(ARGV)) {
 		if (o eq '-h' || o eq '--help') {
