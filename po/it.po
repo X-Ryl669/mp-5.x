@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: mp_crypt.mpsl:32 mp_file.mpsl:558
+#: mp_crypt.mpsl:32 mp_file.mpsl:590
 msgid "Password:"
 msgstr "Password:"
 
@@ -34,7 +34,7 @@ msgstr "Funzione morta"
 msgid "Line to go to:"
 msgstr "Numero riga:"
 
-#: mp_file.mpsl:31 mp_file.mpsl:406 mp_file.mpsl:443 mp_session.mpsl:64
+#: mp_file.mpsl:31 mp_file.mpsl:418 mp_file.mpsl:475 mp_session.mpsl:64
 #: mp_session.mpsl:72
 msgid "<unnamed>"
 msgstr "<Senza nome>"
@@ -48,11 +48,11 @@ msgstr "File '%s' non trovato."
 msgid "Can't create file '%s'."
 msgstr "Impossibile scrivere '%s'."
 
-#: mp_file.mpsl:80
+#: mp_file.mpsl:452
 msgid "File has changed. Save changes?"
 msgstr "Il file e' cambiato. Salvare i cambiamenti?"
 
-#: mp_file.mpsl:151 mp_file.mpsl:211
+#: mp_file.mpsl:158 mp_file.mpsl:223
 msgid "System command:"
 msgstr "Esegui:"
 
@@ -313,34 +313,34 @@ msgstr "Sostituisci..."
 msgid "Replace in all..."
 msgstr "Sostituisci tutti..."
 
-#: mp_file.mpsl:339
+#: mp_file.mpsl:351
 msgid "Next"
 msgstr "Prossimo"
 
-#: mp_file.mpsl:336
+#: mp_file.mpsl:348
 msgid "New"
 msgstr "Nuovo"
 
-#: mp_file.mpsl:341
+#: mp_file.mpsl:353
 msgid "Open..."
 msgstr "Apri..."
 
 msgid "Reopen..."
 msgstr "Riapri..."
 
-#: mp_file.mpsl:337
+#: mp_file.mpsl:349
 msgid "Save..."
 msgstr "Salva..."
 
-#: mp_file.mpsl:338
+#: mp_file.mpsl:350
 msgid "Save as..."
 msgstr "Salva come..."
 
-#: mp_file.mpsl:343
+#: mp_file.mpsl:355
 msgid "Close"
 msgstr "Chiudere"
 
-#: mp_file.mpsl:351
+#: mp_file.mpsl:363
 msgid "Open file under cursor"
 msgstr "Apri il file sotto il cursore"
 
@@ -376,7 +376,7 @@ msgstr ""
 msgid "Help for word under cursor"
 msgstr "Aiuto x la parola sotto il cursore"
 
-#: mp_file.mpsl:349
+#: mp_file.mpsl:361
 msgid "Run system command..."
 msgstr "Esegui comando di sistema..."
 
@@ -399,7 +399,7 @@ msgstr "Completa tag..."
 msgid "Edit templates file"
 msgstr "Modifica file dei moduli"
 
-#: mp_file.mpsl:347
+#: mp_file.mpsl:359
 msgid "Edit configuration file"
 msgstr "Modifica il file di configurazione"
 
@@ -413,11 +413,11 @@ msgstr "Lunghezza del tab..."
 msgid "Menu"
 msgstr "Menu"
 
-#: mp_misc.mpsl:183
+#: mp_misc.mpsl:185
 msgid "About..."
 msgstr "Circa..."
 
-#: mp_file.mpsl:342
+#: mp_file.mpsl:354
 msgid "Exit"
 msgstr "Esci"
 
@@ -438,7 +438,7 @@ msgstr "Posiziona il cursore col mouse"
 msgid "Execute editor function..."
 msgstr "Esegui funzione dell'editor..."
 
-#: mp_file.mpsl:348
+#: mp_file.mpsl:360
 msgid "Save modified texts"
 msgstr "Salva il testo modificato"
 
@@ -527,7 +527,7 @@ msgstr "Seleziona l'ultima ricerca effettuata"
 msgid "Jump to matching bracket"
 msgstr "Salta alla parentesi corrispondente"
 
-#: mp_file.mpsl:340
+#: mp_file.mpsl:352
 msgid "Previous"
 msgstr "Precedente"
 
@@ -645,7 +645,7 @@ msgstr ""
 msgid "Error saving file: %s"
 msgstr ""
 
-#: mp_file.mpsl:104 mp_file.mpsl:306
+#: mp_file.mpsl:101 mp_file.mpsl:318
 msgid "File to open:"
 msgstr ""
 
@@ -661,19 +661,19 @@ msgstr ""
 msgid "Exit value:\n"
 msgstr ""
 
-#: mp_misc.mpsl:177
+#: mp_misc.mpsl:179
 msgid "Execute MPSL code..."
 msgstr ""
 
-#: mp_misc.mpsl:178
+#: mp_misc.mpsl:180
 msgid "Execute document as MPSL"
 msgstr ""
 
-#: mp_misc.mpsl:181
+#: mp_misc.mpsl:183
 msgid "Bigger font"
 msgstr ""
 
-#: mp_misc.mpsl:182
+#: mp_misc.mpsl:184
 msgid "Smaller font"
 msgstr ""
 
@@ -762,7 +762,7 @@ msgstr ""
 msgid "Tab options..."
 msgstr ""
 
-#: mp_file.mpsl:117
+#: mp_file.mpsl:114
 msgid "File has changed. Are you sure?"
 msgstr ""
 
@@ -772,12 +772,12 @@ msgstr ""
 msgid "Error writing command '%s'"
 msgstr ""
 
-#: mp_file.mpsl:198
+#: mp_file.mpsl:210
 #, c-format
 msgid "Error reading from command '%s'"
 msgstr ""
 
-#: mp_file.mpsl:344
+#: mp_file.mpsl:356
 msgid "Revert"
 msgstr ""
 
@@ -794,7 +794,7 @@ msgstr ""
 msgid "Lines: %d Words: %d"
 msgstr ""
 
-#: mp_misc.mpsl:180
+#: mp_misc.mpsl:182
 msgid "Set charset encoding..."
 msgstr ""
 
@@ -836,7 +836,7 @@ msgid ""
 "Mailing list: mp-subscribe@lists.triptico.com\n"
 msgstr ""
 
-#: mp_file.mpsl:178
+#: mp_file.mpsl:188
 #, c-format
 msgid "Error writing to command '%s'"
 msgstr ""
@@ -877,7 +877,7 @@ msgstr ""
 msgid "Unbound keystroke '%s'"
 msgstr ""
 
-#: mp_file.mpsl:531
+#: mp_file.mpsl:563
 #, c-format
 msgid "New file '%s'"
 msgstr ""
@@ -887,12 +887,12 @@ msgstr ""
 msgid "%d replaces"
 msgstr ""
 
-#: mp_core.mpsl:498 mp_core.mpsl:516
+#: mp_core.mpsl:518 mp_core.mpsl:536
 #, c-format
 msgid "Cannot open '%s'"
 msgstr ""
 
-#: mp_core.mpsl:623
+#: mp_core.mpsl:643
 #, c-format
 msgid "WARNING: %s version found is %s, but %s is needed"
 msgstr ""
@@ -905,7 +905,7 @@ msgstr ""
 msgid "Mark end of lines"
 msgstr ""
 
-#: mp_file.mpsl:345
+#: mp_file.mpsl:357
 msgid "Close all"
 msgstr ""
 
@@ -1000,11 +1000,11 @@ msgstr ""
 msgid "Keep original end of lines"
 msgstr ""
 
-#: mp_file.mpsl:352
+#: mp_file.mpsl:364
 msgid "Hexadecimal viewer..."
 msgstr ""
 
-#: mp_file.mpsl:353
+#: mp_file.mpsl:365
 msgid "Open dropped files"
 msgstr ""
 
@@ -1058,7 +1058,7 @@ msgid ""
 "Mailing list: mp-subscribe@lists.triptico.com\n"
 msgstr ""
 
-#: mp_core.mpsl:444
+#: mp_core.mpsl:464
 #, c-format
 msgid ""
 "Minimum Profit %s - Programmer Text Editor\n"
@@ -1089,7 +1089,7 @@ msgstr ""
 msgid "Toggle insert/overwrite mode"
 msgstr ""
 
-#: mp_file.mpsl:350
+#: mp_file.mpsl:362
 msgid "Filter selection through system command..."
 msgstr ""
 
@@ -1101,7 +1101,7 @@ msgstr ""
 msgid "Select action to execute:"
 msgstr ""
 
-#: mp_misc.mpsl:179
+#: mp_misc.mpsl:181
 msgid "Execute action on document..."
 msgstr ""
 
@@ -1159,8 +1159,6 @@ msgstr ""
 msgid "'Smart' move to beginning of line:"
 msgstr ""
 
-#: mp_misc.mpsl:134
-#, c-format
 msgid ""
 "Minimum Profit %s (%s) - Programmer Text Editor\n"
 "\n"
@@ -1186,7 +1184,60 @@ msgid ""
 "Mailing list: mp-subscribe@lists.triptico.com\n"
 msgstr ""
 
-#: mp_syntax.mpsl:904
+#: mp_syntax.mpsl:905
 #, c-format
 msgid "Gathered information on %s:"
+msgstr ""
+
+#: mp_core.mpsl:292
+msgid "File was changed externally. Reload?"
+msgstr ""
+
+#: mp_misc.mpsl:134
+#, c-format
+msgid ""
+"Minimum Profit %s (%s) - Programmer Text Editor\n"
+"\n"
+"Components: MPDM %s, MPSL %s\n"
+"\n"
+"Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com> and others\n"
+"\n"
+"This program is free software; you can redistribute it and/or\n"
+"modify it under the terms of the GNU General Public License\n"
+"as published by the Free Software Foundation; either version 2\n"
+"of the License, or (at your option) any later version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
+"See the GNU General Public License for more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License\n"
+"along with this program; if not, write to the Free Software Foundation,\n"
+"Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.\n"
+"\n"
+"Home page: http://triptico.com/software/mp.html\n"
+"Mailing list: mp-subscribe@lists.triptico.com\n"
+msgstr ""
+
+#: mp_toys.mpsl:138
+msgid "You won!"
+msgstr ""
+
+#: mp_vcs.mpsl:115
+msgid "This directory is not under a supported version control system"
+msgstr ""
+
+#: mp_vcs.mpsl:122
+#, c-format
+msgid "Available %s commands"
+msgstr ""
+
+#: mp_vcs.mpsl:142 mp_vcs.mpsl:195
+#, c-format
+msgid "<%s output>"
+msgstr ""
+
+#: mp_vcs.mpsl:167
+msgid "Version Control..."
 msgstr ""

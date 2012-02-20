@@ -252,5 +252,12 @@ __I18N__ = {
 	"Unindent block" => "Desindentar bloque",
 	"Template file to edit:" => "Fichero de plantillas a editar:",
 	"'Smart' move to beginning of line:" => "Saltar al principio de la l\x{00ed}nea 'inteligente':",
+	"Gathered information on %s:" => "Informaci\x{00f3}n recopilada sobre %s:",
+	"File was changed externally. Reload?" => "El fichero se cambi\x{00f3} externamente. \x{00bf}Recargar?",
+	"You won!" => "\x{00a1}Has ganado!",
+	"This directory is not under a supported version control system" => "Este directorio no est\x{00e1} bajo control de versiones.",
+	"Available %s commands" => "Comandos %s disponibles",
+	"<%s output>" => "<salida de %s>",
+	"Version Control..." => "Control de Versiones...",
 	"-" => "-"
 };
