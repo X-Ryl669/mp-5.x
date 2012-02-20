@@ -25,6 +25,18 @@
 
 */
 
+/** editor actions **/
+
+mp.actions['pipes'] =   sub (d) {
+    mp.pipes();
+};
+
+/** action descriptions **/
+
+mp.actdesc['pipes'] = LL("Play \"Pipes\"");
+
+/** code **/
+
 sub mp.maze(doc, keycode)
 {
 	local tx = mp.window.tx;
@@ -271,7 +283,10 @@ sub mp.pipes(doc, keycode)
             }
 
             if (pipes.you_won) {
-                out[0] = [ mp.colors.cursor.attr, "You won! Press ENTER." ];
+                out[0] = [
+                    mp.colors.cursor.attr,
+                    L("You won! Press any key.")
+                ];
             }
 
             return out;

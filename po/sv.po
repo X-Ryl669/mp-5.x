@@ -1239,7 +1239,7 @@ msgid ""
 "Mailing list: mp-subscribe@lists.triptico.com\n"
 msgstr ""
 
-#: mp_toys.mpsl:138
+#: mp_toys.mpsl:150
 msgid "You won!"
 msgstr ""
 
@@ -1259,4 +1259,12 @@ msgstr ""
 
 #: mp_vcs.mpsl:167
 msgid "Version Control..."
+msgstr ""
+
+#: mp_toys.mpsl:36
+msgid "Play \"Pipes\""
+msgstr ""
+
+#: mp_toys.mpsl:288
+msgid "You won! Press any key."
 msgstr ""

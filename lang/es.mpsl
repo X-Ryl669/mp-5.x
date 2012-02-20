@@ -259,5 +259,7 @@ __I18N__ = {
 	"Available %s commands" => "Comandos %s disponibles",
 	"<%s output>" => "<salida de %s>",
 	"Version Control..." => "Control de Versiones...",
+	"Play \"Pipes\"" => "Jugar a \"Tuber\x{00ed}as\"",
+	"You won! Press any key." => "\x{00a1}Has ganado! Pulsa una tecla.",
 	"-" => "-"
 };
