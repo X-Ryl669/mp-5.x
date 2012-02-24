@@ -8,6 +8,7 @@ Release Critical Bugs
  * 1287: Add an action to move to next section.
  * 1294: If the `keep_eol' config variable is not set, EOLs should
    be forced.
+ * 1295: Delete backspace+char pairs when piping help.
 
 Open Bugs
 ---------
