@@ -760,7 +760,7 @@ sub mp.help(doc, word)
             h = [];
 
             while ((l = read(f)) != NULL) {
-                l = sregex(l, "/\b./g");
+                l = sregex(l, "/\x{0008}./g");
                 push(h, mp.chomp(l));
             }
 
