@@ -746,36 +746,38 @@ sub mp.detect_syntax(doc)
 
 sub mp.help(doc, word)
 {
-	local h;
+    local h;
 
-	foreach (c, doc.syntax.help) {
-		local f;
+    foreach (c, doc.syntax.help) {
+        local f;
 
-		/* format the command */
-		c = sprintf(c, word);
+        /* format the command */
+        c = sprintf(c, word);
 
-		/* pipe from it */
-		if ((f = popen(c, "r")) != NULL) {
-			local l;
-			h = [];
+        /* pipe from it */
+        if ((f = popen(c, "r")) != NULL) {
+            local l;
+            h = [];
 
-			while ((l = read(f)) != NULL)
-				push(h, mp.chomp(l));
+            while ((l = read(f)) != NULL) {
+                l = sregex(l, "/\b./g");
+                push(h, mp.chomp(l));
+            }
 
-			/* fails? */
-			if (pclose(f) != 0)
-				h = NULL;
-		}
+            /* fails? */
+            if (pclose(f) != 0)
+                h = NULL;
+        }
 
-		/* is there already help? don't look for more */
-		if (h != NULL)
-			break;
-	}
+        /* is there already help? don't look for more */
+        if (h != NULL)
+            break;
+    }
 
     if (h == NULL && doc.syntax.help_func)
         h = doc.syntax.help_func(word);
 
-	return h;
+    return h;
 }
 
 

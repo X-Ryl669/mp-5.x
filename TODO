@@ -6,7 +6,6 @@ Release Critical Bugs
 
  * 1286: Add an action to move to previous section.
  * 1287: Add an action to move to next section.
- * 1295: Delete backspace+char pairs when piping help.
 
 Open Bugs
 ---------
@@ -368,5 +367,7 @@ Closed
    (Tue, 14 Feb 2012 12:25:04 +0100).
  * 1294: If the `keep_eol' config variable is not set, EOLs should
    be forced (Mon, 27 Feb 2012 12:47:26 +0000).
+ * 1295: Delete backspace+char pairs when piping help
+   (Mon, 27 Feb 2012 15:43:29 +0100).
 
 Email bugs to angel@triptico.com
