@@ -5,7 +5,7 @@
 
     Templates.
 
-    Copyright (C) 1991-2007 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -29,25 +29,33 @@
 
 mp.actions['insert_template']	 = sub(d) {
 
-	local l, t;
+    local l;
 
-	/* no local templates? do nothing */
-	if ((l = mp.long_op(mp.read_templates_file, d)) == NULL)
-		return;
+    /* no local templates? do nothing */
+    if ((l = mp.long_op(mp.read_templates_file, d)) != NULL) {
 
-	/* select one */
-	if ((t = mp.form( [
-		{ 'label'	=> L("Template to insert:"),
-		  'type'	=> 'list',
-		  'list'	=> l }
-		])) == NULL)
-		return;
-	t = t[0];
+        /* select one */
+        local t = mp.form(
+            [
+                {
+                    label:  L("Template to insert:"),
+                    type:   'list',
+                    list:   l
+                }
+            ]
+        );
 
-	mp.store_undo(d);
+        if (t != NULL) {
+            t = t[0];
 
-	/* insert the template content */
-	mp.insert(d, mp.templates[l[t]]);
+            mp.store_undo(d);
+
+            /* get the template content */
+            local c = mp.templates[l[t]];
+
+            mp.insert(d, c);
+        }
+    }
 };
 
 mp.actions['open_templates_file'] = sub (d) {
