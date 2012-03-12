@@ -53,7 +53,18 @@ mp.actions['insert_template']	 = sub(d) {
             /* get the template content */
             local c = mp.templates[l[t]];
 
-            mp.insert(d, c);
+            /* does it start with #!? execute as MPSL */
+            if (regex(l[t], "/^ *#!/")) {
+                c = eval(c);
+
+                if (ERROR)
+                    mp.alert(ERROR);
+
+                ERROR = NULL;
+            }
+
+            if (c)
+                mp.insert(d, c);
         }
     }
 };

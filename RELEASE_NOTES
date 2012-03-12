@@ -18,6 +18,9 @@ Minimum Profit Release Notes
      a `man' page, a special routine inspects all source files and
      headers looking for structures, variables and function prototypes
      to be shown as help.
+   - If a template name starts with #!, the template body is assumed
+     to be MPSL code, that will be executed and its value returned
+     as the template to be inserted.
    - New "Pipes" game.
  - Minor improvements:
    - The `build' action remembers the last Makefile target.

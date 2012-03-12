@@ -5,6 +5,10 @@ with content in the same format as this file: a separator / label
 line starting with %% that will be used as the prompt in the
 "Insert template..." list, and a body, that can be anything, upto
 next label or the end of file.
+
+Also, if the template label starts with #!, the template body is
+assumed to be a piece of MPSL code that shall be executed and its
+return value inserted as the template.
 %%C Source header with GPL
 /*
 
