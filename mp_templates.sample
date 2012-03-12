@@ -72,3 +72,21 @@ different menu item names, please try them.
 
 To convert to plain text is almost the same -- instead of HTML Document,
 choose Text Only or Text Document as the 'Save As Type'.
+%%#! RSS entry
+/* as its name starts with #!, execute as MPSL */
+join(
+    [
+        "",
+        "<item>",
+        "  <title></title>",
+        "  <link>http://triptico.com</link>",
+        "  <pubDate>" ~ strftime("%a, %d %b %Y %T %z") ~ "</pubDate>",
+        "  <description>",
+        "<![CDATA[",
+        "]]>",
+        "</description>",
+        "</item>",
+        ""
+    ],
+    "\n"
+);
