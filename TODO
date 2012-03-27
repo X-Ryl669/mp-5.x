@@ -4,8 +4,7 @@ Minimum Profit 5 TODO / Bug List
 Release Critical Bugs
 ---------------------
 
- * 1286: Add an action to move to previous section.
- * 1287: Add an action to move to next section.
+ * 1296: Add a `check_for_updates' action.
 
 Open Bugs
 ---------
@@ -51,6 +50,8 @@ Pending Enhancements
  * 1280: Study a way to convert MP to a "portable" application, i.e.
    to be formed by just the executable with all MPSL code embedded
    (mainly aimed towards MS Windows).
+ * 1286: Add an action to move to previous section.
+ * 1287: Add an action to move to next section.
 
 Closed
 ------
