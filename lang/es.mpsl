@@ -261,5 +261,10 @@ __I18N__ = {
 	"Version Control..." => "Control de Versiones...",
 	"Play \"Pipes\"" => "Jugar a \"Tuber\x{00ed}as\"",
 	"You won! Press any key." => "\x{00a1}Has ganado! Pulsa una tecla.",
+	"You already have the latest version." => "Ya tienes la \x{00fa}ltima versi\x{00f3}n.",
+	"There are new versions available:" => "Hay nuevas versiones disponibles:",
+	"Update Minimum Profit from http://triptico.com/software/mp.html" => "Actualiza Minimum Profit desde http://triptico.com/software/mp.html",
+	"Cannot connect -- please try later." => "Imposible conectar. Int\x{00e9}ntalo m\x{00e1}s tarde.",
+	"Check for updates..." => "Comprobar actualizaciones...",
 	"-" => "-"
 };

@@ -388,14 +388,14 @@ msgstr "Lista de documentos"
 msgid "Search tag..."
 msgstr "Buscar tag..."
 
-#: mp_templates.mpsl:73
+#: mp_templates.mpsl:92
 msgid "Insert template..."
 msgstr "Insertar molde..."
 
 msgid "Complete tag..."
 msgstr "Completar tag..."
 
-#: mp_templates.mpsl:74
+#: mp_templates.mpsl:93
 msgid "Edit templates file"
 msgstr "Editar fichero de moldes"
 
@@ -413,7 +413,7 @@ msgstr "Tamaño del tabulador..."
 msgid "Menu"
 msgstr "Menú"
 
-#: mp_misc.mpsl:185
+#: mp_misc.mpsl:251
 msgid "About..."
 msgstr "Acerca de..."
 
@@ -600,19 +600,19 @@ msgstr "Error: "
 msgid "Exit value:\n"
 msgstr "Valor de salida:\n"
 
-#: mp_misc.mpsl:179
+#: mp_misc.mpsl:245
 msgid "Execute MPSL code..."
 msgstr "Executar código MPSL..."
 
-#: mp_misc.mpsl:180
+#: mp_misc.mpsl:246
 msgid "Execute document as MPSL"
 msgstr "Ejecutar documento como MPSL"
 
-#: mp_misc.mpsl:183
+#: mp_misc.mpsl:249
 msgid "Bigger font"
 msgstr "Tipo de letra más grande"
 
-#: mp_misc.mpsl:184
+#: mp_misc.mpsl:250
 msgid "Smaller font"
 msgstr "Tipo de letra más pequeño"
 
@@ -677,7 +677,7 @@ msgstr "Tag no encontrado."
 msgid "Select tag:"
 msgstr "Seleccionar tag:"
 
-#: mp_templates.mpsl:40
+#: mp_templates.mpsl:41
 msgid "Template to insert:"
 msgstr "Plantilla a insertar:"
 
@@ -727,7 +727,7 @@ msgstr "Codificación no válida "
 msgid "Lines: %d Words: %d"
 msgstr "Lineas: %d Palabras: %d"
 
-#: mp_misc.mpsl:182
+#: mp_misc.mpsl:248
 msgid "Set charset encoding..."
 msgstr "Codificación..."
 
@@ -974,7 +974,7 @@ msgstr "Marcar todo"
 msgid "Select action to execute:"
 msgstr "Seleccionar acción a ejecutar:"
 
-#: mp_misc.mpsl:181
+#: mp_misc.mpsl:247
 msgid "Execute action on document..."
 msgstr "Ejecutar acción sobre el documento..."
 
@@ -998,7 +998,7 @@ msgstr "Indentar bloque"
 msgid "Unindent block"
 msgstr "Desindentar bloque"
 
-#: mp_templates.mpsl:60
+#: mp_templates.mpsl:79
 msgid "Template file to edit:"
 msgstr "Fichero de plantillas a editar:"
 
@@ -1031,7 +1031,7 @@ msgid ""
 "Mailing list: mp-subscribe@lists.triptico.com\n"
 msgstr ""
 
-#: mp_syntax.mpsl:905
+#: mp_syntax.mpsl:907
 #, c-format
 msgid "Gathered information on %s:"
 msgstr "Información recopilada sobre %s:"
@@ -1093,6 +1093,26 @@ msgstr "Control de Versiones..."
 msgid "Play \"Pipes\""
 msgstr "Jugar a \"Tuberías\""
 
-#: mp_toys.mpsl:288
+#: mp_toys.mpsl:289
 msgid "You won! Press any key."
 msgstr "¡Has ganado! Pulsa una tecla."
+
+#: mp_misc.mpsl:217
+msgid "You already have the latest version."
+msgstr "Ya tienes la última versión."
+
+#: mp_misc.mpsl:221
+msgid "There are new versions available:"
+msgstr "Hay nuevas versiones disponibles:"
+
+#: mp_misc.mpsl:222
+msgid "Update Minimum Profit from http://triptico.com/software/mp.html"
+msgstr "Actualiza Minimum Profit desde http://triptico.com/software/mp.html"
+
+#: mp_misc.mpsl:226
+msgid "Cannot connect -- please try later."
+msgstr "Imposible conectar. Inténtalo más tarde."
+
+#: mp_misc.mpsl:252
+msgid "Check for updates..."
+msgstr "Comprobar actualizaciones..."

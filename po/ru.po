@@ -534,7 +534,7 @@ msgstr "Вставить строку"
 msgid "Insert new line above cursor"
 msgstr "Вставить новую строку над курсором"
 
-#: mp_templates.mpsl:73
+#: mp_templates.mpsl:92
 msgid "Insert template..."
 msgstr "Вставить шаблон..."
 
@@ -571,7 +571,7 @@ msgstr "Список документов"
 msgid "Edit configuration file"
 msgstr "Редактировать конфигурационный файл"
 
-#: mp_templates.mpsl:74
+#: mp_templates.mpsl:93
 msgid "Edit templates file"
 msgstr "Редактировать файл шаблонов"
 
@@ -603,7 +603,7 @@ msgstr "Копировать блок"
 msgid "Cut block"
 msgstr "Вырезать блок"
 
-#: mp_misc.mpsl:185
+#: mp_misc.mpsl:251
 msgid "About..."
 msgstr "О программе..."
 
@@ -681,19 +681,19 @@ msgstr "Ошибка: "
 msgid "Exit value:\n"
 msgstr "Код выхода:\n"
 
-#: mp_misc.mpsl:179
+#: mp_misc.mpsl:245
 msgid "Execute MPSL code..."
 msgstr "Выполнить MPSL код"
 
-#: mp_misc.mpsl:180
+#: mp_misc.mpsl:246
 msgid "Execute document as MPSL"
 msgstr "Выполнить как MPSL"
 
-#: mp_misc.mpsl:183
+#: mp_misc.mpsl:249
 msgid "Bigger font"
 msgstr "Увеличить шрифт"
 
-#: mp_misc.mpsl:184
+#: mp_misc.mpsl:250
 msgid "Smaller font"
 msgstr "Уменьшить шрифт"
 
@@ -758,7 +758,7 @@ msgstr "Тэг не найден"
 msgid "Select tag:"
 msgstr "Выделить тэг"
 
-#: mp_templates.mpsl:40
+#: mp_templates.mpsl:41
 msgid "Template to insert:"
 msgstr ""
 
@@ -814,7 +814,7 @@ msgstr "Не правильная кодировка "
 msgid "Lines: %d Words: %d"
 msgstr "Строк: %d Слов: %d"
 
-#: mp_misc.mpsl:182
+#: mp_misc.mpsl:248
 msgid "Set charset encoding..."
 msgstr "Установить кодировку"
 
@@ -1112,7 +1112,7 @@ msgstr ""
 msgid "Select action to execute:"
 msgstr ""
 
-#: mp_misc.mpsl:181
+#: mp_misc.mpsl:247
 msgid "Execute action on document..."
 msgstr ""
 
@@ -1162,7 +1162,7 @@ msgid ""
 "Mailing list: mp-subscribe@lists.triptico.com\n"
 msgstr ""
 
-#: mp_templates.mpsl:60
+#: mp_templates.mpsl:79
 msgid "Template file to edit:"
 msgstr ""
 
@@ -1195,7 +1195,7 @@ msgid ""
 "Mailing list: mp-subscribe@lists.triptico.com\n"
 msgstr ""
 
-#: mp_syntax.mpsl:905
+#: mp_syntax.mpsl:907
 #, c-format
 msgid "Gathered information on %s:"
 msgstr ""
@@ -1257,6 +1257,26 @@ msgstr ""
 msgid "Play \"Pipes\""
 msgstr ""
 
-#: mp_toys.mpsl:288
+#: mp_toys.mpsl:289
 msgid "You won! Press any key."
+msgstr ""
+
+#: mp_misc.mpsl:217
+msgid "You already have the latest version."
+msgstr ""
+
+#: mp_misc.mpsl:221
+msgid "There are new versions available:"
+msgstr ""
+
+#: mp_misc.mpsl:222
+msgid "Update Minimum Profit from http://triptico.com/software/mp.html"
+msgstr ""
+
+#: mp_misc.mpsl:226
+msgid "Cannot connect -- please try later."
+msgstr ""
+
+#: mp_misc.mpsl:252
+msgid "Check for updates..."
 msgstr ""
