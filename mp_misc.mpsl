@@ -178,7 +178,7 @@ mp.actions.check_for_updates = sub (d) {
     mp.busy(1);
 
     local c = [];
-    local f = connect("triptico.com", "80");
+    local f = connect("triptico.com", "www");
 
     if (f != NULL) {
         local l;
