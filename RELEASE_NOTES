@@ -22,10 +22,7 @@ Minimum Profit Release Notes
      to be MPSL code, that will be executed and its value returned
      as the template to be inserted.
    - New "Pipes" game.
- - Minor improvements:
-   - The `build' action remembers the last Makefile target.
-   - The `section_list' action sets the list selector to the most
-     appropriate section regarding the current cursor position.
+   - New `check_for_updates' action.
  - Fixed bugs:
    - Make `keep_eol' behaviour more intuitive (bug #1294).
 

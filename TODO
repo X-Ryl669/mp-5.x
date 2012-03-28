@@ -4,7 +4,7 @@ Minimum Profit 5 TODO / Bug List
 Release Critical Bugs
 ---------------------
 
- * 1296: Add a `check_for_updates' action.
+None!
 
 Open Bugs
 ---------
@@ -370,5 +370,7 @@ Closed
    be forced (Mon, 27 Feb 2012 12:47:26 +0000).
  * 1295: Delete backspace+char pairs when piping help
    (Mon, 27 Feb 2012 15:43:29 +0100).
+ * 1296: Add a `check_for_updates' action
+   (Wed, 28 Mar 2012 09:57:30 +0200).
 
 Email bugs to angel@triptico.com
