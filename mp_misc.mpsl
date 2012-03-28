@@ -5,7 +5,7 @@
 
     Miscellaneous editor actions.
 
-    Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -166,23 +166,75 @@ mp.actions['about'] = sub (d) {
 	}
 };
 
+
+mp.actions.check_for_updates = sub (d) {
+    d = mp.open("<updates>");
+
+    mp.move_bof(d);
+    mp.move_bol(d);
+    d.txt.mod   = 0;
+    d.read_only = 1;
+
+    local c = [];
+    local f = open("RELEASE_NOTES", "r");
+
+    if (f != NULL) {
+        local l;
+
+        /* content */
+        /* drop first 3 lines */
+        read(f);
+        read(f);
+        read(f);
+
+        /* read until current version is found or EOF */
+        while ((l = read(f)) != NULL) {
+            mp.chomp(l);
+
+            if (cmp(mp.normalize_version(l),
+                    mp.normalize_version('5.2.1')) == 0)
+                break;
+
+            push(c, l);
+        }
+
+        close(f);
+
+        if (size(c) == 0) {
+            c = [L("You already have the latest version."), ''];
+        }
+        else {
+            ins(c, "", 0);
+            ins(c, L("There are new versions available:"), 0);
+            push(c, "", L("Update Minimum Profit from http://triptico.com/software/mp.html"), "");
+        }
+    }
+    else {
+        c = [ L("Cannot connect -- please try later."), '' ];
+    }
+
+    d.txt.lines = c;
+};
+
+
 /** default key bindings **/
 
-mp.keycodes['escape']		= 'eval';
-mp.keycodes['f12']		= 'zoom_in';
-mp.keycodes['ctrl-kp-plus' ]	= 'zoom_in';
-mp.keycodes['f11']		= 'zoom_out';
-mp.keycodes['ctrl-kp-minus' ]	= 'zoom_out';
+mp.keycodes['escape']           = 'eval';
+mp.keycodes['f12']              = 'zoom_in';
+mp.keycodes['ctrl-kp-plus' ]    = 'zoom_in';
+mp.keycodes['f11']              = 'zoom_out';
+mp.keycodes['ctrl-kp-minus' ]   = 'zoom_out';
 
 /** action descriptions **/
 
-mp.actdesc['eval']          = LL("Execute MPSL code...");
-mp.actdesc['eval_doc']      = LL("Execute document as MPSL");
-mp.actdesc['exec_action']   = LL("Execute action on document...");
-mp.actdesc['encoding']      = LL("Set charset encoding...");
-mp.actdesc['zoom_in']       = LL("Bigger font");
-mp.actdesc['zoom_out']      = LL("Smaller font");
-mp.actdesc['about']         = LL("About...");
+mp.actdesc['eval']              = LL("Execute MPSL code...");
+mp.actdesc['eval_doc']          = LL("Execute document as MPSL");
+mp.actdesc['exec_action']       = LL("Execute action on document...");
+mp.actdesc['encoding']          = LL("Set charset encoding...");
+mp.actdesc['zoom_in']           = LL("Bigger font");
+mp.actdesc['zoom_out']          = LL("Smaller font");
+mp.actdesc['about']             = LL("About...");
+mp.actdesc['check_for_updates'] = LL("Check for updates...");
 
 /** code **/
 

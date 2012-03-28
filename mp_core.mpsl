@@ -214,7 +214,7 @@ mp.menu = [
             'repeated_words_options', 'toggle_spellcheck', '-',
             'word_count', '-',
             'zoom_in', 'zoom_out', '-',
-            'pipes', 'about'
+            'pipes', '-', 'check_for_updates', 'about'
         ]
     ]
 ];
