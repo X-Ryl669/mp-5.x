@@ -175,11 +175,24 @@ mp.actions.check_for_updates = sub (d) {
     d.txt.mod   = 0;
     d.read_only = 1;
 
+    mp.busy(1);
+
     local c = [];
-    local f = open("RELEASE_NOTES", "r");
+    local f = connect("triptico.com", "80");
 
     if (f != NULL) {
         local l;
+
+        write(f, "GET /download/mp_release_notes HTTP/1.1\r\n");
+        write(f, "Host: triptico.com\r\nConnection: close\r\n\r\n");
+
+        /* ignore HTTP response */
+        while ((l = read(f)) != NULL) {
+            mp.chomp(l);
+
+            if (l eq '')
+                break;
+        }
 
         /* content */
         /* drop first 3 lines */
@@ -192,7 +205,7 @@ mp.actions.check_for_updates = sub (d) {
             mp.chomp(l);
 
             if (cmp(mp.normalize_version(l),
-                    mp.normalize_version('5.2.1')) == 0)
+                    mp.normalize_version(mp.version)) == 0)
                 break;
 
             push(c, l);
@@ -212,6 +225,8 @@ mp.actions.check_for_updates = sub (d) {
     else {
         c = [ L("Cannot connect -- please try later."), '' ];
     }
+
+    mp.busy(0);
 
     d.txt.lines = c;
 };
