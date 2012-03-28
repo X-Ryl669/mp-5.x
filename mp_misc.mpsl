@@ -188,7 +188,7 @@ mp.actions.check_for_updates = sub (d) {
 
         /* ignore HTTP response */
         while ((l = read(f)) != NULL) {
-            mp.chomp(l);
+            l = mp.chomp(l);
 
             if (l eq '')
                 break;
@@ -202,10 +202,10 @@ mp.actions.check_for_updates = sub (d) {
 
         /* read until current version is found or EOF */
         while ((l = read(f)) != NULL) {
-            mp.chomp(l);
+            l = mp.chomp(l);
 
             if (cmp(mp.normalize_version(l),
-                    mp.normalize_version(mp.version)) == 0)
+                    mp.normalize_version(mp.VERSION)) == 0)
                 break;
 
             push(c, l);
