@@ -184,7 +184,9 @@ mp.actions.check_for_updates = sub (d) {
         local l;
 
         write(f, "GET /download/mp_release_notes HTTP/1.1\r\n");
-        write(f, "Host: triptico.com\r\nConnection: close\r\n\r\n");
+        write(f, "Host: triptico.com\r\n");
+        write(f, "User-Agent: Minimum Profit ", mp.VERSION, "\r\n");
+        write(f, "Connection: close\r\n\r\n");
 
         /* ignore HTTP response */
         while ((l = read(f)) != NULL) {
