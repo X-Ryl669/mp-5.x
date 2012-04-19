@@ -211,6 +211,7 @@ sub mp.vcs_commit_on_close(doc, cmd, vcsname)
                 log.undo        = [];
                 log.read_only   = 1;
 
+                /* set active back */
                 mp.active_i = p_active;
             }
 
@@ -220,7 +221,7 @@ sub mp.vcs_commit_on_close(doc, cmd, vcsname)
             pop(doc.on_close);
 
             /* always close */
-            return 1;
+            return 0;
         }
     );
 
