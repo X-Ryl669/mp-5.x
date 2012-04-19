@@ -213,6 +213,7 @@ sub mp.vcs_commit_on_close(doc, cmd, vcsname)
 
                 /* set active back */
                 mp.active_i = p_active;
+                mp.active();
             }
 
             unlink('.COMMIT_MESSAGE');
