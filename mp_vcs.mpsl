@@ -63,6 +63,7 @@ mp.vcs = {
             "svn add '%s'"      => NULL,
             "svn annotate '%s'" => NULL,
             "svn update"        => NULL,
+            "svn revert '%s'"   => NULL,
             "svn commit"        => {
                 pre:    sub (doc) {
                     mp.vcs_commit_on_close(doc, "svn commit -F '%s'");
