@@ -4,7 +4,9 @@ Minimum Profit Release Notes
 5.2.3
 -----
 
- - Minor improvements:
+ - New improvements:
+   - New actions `move_section_up' and `move_section_down'
+     (bound by default to `alt-cursor-up' and `alt-cursor-down').
    - VCS commands can have a common or private log.
 
 5.2.2
