@@ -222,7 +222,7 @@ sub mp.vcs_commit_on_close(doc, cmd, vcsname)
             pop(doc.on_close);
 
             /* always close */
-            return 0;
+            return 1;
         }
     );
 
