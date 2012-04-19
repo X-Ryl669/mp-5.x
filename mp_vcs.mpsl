@@ -196,6 +196,8 @@ sub mp.vcs_commit_on_close(doc, cmd, vcsname)
     push(ci.on_close,
         sub (doc) {
             if (stat(doc.name)) {
+                local p_active = mp.active_i;
+
                 local cmd = sprintf(doc.commit_cmd, doc.name);
 
                 local log = mp.open(doc.log_name);
@@ -207,6 +209,8 @@ sub mp.vcs_commit_on_close(doc, cmd, vcsname)
                 log.txt.mod     = 0;
                 log.undo        = [];
                 log.read_only   = 1;
+
+                mp.active_i = p_active;
             }
 
             unlink('.COMMIT_MESSAGE');
