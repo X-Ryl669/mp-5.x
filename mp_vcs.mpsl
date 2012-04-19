@@ -32,13 +32,13 @@ mp.vcs = {
         id:     'Git',
         check:  [ '.git', '../.git', '../../.git' ],
         opts:   {
-            'git diff'          => NULL,
+            'git diff'          => { unique_log: 1 },
             'git status'        => NULL,
-            'git log'           => NULL,
-            "git diff '%s'"     => NULL,
-            "git log '%s'"      => NULL,
+            'git log'           => { unique_log: 1 },
+            "git diff '%s'"     => { unique_log: 1 },
+            "git log '%s'"      => { unique_log: 1 },
             "git add '%s'"      => NULL,
-            "git blame '%s'"    => NULL,
+            "git blame '%s'"    => { unique_log: 1 },
             "git checkout '%s'" => NULL,
             "git stash"         => NULL,
             "git stash apply"   => NULL,
@@ -46,7 +46,7 @@ mp.vcs = {
             "git pull"          => NULL,
             "git commit -a"     => {
                 pre:    sub (doc) {
-                    mp.vcs_commit_on_close(doc, "git commit -a -F '%s'");
+                    mp.vcs_commit_on_close(doc, "git commit -a -F '%s'", 'Git');
                 }
             }
         }
@@ -55,18 +55,18 @@ mp.vcs = {
         id:     'SVN',
         check:  [ '.svn' ],
         opts:   {
-            'svn diff'          => NULL,
+            'svn diff'          => { unique_log: 1 },
             'svn status'        => NULL,
-            'svn log'           => NULL,
+            'svn log'           => { unique_log: 1 },
             "svn diff '%s'"     => NULL,
-            "svn log '%s'"      => NULL,
+            "svn log '%s'"      => { unique_log: 1 },
             "svn add '%s'"      => NULL,
-            "svn annotate '%s'" => NULL,
+            "svn annotate '%s'" => { unique_log: 1 },
             "svn update"        => NULL,
             "svn revert '%s'"   => NULL,
             "svn commit"        => {
                 pre:    sub (doc) {
-                    mp.vcs_commit_on_close(doc, "svn commit -F '%s'");
+                    mp.vcs_commit_on_close(doc, "svn commit -F '%s'", 'SVN');
                 }
             }
         }
@@ -75,18 +75,18 @@ mp.vcs = {
         id:     'Mercurial',
         check:  [ '.hg', '../.hg', '../../.hg' ],
         opts:   {
-            'hg diff'          => NULL,
+            'hg diff'          => { unique_log: 1 },
             'hg status'        => NULL,
-            'hg log'           => NULL,
+            'hg log'           => { unique_log: 1 },
             "hg diff '%s'"     => NULL,
-            "hg log '%s'"      => NULL,
+            "hg log '%s'"      => { unique_log: 1 },
             "hg add '%s'"      => NULL,
             "hg push"          => NULL,
             "hg pull"          => NULL,
-            "hg annotate '%s'" => NULL,
+            "hg annotate '%s'" => { unique_log: 1 },
             "hg commit -A"     => {
                 pre:    sub (doc) {
-                    mp.vcs_commit_on_close(doc, "hg commit -A -l '%s'");
+                    mp.vcs_commit_on_close(doc, "hg commit -A -l '%s'", 'Mercurial');
                 }
             }
         }
@@ -131,26 +131,40 @@ mp.actions['vcs'] = sub (d) {
         if (t != NULL) {
             mp.vcs_target = t[0];
 
+            local opts = v.opts[l[mp.vcs_target]];
             local cmd = sprintf(l[mp.vcs_target], d.name);
 
             /* if a 'pre' hook exists, run it and get the
                cmd to be executed (NULL if none) */
-            if (v.opts[cmd].pre) {
-                cmd = v.opts[cmd].pre(d);
+            if (opts.pre) {
+                cmd = opts.pre(d);
             }
 
             if (cmd != NULL) {
-                local log = mp.open(sprintf(L("<%s output>"), cmd));
+                local log;
 
-                log.txt.lines   = [ '' ];
-                log.txt.y       = 0;
+                /* unique log for this command? */
+                if (opts.unique_log) {
+                    log = mp.open(sprintf(L("<%s output>"), cmd));
+                    log.txt.lines   = [ '' ];
+                    log.txt.y       = 0;
+                }
+                else {
+                    /* common log */
+                    log = mp.open(sprintf(L("<%s output>"), v.id));
 
-                if (v.opts[cmd] == NULL) {
-                    mp.actions.exec_command(log, cmd);
+                    mp.insert(log, cmd ~ ":\n\n");
                 }
 
-                mp.detect_syntax(log);
-                mp.move_bof(log);
+                mp.actions.exec_command(log, cmd);
+
+                if (opts.unique_log) {
+                    mp.detect_syntax(log);
+                    mp.move_bof(log);
+                }
+                else
+                    mp.insert(log, "\n");
+
                 log.txt.mod     = 0;
                 log.undo        = [];
                 log.read_only   = 1;
@@ -169,34 +183,30 @@ mp.keycodes['vcs'] = LL("Version Control...");
 
 /** code **/
 
-sub mp.vcs_commit_on_close(doc, cmd)
+sub mp.vcs_commit_on_close(doc, cmd, vcsname)
 /* on_close handler for commit message documents */
 {
     /* create a commit message */
     local ci = mp.open('.COMMIT_MESSAGE');
 
-    ci.commit_cmd = cmd;
+    ci.commit_cmd   = cmd;
+    ci.log_name     = sprintf(L("<%s output>"), vcsname);
 
     /* and add an on_close handler */
     push(ci.on_close,
         sub (doc) {
-            local ret = 1;
-
             if (stat(doc.name)) {
-                doc.txt.lines   = [ '' ];
-                doc.txt.y       = 0;
-                mp.actions.exec_command(doc, sprintf(doc.commit_cmd, doc.name));
+                local cmd = sprintf(doc.commit_cmd, doc.name);
 
-                mp.detect_syntax(doc);
-                mp.move_bof(doc);
-                doc.txt.mod     = 0;
-                doc.undo        = [];
-                doc.read_only   = 1;
+                local log = mp.open(doc.log_name);
 
-                doc.name = sprintf(L("<%s output>"), sprintf(doc.commit_cmd, doc.name));
+                mp.insert(log, cmd ~ ":\n\n");
+                mp.actions.exec_command(log, cmd);
+                mp.insert(log, "\n");
 
-                /* reject closing (file has been modified) */
-                ret = 0;
+                log.txt.mod     = 0;
+                log.undo        = [];
+                log.read_only   = 1;
             }
 
             unlink('.COMMIT_MESSAGE');
@@ -204,7 +214,8 @@ sub mp.vcs_commit_on_close(doc, cmd)
             /* delete this on_close handler */
             pop(doc.on_close);
 
-            return ret;
+            /* always close */
+            return 1;
         }
     );
 
