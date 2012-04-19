@@ -193,7 +193,7 @@ sub mp.vcs_commit_on_close(doc, cmd)
                 doc.undo        = [];
                 doc.read_only   = 1;
 
-                doc.name = sprintf(L("<%s output>"), doc.commit_cmd);
+                doc.name = sprintf(L("<%s output>"), sprintf(doc.commit_cmd, doc.name));
 
                 /* reject closing (file has been modified) */
                 ret = 0;
