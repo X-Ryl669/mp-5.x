@@ -5,7 +5,7 @@
 
     Syntax highlight definitions.
 
-    Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    http://www.triptico.com
+    http://triptico.com
 
 */
 
@@ -54,7 +54,7 @@ sub mp.actions.help(d) {
 
         hd.syntax = d.syntax;
     }
-};
+}
 
 sub mp.actions.section_list(d) {
     local l = mp.section_list(d);
@@ -95,17 +95,56 @@ sub mp.actions.section_list(d) {
             }
         }
     }
-};
+}
+
+
+sub mp.actions.move_section_up(d) {
+    local pos = 0;
+
+    foreach (e, mp.section_list(d)) {
+        if (e[1] >= d.txt.y)
+            break;
+
+        pos = e[1];
+    }
+
+    d.txt.x = 0;
+    d.txt.y = pos;
+
+    return d;
+}
+
+
+sub mp.actions.move_section_down(d) {
+    local pos = d.txt.y;
+
+    foreach (e, mp.section_list(d)) {
+        if (e[1] > pos) {
+            pos = e[1];
+            break;
+        }
+    }
+
+    d.txt.x = 0;
+    d.txt.y = pos;
+
+    return d;
+}
+
 
 /** default key bindings **/
 
-mp.keycodes['f1']       = "help";
-mp.keycodes['ctrl-d']   = "section_list";
+mp.keycodes['f1']               = "help";
+mp.keycodes['ctrl-d']           = "section_list";
+mp.keycodes['alt-cursor-up']    = "move_section_up";
+mp.keycodes['alt-cursor-down']  = "move_section_down";
 
 /** action descriptions **/
 
-mp.actdesc['help']          = LL("Help on word over cursor");
-mp.actdesc['section_list']  = LL("Section list...");
+mp.actdesc['help']              = LL("Help on word over cursor");
+mp.actdesc['section_list']      = LL("Section list...");
+mp.actdesc['move_section_up']   = LL("Move one section up");
+mp.actdesc['move_section_down'] = LL("Move one section down");
 
 /** data **/
 

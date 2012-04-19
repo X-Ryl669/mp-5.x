@@ -50,8 +50,6 @@ Pending Enhancements
  * 1280: Study a way to convert MP to a "portable" application, i.e.
    to be formed by just the executable with all MPSL code embedded
    (mainly aimed towards MS Windows).
- * 1286: Add an action to move to previous section.
- * 1287: Add an action to move to next section.
 
 Closed
 ------
@@ -372,5 +370,9 @@ Closed
    (Mon, 27 Feb 2012 15:43:29 +0100).
  * 1296: Add a `check_for_updates' action
    (Wed, 28 Mar 2012 09:57:30 +0200).
+ * 1286: Add an action to move to previous section
+   (Thu, 19 Apr 2012 14:30:45 +0000).
+ * 1287: Add an action to move to next section
+   (Thu, 19 Apr 2012 14:30:45 +0000).
 
 Email bugs to angel@triptico.com
