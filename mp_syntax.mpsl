@@ -99,7 +99,7 @@ sub mp.actions.section_list(d) {
 
 
 sub mp.actions.move_section_up(d) {
-    local pos = 0;
+    local pos = -1;
 
     foreach (e, mp.section_list(d)) {
         if (e[1] >= d.txt.y)
@@ -108,8 +108,10 @@ sub mp.actions.move_section_up(d) {
         pos = e[1];
     }
 
-    d.txt.x = 0;
-    d.txt.y = pos;
+    if (pos != -1) {
+        d.txt.x = 0;
+        d.txt.y = pos;
+    }
 
     return d;
 }
