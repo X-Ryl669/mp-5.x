@@ -190,16 +190,18 @@ sub mp.vcs_commit_on_close(doc, cmd, vcsname)
     /* create a commit message */
     local ci = mp.open('.COMMIT_MESSAGE');
 
-    ci.commit_cmd   = cmd;
-    ci.log_name     = sprintf(L("<%s output>"), vcsname);
+    ci.vcs = {
+        commit_cmd: cmd,
+        log_name:   sprintf(L("<%s output>"), vcsname);
+    };
 
     /* and add an on_close handler */
     push(ci.on_close,
         sub (doc) {
             if (stat(doc.name)) {
-                local cmd = sprintf(doc.commit_cmd, doc.name);
+                local cmd = sprintf(doc.vcs.commit_cmd, doc.name);
 
-                local log = mp.open(doc.log_name);
+                local log = mp.open(doc.vcs.log_name);
 
                 mp.move_eof(log);
                 mp.insert(log, cmd ~ ":\n\n");
