@@ -192,7 +192,7 @@ sub mp.vcs_commit_on_close(doc, cmd, vcsname)
 
     ci.vcs = {
         commit_cmd: cmd,
-        log_name:   sprintf(L("<%s output>"), vcsname);
+        log_name:   sprintf(L("<%s output>"), vcsname)
     };
 
     /* and add an on_close handler */
