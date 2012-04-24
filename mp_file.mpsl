@@ -237,11 +237,7 @@ mp.actions['filter_selection'] = sub (d, cmd) {
 
         /* if there is no selection, take full document */
         if (d.txt.mark == NULL) {
-            mp.move_bof(d);
-            mp.mark(d);
-            mp.move_eof(d);
-            mp.move_eol(d);
-            mp.mark(d);
+            d->mp.move_bof()->mp.mark()->mp.move_eof()->mp.move_eol()->mp.mark();
         }
 
         /* take it out */
@@ -461,24 +457,36 @@ sub mp.save_on_close(doc)
 }
 
 
+/* the document class */
+mp_doc = {
+    txt: {
+        x:      0,
+        y:      0,
+        vx:     0,
+        vy:     0,
+        mod:    0,
+        lines:  [ '' ]
+    },
+    name:       L("<unnamed>"),
+    undo:       [],
+    redo:       [],
+    syntax:     NULL,
+    on_close:   [ mp.save_on_close ],
+
+    busy:       sub (doc, b) { mp.busy(b); return doc; }
+};
+
+
 sub mp.create(filename, lines)
 /* creates a document */
 {
-    local doc = {
-        txt: {
-            x:      0,
-            y:      0,
-            vx:     0,
-            vy:     0,
-            mod:    0,
-            lines:  lines || [ '' ]
-        },
-        name:       filename || L("<unnamed>"),
-        undo:       [],
-        redo:       [],
-        syntax:     NULL,
-        on_close:   [ mp.save_on_close ]
-    };
+    local doc = clone(mp_doc);
+
+    if (filename)
+        doc.name = filename;
+
+    if (lines)
+        doc.txt.lines = lines;
 
 	return doc;
 }
@@ -537,13 +545,7 @@ sub mp.close()
 sub mp.find_file_by_name(filename)
 /* finds an open file by its name */
 {
-	seek(
-		map(
-			mp.docs,
-			sub(d) { d.name; }
-		),
-		filename
-	);
+    mp.docs->map(sub(d) { d.name; })->seek(filename);
 }
 
 
