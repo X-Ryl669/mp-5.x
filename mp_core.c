@@ -846,24 +846,28 @@ mpdm_t mp_draw(mpdm_t doc, int optimize)
         optimize = ppp = 0;
 
     if (doc != NULL) {
+        if ((f = mpdm_hget_s(doc, L"pre_paint")) != NULL) {
+            mpdm_void(mpdm_exec_1(f, doc, NULL));
+        }
+
         if ((f = mpdm_hget_s(doc, L"paint")) != NULL) {
             ppp = 1;
             r = mpdm_exec_2(f, doc, MPDM_I(optimize), NULL);
         }
         else
             r = drw_draw(doc, optimize);
-    }
 
-    /* if there is a global post_paint list of functions, execute it */
-    if ((f = mpdm_hget_s(mp, L"post_paint")) != NULL) {
-        for (n = 0; n < mpdm_size(f); n++)
-            r = mpdm_exec_2(mpdm_aget(f, n), doc, r, NULL);
-    }
+        /* if there is a global post_paint list of functions, execute it */
+        if ((f = mpdm_hget_s(mp, L"post_paint")) != NULL) {
+            for (n = 0; n < mpdm_size(f); n++)
+                r = mpdm_exec_2(mpdm_aget(f, n), doc, r, NULL);
+        }
 
-    /* if doc has a post_paint list of functions, execute it */
-    if ((f = mpdm_hget_s(doc, L"post_paint")) != NULL) {
-        for (n = 0; n < mpdm_size(f); n++)
-            r = mpdm_exec_2(mpdm_aget(f, n), doc, r, NULL);
+        /* if doc has a post_paint list of functions, execute it */
+        if ((f = mpdm_hget_s(doc, L"post_paint")) != NULL) {
+            for (n = 0; n < mpdm_size(f); n++)
+                r = mpdm_exec_2(mpdm_aget(f, n), doc, r, NULL);
+        }
     }
 
     return r;
