@@ -94,15 +94,16 @@ mp.actions['exit']	= sub (d) {
         mp.exit();
 };
 
-mp.actions['open']	= sub (d) {
+mp.actions['open']	= sub (d, filename) {
 
-    local n;
+    if (filename == NULL)
+        filename = mp.openfile(L("File to open:"));
 
-    if ((n = mp.openfile(L("File to open:"))) != NULL && n ne "")
-        if (mp.long_op(mp.open, n) == NULL && ERRNO != NULL)
-            mp.alert(sprintf("Error opening '%s': %s", n, ERRNO));
+    if (filename != NULL && filename ne "")
+        if (mp.long_op(mp.open, filename) == NULL && ERRNO != NULL)
+            mp.alert(sprintf("Error opening '%s': %s", filename, ERRNO));
 
-    return n;
+    return filename;
 };
 
 mp.actions['revert']	= sub (d) {
