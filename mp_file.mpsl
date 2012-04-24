@@ -5,7 +5,7 @@
 
     File manipulation.
 
-    Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    http://www.triptico.com
+    http://triptico.com
 
 */
 
@@ -547,86 +547,71 @@ sub mp.find_file_by_name(filename)
 }
 
 
-sub mp.open(filename)
-/* opens a new document (uses UI) */
+sub mp.open(filename, password)
+/* opens a new document */
 {
-	local s;
+    local d, s, f;
 
-	/* looks first if the file is already open */
-	if ((s = mp.find_file_by_name(filename)) != -1) {
-		mp.active_i = s;
-		return mp.active();
+    if ((s = mp.find_file_by_name(filename)) != -1) {
+        /* already open */
+        mp.active_i = s;
+        d = mp.active();
+    }
+    else
+    if ((s = stat(filename)) == NULL) {
+        /* non-existent file; create as new */
+        mp.message = {
+            timeout:    time() + 2,
+            string:     sprintf(L("New file '%s'"), filename)
+        };
+
+        d = mp.new(filename);
 	}
+    else
+    if (s[13] != NULL) {
+        /* canonicalize, if possible */
+        filename = s[13];
 
-	if ((s = stat(filename)) == NULL) {
-		mp.message = {
-			'timeout' => time() + 2,
-			'string'  => sprintf(L("New file '%s'"), filename)
-		};
+        /* look again for this filename in the open files */
+        if ((s = mp.find_file_by_name(filename)) != -1) {
+            mp.active_i = s;
+            d = mp.active();
+        }
+    }
 
-		return mp.new(filename);
-	}
+    if (d == NULL) {
+        /* still not open: load */
+        f = open(filename, "rb");
 
-	/* canonicalize, if possible */
-	if (s[13] != NULL) {
-		filename = s[13];
+        if (mp.crypt1_detect(f)) {
+            if (password != NULL && password != '') {
+                /* and load the file */
+                d = mp.new(filename, mp.crypt1_load(f, password));
+                d.password = password;
+            }
+        }
+        else {
+            /* close file (needed for rewinding AND
+               possible encoding autodetection) */
+            close(f);
 
-		/* look again for this filename in the open files */
-		if ((s = mp.find_file_by_name(filename)) != -1) {
-			mp.active_i = s;
-			return mp.active();
-		}
-	}
+            /* reopen and read */
+            f = open(filename, "rb");
+            d = mp.new(filename, mp.plain_load(f));
+        }
 
-	local d, f;
+        close(f);
 
-	if ((f = open(filename, "rb")) == NULL)
-		return NULL;
-	else {
-		if (mp.crypt1_detect(f)) {
-			/* password needed; ask for it */
-			local p;
-
-			if ((p = mp.form( [
-				{ 'label'	=> L("Password:"),
-				  'type'	=> 'password' }
-				])) == NULL) {
-				/* cancel? fail, but not on error */
-				return NULL;
-			}
-
-			/* get the password */
-			p = p[0];
-
-			/* an empty password is equal to cancellation */
-			if (p eq '')
-				return NULL;
-
-			/* and load the file */
-			d = mp.new(filename, mp.crypt1_load(f, p));
-			d.password = p;
-		}
-		else {
-			/* close file (needed for rewinding AND
-			   possible encoding autodetection) */
-			close(f);
-
-			/* reopen and read */
-			f = open(filename, "rb");
-			d = mp.new(filename, mp.plain_load(f));
-		}
-
+        /* store mtime */
         s = stat(filename);
         d.mtime = s[9];
 
-		close(f);
-	}
+        /* store the encoding */
+        d.encoding = DETECTED_ENCODING || ENCODING || '';
 
-	/* store the encoding */
-	d.encoding = DETECTED_ENCODING || ENCODING || '';
-
-    /* always keep original EOL */
-    d.eol = mp.last_seen_eol;
+        /* always keep original EOL */
+        d.eol = mp.last_seen_eol;
+    }
 
 	return d;
 }
