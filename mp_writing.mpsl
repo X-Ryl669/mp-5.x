@@ -28,9 +28,7 @@
 /** editor actions **/
 
 mp.actions['word_count'] = sub (d) {
-    d->busy(1);
-    local c = d->word_count();
-    d->busy(0);
+    local c = d->long_op(d.word_count);
 
     mp.alert(sprintf(L("Lines: %d Words: %d"),
         size(d->mp.get_active_area()), c));
