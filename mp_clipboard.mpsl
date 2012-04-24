@@ -27,9 +27,9 @@
 
 /** editor actions **/
 
-mp.actions['unmark']        = sub (d) { mp.unmark(d); };
-mp.actions['mark']          = sub (d) { mp.mark(d); };
-mp.actions['mark_vertical'] = sub (d) { mp.mark_vertical(d); };
+mp.actions['unmark']        = sub (d) { d->mp.unmark(); };
+mp.actions['mark']          = sub (d) { d->mp.mark(); };
+mp.actions['mark_vertical'] = sub (d) { d->mp.mark_vertical(); };
 
 mp.actions['copy_mark']   = sub (d) { d->busy(1)->mp.copy()->mp.unmark()->busy(0); };
 mp.actions['paste_mark']  = sub (d) { d->busy(1)->mp.store_undo()->mp.paste()->busy(0); };
@@ -39,13 +39,13 @@ mp.actions['delete_mark'] = sub (d) { d->busy(1)->mp.store_undo()->mp.delete_mar
 mp.actions['mouse_drag_mark'] = sub (d) {
     /* no selection yet? move to initial click and mark */
     if (d.txt.mark == NULL)
-        mp.mark(d);
+        d->mp.mark();
 
     /* move to drag position */
-    mp.move_to_coords_xy(d, mp.mouse_to_x, mp.mouse_to_y);
+    d->mp.move_to_coords_xy(mp.mouse_to_x, mp.mouse_to_y);
 
     /* and mark */
-    mp.mark(d);
+    d->mp.mark();
 
     return d;
 };
@@ -174,22 +174,22 @@ sub mp.mark(doc)
 sub mp.mark_vertical(doc)
 /* start vertical block selection */
 {
-	mp.mark(doc);
-	doc.txt.mark.vertical = 1;
+    doc->mp.mark();
+    doc.txt.mark.vertical = 1;
 
-	return doc;
+    return doc;
 }
 
 
 sub mp.get_active_area(doc)
 /* returns the active area: the selection or the full document */
 {
-	local m;
+    local m;
 
-	if ((m = doc.txt.mark) == NULL)
-		return doc.txt.lines;
-	else
-		return mp.get_range(doc, m.bx, m.by, m.ex, m.ey, m.vertical);
+    if ((m = doc.txt.mark) == NULL)
+        return doc.txt.lines;
+    else
+        return doc->mp.get_range(m.bx, m.by, m.ex, m.ey, m.vertical);
 }
 
 
@@ -205,7 +205,7 @@ sub mp.copy(doc)
 {
 	if (is_hash(doc)) {
 		if (doc.txt.mark) {
-			mp.clipboard = mp.get_active_area(doc);
+			mp.clipboard = doc->mp.get_active_area();
 			mp.clipboard_vertical = doc.txt.mark.vertical;
 
 			mp.drv.clip_to_sys();
@@ -227,30 +227,29 @@ sub mp.copy(doc)
 sub mp.delete_mark(doc)
 /* deletes current selection */
 {
-	local txt = doc.txt;
+    local txt = doc.txt;
 
-	/* no mark? done */
-	if (txt.mark != NULL) {
-		/* deletes the range */
+    /* no mark? done */
+    if (txt.mark != NULL) {
+        /* deletes the range */
         if (txt.mark.bx != txt.mark.ex || txt.mark.by != txt.mark.ey)
-    		mp.delete_range(doc, txt.mark.bx, txt.mark.by,
-					txt.mark.ex, txt.mark.ey, txt.mark.vertical);
+            doc->mp.delete_range(txt.mark.bx, txt.mark.by,
+                txt.mark.ex, txt.mark.ey, txt.mark.vertical);
 
-		mp.unmark(doc);
-	}
+        doc->mp.unmark();
+    }
 
-	return doc;
+    return doc;
 }
 
 
 sub mp.cut(doc)
 /* cut (copy + delete) selected mark */
 {
-	mp.copy(doc);
-	mp.delete_mark(doc);
-	mp.drv.clip_to_sys();
+    doc->mp.copy()->mp.delete_mark();
+    mp.drv.clip_to_sys();
 
-	return doc;
+    return doc;
 }
 
 
@@ -264,56 +263,57 @@ sub mp.cut(doc)
  */
 sub mp.paste(doc)
 {
-	mp.drv.sys_to_clip();
+    mp.drv.sys_to_clip();
 
-	if (doc == NULL)
-		return join(mp.clipboard, "\n");
+    if (doc == NULL)
+        return join(mp.clipboard, "\n");
 
-	if (size(mp.clipboard) == 0)
-		return doc;
+    if (size(mp.clipboard) == 0)
+        return doc;
 
-	local t = mp.config.auto_indent;
-	mp.config.auto_indent = 0;
+    local t = mp.config.auto_indent;
+    mp.config.auto_indent = 0;
 
 	/* is there a block? replace it */
-	if (doc.txt.mark != NULL) {
-		/* move there */
-		doc.txt.x = doc.txt.mark.bx;
-		doc.txt.y = doc.txt.mark.by;
+    if (doc.txt.mark != NULL) {
+        /* move there */
+        doc.txt.x = doc.txt.mark.bx;
+        doc.txt.y = doc.txt.mark.by;
 
-		/* and delete the block */
-		mp.delete_mark(doc);
+        /* and delete the block */
+        doc->mp.delete_mark();
 	}
 
-	if (mp.clipboard_vertical == 0) {
-		/* normal selection in clipboard */
-		mp.insert(doc, mp.clipboard);
-	}
-	else {
-		/* vertical selection in clipboard */
-		local txt = doc.txt;
-		local s = size(mp.clipboard);
-		local i = 0;
-		local w;
-		local e;
-		while (i < s) {
-			/* pad out to current x position */
-			e = txt.x - size(txt.lines[txt.y]);
+    if (mp.clipboard_vertical == 0) {
+        /* normal selection in clipboard */
+        mp.insert(doc, mp.clipboard);
+    }
+    else {
+        /* vertical selection in clipboard */
+        local txt = doc.txt;
+        local s = size(mp.clipboard);
+        local i = 0;
+        local w;
+        local e;
 
-			while(e-- > 0)
-				txt.lines[txt.y] = txt.lines[txt.y] ~ " ";
+        while (i < s) {
+            /* pad out to current x position */
+            e = txt.x - size(txt.lines[txt.y]);
+
+            while(e-- > 0)
+                txt.lines[txt.y] = txt.lines[txt.y] ~ " ";
 			
-			/* insert this line of the clipboard */
-			w = splice(txt.lines[txt.y], mp.clipboard[i++], txt.x, 0);
-			txt.lines[txt.y++] = w[0];
-		}
-		txt.y--;
-		txt.mod++;
-	}
+            /* insert this line of the clipboard */
+            w = splice(txt.lines[txt.y], mp.clipboard[i++], txt.x, 0);
+            txt.lines[txt.y++] = w[0];
+        }
+        txt.y--;
+        txt.mod++;
+    }
 
-	mp.config.auto_indent = t;
+    mp.config.auto_indent = t;
 
-	return doc;
+    return doc;
 }
 
 
@@ -337,7 +337,7 @@ sub mp.cut_lines_with_string(doc, str)
     str = '/' ~ str ~ '/';
 
     if (doc.txt.mark) {
-        mp.cut(doc);
+        doc->mp.cut();
 
         /* create a temporary work document */
         p = mp.create('<wrk>', mp.clipboard);
@@ -345,23 +345,22 @@ sub mp.cut_lines_with_string(doc, str)
     else
         p = doc;
 
-    mp.move_bof(p);
-    mp.move_bol(p);
+    p->mp.move_bof()->mp.move_bol();
 
     while (p.txt.y < size(p.txt.lines) - 1) {
         local l = p.txt.lines[p.txt.y];
 
         if (regex(l, str) != NULL) {
             push(r, l);
-            mp.delete_line(p);
+            p->mp.delete_line();
         }
         else
-            mp.move_down(p);
+            p>mp.move_down();
     }
 
     /* if p is the working document, move content back to doc */
     if (p.name eq '<wrk>')
-        mp.insert(doc, p.txt.lines);
+        doc->mp.insert(p.txt.lines);
 
     mp.clipboard = r;
     mp.drv.clip_to_sys();
