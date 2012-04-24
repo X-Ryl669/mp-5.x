@@ -5,7 +5,7 @@
 
     Tools for writing.
 
-    Copyright (C) 1991-2009 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -21,20 +21,19 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    http://www.triptico.com
+    http://triptico.com
 
 */
 
 /** editor actions **/
 
 mp.actions['word_count'] = sub (d) {
+    d->busy(1);
+    local c = d->word_count();
+    d->busy(0);
 
-	mp.busy(1);
-	local c = mp.word_count(d);
-	mp.busy(0);
-
-	mp.alert(sprintf(L("Lines: %d Words: %d"),
-		size(mp.get_active_area(d)), c));
+    mp.alert(sprintf(L("Lines: %d Words: %d"),
+        size(d->mp.get_active_area()), c));
 };
 
 
@@ -84,15 +83,15 @@ mp.config.rw_max_dist	= 40;
 
 /** code **/
 
-sub mp.word_count(doc)
+sub mp_doc.word_count(doc)
 /* counts the number of words in doc */
 {
-	local w = 0;
+    local w = 0;
 
-	foreach (l, mp.get_active_area(doc))
-		w += size(mp.split_by_words(l, "/[^ \t]+/"));
+    foreach (l, doc->mp.get_active_area())
+        w += size(mp.split_by_words(l, "/[^ \t]+/"));
 
-	return w;
+    return w;
 }
 
 
