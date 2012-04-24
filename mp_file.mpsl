@@ -477,7 +477,9 @@ sub mp.create(filename, lines)
         undo:       [],
         redo:       [],
         syntax:     NULL,
-        on_close:   [ mp.save_on_close ]
+        on_close:   [ mp.save_on_close ],
+
+        busy:       sub (doc, b) { mp.busy(b); return doc; }
     };
 
 	return doc;
