@@ -5,7 +5,7 @@
 
     Clipboard routines.
 
-    Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    http://www.triptico.com
+    http://triptico.com
 
 */
 
@@ -33,8 +33,7 @@ mp.actions['mark_vertical'] = sub (d) { mp.mark_vertical(d); };
 
 mp.actions['copy_mark']	= sub (d) {
     mp.busy(1);
-    mp.copy(d);
-    mp.unmark(d);
+    d->mp.copy()->mp.unmark();
     mp.busy(0);
 
     return d;
@@ -42,8 +41,7 @@ mp.actions['copy_mark']	= sub (d) {
 
 mp.actions['paste_mark'] = sub (d) {
     mp.busy(1);
-    mp.store_undo(d);
-    mp.paste(d);
+    d->mp.store_undo()->mp.paste();
     mp.busy(0);
 
     return d;
@@ -51,8 +49,7 @@ mp.actions['paste_mark'] = sub (d) {
 
 mp.actions['cut_mark']  = sub (d) {
     mp.busy(1);
-    mp.store_undo(d);
-    mp.cut(d);
+    d->mp.store_undo()->mp.cut();
     mp.busy(0);
 
     return d;
@@ -60,8 +57,7 @@ mp.actions['cut_mark']  = sub (d) {
 
 mp.actions['delete_mark'] = sub (d) {
     mp.busy(1);
-    mp.store_undo(d);
-    mp.delete_mark(d);
+    d->mp.store_undo()->mp.delete_mark();
     mp.busy(0);
 
     return d;
@@ -82,15 +78,7 @@ mp.actions['mouse_drag_mark'] = sub (d) {
 };
 
 mp.actions['mark_all'] = sub (d) {
-    mp.move_bof(d);
-    mp.move_bol(d);
-    mp.mark(d);
-
-    mp.move_eof(d);
-    mp.move_eol(d);
-    mp.mark(d);
-
-    return d;
+    d->mp.move_bof()->mp.move_bol()->mp.mark()-> mp.move_eof()->mp.move_eol()-> mp.mark();
 };
 
 mp.actions['cut_lines_with_string'] = sub (d, str) {
@@ -111,8 +99,7 @@ mp.actions['cut_lines_with_string'] = sub (d, str) {
 
     if (str != NULL) {
         mp.busy(1);
-        mp.store_undo(d);
-        mp.cut_lines_with_string(d, str);
+        d->mp.store_undo()->mp.cut_lines_with_string(str);
         mp.busy(0);
     }
 
@@ -407,4 +394,6 @@ sub mp.cut_lines_with_string(doc, str)
 
     mp.clipboard = r;
     mp.drv.clip_to_sys();
+
+    return doc;
 }
