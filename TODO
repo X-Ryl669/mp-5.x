@@ -5,6 +5,7 @@ Release Critical Bugs
 ---------------------
 
  * 1297: Fix +NNN in the command line.
+ * 1298: Fix password prompt in encrypted files.
 
 Open Bugs
 ---------
