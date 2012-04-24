@@ -29,8 +29,7 @@
 /** editor actions **/
 
 mp.actions['insert_line']	= sub (d) {
-    mp.store_undo(d);
-    mp.insert_newline(d);
+    d->mp.store_undo()->mp.insert_newline();
 
     if (d.syntax == NULL)
         mp.detect_syntax(d);
@@ -38,18 +37,15 @@ mp.actions['insert_line']	= sub (d) {
     return d;
 };
 
-mp.actions['delete_line']       = sub (d) { mp.store_undo(d); mp.delete_line(d); };
-mp.actions['insert_space']      = sub (d) { mp.store_undo(d); mp.insert_space(d); };
-mp.actions['insert_tab']        = sub (d) { mp.store_undo(d); mp.insert_tab(d); };
-mp.actions['insert_real_tab']   = sub (d) { mp.store_undo(d); mp.insert(d, "\t"); };
-mp.actions['delete']            = sub (d) { mp.store_undo(d); mp.delete_char(d); };
+mp.actions['delete_line']       = sub (d) { d->mp.store_undo()->mp.delete_line(); };
+mp.actions['insert_space']      = sub (d) { d->mp.store_undo()->mp.insert_space(); };
+mp.actions['insert_tab']        = sub (d) { d->mp.store_undo()->mp.insert_tab(); };
+mp.actions['insert_real_tab']   = sub (d) { d->mp.store_undo()->mp.insert("\t"); };
+mp.actions['delete']            = sub (d) { d->mp.store_undo()->mp.delete_char(); };
 
 mp.actions['delete_left']	= sub (d) {
-    if (d.txt.x + d.txt.y) {
-        mp.store_undo(d);
-        mp.move_left(d);
-        mp.delete_char(d);
-    }
+    if (d.txt.x + d.txt.y)
+        d->mp.store_undo()->mp.move_left()->mp.delete_char();
 
     return d;
 };
@@ -57,39 +53,29 @@ mp.actions['delete_left']	= sub (d) {
 mp.actions['indent_block'] = sub (d) {
     mp.store_undo(d);
 
-    if (d.txt.mark == NULL) {
-        mp.move(d, mp.move_bol);
-        mp.insert_tab(d);
-    }
+    if (d.txt.mark == NULL)
+        d->mp.move(mp.move_bol)->mp.insert_tab();
 	else {
         local currentY = d.txt.y;
         local startY   = d.txt.mark.by;
         local endY     = d.txt.mark.ey;
         local times    = endY - startY;
 	
-        mp.unmark(d);
-	
-        mp.set_y(d, startY);
+        d->mp.unmark()->mp.set_y(startY);
 
         /* use to be while d.txt.y <= endY, but that entered an endless loop when
             you were indenting a block including the very last line in the file */
         while (times >= 0) {
-            mp.move(d, mp.move_bol);
-            mp.insert_tab(d);
-            mp.move(d, mp.move_down);
+            d->mp.move(mp.move_bol)->mp.insert_tab()->mp.move(mp.move_down);
 		
             times--;
         }
 	
-        mp.set_y(d, startY);
-        mp.move(d, mp.move_bol);
-        mp.mark(d);
+        d->mp.set_y(startY)->mp.move(mp.move_bol)->mp.mark();
 	
-        mp.set_y(d, endY);
-        mp.move(d.mp_move_eol);
-        mp.mark(d);
+        d->mp.set_y(endY)->mp.move(mp.move_eol)->mp.mark();
 	
-        mp.set_y(d, currentY);
+        d->mp.set_y(currentY);
     }
 
     return d;
@@ -114,21 +100,16 @@ mp.actions['unindent_block'] = sub(d) {
         /* use to be while d.txt.y <= endY, but that entered an endless loop when
             you were unindenting a block including the very last line in the file */
         while (times >= 0) {
-            mp.unindent_line(d);
-            mp.move(d, mp.move_down);
+            d->mp.unindent_line()->mp.move(mp.move_down);
 		
             times--;
         }
 	
-        mp.set_y(d, startY);
-        mp.move(d, mp.move_bol);
-        mp.mark(d);
+        d->mp.set_y(startY)->mp.move(mp.move_bol)->mp.mark();
 	
-        mp.set_y(d, endY);
-        mp.move(d.mp_move_eol);
-        mp.mark(d);
+        d->mp.set_y(endY)->mp.move(mp.move_eol)->mp.mark();
 	
-        mp.set_y(d, currentY);
+        d->mp.set_y(currentY);
     }
 
     return d;
@@ -149,9 +130,7 @@ mp.actions['join_paragraph'] = sub (d) {
 
         /* while not at EOF, word wrap everything */
         while (p.txt.y < size(p.txt.lines) - 1) {
-            mp.join_paragraph(p);
-            mp.move_down(p);
-            mp.move_down(p);
+            p->mp.join_paragraph()->mp.move_down()->mp.move_down();
         }
 
         /* insert the content */
@@ -180,9 +159,7 @@ mp.actions['word_wrap_paragraph'] = sub (d) {
 
             /* while not at EOF, word wrap everything */
             while (p.txt.y < size(p.txt.lines) - 1) {
-                mp.word_wrap_paragraph(p);
-                mp.move_down(p);
-                mp.move_down(p);
+                p->mp.word_wrap_paragraph()->mp.move_down()->mp.move_down();
             }
 
             /* insert the content */
@@ -621,7 +598,8 @@ sub mp.insert_tab(doc)
 		local n = mp.config.tab_size -
 			((doc.txt.x) % mp.config.tab_size);
 
-		while(n--) mp.insert(doc, ' ');
+		while (n--)
+            mp.insert(doc, ' ');
 	}
 	else
 		mp.insert(doc, "\t");
@@ -633,27 +611,25 @@ sub mp.insert_tab(doc)
 sub mp.insert_newline(doc)
 /* inserts a newline */
 {
-	mp.wrap_words(doc);
-	mp.break_line(doc);
+	doc->mp.wrap_words()->mp.break_line();
 }
 
 
 sub mp.insert_keystroke(doc, key)
 /* inserts from a keystroke (with undo) */
 {
-	if (size(key) == 1) {
-		mp.store_undo(doc);
-		mp.insert(doc, key);
-	}
-	else
-	if (key != NULL) {
-		mp.message = {
-			'timeout'	=> time() + 2,
-			'string'	=> sprintf(L("Unbound keystroke '%s'"), key)
-		};
-	}
+    if (size(key) == 1) {
+        doc->mp.store_undo()->mp.insert(key);
+    }
+    else
+    if (key != NULL) {
+        mp.message = {
+            timeout:    time() + 2,
+            string:     sprintf(L("Unbound keystroke '%s'"), key)
+        };
+    }
 
-	return doc;
+    return doc;
 }
 
 
@@ -702,44 +678,35 @@ sub mp.redo(doc)
 sub mp.join_paragraph(doc)
 /* joins current paragraph in just one line */
 {
-	local txt = doc.txt;
-	local l;
+    local txt = doc.txt;
+    local l;
 
-	while ((l = txt.lines[txt.y + 1]) && size(l)) {
-		/* delete all leading blanks in the next line */
-		txt.lines[txt.y + 1] = sregex(txt.lines[txt.y + 1], "/^[ \t]+/");
+    while ((l = txt.lines[txt.y + 1]) && size(l)) {
+        /* delete all leading blanks in the next line */
+        txt.lines[txt.y + 1] = sregex(txt.lines[txt.y + 1], "/^[ \t]+/");
 
-		/* move to end of line and add a space separator */
-		mp.move_eol(doc);
-		mp.insert(doc, ' ');
+        /* move to end of line, add a space separator and join */
+        doc->mp.move_eol()->mp.insert(' ')->mp.join_line();
+    }
 
-		/* really join */
-		mp.join_line(doc);
-	}
-
-	return doc;
+    return doc;
 }
 
 
 sub mp.word_wrap_paragraph(doc)
 /* word wraps current paragraph */
 {
-	local txt = doc.txt;
+    local txt = doc.txt;
 
-	if (mp.config.word_wrap == 0)
-		return doc;
+    if (mp.config.word_wrap) {
+        doc->mp.join_paragraph()->mp.move_eol();
 
-	mp.join_paragraph(doc);
+        while (size(txt.lines[txt.y]) > mp.config.word_wrap) {
+            doc->mp.insert_space()->mp.move_left()->mp.delete_char();
+        }
+    }
 
-	mp.move_eol(doc);
-
-	while (size(txt.lines[txt.y]) > mp.config.word_wrap) {
-		mp.insert_space(doc);
-		mp.move_left(doc);
-		mp.delete_char(doc);
-	}
-
-	return doc;
+    return doc;
 }
 
 /* indent/unindent support functions */
