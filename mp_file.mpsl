@@ -477,6 +477,19 @@ mp_doc = {
 };
 
 
+
+sub mp_doc.long_op(doc, func, a2, a3, a4)
+{
+    local r;
+
+    doc->busy(1);
+    r = doc->func(a2, a3, a4);
+    doc->busy(0);
+
+    return r;
+}
+
+
 sub mp.create(filename, lines)
 /* creates a document */
 {
