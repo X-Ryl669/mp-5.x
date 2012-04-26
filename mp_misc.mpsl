@@ -160,7 +160,6 @@ mp.actions['about'] = sub (d) {
 	if (size(d.txt.lines) == 1) {
 		mp.insert(d, msg);
         mp.move_bof(d);
-        mp.move_bol(d);
 		d.txt.mod = 0;
 		d.read_only = 1;
 	}
@@ -171,7 +170,6 @@ mp.actions.check_for_updates = sub (d) {
     d = mp.open("<updates>");
 
     mp.move_bof(d);
-    mp.move_bol(d);
     d.txt.mod   = 0;
     d.read_only = 1;
 
