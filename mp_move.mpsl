@@ -469,7 +469,7 @@ sub mp_doc.get_word(doc, r)
 }
 
 
-sub mp_doc.get_range(bx, by, ex, ey, v)
+sub mp_doc.get_range(doc, bx, by, ex, ey, v)
 /* gets a range or characters from a document */
 {
     local txt = doc.txt;

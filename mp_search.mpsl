@@ -286,7 +286,7 @@ sub mp.search_dir(doc, str, dir)
 		}
 	}
 
-	lines = mp.get_range(doc, bx, by, ex, ey, 0);
+	lines = doc->get_range(bx, by, ex, ey, 0);
 
 	/* do the search */
 	local n = (dir == -1) && (size(lines) - 1) || 0;

@@ -187,7 +187,7 @@ sub mp.get_active_area(doc)
     if ((m = doc.txt.mark) == NULL)
         return doc.txt.lines;
     else
-        return doc->mp.get_range(m.bx, m.by, m.ex, m.ey, m.vertical);
+        return doc->get_range(m.bx, m.by, m.ex, m.ey, m.vertical);
 }
 
 
