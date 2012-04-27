@@ -195,7 +195,7 @@ mp.actdesc['grep']		= LL("Grep (find inside) files...");
  */
 sub mp.search_set_y(doc, y)
 {
-	mp.set_y(doc, y);
+    doc->set_y(y);
 
 	/* set always to the same line */
 	if (mp.config.move_seek_to_line != NULL &&

@@ -61,7 +61,7 @@ mp.actions['indent_block'] = sub (d) {
         local endY     = d.txt.mark.ey;
         local times    = endY - startY;
 	
-        d->mp.unmark()->mp.set_y(startY);
+        d->mp.unmark()->set_y(startY);
 
         /* use to be while d.txt.y <= endY, but that entered an endless loop when
             you were indenting a block including the very last line in the file */
@@ -71,11 +71,11 @@ mp.actions['indent_block'] = sub (d) {
             times--;
         }
 	
-        d->mp.set_y(startY)->mp.move(mp.move_bol)->mp.mark();
+        d->set_y(startY)->mp.move(mp.move_bol)->mp.mark();
 	
-        d->mp.set_y(endY)->mp.move(mp.move_eol)->mp.mark();
+        d->set_y(endY)->mp.move(mp.move_eol)->mp.mark();
 	
-        d->mp.set_y(currentY);
+        d->set_y(currentY);
     }
 
     return d;
@@ -95,7 +95,7 @@ mp.actions['unindent_block'] = sub(d) {
 	
         mp.unmark(d);
 	
-        mp.set_y(d, startY);
+        d->set_y(startY);
 	
         /* use to be while d.txt.y <= endY, but that entered an endless loop when
             you were unindenting a block including the very last line in the file */
@@ -105,11 +105,11 @@ mp.actions['unindent_block'] = sub(d) {
             times--;
         }
 	
-        d->mp.set_y(startY)->mp.move(mp.move_bol)->mp.mark();
+        d->set_y(startY)->mp.move(mp.move_bol)->mp.mark();
 	
-        d->mp.set_y(endY)->mp.move(mp.move_eol)->mp.mark();
+        d->set_y(endY)->mp.move(mp.move_eol)->mp.mark();
 	
-        d->mp.set_y(currentY);
+        d->set_y(currentY);
     }
 
     return d;

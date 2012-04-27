@@ -129,7 +129,7 @@ mp.actions['revert']	= sub (d) {
 
     d = mp.active();
 
-    mp.set_y(d, y);
+    x->set_y(y);
     d.txt.vy = vy;
     d->set_x(x);
 

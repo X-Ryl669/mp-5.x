@@ -219,8 +219,8 @@ sub mp.search_misspelled(doc)
 				/* store word for later */
 				mp.last_misspelled_word = w;
 
-				mp.set_y(doc, y);
-                doc->set_x(x);
+                doc->set_y(y)->set_x(x);
+
 				return 1;
 			}
 		}

@@ -70,7 +70,7 @@ mp.actions['eval_doc']	= sub (d) {
 			local l = regex(ERROR, [ '/, line /', '/[0-9]+/' ]);
 
 			if (size(l) == 2)
-				mp.set_y(d, l[1]);
+                d->set_y(l[1]);
 
 			ERROR = NULL;
 		}

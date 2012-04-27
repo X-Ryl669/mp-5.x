@@ -58,7 +58,7 @@ mp.actions['goto']		= sub (d, line) {
 
     if (line != NULL) {
         d.txt.x = 0;
-        mp.set_y(d, line - 1);
+        d->set_y(line - 1);
     }
 
     return d;
@@ -210,56 +210,56 @@ sub mp_doc.set_x(doc, x)
 }
 
 
-sub mp.set_y(doc, y)
+sub mp_doc.set_y(doc, y)
 /* sets the y position */
 {
-	local txt = doc.txt;
-	local vx;
+    local txt = doc.txt;
+    local vx;
 
-	/* get current visual x position */
-	vx = mp.x2vx(txt.lines[txt.y], txt.x);
+    /* get current visual x position */
+    vx = mp.x2vx(txt.lines[txt.y], txt.x);
 
-	/* set boundaries */
-	if (y < 0)
-		y = 0;
-	if (y >= size(txt.lines))
-		y = size(txt.lines) - 1;
+    /* set boundaries */
+    if (y < 0)
+        y = 0;
+    if (y >= size(txt.lines))
+        y = size(txt.lines) - 1;
 
-	/* move there */
-	txt.y = y;
+    /* move there */
+    txt.y = y;
 
-	/* adjust new x to match previously one */
-	txt.x = mp.vx2x(txt.lines[txt.y], vx);
+    /* adjust new x to match previously one */
+    txt.x = mp.vx2x(txt.lines[txt.y], vx);
 
-	return doc;
+    return doc;
 }
 
 
 sub mp.move_up(doc)
 /* moves one line up */
 {
-	mp.set_y(doc, doc.txt.y - 1);
+    doc->set_y(doc.txt.y - 1);
 }
 
 
 sub mp.move_down(doc)
 /* moves one line down */
 {
-	mp.set_y(doc, doc.txt.y + 1);
+    doc->set_y(doc.txt.y + 1);
 }
 
 
 sub mp.move_pgup(doc)
 /* moves one page up */
 {
-	mp.set_y(doc, doc.txt.y - mp.window.ty);
+    doc->set_y(doc.txt.y - mp.window.ty);
 }
 
 
 sub mp.move_pgdn(doc)
 /* moves one page down */
 {
-	mp.set_y(doc, doc.txt.y + mp.window.ty);
+    doc->set_y(doc.txt.y + mp.window.ty);
 }
 
 
@@ -403,7 +403,7 @@ sub mp.move_to_coords_xy(doc, x, y)
 /* move the cursor to the character on the visual coords x and y */
 {
 	/* set y */
-	mp.set_y(doc, doc.txt.vy + y);
+    doc->set_y(doc.txt.vy + y);
 
 	/* calculate the real position in that line
 	   where the mouse click seem to be */
