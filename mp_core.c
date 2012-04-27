@@ -2,7 +2,7 @@
 
     Minimum Profit - Programmer Text Editor
 
-    Copyright (C) 1991-2010 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    http://www.triptico.com
+    http://triptico.com
 
 */
 
@@ -1061,6 +1061,7 @@ mpdm_t mp_plain_load(mpdm_t args, mpdm_t ctxt)
 void mp_startup(int argc, char *argv[])
 {
     mpdm_t INC;
+    char *ptr;
 
     mpsl_startup();
 
@@ -1086,6 +1087,11 @@ void mp_startup(int argc, char *argv[])
 
     /* creates the INC (executable path) array */
     INC = mpdm_hset_s(mpdm_root(), L"INC", MPDM_A(0));
+
+    /* if the MP_LIBRARY_PATH environment variable is set,
+       put if before enything else */
+    if ((ptr = getenv("MP_LIBRARY_PATH")) != NULL)
+        mpdm_push(INC, MPDM_MBS(ptr));
 
     /* add installed library path */
     mpdm_push(INC, mpdm_strcat(mpdm_hget_s(mpdm_root(), L"APPDIR"),
