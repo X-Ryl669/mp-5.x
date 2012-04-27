@@ -42,7 +42,7 @@ mp.actions['mouse_drag_mark'] = sub (d) {
         d->mp.mark();
 
     /* move to drag position */
-    d->mp.move_to_coords_xy(mp.mouse_to_x, mp.mouse_to_y);
+    d->move_to_coords_xy(mp.mouse_to_x, mp.mouse_to_y);
 
     /* and mark */
     d->mp.mark();

@@ -35,7 +35,7 @@ sub mp.actions.help(d) {
 
     /* if there is a word at the cursor position,
         try searching for help */
-    if ((w = mp.get_word(d, r)) != NULL) {
+    if ((w = d->get_word(r)) != NULL) {
         mp.busy(1);
         h = mp.help(d, w);
         mp.busy(0);

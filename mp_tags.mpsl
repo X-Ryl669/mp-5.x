@@ -32,7 +32,7 @@ mp.config.ctags_cmd = "ctags *";
 
 mp.actions['find_tag']	= sub(d) {
 
-	local tag = mp.get_word(d);
+    local tag = d->get_word();
 
 	/* ask for it, taking the word under the cursor */
 	local r = mp.form( [
@@ -59,7 +59,7 @@ mp.actions['complete'] = sub(d) {
 	mp.busy(0);
 
 	/* if the current word happens only one time, delete it */
-	local w = mp.get_word(d);
+    local w = d->get_word();
 	if (words[w] == 1)
 		hdel(words, w);
 
@@ -195,7 +195,7 @@ sub mp.complete(d, list, label)
 /* completes the current word given a list (uses GUI) */
 {
 	local l, a;
-	local word = mp.get_word(d);
+    local word = d->get_word();
 
 	/* takes all list elements starting with word */
 	if ((l = sort(grep(list, '/^' ~ word ~ '/'))) == NULL)
@@ -220,7 +220,7 @@ sub mp.complete(d, list, label)
 	mp.store_undo(d);
 
 	/* split line by words to take the offset of current word */
-	local r = mp.split_line_by_words(d);
+	local r = d->split_line_by_words();
 	local offset = r[1][r[2]];
 
 	/* substitute current word with newly selected word */
