@@ -35,7 +35,7 @@ mp.actions['new']	= sub (d) {
         d = mp.active();
     }
     else
-        d = mp.new();
+        d = mp.empty();
 
     return d;
 };
@@ -505,8 +505,8 @@ sub mp.create(filename, lines)
 }
 
 
-sub mp.new(filename, lines)
-/* creates a new document */
+sub mp.empty(filename, lines)
+/* creates a new, empty document */
 {
     local doc = mp.create(filename, lines);
 
@@ -580,7 +580,7 @@ sub mp.open(filename, password)
             string:     sprintf(L("New file '%s'"), filename)
         };
 
-        d = mp.new(filename);
+        d = mp.empty(filename);
 	}
     else
     if (s[13] != NULL) {
@@ -601,7 +601,7 @@ sub mp.open(filename, password)
         if (mp.crypt1_detect(f)) {
             if (password != NULL && password != '') {
                 /* and load the file */
-                d = mp.new(filename, mp.crypt1_load(f, password));
+                d = mp.empty(filename, mp.crypt1_load(f, password));
                 d.password = password;
             }
         }
@@ -612,7 +612,7 @@ sub mp.open(filename, password)
 
             /* reopen and read */
             f = open(filename, "rb");
-            d = mp.new(filename, mp.plain_load(f));
+            d = mp.empty(filename, mp.plain_load(f));
         }
 
         close(f);
@@ -696,7 +696,7 @@ sub mp.hex_view(filename)
     if ((f = open(filename, "rb")) != NULL) {
         close(f);
 
-        d = mp.new('<' ~ filename ~ ' hex view>', []);
+        d = mp.empty('<' ~ filename ~ ' hex view>', []);
         d.read_only = 1;
         d.syntax = mp.syntax.hex_view;
         d.disk_op = 1;
