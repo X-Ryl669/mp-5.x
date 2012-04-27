@@ -186,7 +186,7 @@ sub mp.open_tag(tag)
 	doc = mp.long_op(mp.open, tag.file);
 
 	/* move up and search */
-	mp.move_bof(doc);
+    doc->move_bof();
 	return mp.long_op(mp.search, doc, tag.regex);
 }
 

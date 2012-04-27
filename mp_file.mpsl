@@ -237,7 +237,7 @@ mp.actions['filter_selection'] = sub (d, cmd) {
 
         /* if there is no selection, take full document */
         if (d.txt.mark == NULL) {
-            d->mp.move_bof()->mp.mark()->mp.move_eof()->mp.mark();
+            d->move_bof()->mp.mark()->move_eof()->mp.mark();
         }
 
         /* take it out */

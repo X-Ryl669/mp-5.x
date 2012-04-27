@@ -151,12 +151,12 @@ mp.actions['grep']	= sub (d) {
             local l = mp.open(t);
 
             l.txt.lines = [];
-            mp.move_bof(l);
+            l->move_bof();
 
             foreach (e, r)
                 mp.insert(l, sprintf("%s:%d: %s\n", e[0], e[1] + 1, e[2]));
 
-            mp.move_bof(l);
+            l->move_bof();
 
             l.txt.mod = 0;
             l.read_only = 1;
@@ -378,7 +378,7 @@ sub mp.seek_prev_or_next_char(doc, func)
 	local w = splice(txt.lines[txt.y], NULL, txt.x, 1);
 
 	/* move one char right */
-	mp.move_right(doc);
+    doc->move_right();
 
 	/* search for it (mp.search() or mp.search_back()) */
 	local t = mp.last_search;
@@ -386,7 +386,7 @@ sub mp.seek_prev_or_next_char(doc, func)
 	mp.last_search = t;
 
 	/* move back */
-	mp.move_left(doc);
+    doc->move_left();
 
 	return doc;
 }

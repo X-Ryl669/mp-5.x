@@ -159,7 +159,7 @@ mp.actions['about'] = sub (d) {
 
 	if (size(d.txt.lines) == 1) {
 		mp.insert(d, msg);
-        mp.move_bof(d);
+        d->move_bof();
 		d.txt.mod = 0;
 		d.read_only = 1;
 	}
@@ -169,7 +169,7 @@ mp.actions['about'] = sub (d) {
 mp.actions.check_for_updates = sub (d) {
     d = mp.open("<updates>");
 
-    mp.move_bof(d);
+    d->move_bof();
     d.txt.mod   = 0;
     d.read_only = 1;
 
@@ -257,10 +257,10 @@ mp.actdesc['check_for_updates'] = LL("Check for updates...");
 sub dump(v)
 /* overwrite of the MPSL dump() function, dumping over a text document */
 {
-	local d = mp.open("<dump>");
+    local d = mp.open("<dump>");
 
-	mp.move_eof(d);
-	mp.insert(d, dumper(v));
-	d.txt.mod = 0;
-	d.read_only = 1;
+    d->move_eof();
+    mp.insert(d, dumper(v));
+    d.txt.mod = 0;
+    d.read_only = 1;
 }

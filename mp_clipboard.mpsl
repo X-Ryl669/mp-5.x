@@ -50,7 +50,7 @@ mp.actions['mouse_drag_mark'] = sub (d) {
     return d;
 };
 
-mp.actions['mark_all'] = sub (d) { d->mp.move_bof()->mp.mark()-> mp.move_eof()-> mp.mark(); };
+mp.actions['mark_all'] = sub (d) { d->move_bof()->mp.mark()->move_eof()-> mp.mark(); };
 
 mp.actions['cut_lines_with_string'] = sub (d, str) {
     if (str == NULL) {
@@ -343,7 +343,7 @@ sub mp.cut_lines_with_string(doc, str)
     else
         p = doc;
 
-    p->mp.move_bof();
+    p->move_bof();
 
     while (p.txt.y < size(p.txt.lines) - 1) {
         local l = p.txt.lines[p.txt.y];
@@ -353,7 +353,7 @@ sub mp.cut_lines_with_string(doc, str)
             p->mp.delete_line();
         }
         else
-            p>mp.move_down();
+            p>move_down();
     }
 
     /* if p is the working document, move content back to doc */

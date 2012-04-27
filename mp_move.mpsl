@@ -27,18 +27,18 @@
 
 /** editor actions **/
 
-mp.actions['move_left']         = sub (d) { mp.move(d, mp.move_left); };
-mp.actions['move_right']        = sub (d) { mp.move(d, mp.move_right); };
-mp.actions['move_up']           = sub (d) { mp.move(d, mp.move_up); };
-mp.actions['move_down']         = sub (d) { mp.move(d, mp.move_down); };
-mp.actions['move_pgup']         = sub (d) { mp.move(d, mp.move_pgup); };
-mp.actions['move_pgdn']         = sub (d) { mp.move(d, mp.move_pgdn); };
-mp.actions['move_bol']          = sub (d) { mp.move(d, mp.move_bol); };
-mp.actions['move_eol']          = sub (d) { mp.move(d, mp.move_eol); };
-mp.actions['move_bof']          = sub (d) { mp.move(d, mp.move_bof); };
-mp.actions['move_eof']          = sub (d) { mp.move(d, mp.move_eof); };
-mp.actions['move_word_left']    = sub (d) { mp.move(d, mp.move_word_left); };
-mp.actions['move_word_right']   = sub (d) { mp.move(d, mp.move_word_right); };
+mp.actions['move_left']         = sub (d) { d->mp.move(mp_doc.move_left); };
+mp.actions['move_right']        = sub (d) { d->mp.move(mp_doc.move_right); };
+mp.actions['move_up']           = sub (d) { d->mp.move(mp_doc.move_up); };
+mp.actions['move_down']         = sub (d) { d->mp.move(mp_doc.move_down); };
+mp.actions['move_pgup']         = sub (d) { d->mp.move(mp_doc.move_pgup); };
+mp.actions['move_pgdn']         = sub (d) { d->mp.move(mp_doc.move_pgdn); };
+mp.actions['move_bol']          = sub (d) { d->mp.move(mp_doc.move_bol); };
+mp.actions['move_eol']          = sub (d) { d->mp.move(mp_doc.move_eol); };
+mp.actions['move_bof']          = sub (d) { d->mp.move(mp_doc.move_bof); };
+mp.actions['move_eof']          = sub (d) { d->mp.move(mp_doc.move_eof); };
+mp.actions['move_word_left']    = sub (d) { d->mp.move(mp.move_word_left); };
+mp.actions['move_word_right']   = sub (d) { d->mp.move(mp.move_word_right); };
 
 mp.actions['goto']		= sub (d, line) {
     if (line == NULL) {
@@ -75,21 +75,11 @@ mp.actions['move_to_mouse_position']	= sub (d) {
 };
 
 mp.actions['move_mouse_wheel_up']	= sub (d) {
-    mp.move(d, sub (d) {
-        mp.move_up(d);
-        mp.move_up(d);
-        mp.move_up(d);
-        mp.move_up(d);
-    });
+    d->mp.move(sub (d) { d->move_up()->move_up()->move_up()->move_up();});
 };
 
 mp.actions['move_mouse_wheel_down']	= sub (d) {
-    mp.move(d, sub(d) {
-        mp.move_down(d);
-        mp.move_down(d);
-        mp.move_down(d);
-        mp.move_down(d);
-    });
+    d->mp.move(sub (d) { d->move_down()->move_down()->move_down()->move_down();});
 };
 
 mp.actions['document_list'] = sub (d) {
@@ -235,52 +225,52 @@ sub mp_doc.set_y(doc, y)
 }
 
 
-sub mp.move_up(doc)
+sub mp_doc.move_up(doc)
 /* moves one line up */
 {
     doc->set_y(doc.txt.y - 1);
 }
 
 
-sub mp.move_down(doc)
+sub mp_doc.move_down(doc)
 /* moves one line down */
 {
     doc->set_y(doc.txt.y + 1);
 }
 
 
-sub mp.move_pgup(doc)
+sub mp_doc.move_pgup(doc)
 /* moves one page up */
 {
     doc->set_y(doc.txt.y - mp.window.ty);
 }
 
 
-sub mp.move_pgdn(doc)
+sub mp_doc.move_pgdn(doc)
 /* moves one page down */
 {
     doc->set_y(doc.txt.y + mp.window.ty);
 }
 
 
-sub mp.move_left(doc)
+sub mp_doc.move_left(doc)
 /* moves one char left */
 {
-	if (doc.txt.x + doc.txt.y)
+    if (doc.txt.x + doc.txt.y)
 		doc->set_x(doc.txt.x - 1);
 
-	return doc;
+    return doc;
 }
 
 
-sub mp.move_right(doc)
+sub mp_doc.move_right(doc)
 /* moves one char right */
 {
     doc->set_x(doc.txt.x + 1);
 }
 
 
-sub mp.move_bol(doc)
+sub mp_doc.move_bol(doc)
 /* moves to the beginning of the line */
 {
     if (mp.config.smart_bol) {
@@ -305,28 +295,27 @@ sub mp.move_bol(doc)
     return doc;
 }
 
-sub mp.move_eol(doc)
+sub mp_doc.move_eol(doc)
 /* moves to the end of the line */
 {
-	doc.txt.x = size(doc.txt.lines[doc.txt.y]);
-	return doc;
+    doc.txt.x = size(doc.txt.lines[doc.txt.y]);
+    return doc;
 }
 
 
-sub mp.move_bof(doc)
+sub mp_doc.move_bof(doc)
 /* moves to the beginning of the file */
 {
-	doc.txt.x = 0;
-	doc.txt.y = 0;
-	return doc;
+    doc.txt.x = doc.txt.y = 0;
+    return doc;
 }
 
 
-sub mp.move_eof(doc)
+sub mp_doc.move_eof(doc)
 /* moves to the end of the file */
 {
-	doc.txt.y = size(doc.txt.lines) - 1;
-	mp.move_eol(doc);
+    doc.txt.y = size(doc.txt.lines) - 1;
+    doc->move_eol();
 }
 
 

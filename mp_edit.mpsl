@@ -45,7 +45,7 @@ mp.actions['delete']            = sub (d) { d->mp.store_undo()->mp.delete_char()
 
 mp.actions['delete_left']	= sub (d) {
     if (d.txt.x + d.txt.y)
-        d->mp.store_undo()->mp.move_left()->mp.delete_char();
+        d->mp.store_undo()->move_left()->mp.delete_char();
 
     return d;
 };
@@ -54,7 +54,7 @@ mp.actions['indent_block'] = sub (d) {
     mp.store_undo(d);
 
     if (d.txt.mark == NULL)
-        d->mp.move(mp.move_bol)->mp.insert_tab();
+        d->move_bol()->mp.insert_tab();
 	else {
         local currentY = d.txt.y;
         local startY   = d.txt.mark.by;
@@ -66,14 +66,14 @@ mp.actions['indent_block'] = sub (d) {
         /* use to be while d.txt.y <= endY, but that entered an endless loop when
             you were indenting a block including the very last line in the file */
         while (times >= 0) {
-            d->mp.move(mp.move_bol)->mp.insert_tab()->mp.move(mp.move_down);
+            d->move_bol()->mp.insert_tab()->move_down();
 		
             times--;
         }
 	
-        d->set_y(startY)->mp.move(mp.move_bol)->mp.mark();
+        d->set_y(startY)->move_bol()->mp.mark();
 	
-        d->set_y(endY)->mp.move(mp.move_eol)->mp.mark();
+        d->set_y(endY)->move_eol()->mp.mark();
 	
         d->set_y(currentY);
     }
@@ -100,14 +100,14 @@ mp.actions['unindent_block'] = sub(d) {
         /* use to be while d.txt.y <= endY, but that entered an endless loop when
             you were unindenting a block including the very last line in the file */
         while (times >= 0) {
-            d->mp.unindent_line()->mp.move(mp.move_down);
+            d->mp.unindent_line()->move_down();
 		
             times--;
         }
 	
-        d->set_y(startY)->mp.move(mp.move_bol)->mp.mark();
+        d->set_y(startY)->move_bol()->mp.mark();
 	
-        d->set_y(endY)->mp.move(mp.move_eol)->mp.mark();
+        d->set_y(endY)->move_eol()->mp.mark();
 	
         d->set_y(currentY);
     }
@@ -130,7 +130,7 @@ mp.actions['join_paragraph'] = sub (d) {
 
         /* while not at EOF, word wrap everything */
         while (p.txt.y < size(p.txt.lines) - 1) {
-            p->mp.join_paragraph()->mp.move_down()->mp.move_down();
+            p->mp.join_paragraph()->move_down()->move_down();
         }
 
         /* insert the content */
@@ -159,7 +159,7 @@ mp.actions['word_wrap_paragraph'] = sub (d) {
 
             /* while not at EOF, word wrap everything */
             while (p.txt.y < size(p.txt.lines) - 1) {
-                p->mp.word_wrap_paragraph()->mp.move_down()->mp.move_down();
+                p->mp.word_wrap_paragraph()->move_down()->move_down();
             }
 
             /* insert the content */
@@ -686,7 +686,7 @@ sub mp.join_paragraph(doc)
         txt.lines[txt.y + 1] = sregex(txt.lines[txt.y + 1], "/^[ \t]+/");
 
         /* move to end of line, add a space separator and join */
-        doc->mp.move_eol()->mp.insert(' ')->mp.join_line();
+        doc->move_eol()->mp.insert(' ')->mp.join_line();
     }
 
     return doc;
@@ -699,10 +699,10 @@ sub mp.word_wrap_paragraph(doc)
     local txt = doc.txt;
 
     if (mp.config.word_wrap) {
-        doc->mp.join_paragraph()->mp.move_eol();
+        doc->mp.join_paragraph()->move_eol();
 
         while (size(txt.lines[txt.y]) > mp.config.word_wrap) {
-            doc->mp.insert_space()->mp.move_left()->mp.delete_char();
+            doc->mp.insert_space()->move_left()->mp.delete_char();
         }
     }
 
@@ -716,7 +716,7 @@ sub mp.unindent_line(d)
 {
 	local l = split(d.txt.lines[d.txt.y]);
 	
-	mp.move(d, mp.move_bol);
+    d->move_bol();
 	
 	if (cmp(l[0], "\t") == 0) {
 		mp.delete_char(d);

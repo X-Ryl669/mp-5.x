@@ -134,7 +134,7 @@ sub mp.build_execute(target)
 
         log.syntax = mp.syntax.make_output;
 
-        mp.move_bof(log);
+        log->move_bof();
 
         /* set the last search regex to match file:line strings,
             so that calling seek-next and seek-prev moves there */
