@@ -57,7 +57,7 @@ mp.actions['eval']	= sub (d) {
 };
 
 mp.actions['eval_doc']	= sub (d) {
-	local t = join(mp.get_active_area(d), "\n");
+	local t = join(d->get_active_area(), "\n");
 
 	if (t != NULL) {
 		t = eval(t);

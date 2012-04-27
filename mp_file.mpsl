@@ -178,7 +178,7 @@ mp.actions['exec_command']	= sub (d, cmd) {
             if ((p = popen(cmd, "w")) != NULL) {
                 mp.busy(1);
 
-                foreach (l, mp.get_active_area(d))
+                foreach (l, d->get_active_area())
                     write(p, l ~ mp.config.eol);
 
                 pclose(p);
@@ -237,11 +237,11 @@ mp.actions['filter_selection'] = sub (d, cmd) {
 
         /* if there is no selection, take full document */
         if (d.txt.mark == NULL) {
-            d->move_bof()->mp.mark()->move_eof()->mp.mark();
+            d->move_bof()->mark()->move_eof()->mark();
         }
 
         /* take it out */
-        d->mp.cut();
+        d->cut();
 
         /* now feed it to the command */
         local p = popen2(cmd);

@@ -61,7 +61,7 @@ mp.actions['indent_block'] = sub (d) {
         local endY     = d.txt.mark.ey;
         local times    = endY - startY;
 	
-        d->mp.unmark()->set_y(startY);
+        d->unmark()->set_y(startY);
 
         /* use to be while d.txt.y <= endY, but that entered an endless loop when
             you were indenting a block including the very last line in the file */
@@ -71,9 +71,9 @@ mp.actions['indent_block'] = sub (d) {
             times--;
         }
 	
-        d->set_y(startY)->move_bol()->mp.mark();
+        d->set_y(startY)->move_bol()->mark();
 	
-        d->set_y(endY)->move_eol()->mp.mark();
+        d->set_y(endY)->move_eol()->mark();
 	
         d->set_y(currentY);
     }
@@ -93,7 +93,7 @@ mp.actions['unindent_block'] = sub(d) {
         local endY     = d.txt.mark.ey;
         local times    = endY - startY;
 	
-        mp.unmark(d);
+        d->unmark();
 	
         d->set_y(startY);
 	
@@ -105,9 +105,9 @@ mp.actions['unindent_block'] = sub(d) {
             times--;
         }
 	
-        d->set_y(startY)->move_bol()->mp.mark();
+        d->set_y(startY)->move_bol()->mark();
 	
-        d->set_y(endY)->move_eol()->mp.mark();
+        d->set_y(endY)->move_eol()->mark();
 	
         d->set_y(currentY);
     }
@@ -123,7 +123,7 @@ mp.actions['join_paragraph'] = sub (d) {
 
     if (d.txt.mark) {
         mp.busy(1);
-        mp.cut(d);
+        d->cut();
 
         /* create a working document */
         local p = mp.create('<wrk>', mp.clipboard);
@@ -152,7 +152,7 @@ mp.actions['word_wrap_paragraph'] = sub (d) {
 
         if (d.txt.mark) {
             mp.busy(1);
-            mp.cut(d);
+            d->cut();
 
             /* create a working document */
             local p = mp.create('<wrk>', mp.clipboard);
@@ -405,7 +405,7 @@ sub mp_doc.delete_char(doc)
     local txt = doc.txt;
 
     if (txt.mark != NULL) {
-        doc->mp.delete_mark();
+        doc->delete_mark();
         return;
     }
 
@@ -484,7 +484,7 @@ sub mp_doc.insert_string(doc, str)
     local txt = doc.txt;
     local w;
 
-    doc->mp.delete_mark();
+    doc->delete_mark();
 
     /* splice and change */
     w = splice(txt.lines[txt.y], str, txt.x, mp.config.insert && size(str) || 0);

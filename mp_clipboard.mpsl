@@ -27,30 +27,30 @@
 
 /** editor actions **/
 
-mp.actions['unmark']        = sub (d) { d->mp.unmark(); };
-mp.actions['mark']          = sub (d) { d->mp.mark(); };
-mp.actions['mark_vertical'] = sub (d) { d->mp.mark_vertical(); };
+mp.actions['unmark']        = sub (d) { d->unmark(); };
+mp.actions['mark']          = sub (d) { d->mark(); };
+mp.actions['mark_vertical'] = sub (d) { d->mark_vertical(); };
 
-mp.actions['copy_mark']   = sub (d) { d->busy(1)->mp.copy()->mp.unmark()->busy(0); };
-mp.actions['paste_mark']  = sub (d) { d->busy(1)->store_undo()->mp.paste()->busy(0); };
-mp.actions['cut_mark']    = sub (d) { d->busy(1)->store_undo()->mp.cut()->busy(0); };
-mp.actions['delete_mark'] = sub (d) { d->busy(1)->store_undo()->mp.delete_mark()->busy(0); };
+mp.actions['copy_mark']   = sub (d) { d->busy(1)->copy()->unmark()->busy(0); };
+mp.actions['paste_mark']  = sub (d) { d->busy(1)->store_undo()->paste()->busy(0); };
+mp.actions['cut_mark']    = sub (d) { d->busy(1)->store_undo()->cut()->busy(0); };
+mp.actions['delete_mark'] = sub (d) { d->busy(1)->store_undo()->delete_mark()->busy(0); };
 
 mp.actions['mouse_drag_mark'] = sub (d) {
     /* no selection yet? move to initial click and mark */
     if (d.txt.mark == NULL)
-        d->mp.mark();
+        d->mark();
 
     /* move to drag position */
     d->move_to_coords_xy(mp.mouse_to_x, mp.mouse_to_y);
 
     /* and mark */
-    d->mp.mark();
+    d->mark();
 
     return d;
 };
 
-mp.actions['mark_all'] = sub (d) { d->move_bof()->mp.mark()->move_eof()-> mp.mark(); };
+mp.actions['mark_all'] = sub (d) { d->move_bof()->mark()->move_eof()->mark(); };
 
 mp.actions['cut_lines_with_string'] = sub (d, str) {
     if (str == NULL) {
@@ -69,7 +69,7 @@ mp.actions['cut_lines_with_string'] = sub (d, str) {
     }
 
     if (str != NULL) {
-        d->busy(1)->store_undo()->mp.cut_lines_with_string(str)->busy(0);
+        d->busy(1)->store_undo()->cut_lines_with_string(str)->busy(0);
     }
 
     return d;
@@ -102,84 +102,84 @@ mp.actdesc['cut_lines_with_string'] = LL("Cut lines containing a string...");
 
 /** code **/
 
-sub mp.unmark(doc)
+sub mp_doc.unmark(doc)
 /* unmarks the block */
 {
-	/* just destroy the mark */
-	doc.txt.mark = NULL;
+    /* just destroy the mark */
+    doc.txt.mark = NULL;
 
-	return doc;
+    return doc;
 }
 
 
-sub mp.mark(doc)
+sub mp_doc.mark(doc)
 /* marks the start or end of the block */
 {
-	local txt = doc.txt;
+    local txt = doc.txt;
 
-	if (txt.mark == NULL) {
-		/* no mark; create one */
-		txt.mark = {};
-		txt.mark.ax = txt.mark.bx = txt.mark.ex = txt.x;
-		txt.mark.ay = txt.mark.by = txt.mark.ey = txt.y;
-		txt.mark.vertical = 0;
-		txt.mark.incomplete = 1;
-	}
-	else {
-		/* mark exists; extend current one */
-		if (txt.mark.vertical == 0) {
-			/* normal selection */
-			if (txt.y < txt.mark.ay ||
-				(txt.y == txt.mark.ay && txt.x < txt.mark.ax)) {
-				/* move the beginning of the block */
-				txt.mark.bx = txt.x;
-				txt.mark.by = txt.y;
-				txt.mark.ex = txt.mark.ax;
-				txt.mark.ey = txt.mark.ay;
-			}
-			else {
-				/* move the end of the block */
-				txt.mark.ex = txt.x;
-				txt.mark.ey = txt.y;
-				txt.mark.bx = txt.mark.ax;
-				txt.mark.by = txt.mark.ay;
-			}
-		}
-		else {
-			/* vertical selection */
-			txt.mark.by = txt.mark.ay;
-			txt.mark.ey = txt.y;
-			if (txt.y < txt.mark.ay) {
-				txt.mark.by = txt.y;
-				txt.mark.ey = txt.mark.ay;
-			}
+    if (txt.mark == NULL) {
+        /* no mark; create one */
+        txt.mark = {};
+        txt.mark.ax = txt.mark.bx = txt.mark.ex = txt.x;
+        txt.mark.ay = txt.mark.by = txt.mark.ey = txt.y;
+        txt.mark.vertical = 0;
+        txt.mark.incomplete = 1;
+    }
+    else {
+        /* mark exists; extend current one */
+        if (txt.mark.vertical == 0) {
+            /* normal selection */
+            if (txt.y < txt.mark.ay ||
+                (txt.y == txt.mark.ay && txt.x < txt.mark.ax)) {
+                /* move the beginning of the block */
+                txt.mark.bx = txt.x;
+                txt.mark.by = txt.y;
+                txt.mark.ex = txt.mark.ax;
+                txt.mark.ey = txt.mark.ay;
+            }
+            else {
+                /* move the end of the block */
+                txt.mark.ex = txt.x;
+                txt.mark.ey = txt.y;
+                txt.mark.bx = txt.mark.ax;
+                txt.mark.by = txt.mark.ay;
+            }
+        }
+        else {
+            /* vertical selection */
+            txt.mark.by = txt.mark.ay;
+            txt.mark.ey = txt.y;
+            if (txt.y < txt.mark.ay) {
+                txt.mark.by = txt.y;
+                txt.mark.ey = txt.mark.ay;
+            }
 
-			txt.mark.bx = txt.mark.ax;
-			txt.mark.ex = txt.x;
-			if (txt.x < txt.mark.ax) {
-				txt.mark.bx = txt.x;
-				txt.mark.ex = txt.mark.ax;
-			}
-		}
+            txt.mark.bx = txt.mark.ax;
+            txt.mark.ex = txt.x;
+            if (txt.x < txt.mark.ax) {
+                txt.mark.bx = txt.x;
+                txt.mark.ex = txt.mark.ax;
+            }
+        }
 
-		txt.mark.incomplete = 0;
-	}
+        txt.mark.incomplete = 0;
+    }
 
-	return doc;
+    return doc;
 }
 
 
-sub mp.mark_vertical(doc)
+sub mp_doc.mark_vertical(doc)
 /* start vertical block selection */
 {
-    doc->mp.mark();
+    doc->mark();
     doc.txt.mark.vertical = 1;
 
     return doc;
 }
 
 
-sub mp.get_active_area(doc)
+sub mp_doc.get_active_area(doc)
 /* returns the active area: the selection or the full document */
 {
     local m;
@@ -192,37 +192,37 @@ sub mp.get_active_area(doc)
 
 
 /**
- * mp.copy - Copies the selected block or a string to the clipboard
+ * mp_doc.copy - Copies the selected block or a string to the clipboard
  * @doc: the source of the copy
  *
  * If @doc is a document, it copies to the clipboard the content of the
  * selected block, if one exists. If @doc is an array or scalar, it copies
  * that data directly into it.
  */
-sub mp.copy(doc)
+sub mp_doc.copy(doc)
 {
-	if (is_hash(doc)) {
-		if (doc.txt.mark) {
-			mp.clipboard = doc->mp.get_active_area();
-			mp.clipboard_vertical = doc.txt.mark.vertical;
+    if (is_hash(doc)) {
+        if (doc.txt.mark) {
+            mp.clipboard = doc->get_active_area();
+            mp.clipboard_vertical = doc.txt.mark.vertical;
 
-			mp.drv.clip_to_sys();
-		}
-	}
-	else {
-		if (!is_array(doc))
-			doc = split(doc, "\n");
+            mp.drv.clip_to_sys();
+        }
+    }
+    else {
+        if (!is_array(doc))
+            doc = split(doc, "\n");
 
-		mp.clipboard = doc;
-		mp.clipboard_vertical = 0;
-		mp.drv.clip_to_sys();
-	}
+        mp.clipboard = doc;
+        mp.clipboard_vertical = 0;
+        mp.drv.clip_to_sys();
+    }
 
-	return doc;
+    return doc;
 }
 
 
-sub mp.delete_mark(doc)
+sub mp_doc.delete_mark(doc)
 /* deletes current selection */
 {
     local txt = doc.txt;
@@ -234,17 +234,17 @@ sub mp.delete_mark(doc)
             doc->delete_range(txt.mark.bx, txt.mark.by,
                 txt.mark.ex, txt.mark.ey, txt.mark.vertical);
 
-        doc->mp.unmark();
+        doc->unmark();
     }
 
     return doc;
 }
 
 
-sub mp.cut(doc)
+sub mp_doc.cut(doc)
 /* cut (copy + delete) selected mark */
 {
-    doc->mp.copy()->mp.delete_mark();
+    doc->copy()->delete_mark();
     mp.drv.clip_to_sys();
 
     return doc;
@@ -252,14 +252,14 @@ sub mp.cut(doc)
 
 
 /**
- * mp.paste - Pastes from the clipboard into a text or as a value
+ * mp_doc.paste - Pastes from the clipboard into a text or as a value
  * @doc: the destination of the copy
  *
  * If @doc is NULL, returns the content of the clipboard as a
  * scalar string; if it's not, is assumed to be a document and
  * pastes the content of the clipboard into the cursor position.
  */
-sub mp.paste(doc)
+sub mp_doc.paste(doc)
 {
     mp.drv.sys_to_clip();
 
@@ -279,7 +279,7 @@ sub mp.paste(doc)
         doc.txt.y = doc.txt.mark.by;
 
         /* and delete the block */
-        doc->mp.delete_mark();
+        doc->delete_mark();
 	}
 
     if (mp.clipboard_vertical == 0) {
@@ -316,7 +316,7 @@ sub mp.paste(doc)
 
 
 /**
- * mp.cut_lines_with_string - Cuts all lines matching a string
+ * mp_doc.cut_lines_with_string - Cuts all lines matching a string
  * @doc: the document
  * @str: the string to be matched
  *
@@ -324,7 +324,7 @@ sub mp.paste(doc)
  * a regular expression. The deleted lines are left in the clipboard.
  * If a block is selected, only lines inside it are cut.
  */
-sub mp.cut_lines_with_string(doc, str)
+sub mp_doc.cut_lines_with_string(doc, str)
 {
     local r = [];
     local p;
@@ -335,7 +335,7 @@ sub mp.cut_lines_with_string(doc, str)
     str = '/' ~ str ~ '/';
 
     if (doc.txt.mark) {
-        doc->mp.cut();
+        doc->cut();
 
         /* create a temporary work document */
         p = mp.create('<wrk>', mp.clipboard);

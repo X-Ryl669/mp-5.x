@@ -69,7 +69,7 @@ mp.actions['move_to_mouse_position'] = sub (d) {
     d->move_to_coords_xy(mp.mouse_x, mp.mouse_y);
 
     /* mouse click always unmarks */
-    d->mp.unmark();
+    d->unmark();
 
     return d;
 };
@@ -154,10 +154,10 @@ sub mp_doc.move(doc, func)
         if (mp.shift_pressed) {
             /* shift pressed? move selecting */
             if (doc.txt.mark == NULL)
-                doc->mp.mark();
+                doc->mark();
 
             doc->func();
-            doc->mp.mark();
+            doc->mark();
         }
         else
             doc->func();
