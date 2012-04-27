@@ -221,6 +221,28 @@ mp.menu = [
 
 mp.actions_by_menu_label = {};
 
+
+/** MP document class/base object **/
+
+mp_doc = {
+    txt: {
+        x:      0,
+        y:      0,
+        vx:     0,
+        vy:     0,
+        mod:    0,
+        lines:  [ '' ]
+    },
+    name:       L("<unnamed>"),
+    undo:       [],
+    redo:       [],
+    syntax:     NULL,
+
+    busy:       sub (doc, b) { mp.busy(b); return doc; }
+};
+
+
+
 /** code **/
 
 /**
