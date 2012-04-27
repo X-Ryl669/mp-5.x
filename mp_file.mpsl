@@ -131,7 +131,7 @@ mp.actions['revert']	= sub (d) {
 
     mp.set_y(d, y);
     d.txt.vy = vy;
-    mp.set_x(d, x);
+    d->set_x(x);
 
     return d;
 };
@@ -455,27 +455,6 @@ sub mp.save_on_close(doc)
 
     return r;
 }
-
-
-/* the MP document class/base object */
-
-mp_doc = {
-    txt: {
-        x:      0,
-        y:      0,
-        vx:     0,
-        vy:     0,
-        mod:    0,
-        lines:  [ '' ]
-    },
-    name:       L("<unnamed>"),
-    undo:       [],
-    redo:       [],
-    syntax:     NULL,
-
-    busy:       sub (doc, b) { mp.busy(b); return doc; }
-};
-
 
 
 sub mp_doc.long_op(doc, func, a2, a3, a4)

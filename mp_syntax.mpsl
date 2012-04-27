@@ -91,7 +91,7 @@ sub mp.actions.section_list(d) {
 
             if (r != NULL) {
                 mp.search_set_y(d, l[r[0]][1]);
-                mp.set_x(d, 0);
+                d->set_x(0);
             }
         }
     }

@@ -220,7 +220,7 @@ sub mp.search_misspelled(doc)
 				mp.last_misspelled_word = w;
 
 				mp.set_y(doc, y);
-				mp.set_x(doc, x);
+                doc->set_x(x);
 				return 1;
 			}
 		}

@@ -177,36 +177,36 @@ sub mp.move(doc, func)
 }
 
 
-sub mp.set_x(doc, x)
+sub mp_doc.set_x(doc, x)
 /* sets the x position */
 {
-	local txt = doc.txt;
+    local txt = doc.txt;
 
-	if (x < 0) {
-		/* cursor moved left of the bol; effective cursor up + eol */
-		if (txt.y > 0) {
-			/* one line up */
-			txt.y--;
+    if (x < 0) {
+        /* cursor moved left of the bol; effective cursor up + eol */
+        if (txt.y > 0) {
+            /* one line up */
+            txt.y--;
 
-			/* set x to the end of the line */
-			txt.x = size(txt.lines[txt.y]);
-		}
-	}
-	else {
-		/* test if moved beyond end of line */
-		if (x > size(txt.lines[txt.y])) {
-			if (txt.y < size(txt.lines) - 1) {
-				/* cursor moved right of eol;
-				   effective cursor down + bol */
-				txt.x = 0;
-				txt.y++;
-			}
-		}
-		else
-			txt.x = x;
-	}
+            /* set x to the end of the line */
+            txt.x = size(txt.lines[txt.y]);
+        }
+    }
+    else {
+        /* test if moved beyond end of line */
+        if (x > size(txt.lines[txt.y])) {
+            if (txt.y < size(txt.lines) - 1) {
+                /* cursor moved right of eol;
+                   effective cursor down + bol */
+                txt.x = 0;
+                txt.y++;
+            }
+        }
+        else
+            txt.x = x;
+    }
 
-	return doc;
+    return doc;
 }
 
 
@@ -267,7 +267,7 @@ sub mp.move_left(doc)
 /* moves one char left */
 {
 	if (doc.txt.x + doc.txt.y)
-		mp.set_x(doc, doc.txt.x - 1);
+		doc->set_x(doc.txt.x - 1);
 
 	return doc;
 }
@@ -276,7 +276,7 @@ sub mp.move_left(doc)
 sub mp.move_right(doc)
 /* moves one char right */
 {
-	mp.set_x(doc, doc.txt.x + 1);
+    doc->set_x(doc.txt.x + 1);
 }
 
 
@@ -410,7 +410,7 @@ sub mp.move_to_coords_xy(doc, x, y)
 	x = mp.vx2x(doc.txt.lines[doc.txt.y], doc.txt.vx + x);
 
 	/* move there */
-	mp.set_x(doc, x);
+    doc->set_x(x);
 }
 
 
