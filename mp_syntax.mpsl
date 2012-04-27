@@ -90,8 +90,7 @@ sub mp.actions.section_list(d) {
             );
 
             if (r != NULL) {
-                mp.search_set_y(d, l[r[0]][1]);
-                d->set_x(0);
+                d->search_set_y(l[r[0]][1])->set_x(0);
             }
         }
     }

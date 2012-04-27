@@ -289,7 +289,7 @@ mp.actions['open_under_cursor'] = sub (d) {
         local n = mp.open(join(w, ':'));
 
         /* now move to the line */
-        mp.search_set_y(n, l);
+        n->search_set_y(l);
 
         d = n;
     }
