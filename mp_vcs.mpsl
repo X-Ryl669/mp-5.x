@@ -167,7 +167,7 @@ mp.actions['vcs'] = sub (d) {
                     log->insert("\n");
 
                 log.txt.mod     = 0;
-                log.undo        = [];
+                log.undo_q      = [];
                 log.read_only   = 1;
             }
         }
@@ -209,7 +209,7 @@ sub mp.vcs_commit_on_close(doc, cmd, vcsname)
                 log->insert("\n");
 
                 log.txt.mod     = 0;
-                log.undo        = [];
+                log.undo_q      = [];
                 log.read_only   = 1;
 
                 /* bring doc to active back */

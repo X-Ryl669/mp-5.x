@@ -195,12 +195,12 @@ mp.actions['exec_command']	= sub (d, cmd) {
             if ((p = popen(cmd, "r")) != NULL) {
                 local l;
 
-                mp.store_undo(d);
+                d->store_undo();
                 mp.busy(1);
 
                 while ((l = read(p)) != NULL) {
                     d->insert(mp.chomp(l));
-                    d->insert_newline(d);
+                    d->insert_newline();
                 }
 
                 pclose(p);
@@ -233,7 +233,7 @@ mp.actions['filter_selection'] = sub (d, cmd) {
     }
 
     if (cmd != NULL) {
-        mp.store_undo(d);
+        d->store_undo();
 
         /* if there is no selection, take full document */
         if (d.txt.mark == NULL) {
@@ -241,7 +241,7 @@ mp.actions['filter_selection'] = sub (d, cmd) {
         }
 
         /* take it out */
-        mp.cut(d);
+        d->mp.cut();
 
         /* now feed it to the command */
         local p = popen2(cmd);

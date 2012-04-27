@@ -29,7 +29,7 @@
 /** editor actions **/
 
 mp.actions['insert_line']	= sub (d) {
-    d->mp.store_undo()->insert_newline();
+    d->store_undo()->insert_newline();
 
     if (d.syntax == NULL)
         mp.detect_syntax(d);
@@ -37,21 +37,21 @@ mp.actions['insert_line']	= sub (d) {
     return d;
 };
 
-mp.actions['delete_line']       = sub (d) { d->mp.store_undo()->delete_line(); };
-mp.actions['insert_space']      = sub (d) { d->mp.store_undo()->insert_space(); };
-mp.actions['insert_tab']        = sub (d) { d->mp.store_undo()->insert_tab(); };
-mp.actions['insert_real_tab']   = sub (d) { d->mp.store_undo()->insert("\t"); };
-mp.actions['delete']            = sub (d) { d->mp.store_undo()->delete_char(); };
+mp.actions['delete_line']       = sub (d) { d->store_undo()->delete_line(); };
+mp.actions['insert_space']      = sub (d) { d->store_undo()->insert_space(); };
+mp.actions['insert_tab']        = sub (d) { d->store_undo()->insert_tab(); };
+mp.actions['insert_real_tab']   = sub (d) { d->store_undo()->insert("\t"); };
+mp.actions['delete']            = sub (d) { d->store_undo()->delete_char(); };
 
 mp.actions['delete_left']	= sub (d) {
     if (d.txt.x + d.txt.y)
-        d->mp.store_undo()->move_left()->delete_char();
+        d->store_undo()->move_left()->delete_char();
 
     return d;
 };
 
 mp.actions['indent_block'] = sub (d) {
-    mp.store_undo(d);
+    d->store_undo();
 
     if (d.txt.mark == NULL)
         d->move_bol()->insert_tab();
@@ -82,7 +82,7 @@ mp.actions['indent_block'] = sub (d) {
 };
 
 mp.actions['unindent_block'] = sub(d) {
-    mp.store_undo(d);
+    d->store_undo();
 
     if (d.txt.mark == NULL) {
         d->unindent_line();
@@ -115,11 +115,11 @@ mp.actions['unindent_block'] = sub(d) {
     return d;
 };
 
-mp.actions['undo']		= sub (d) { mp.undo(d); };
-mp.actions['redo']		= sub (d) { mp.redo(d); };
+mp.actions['undo']		= sub (d) { d->undo(); };
+mp.actions['redo']		= sub (d) { d->redo(); };
 
 mp.actions['join_paragraph'] = sub (d) {
-    mp.store_undo(d);
+    d->store_undo();
 
     if (d.txt.mark) {
         mp.busy(1);
@@ -148,7 +148,7 @@ mp.actions['word_wrap_paragraph'] = sub (d) {
     if(mp.config.word_wrap == 0)
         mp.alert(L("Word wrapping must be set"));
     else {
-        mp.store_undo(d);
+        d->store_undo();
 
         if (d.txt.mark) {
             mp.busy(1);
@@ -615,7 +615,7 @@ sub mp_doc.insert_keystroke(doc, key)
 /* inserts from a keystroke (with undo) */
 {
     if (size(key) == 1) {
-        doc->mp.store_undo()->insert(key);
+        doc->store_undo()->insert(key);
     }
     else
     if (key != NULL) {
@@ -631,23 +631,23 @@ sub mp_doc.insert_keystroke(doc, key)
 
 /** undo **/
 
-sub mp.store_undo(doc)
+sub mp_doc.store_undo(doc)
 /* stores the current txt in the undo queue */
 {
-    queue(doc.undo, clone(doc.txt), mp.config.undo_levels);
-    doc.redo = [];
+    queue(doc.undo_q, clone(doc.txt), mp.config.undo_levels);
+    doc.redo_q = [];
 
     return doc;
 }
 
 
-sub mp.undo(doc)
+sub mp_doc.undo(doc)
 /* undoes last operation */
 {
     local txt;
 
-    if (txt = pop(doc.undo)) {
-        queue(doc.redo, clone(doc.txt), mp.config.undo_levels);
+    if (txt = pop(doc.undo_q)) {
+        queue(doc.redo_q, clone(doc.txt), mp.config.undo_levels);
         doc.txt = txt;
     }
 
@@ -655,13 +655,13 @@ sub mp.undo(doc)
 }
 
 
-sub mp.redo(doc)
+sub mp_doc.redo(doc)
 /* redoes last undid operation */
 {
     local txt;
 
-    if (txt = pop(doc.redo)) {
-        queue(doc.undo, clone(doc.txt), mp.config.undo_levels);
+    if (txt = pop(doc.redo_q)) {
+        queue(doc.undo_q, clone(doc.txt), mp.config.undo_levels);
         doc.txt = txt;
     }
 

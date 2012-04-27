@@ -32,9 +32,9 @@ mp.actions['mark']          = sub (d) { d->mp.mark(); };
 mp.actions['mark_vertical'] = sub (d) { d->mp.mark_vertical(); };
 
 mp.actions['copy_mark']   = sub (d) { d->busy(1)->mp.copy()->mp.unmark()->busy(0); };
-mp.actions['paste_mark']  = sub (d) { d->busy(1)->mp.store_undo()->mp.paste()->busy(0); };
-mp.actions['cut_mark']    = sub (d) { d->busy(1)->mp.store_undo()->mp.cut()->busy(0); };
-mp.actions['delete_mark'] = sub (d) { d->busy(1)->mp.store_undo()->mp.delete_mark()->busy(0); };
+mp.actions['paste_mark']  = sub (d) { d->busy(1)->store_undo()->mp.paste()->busy(0); };
+mp.actions['cut_mark']    = sub (d) { d->busy(1)->store_undo()->mp.cut()->busy(0); };
+mp.actions['delete_mark'] = sub (d) { d->busy(1)->store_undo()->mp.delete_mark()->busy(0); };
 
 mp.actions['mouse_drag_mark'] = sub (d) {
     /* no selection yet? move to initial click and mark */
@@ -69,7 +69,7 @@ mp.actions['cut_lines_with_string'] = sub (d, str) {
     }
 
     if (str != NULL) {
-        d->busy(1)->mp.store_undo()->mp.cut_lines_with_string(str)->busy(0);
+        d->busy(1)->store_undo()->mp.cut_lines_with_string(str)->busy(0);
     }
 
     return d;

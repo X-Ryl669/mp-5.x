@@ -217,7 +217,7 @@ sub mp.complete(d, list, label)
 	}
 
 	/* accepted; substitute current word */
-	mp.store_undo(d);
+    d->store_undo();
 
 	/* split line by words to take the offset of current word */
 	local r = d->split_line_by_words();

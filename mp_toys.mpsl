@@ -159,7 +159,7 @@ sub mp.maze(doc, keycode)
 
 	maze.map[maze.y][maze.x] = '@';
 
-    mp.undo(doc);
+    doc->undo();
 
 	return doc;
 }
@@ -341,7 +341,7 @@ sub mp.pipes(doc, keycode)
         pipes.you_won = 1;
     }
 
-    mp.undo(doc);
+    doc->undo();
 
     return doc;
 }
