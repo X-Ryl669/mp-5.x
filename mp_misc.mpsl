@@ -158,7 +158,7 @@ mp.actions['about'] = sub (d) {
 	d = mp.open("<about>");
 
 	if (size(d.txt.lines) == 1) {
-		mp.insert(d, msg);
+        d->insert(msg);
         d->move_bof();
 		d.txt.mod = 0;
 		d.read_only = 1;
@@ -260,7 +260,7 @@ sub dump(v)
     local d = mp.open("<dump>");
 
     d->move_eof();
-    mp.insert(d, dumper(v));
+    d->insert(dumper(v));
     d.txt.mod = 0;
     d.read_only = 1;
 }

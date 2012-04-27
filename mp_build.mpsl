@@ -74,7 +74,7 @@ mp.actions['insert_next_item'] = sub(doc) {
     }
 
     mp.store_undo(doc);
-    mp.insert(doc, ' * ' ~ (n + 1) ~ ': ');
+    doc->insert(' * ' ~ (n + 1) ~ ': ');
 };
 
 /** Default key bindings **/
@@ -125,7 +125,7 @@ sub mp.build_execute(target)
         local l;
 
         while (l = read(p))
-            mp.insert(log, l);
+            doc->insert(l);
 
         pclose(p);
 

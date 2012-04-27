@@ -363,7 +363,7 @@ sub mp.process_event(k)
             }
         }
         else {
-            mp.insert_keystroke(d, k);
+            d->insert_keystroke(k);
             mp.keycodes_t = NULL;
         }
     

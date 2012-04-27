@@ -64,7 +64,7 @@ mp.actions['insert_template']	 = sub(d) {
             }
 
             if (c)
-                mp.insert(d, c);
+                d->insert(c);
         }
     }
 };

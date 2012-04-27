@@ -199,8 +199,8 @@ mp.actions['exec_command']	= sub (d, cmd) {
                 mp.busy(1);
 
                 while ((l = read(p)) != NULL) {
-                    mp.insert(d, mp.chomp(l));
-                    mp.insert_newline(d);
+                    d->insert(mp.chomp(l));
+                    d->insert_newline(d);
                 }
 
                 pclose(p);
@@ -252,7 +252,7 @@ mp.actions['filter_selection'] = sub (d, cmd) {
 
             local l;
             while ((l = read(p[0])) != NULL)
-                mp.insert(d, l);
+                d->insert(l);
 
             pclose(p[0]);
         }

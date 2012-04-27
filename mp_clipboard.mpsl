@@ -231,7 +231,7 @@ sub mp.delete_mark(doc)
     if (txt.mark != NULL) {
         /* deletes the range */
         if (txt.mark.bx != txt.mark.ex || txt.mark.by != txt.mark.ey)
-            doc->mp.delete_range(txt.mark.bx, txt.mark.by,
+            doc->delete_range(txt.mark.bx, txt.mark.by,
                 txt.mark.ex, txt.mark.ey, txt.mark.vertical);
 
         doc->mp.unmark();
@@ -284,7 +284,7 @@ sub mp.paste(doc)
 
     if (mp.clipboard_vertical == 0) {
         /* normal selection in clipboard */
-        mp.insert(doc, mp.clipboard);
+        doc->insert(mp.clipboard);
     }
     else {
         /* vertical selection in clipboard */
@@ -350,7 +350,7 @@ sub mp.cut_lines_with_string(doc, str)
 
         if (regex(l, str) != NULL) {
             push(r, l);
-            p->mp.delete_line();
+            p->delete_line();
         }
         else
             p>move_down();
@@ -358,7 +358,7 @@ sub mp.cut_lines_with_string(doc, str)
 
     /* if p is the working document, move content back to doc */
     if (p.name eq '<wrk>')
-        doc->mp.insert(p.txt.lines);
+        doc->insert(p.txt.lines);
 
     mp.clipboard = r;
     mp.drv.clip_to_sys();

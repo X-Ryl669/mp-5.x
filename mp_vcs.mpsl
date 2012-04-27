@@ -154,7 +154,7 @@ mp.actions['vcs'] = sub (d) {
                     log = mp.open(sprintf(L("<%s output>"), v.id));
 
                     log->move_eof();
-                    mp.insert(log, cmd ~ ":\n\n");
+                    log->insert(cmd ~ ":\n\n");
                 }
 
                 mp.actions.exec_command(log, cmd);
@@ -164,7 +164,7 @@ mp.actions['vcs'] = sub (d) {
                     log->move_bof();
                 }
                 else
-                    mp.insert(log, "\n");
+                    log->insert("\n");
 
                 log.txt.mod     = 0;
                 log.undo        = [];
@@ -204,9 +204,9 @@ sub mp.vcs_commit_on_close(doc, cmd, vcsname)
                 local log = mp.open(doc.vcs.log_name);
 
                 log->move_eof();
-                mp.insert(log, cmd ~ ":\n\n");
+                log->insert(cmd ~ ":\n\n");
                 mp.actions.exec_command(log, cmd);
-                mp.insert(log, "\n");
+                log->insert("\n");
 
                 log.txt.mod     = 0;
                 log.undo        = [];
