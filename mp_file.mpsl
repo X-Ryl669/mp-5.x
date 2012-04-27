@@ -457,7 +457,8 @@ sub mp.save_on_close(doc)
 }
 
 
-/* the document class */
+/* the MP document class/base object */
+
 mp_doc = {
     txt: {
         x:      0,
@@ -471,7 +472,6 @@ mp_doc = {
     undo:       [],
     redo:       [],
     syntax:     NULL,
-    on_close:   [ mp.save_on_close ],
 
     busy:       sub (doc, b) { mp.busy(b); return doc; }
 };

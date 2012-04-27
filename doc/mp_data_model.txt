@@ -45,13 +45,6 @@ document are the following:
    These functions are used as display structure filters. A similar
    but global list of display structure filtering functions can be
    stored in `mp.post_paint'.
- * on_close: This component is an array of functions that will be
-   called sequentially when the `close' action is executed on the
-   document. Each of this functions will receive the document as
-   their only argument and can do whatever they want. If 0 is returned,
-   no more functions are called and the closing is aborted. By default,
-   it only contains the `mp.save_on_close' function, that will ask for
-   confirmation if the document has been modified.
 
 The `txt' component contains the current state of the document:
 
