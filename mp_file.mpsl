@@ -74,16 +74,8 @@ mp.actions['save']	= sub (d) {
 };
 
 mp.actions['close']	= sub (d) {
-
-    /* call all 'on_close' functions */
-    foreach (f, d.on_close) {
-
-        /* if it returns 0, cancel close */
-        if (f(d) == 0)
-            return;
-    }
-
-    mp.close();
+    if (d->query_close() != 0)
+        mp.close();
 };
 
 mp.actions['exit']	= sub (d) {
@@ -366,7 +358,24 @@ mp.actdesc['open_dropped_files'] = LL("Open dropped files");
 sub mp.chomp(str)
 /* chomps the end of file chars from a string */
 {
-	sregex(str, "/\r*\n*$/");
+    sregex(str, "/\r*\n*$/");
+}
+
+
+sub mp_doc.query_close(doc)
+/* queries a close; if it returns 0, the closing is rejected */
+{
+    local r = 1;
+
+    if (doc.txt.mod) {
+        r = mp.confirm(L("File has changed. Save changes?"));
+
+        /* confirm? save */
+        if (r == 1)
+            mp.actions.save(d);
+    }
+
+    return r;
 }
 
 
@@ -437,23 +446,6 @@ sub mp.save(doc)
     }
     
 	return ret;
-}
-
-
-sub mp.save_on_close(doc)
-/* on_close function to save modified files */
-{
-    local r = 1;
-
-    if (doc.txt.mod) {
-        r = mp.confirm(L("File has changed. Save changes?"));
-
-        /* confirm? save */
-        if (r == 1)
-            mp.actions.save(d);
-    }
-
-    return r;
 }
 
 
