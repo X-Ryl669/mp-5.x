@@ -767,7 +767,7 @@ sub mp_doc.detect_syntax(doc)
         foreach (ext, s.filenames) {
             if (regex(doc.name, ext)) {
                 doc.syntax = s;
-                return;
+                return doc;
             }
         }
     }
@@ -778,7 +778,7 @@ sub mp_doc.detect_syntax(doc)
 
         if (is_exec(s.detect) && s.detect(doc)) {
             doc.syntax = s;
-            return;
+            return doc;
         }
     }
 

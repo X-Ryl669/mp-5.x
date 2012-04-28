@@ -122,11 +122,11 @@ mp.actions['join_paragraph'] = sub (d) {
     d->store_undo();
 
     if (d.txt.mark) {
-        mp.busy(1);
-        d->cut();
+        d->busy(1)->cut();
 
         /* create a working document */
-        local p = mp.create('<wrk>', mp.clipboard);
+        local p = new(mp_doc, { name: '<wrk>' });
+        p.txt.lines = mp.clipboard;
 
         /* while not at EOF, word wrap everything */
         while (p.txt.y < size(p.txt.lines) - 1) {
@@ -134,11 +134,10 @@ mp.actions['join_paragraph'] = sub (d) {
         }
 
         /* insert the content */
-        d->insert(p.txt.lines);
-        mp.busy(0);
+        d->insert(p.txt.lines)->busy(0);
     }
     else
-        s->join_paragraph();
+        d->join_paragraph();
 
     return d;
 };
@@ -151,11 +150,11 @@ mp.actions['word_wrap_paragraph'] = sub (d) {
         d->store_undo();
 
         if (d.txt.mark) {
-            mp.busy(1);
-            d->cut();
+            d->busy(1)->cut();
 
             /* create a working document */
-            local p = mp.create('<wrk>', mp.clipboard);
+            local p = new(mp_doc, { name: '<wrk>' });
+            p.txt.lines = mp.clipboard;
 
             /* while not at EOF, word wrap everything */
             while (p.txt.y < size(p.txt.lines) - 1) {
@@ -163,8 +162,7 @@ mp.actions['word_wrap_paragraph'] = sub (d) {
             }
 
             /* insert the content */
-            d->insert(p.txt.lines);
-            mp.busy(0);
+            d->insert(p.txt.lines)->busy(0);
         }
         else
             d->word_wrap_paragraph();

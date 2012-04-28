@@ -268,7 +268,7 @@ sub mp.active()
 
     /* empty document list? create a new, empty one */
     if (size(mp.docs) == 0)
-        mp.empty();
+        mp.add(new(mp_doc));
 
     /* get active document */
     d = mp.docs[mp.active_i];

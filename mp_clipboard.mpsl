@@ -338,7 +338,8 @@ sub mp_doc.cut_lines_with_string(doc, str)
         doc->cut();
 
         /* create a temporary work document */
-        p = mp.create('<wrk>', mp.clipboard);
+        p = new(mp_doc, { name: '<wrk>' });
+        p.txt.lines = mp.clipboard;
     }
     else
         p = doc;

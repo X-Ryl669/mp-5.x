@@ -35,7 +35,7 @@ mp.actions['new']	= sub (d) {
         d = mp.active();
     }
     else
-        d = mp.empty();
+        d = mp.add(new(mp_doc));
 
     return d;
 };
@@ -461,26 +461,9 @@ sub mp_doc.long_op(doc, func, a2, a3, a4)
 }
 
 
-sub mp.create(filename, lines)
-/* creates a document */
+sub mp.add(doc)
+/* adds a doc to the list of documents */
 {
-    local doc = clone(mp_doc);
-
-    if (filename)
-        doc.name = filename;
-
-    if (lines)
-        doc.txt.lines = lines;
-
-	return doc;
-}
-
-
-sub mp.empty(filename, lines)
-/* creates a new, empty document */
-{
-    local doc = mp.create(filename, lines);
-
     /* store in the list and set as active */
     ins(mp.docs, doc, mp.active_i);
 
@@ -551,7 +534,7 @@ sub mp.open(filename, password)
             string:     sprintf(L("New file '%s'"), filename)
         };
 
-        d = mp.empty(filename);
+        d = mp.add(new(mp_doc, { name: filename }));
 	}
     else
     if (s[13] != NULL) {
@@ -572,8 +555,10 @@ sub mp.open(filename, password)
         if (mp.crypt1_detect(f)) {
             if (password != NULL && password != '') {
                 /* and load the file */
-                d = mp.empty(filename, mp.crypt1_load(f, password));
-                d.password = password;
+                d = mp.add(new(mp_doc, { name: filename }));
+
+                d.txt.lines     = mp.crypt1_load(f, password);
+                d.password      = password;
             }
         }
         else {
@@ -583,7 +568,8 @@ sub mp.open(filename, password)
 
             /* reopen and read */
             f = open(filename, "rb");
-            d = mp.empty(filename, mp.plain_load(f));
+            d = mp.add(new(mp_doc, { name: filename }));
+            d.txt.lines = mp.plain_load(f);
         }
 
         close(f);
@@ -667,10 +653,11 @@ sub mp.hex_view(filename)
     if ((f = open(filename, "rb")) != NULL) {
         close(f);
 
-        d = mp.empty('<' ~ filename ~ ' hex view>', []);
+        d = mp.add(new(mp_doc, { name: '<' ~ filename ~ ' hex view>' }));
+
         d.read_only = 1;
-        d.syntax = mp.syntax.hex_view;
-        d.disk_op = 1;
+        d.syntax    = mp.syntax.hex_view;
+        d.disk_op   = 1;
 
         mp.hex_view_th(filename, d);
     }
