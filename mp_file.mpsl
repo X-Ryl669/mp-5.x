@@ -52,7 +52,7 @@ mp.actions['save_as']	= sub (d, newname) {
         /* store new name */
         d.name = newname;
 
-        if (mp.long_op(mp.save, d) == -1)
+        if (d->long_op(mp_doc.save) == -1)
             mp.alert(sprintf(L("Error saving file: %s"), ERRNO));
         else
             d->detect_syntax();
@@ -67,7 +67,7 @@ mp.actions['save']	= sub (d) {
     if (regex(d.name, "/^<.+>$/"))
         mp.actions.save_as(d);
     else
-    if (mp.long_op(mp.save, d) == -1)
+    if (d->long_op(mp_doc.save) == -1)
         mp.alert(sprintf(L("Error saving file: %s"), ERRNO));
 
     return d;
@@ -121,9 +121,8 @@ mp.actions['revert']	= sub (d) {
 
     d = mp.active();
 
-    x->set_y(y);
+    d->set_y(y)->set_x(x);
     d.txt.vy = vy;
-    d->set_x(x);
 
     return d;
 };
@@ -321,16 +320,15 @@ mp.actions['open_dropped_files'] = sub (d) {
 
 /** default key bindings **/
 
-mp.keycodes['ctrl-n']		= 'next';
-mp.keycodes['ctrl-o']		= 'open';
-mp.keycodes['ctrl-q']		= 'exit';
-mp.keycodes['ctrl-s']		= 'save';
-mp.keycodes['ctrl-w']		= 'close';
-mp.keycodes['ctrl-enter']	= 'open_under_cursor';
-mp.keycodes['alt-enter']	= 'open_under_cursor';
-mp.keycodes['dropped-files']	= 'open_dropped_files';
-
-mp.keycodes['close-window'] 	= 'exit';
+mp.keycodes['ctrl-n']           = 'next';
+mp.keycodes['ctrl-o']           = 'open';
+mp.keycodes['ctrl-q']           = 'exit';
+mp.keycodes['ctrl-s']           = 'save';
+mp.keycodes['ctrl-w']           = 'close';
+mp.keycodes['ctrl-enter']       = 'open_under_cursor';
+mp.keycodes['alt-enter']        = 'open_under_cursor';
+mp.keycodes['dropped-files']    = 'open_dropped_files';
+mp.keycodes['close-window']     = 'exit';
 
 /** action descriptions **/
 
@@ -476,36 +474,34 @@ sub mp.add(doc)
 sub mp.next()
 /* rotates through the document list */
 {
-	if (++mp.active_i == size(mp.docs))
-		mp.active_i = 0;
+    if (++mp.active_i == size(mp.docs))
+        mp.active_i = 0;
 
-	return mp.active();
+    return mp.active();
 }
 
 
 sub mp.prev()
 /* rotates through the document list, backwards */
 {
-	if (--mp.active_i == -1)
-		mp.active_i = size(mp.docs) - 1;
+    if (--mp.active_i == -1)
+        mp.active_i = size(mp.docs) - 1;
 
-	return mp.active();
+    return mp.active();
 }
 
 
 sub mp.close()
 /* closes the active document */
 {
-	local k = mp.active_i;
+    /* delete from the list */
+    adel(mp.docs, mp.active_i);
 
-	/* delete from the list */
-	adel(mp.docs, mp.active_i);
+    /* rotate if it was the last one */
+    if (mp.active_i == size(mp.docs))
+        mp.active_i = 0;
 
-	/* rotate if it was the last one */
-	if (mp.active_i == size(mp.docs))
-		mp.active_i = 0;
-
-	/* cannot call mp.active() */
+    /* cannot call mp.active() */
 }
 
 
