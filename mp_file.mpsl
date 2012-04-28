@@ -52,7 +52,7 @@ mp.actions['save_as']	= sub (d, newname) {
         /* store new name */
         d.name = newname;
 
-        if (mp.long_op(mp.save, d) == -1)
+        if (d->long_op(mp_doc.save) == -1)
             mp.alert(sprintf(L("Error saving file: %s"), ERRNO));
         else
             d->detect_syntax();
@@ -67,7 +67,7 @@ mp.actions['save']	= sub (d) {
     if (regex(d.name, "/^<.+>$/"))
         mp.actions.save_as(d);
     else
-    if (mp.long_op(mp.save, d) == -1)
+    if (d->long_op(mp_doc.save) == -1)
         mp.alert(sprintf(L("Error saving file: %s"), ERRNO));
 
     return d;
@@ -403,7 +403,7 @@ sub mp.save_th(f, doc)
 }
 
 
-sub mp.save(doc)
+sub mp_doc.save(doc)
 /* saves a file */
 {
     local f;
