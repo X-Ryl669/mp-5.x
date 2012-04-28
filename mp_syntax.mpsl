@@ -37,7 +37,7 @@ sub mp.actions.help(d) {
         try searching for help */
     if ((w = d->get_word(r)) != NULL) {
         mp.busy(1);
-        h = mp.help(d, w);
+        h = d->help(w);
         mp.busy(0);
     }
 
@@ -57,7 +57,7 @@ sub mp.actions.help(d) {
 }
 
 sub mp.actions.section_list(d) {
-    local l = mp.section_list(d);
+    local l = d->section_list();
 
     if (l == NULL)
         mp.alert(L("No detection for sections for this mode."));
@@ -100,7 +100,7 @@ sub mp.actions.section_list(d) {
 sub mp.actions.move_section_up(d) {
     local pos = -1;
 
-    foreach (e, mp.section_list(d)) {
+    foreach (e, d->section_list()) {
         if (e[1] >= d.txt.y)
             break;
 
@@ -119,7 +119,7 @@ sub mp.actions.move_section_up(d) {
 sub mp.actions.move_section_down(d) {
     local pos = d.txt.y;
 
-    foreach (e, mp.section_list(d)) {
+    foreach (e, d->section_list()) {
         if (e[1] > pos) {
             pos = e[1];
             break;
@@ -754,37 +754,39 @@ mp.syntax.grutatxt = {
 
 /** code **/
 
-sub mp.detect_syntax(doc)
+sub mp_doc.detect_syntax(doc)
 /* tries to detect the syntax of a document */
 {
-	doc.syntax = NULL;
+    doc.syntax = NULL;
 
-	/* loops the syntax highlight definitions */
-	foreach (n, keys(mp.syntax)) {
-		local s = mp.syntax[n];
+    /* loops the syntax highlight definitions */
+    foreach (n, keys(mp.syntax)) {
+        local s = mp.syntax[n];
 
-		/* test the extensions */
-		foreach (ext, s.filenames) {
-			if (regex(doc.name, ext)) {
-				doc.syntax = s;
-				return;
-			}
-		}
-	}
+        /* test the extensions */
+        foreach (ext, s.filenames) {
+            if (regex(doc.name, ext)) {
+                doc.syntax = s;
+                return;
+            }
+        }
+    }
 
-	/* not by extension? try the 'detect' subroutine */
-	foreach (n, keys(mp.syntax)) {
-		local s = mp.syntax[n];
+    /* not by extension? try the 'detect' subroutine */
+    foreach (n, keys(mp.syntax)) {
+        local s = mp.syntax[n];
 
-		if (is_exec(s.detect) && s.detect(doc)) {
-			doc.syntax = s;
-			return;
-		}
-	}
+        if (is_exec(s.detect) && s.detect(doc)) {
+            doc.syntax = s;
+            return;
+        }
+    }
+
+    return doc;
 }
 
 
-sub mp.help(doc, word)
+sub mp_doc.help(doc, word)
 {
     local h;
 
@@ -822,7 +824,7 @@ sub mp.help(doc, word)
 
 
 /**
- * mp.section_list - Returns the list of sections of a document.
+ * mp_doc.section_list - Returns the list of sections of a document.
  * @doc: the document
  *
  * Applies the `section' array of regular expressions of the
@@ -834,7 +836,7 @@ sub mp.help(doc, word)
  * an array of line, line number pairs is returned (it can be
  * an empty list if the document has no recognizable sections).
  */
-sub mp.section_list(doc)
+sub mp_doc.section_list(doc)
 {
     local r;
 

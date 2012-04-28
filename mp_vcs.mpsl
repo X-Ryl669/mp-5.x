@@ -160,8 +160,7 @@ mp.actions['vcs'] = sub (d) {
                 mp.actions.exec_command(log, cmd);
 
                 if (opts.unique_log) {
-                    mp.detect_syntax(log);
-                    log->move_bof();
+                    log->detect_syntax()->move_bof();
                 }
                 else
                     log->insert("\n");

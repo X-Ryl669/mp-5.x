@@ -55,7 +55,7 @@ mp.actions['save_as']	= sub (d, newname) {
         if (mp.long_op(mp.save, d) == -1)
             mp.alert(sprintf(L("Error saving file: %s"), ERRNO));
         else
-            mp.detect_syntax(d);
+            d->detect_syntax();
     }
 
     return d;
@@ -481,10 +481,10 @@ sub mp.empty(filename, lines)
 {
     local doc = mp.create(filename, lines);
 
-	/* store in the list and set as active */
+    /* store in the list and set as active */
     ins(mp.docs, doc, mp.active_i);
 
-	mp.detect_syntax(doc);
+    doc->detect_syntax();
 
     return doc;
 }

@@ -32,7 +32,7 @@ mp.actions['insert_line']	= sub (d) {
     d->store_undo()->insert_newline();
 
     if (d.syntax == NULL)
-        mp.detect_syntax(d);
+        d->detect_syntax();
 
     return d;
 };
