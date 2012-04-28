@@ -108,8 +108,8 @@ mp.actions['replace']	= sub (d) {
     return d;
 };
 
-mp.actions['seek_next_char'] = sub (d) { mp.seek_prev_or_next_char(d, mp.search); };
-mp.actions['seek_prev_char'] = sub (d) { mp.seek_prev_or_next_char(d, mp.search_back); };
+mp.actions['seek_next_char'] = sub (d) { d->seek_prev_or_next_char(mp_doc.search); };
+mp.actions['seek_prev_char'] = sub (d) { d->seek_prev_or_next_char(d, mp_doc.search_back); };
 
 mp.actions['grep']	= sub (d) {
     local r = mp.form(
@@ -370,26 +370,26 @@ sub mp_doc.replace(doc, org, dst)
 }
 
 
-sub mp.seek_prev_or_next_char(doc, func)
+sub mp_doc.seek_prev_or_next_char(doc, func)
 /* moves to next or previous occurence of current char */
 {
-	local txt = doc.txt;
+    local txt = doc.txt;
 
-	/* get current char */
-	local w = splice(txt.lines[txt.y], NULL, txt.x, 1);
+    /* get current char */
+    local w = splice(txt.lines[txt.y], NULL, txt.x, 1);
 
-	/* move one char right */
+    /* move one char right */
     doc->move_right();
 
-	/* search for it (mp.search() or mp.search_back()) */
-	local t = mp.last_search;
-	func(doc, '\' ~ w[1]);
-	mp.last_search = t;
+    /* search for it (mp.search() or mp.search_back()) */
+    local t = mp.last_search;
+    doc->func('\' ~ w[1]);
+    mp.last_search = t;
 
-	/* move back */
+    /* move back */
     doc->move_left();
 
-	return doc;
+    return doc;
 }
 
 
@@ -399,51 +399,51 @@ sub mp.grep(rx, spec, base, rec, r)
    an array with the matches, that are three-element arrays with the file name,
    the line number and the line that matched */
 {
-	local all;
+    local all;
 
-	/* if spec is empty, set as NULL (meaning "glob everything") */
-	if (spec eq '')
-		spec = NULL;
+    /* if spec is empty, set as NULL (meaning "glob everything") */
+    if (spec eq '')
+        spec = NULL;
 
-	all = glob(spec, base);
+    all = glob(spec, base);
 
-	if (r == NULL)
-		r = [];
+    if (r == NULL)
+        r = [];
 
-	/* spec globs to NULL or empty; abort */
-	if (size(all) == 0)
-		return r;
+    /* spec globs to NULL or empty; abort */
+    if (size(all) == 0)
+        return r;
 
-	foreach (fn, all) {
-		local f;
+    foreach (fn, all) {
+        local f;
 
-		if ((f = open(fn, "r")) != NULL) {
-			local l, n;
+        if ((f = open(fn, "r")) != NULL) {
+            local l, n;
 
-			/* file open; now grep */
-			while (l = read(f)) {
-				l = mp.chomp(l);
+            /* file open; now grep */
+            while (l = read(f)) {
+                l = mp.chomp(l);
 
-				if (regex(l, rx)) {
-					/* found; store line, filename and linenum */
-					push(r, [ fn, n, l ]);
-				}
+                if (regex(l, rx)) {
+                    /* found; store line, filename and linenum */
+                    push(r, [ fn, n, l ]);
+                }
 
-				n++;
-			}
+                n++;
+            }
 
-			close(f);
-		}
-	}
+            close(f);
+        }
+    }
 
-	if (rec) {
-		/* glob again, trying subdirectories */
-		foreach (fn, glob(NULL, base)) {
-			if (regex(fn, '@/$@')) {
-				r = mp.grep(rx, spec, fn, rec, r);
-			}
-		}
-	}
+    if (rec) {
+        /* glob again, trying subdirectories */
+        foreach (fn, glob(NULL, base)) {
+            if (regex(fn, '@/$@')) {
+                r = mp.grep(rx, spec, fn, rec, r);
+            }
+        }
+    }
 
-	return r;
+    return r;
 }
