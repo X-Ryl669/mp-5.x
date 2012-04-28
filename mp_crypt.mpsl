@@ -5,7 +5,7 @@
 
     Encrypting functions.
 
-    Copyright (C) 1991-2007 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -21,27 +21,34 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    http://www.triptico.com
+    http://triptico.com
 
 */
 
 /** editor actions **/
 
 mp.actions['set_password'] = sub(d) {
-	local r = mp.form( [
-		{ 'type' => 'password', 'label' => L("Password:") },
-		{ 'type' => 'password', 'label' => L("Password (again):") }
-		]
-	);
+    local r = mp.form(
+        [
+            {
+                type:   'password',
+                label:  L("Password:")
+            },
+            {
+                type:   'password',
+                label:  L("Password (again):")
+            }
+        ]
+    );
 
-	if (r != NULL) {
-		if (r[0] ne r[1])
-			mp.drv.alert(L("Passwords don't match."));
-		else {
-			d.password = r[0];
-			d.txt.mod = 1;
-		}
-	}
+    if (r != NULL) {
+        if (r[0] ne r[1])
+            mp.drv.alert(L("Passwords don't match."));
+        else {
+            d.password  = r[0];
+            d.txt.mod   = 1;
+        }
+    }
 };
 
 
@@ -55,132 +62,132 @@ sub mp.arcfour_byte()
 /* gets next ARCFOUR byte */
 /* next char is chr(ord(getchar(l)) ^ mp.arcfour_byte()) */
 {
-	local i, j, S;
+    local i, j, S;
 
-	i = mp.arcfour.i;
-	j = mp.arcfour.j;
-	S = mp.arcfour.S;
+    i = mp.arcfour.i;
+    j = mp.arcfour.j;
+    S = mp.arcfour.S;
 
-	i = (i + 1) & 0xff;
-	j = (j + S[i]) & 0xff;
+    i = (i + 1) & 0xff;
+    j = (j + S[i]) & 0xff;
 
-	mp.arcfour.i = i; mp.arcfour.j = j;
+    mp.arcfour.i = i; mp.arcfour.j = j;
 
-	/* swap */
-	local t = S[i]; S[i] = S[j]; S[j] = t;
+    /* swap */
+    local t = S[i]; S[i] = S[j]; S[j] = t;
 
-	return S[(S[i] + S[j]) & 0xff];
+    return S[(S[i] + S[j]) & 0xff];
 }
 
 
 sub mp.arcfour_init(key)
 /* initializes an ARCFOUR cypher */
 {
-	/* no key? nothing to do */
-	if (key == NULL)
-		return;
+    /* no key? nothing to do */
+    if (key == NULL)
+        return;
 
-	/* split as an array of characters */
-	local k = split(key);
+    /* split as an array of characters */
+    local k = split(key);
 
-	/* init structures */
-	mp.arcfour = {};
-	mp.arcfour.S = [ 0 .. 255 ];
-	mp.arcfour.i = 0;
-	mp.arcfour.j = 0;
+    /* init structures */
+    mp.arcfour = {};
+    mp.arcfour.S = [ 0 .. 255 ];
+    mp.arcfour.i = 0;
+    mp.arcfour.j = 0;
 
-	local j = 0;
+    local j = 0;
 
-	/* scramble */
-	foreach (i, [ 0 .. 255 ]) {
-		local t = mp.arcfour.S[i];
+    /* scramble */
+    foreach (i, [ 0 .. 255 ]) {
+        local t = mp.arcfour.S[i];
 
-		j = (j + t + ord(k[i % size(k)])) & 0xff;
+        j = (j + t + ord(k[i % size(k)])) & 0xff;
 
-		mp.arcfour.S[i] = mp.arcfour.S[j];
-		mp.arcfour.S[j] = t;
-	}
+        mp.arcfour.S[i] = mp.arcfour.S[j];
+        mp.arcfour.S[j] = t;
+    }
 
-	/* discard 256 bytes (as recommended in many sources) */
-	foreach (i, [ 0 .. 255 ])
-		mp.arcfour_byte();
+    /* discard 256 bytes (as recommended in many sources) */
+    foreach (i, [ 0 .. 255 ])
+        mp.arcfour_byte();
 }
 
 
 sub mp.crypt1_load(fd, password)
 /* loads a crypt1 encrypted file into lines */
 {
-	local c;
-	local l = '';
-	local lines = [];
+    local c;
+    local l = '';
+    local lines = [];
 
-	/* the mpcrypt1\n\0 signature has already been read */
+    /* the mpcrypt1\n\0 signature has already been read */
 
-	/* init */
-	mp.arcfour_init(password);
+    /* init */
+    mp.arcfour_init(password);
 
-	while ((c = getchar(fd)) != NULL) {
-		/* decrypt byte and concat */
-		c = chr(ord(c) ^ mp.arcfour_byte());
+    while ((c = getchar(fd)) != NULL) {
+        /* decrypt byte and concat */
+        c = chr(ord(c) ^ mp.arcfour_byte());
 
-		if (c eq "\n") {
-			/* end of line; push it and restart */
-			push(lines, l);
-			l = '';
-		}
-		else
-			l = l ~ c;
-	}
+        if (c eq "\n") {
+            /* end of line; push it and restart */
+            push(lines, l);
+            l = '';
+        }
+        else
+            l = l ~ c;
+    }
 
-	push(lines, l);
+    push(lines, l);
 
-	return lines;
+    return lines;
 }
 
 
 sub mp.crypt1_save(fd, lines, password)
 /* saves the lines as a crypt1 encrypted file */
 {
-	local nl = 0;
+    local nl = 0;
 
-	/* save first the signature */
-	write(fd, "mpcrypt1\n");
+    /* save first the signature */
+    write(fd, "mpcrypt1\n");
 
-	/* write a \0 */
-	putchar(fd, "");
+    /* write a \0 */
+    putchar(fd, "");
 
-	/* init */
-	mp.arcfour_init(password);
+    /* init */
+    mp.arcfour_init(password);
 
-	/* loop the lines */
-	foreach (l, lines) {
-		/* write a line separator if it's not the first line */
-		if (nl)
-			l = "\n" ~ l;
+    /* loop the lines */
+    foreach (l, lines) {
+        /* write a line separator if it's not the first line */
+        if (nl)
+            l = "\n" ~ l;
 
-		/* split by chars */
-		local lc = split(l);
+        /* split by chars */
+        local lc = split(l);
 
-		/* write each char xoring with next crypto-byte */
-		foreach (c, lc)
-			putchar(fd, chr(ord(c) ^ mp.arcfour_byte()));
+        /* write each char xoring with next crypto-byte */
+        foreach (c, lc)
+            putchar(fd, chr(ord(c) ^ mp.arcfour_byte()));
 
-		nl++;
-	}
+        nl++;
+    }
 
     close(fd);
 
-	return nl;
+    return nl;
 }
 
 
 sub mp.crypt1_detect(fd)
 /* detects if fd is an mpcrypt1-type file */
 {
-	/* is it mpcrypt1\n followed by a 0? */
-	if (read(fd) eq "mpcrypt1\n" && ord(getchar(fd)) == 0)
-		return 1;
+    /* is it mpcrypt1\n followed by a 0? */
+    if (read(fd) eq "mpcrypt1\n" && ord(getchar(fd)) == 0)
+        return 1;
 
-	/* no; file must be reopen */
-	return 0;
+    /* no; file must be reopen */
+    return 0;
 }
