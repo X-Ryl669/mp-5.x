@@ -65,11 +65,7 @@ mp.vcs = {
             "svn annotate '%s'" => { unique_log: 1 },
             "svn update"        => NULL,
             "svn revert '%s'"   => NULL,
-            "svn commit"        => {
-                pre:    sub (doc) {
-                    mp.vcs_commit_on_close(doc, "svn commit -F '%s'", 'SVN');
-                }
-            }
+            "svn commit"        => { commit_cmd: "svn commit -F '%s'" }
         }
     },
     mercurial: {
@@ -85,11 +81,7 @@ mp.vcs = {
             "hg push"          => NULL,
             "hg pull"          => NULL,
             "hg annotate '%s'" => { unique_log: 1 },
-            "hg commit -A"     => {
-                pre:    sub (doc) {
-                    mp.vcs_commit_on_close(doc, "hg commit -A -l '%s'", 'Mercurial');
-                }
-            }
+            "hg commit -A"     => { commit_cmd: "hg commit -A -l '%s'" }
         }
     }
 };
@@ -99,6 +91,7 @@ mp.vcs = {
 mp.actions['vcs'] = sub (d) {
     local v = NULL;
 
+    /* find which VCS apply to current directory */
     foreach (k, keys(mp.vcs)) {
         local n = mp.vcs[k];
 
@@ -200,7 +193,24 @@ sub mp_doc_vcs.query_close(doc)
 
     /* call superclass query close */
     if ((r = mp_doc.query_close(doc)) == 1) {
-        mp.alert("Commiting");
+        if (stat(doc.name) != NULL) {
+            local cmd = sprintf(doc.vcs.commit_cmd, doc.name);
+            local log = mp.open(doc.vcs.log_name);
+
+            log->move_eof();
+            log->insert(cmd ~ ":\n\n");
+            mp.actions.exec_command(log, cmd);
+            log->insert("\n");
+
+            log.txt.mod     = 0;
+            log.undo_q      = [];
+            log.read_only   = 1;
+
+            /* bring doc to active back */
+            mp.open(doc.name);
+        }
+
+        unlink(doc.name);
     }
 
     return r;
