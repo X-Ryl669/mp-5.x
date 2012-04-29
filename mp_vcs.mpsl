@@ -134,7 +134,7 @@ mp.actions['vcs'] = sub (d) {
 
                 msg.vcs = {
                     commit_cmd: opts.commit_cmd,
-                    log_name:   sprintf(L("<%s output>"), opts.id)
+                    log_name:   sprintf(L("<%s output>"), v.id)
                 };
 
                 mp.add(msg);
@@ -214,50 +214,4 @@ sub mp_doc_vcs.query_close(doc)
     }
 
     return r;
-}
-
-
-sub mp.vcs_commit_on_close(doc, cmd, vcsname)
-/* on_close handler for commit message documents */
-{
-    /* create a commit message */
-    local ci = mp.open('.COMMIT_MESSAGE');
-
-    ci.vcs = {
-        commit_cmd: cmd,
-        log_name:   sprintf(L("<%s output>"), vcsname)
-    };
-
-    /* and add an on_close handler */
-    push(ci.on_close,
-        sub (doc) {
-            if (stat(doc.name)) {
-                local cmd = sprintf(doc.vcs.commit_cmd, doc.name);
-
-                local log = mp.open(doc.vcs.log_name);
-
-                log->move_eof();
-                log->insert(cmd ~ ":\n\n");
-                mp.actions.exec_command(log, cmd);
-                log->insert("\n");
-
-                log.txt.mod     = 0;
-                log.undo_q      = [];
-                log.read_only   = 1;
-
-                /* bring doc to active back */
-                mp.open(doc.name);
-            }
-
-            unlink('.COMMIT_MESSAGE');
-
-            /* delete this on_close handler */
-            pop(doc.on_close);
-
-            /* always close */
-            return 1;
-        }
-    );
-
-    return NULL;
 }
