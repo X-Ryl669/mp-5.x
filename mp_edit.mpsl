@@ -54,7 +54,7 @@ mp.actions['indent_block'] = sub (d) {
     d->store_undo();
 
     if (d.txt.mark == NULL)
-        d->move_bol()->insert_tab();
+        d->set_x(0)->insert_tab();
 	else {
         local currentY = d.txt.y;
         local startY   = d.txt.mark.by;
@@ -66,12 +66,12 @@ mp.actions['indent_block'] = sub (d) {
         /* use to be while d.txt.y <= endY, but that entered an endless loop when
             you were indenting a block including the very last line in the file */
         while (times >= 0) {
-            d->move_bol()->insert_tab()->move_down();
+            d->set_x(0)->insert_tab()->move_down();
 		
             times--;
         }
 	
-        d->set_y(startY)->move_bol()->mark();
+        d->set_y(startY)->set_x(0)->mark();
 	
         d->set_y(endY)->move_eol()->mark();
 	
@@ -105,7 +105,7 @@ mp.actions['unindent_block'] = sub(d) {
             times--;
         }
 	
-        d->set_y(startY)->move_bol()->mark();
+        d->set_y(startY)->set_x(0)->mark();
 	
         d->set_y(endY)->move_eol()->mark();
 	
@@ -710,7 +710,7 @@ sub mp_doc.unindent_line(d)
 {
     local l = split(d.txt.lines[d.txt.y]);
 	
-    d->move_bol();
+    d->set_x(0);
 	
     if (cmp(l[0], "\t") == 0) {
         d->delete_char();
