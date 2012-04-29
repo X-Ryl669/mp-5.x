@@ -27,7 +27,7 @@
 
 /** mp_doc commit subclass **/
 
-mp_doc_vcs = new(mp_doc);
+mp_doc_vcs = new(mp_doc, { name: '.COMMIT_MESSAGE' });
 
 
 /** data **/
@@ -130,7 +130,7 @@ mp.actions['vcs'] = sub (d) {
 
             if (opts.commit_cmd) {
                 /* create a commit message editor document */
-                local msg = new(mp_doc_vcs, { name: '.COMMIT_MESSAGE' });
+                local msg = new(mp_doc_vcs);
 
                 msg.vcs = {
                     commit_cmd: opts.commit_cmd,
@@ -193,6 +193,7 @@ sub mp_doc_vcs.query_close(doc)
 
     /* call superclass query close */
     if ((r = mp_doc.query_close(doc)) == 1) {
+        /* has the commit message been saved? */
         if (stat(doc.name) != NULL) {
             local cmd = sprintf(doc.vcs.commit_cmd, doc.name);
             local log = mp.open(doc.vcs.log_name);
