@@ -83,34 +83,32 @@ sub mp.arcfour_byte()
 sub mp.arcfour_init(key)
 /* initializes an ARCFOUR cypher */
 {
-    /* no key? nothing to do */
-    if (key == NULL)
-        return;
+    if (key) {
+        /* split as an array of characters */
+        local k = split(key);
 
-    /* split as an array of characters */
-    local k = split(key);
+        /* init structures */
+        mp.arcfour = {};
+        mp.arcfour.S = [ 0 .. 255 ];
+        mp.arcfour.i = 0;
+        mp.arcfour.j = 0;
 
-    /* init structures */
-    mp.arcfour = {};
-    mp.arcfour.S = [ 0 .. 255 ];
-    mp.arcfour.i = 0;
-    mp.arcfour.j = 0;
+        local n = 0;
 
-    local j = 0;
+        /* scramble */
+        foreach (i, [ 0 .. 255 ]) {
+            local t = mp.arcfour.S[i];
 
-    /* scramble */
-    foreach (i, [ 0 .. 255 ]) {
-        local t = mp.arcfour.S[i];
+            n = (n + t + ord(k[i % size(k)])) & 0xff;
 
-        j = (j + t + ord(k[i % size(k)])) & 0xff;
+            mp.arcfour.S[i] = mp.arcfour.S[n];
+            mp.arcfour.S[n] = t;
+        }
 
-        mp.arcfour.S[i] = mp.arcfour.S[j];
-        mp.arcfour.S[j] = t;
+        /* discard 256 bytes (as recommended in many sources) */
+        foreach (i, [ 0 .. 255 ])
+            mp.arcfour_byte();
     }
-
-    /* discard 256 bytes (as recommended in many sources) */
-    foreach (i, [ 0 .. 255 ])
-        mp.arcfour_byte();
 }
 
 
