@@ -138,11 +138,8 @@ mp.actions['vcs'] = sub (d) {
                 };
 
                 mp.add(msg);
-
-                cmd = NULL;
             }
-
-            if (cmd != NULL) {
+            else {
                 local log;
 
                 /* unique log for this command? */
