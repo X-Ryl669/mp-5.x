@@ -25,6 +25,11 @@
 
 */
 
+/** mp_doc commit subclass **/
+
+mp_doc_vcs = new(mp_doc);
+
+
 /** data **/
 
 mp.vcs = {
@@ -44,11 +49,7 @@ mp.vcs = {
             "git stash apply"   => NULL,
             "git push"          => NULL,
             "git pull"          => NULL,
-            "git commit -a"     => {
-                pre:    sub (doc) {
-                    mp.vcs_commit_on_close(doc, "git commit -a -F '%s'", 'Git');
-                }
-            }
+            "git commit -a"     => { commit_cmd: "git commit -a -F '%s'" }
         }
     },
     svn: {
@@ -131,13 +132,21 @@ mp.actions['vcs'] = sub (d) {
         if (t != NULL) {
             mp.vcs_target = t[0];
 
-            local opts = v.opts[l[mp.vcs_target]];
-            local cmd = sprintf(l[mp.vcs_target], d.name);
+            local opts  = v.opts[l[mp.vcs_target]];
+            local cmd   = sprintf(l[mp.vcs_target], d.name);
 
-            /* if a 'pre' hook exists, run it and get the
-               cmd to be executed (NULL if none) */
-            if (opts.pre) {
-                cmd = opts.pre(d);
+            if (opts.commit_cmd) {
+                /* create a commit message editor document */
+                local msg = new(mp_doc_vcs, { name: '.COMMIT_MESSAGE' });
+
+                msg.vcs = {
+                    commit_cmd: opts.commit_cmd,
+                    log_name:   sprintf(L("<%s output>"), opts.id)
+                };
+
+                mp.add(msg);
+
+                cmd = NULL;
             }
 
             if (cmd != NULL) {
@@ -181,7 +190,22 @@ mp.keycodes['ctrl-p'] = 'vcs';
 
 mp.keycodes['vcs'] = LL("Version Control...");
 
+
 /** code **/
+
+sub mp_doc_vcs.query_close(doc)
+/* mp_doc.query_close overload for commit messages */
+{
+    local r;
+
+    /* call superclass query close */
+    if ((r = mp_doc.query_close(doc)) == 1) {
+        mp.alert("Commiting");
+    }
+
+    return r;
+}
+
 
 sub mp.vcs_commit_on_close(doc, cmd, vcsname)
 /* on_close handler for commit message documents */
