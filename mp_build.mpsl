@@ -125,7 +125,7 @@ sub mp.build_execute(target)
         local l;
 
         while (l = read(p))
-            doc->insert(l);
+            log->insert(l);
 
         pclose(p);
 
