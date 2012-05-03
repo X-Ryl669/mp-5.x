@@ -48,7 +48,7 @@ mp.actions['insert_template']	 = sub(d) {
         if (t != NULL) {
             t = t[0];
 
-            mp.store_undo(d);
+            d->store_undo();
 
             /* get the template content */
             local c = mp.templates[l[t]];
@@ -64,7 +64,7 @@ mp.actions['insert_template']	 = sub(d) {
             }
 
             if (c)
-                mp.insert(d, c);
+                d->insert(c);
         }
     }
 };

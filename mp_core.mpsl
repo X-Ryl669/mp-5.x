@@ -67,9 +67,9 @@ mp.status_line_info = {
 	'%R'	=>	sub { mp.macro.process_event && 'R' || ''; },
 	'%O'	=>	sub { mp.config.insert && 'O' || ''; },
 	'%s'	=>	sub { mp.active.syntax.name; },
-	'%t'	=>	sub { mp.tags[mp.get_word(mp.active())].label; },
+	'%t'	=>	sub { mp.tags[mp.active()->get_word()].label; },
 	'%n'	=>	sub { mp.active.name; },
-	'%w'	=>	sub { mp.word_count(mp.active()); },
+	'%w'	=>	sub { mp.active()->word_count(); },
 	'%e'	=>	sub { mp.active.encoding || ''; },
 	'%%'	=>	'%'
 };
@@ -221,6 +221,28 @@ mp.menu = [
 
 mp.actions_by_menu_label = {};
 
+
+/** MP document class/base object **/
+
+mp_doc = {
+    txt: {
+        x:      0,
+        y:      0,
+        vx:     0,
+        vy:     0,
+        mod:    0,
+        lines:  [ '' ]
+    },
+    name:       L("<unnamed>"),
+    undo_q:     [],
+    redo_q:     [],
+    syntax:     NULL,
+
+    busy:       sub (doc, b) { mp.busy(b); return doc; }
+};
+
+
+
 /** code **/
 
 /**
@@ -246,15 +268,15 @@ sub mp.active()
 
     /* empty document list? create a new, empty one */
     if (size(mp.docs) == 0)
-        mp.new();
+        mp.add(new(mp_doc));
 
     /* get active document */
     d = mp.docs[mp.active_i];
 
     /* if it's read only but has modifications, revert them */
-    if (d.read_only && size(d.undo)) {
-        while (size(d.undo))
-            mp.undo(d);
+    if (d.read_only && size(d.undo_q)) {
+        while (size(d.undo_q))
+            d->undo();
 
         mp.message = {
             timeout:    time() + 2,
@@ -341,7 +363,7 @@ sub mp.process_event(k)
             }
         }
         else {
-            mp.insert_keystroke(d, k);
+            d->insert_keystroke(k);
             mp.keycodes_t = NULL;
         }
     
@@ -649,7 +671,7 @@ sub mp.test_versions()
     local mpdm = MPDM();
 
     mp.assert_version(mpdm.version, '2.0.2', 'MPDM');
-    mp.assert_version(MPSL.VERSION, '2.0.2', 'MPSL');
+    mp.assert_version(MPSL.VERSION, '2.2.0', 'MPSL');
 }
 
 

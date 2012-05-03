@@ -5,7 +5,7 @@
 
     Tags.
 
-    Copyright (C) 1991-2007 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    http://www.triptico.com
+    http://triptico.com
 
 */
 
@@ -32,205 +32,218 @@ mp.config.ctags_cmd = "ctags *";
 
 mp.actions['find_tag']	= sub(d) {
 
-	local tag = mp.get_word(d);
+    local tag = d->get_word();
 
-	/* ask for it, taking the word under the cursor */
-	local r = mp.form( [
-		{ 'label'	=> L("Tag to seek:"),
-		  'type'	=> 'text',
-		  'history'	=> 'find_tag',
-		  'value'	=> tag }
-		]);
+    /* ask for it, taking the word under the cursor */
+    local r = mp.form(
+        [
+            {
+                label:      L("Tag to seek:"),
+                type:       'text',
+                history:    'find_tag',
+                value:      tag
+            }
+        ]
+    );
 
-	if (r != NULL)
-		mp.open_tag(r[0]);
+    if (r != NULL)
+        mp.open_tag(r[0]);
 };
 
 mp.actions['complete'] = sub(d) {
 
-	local words = {};
+    local words = {};
 
-	mp.busy(1);
+    mp.busy(1);
 
-	foreach (l, d.txt.lines)
-		foreach (w, mp.split_by_words(l))
-			words[w]++;
+    foreach (l, d.txt.lines)
+        foreach (w, mp.split_by_words(l))
+            words[w]++;
 
-	mp.busy(0);
+    mp.busy(0);
 
-	/* if the current word happens only one time, delete it */
-	local w = mp.get_word(d);
-	if (words[w] == 1)
-		hdel(words, w);
+    /* if the current word happens only one time, delete it */
+    local w = d->get_word();
 
-	mp.complete(d, keys(words));
+    if (words[w] == 1)
+        hdel(words, w);
+
+    d->complete(keys(words));
 };
 
 mp.actions['complete_symbol'] = sub(d) {
 
-	mp.long_op(mp.load_tags, 1);
+    mp.long_op(mp.load_tags, 1);
 
-	if (!mp.complete(d, keys(mp.tags), L("Select symbol:")))
-		mp.alert(L("No matching symbol found."));
+    if (!d->complete(keys(mp.tags), L("Select symbol:")))
+        mp.alert(L("No matching symbol found."));
 };
 
 /** default key bindings **/
 
-mp.keycodes['ctrl-t']	=	"find_tag";
-mp.keycodes['ctrl-u']	=	"complete";
+mp.keycodes['ctrl-t'] = "find_tag";
+mp.keycodes['ctrl-u'] = "complete";
 
 /** action descriptions **/
 
-mp.actdesc['find_tag']		= LL("Search tag...");
-mp.actdesc['complete']		= LL("Complete...");
-mp.actdesc['complete_symbol']	= LL("Symbol completion...");
+mp.actdesc['find_tag']          = LL("Search tag...");
+mp.actdesc['complete']          = LL("Complete...");
+mp.actdesc['complete_symbol']   = LL("Symbol completion...");
 
 /** code **/
 
 sub mp.load_tags(force)
 /* load a 'tags' file */
 {
-	local f, a;
+    local f, a;
 
-	if ((f = open("tags", "r")) == NULL) {
-		/* if force is set, execute the ctags command */
-		if (!force || (f = popen(mp.config.ctags_cmd, "r")) == NULL)
-			return;
+    if ((f = open("tags", "r")) == NULL) {
+        /* if force is set, execute the ctags command */
+        if (!force || (f = popen(mp.config.ctags_cmd, "r")) == NULL)
+            return;
 
-		/* read (and discard) a line from it */
-		read(f);
-		pclose(f);
+        /* read (and discard) a line from it */
+        read(f);
+        pclose(f);
 
-		/* try again */
-		if ((f = open("tags", "r")) == NULL)
-			return;
-	}
+        /* try again */
+        if ((f = open("tags", "r")) == NULL)
+            return;
+    }
 
-	/* deletes all currently stored tags from the word/color cache */
-	foreach (l, keys(mp.tags))
-		hdel(mp.word_color, l);
+    /* deletes all currently stored tags from the word/color cache */
+    foreach (l, keys(mp.tags))
+        hdel(mp.word_color, l);
 
-	/* reset current tags */
-	mp.tags = {};
+    /* reset current tags */
+    mp.tags = {};
 
-	/* get the attribute for tags */
-	a = mp.colors.tag.attr;
+    /* get the attribute for tags */
+    a = mp.colors.tag.attr;
 
-	while ((l = read(f))) {
-		local t = split(l, "\t");
-		local l, r;
+    while ((l = read(f))) {
+        local t = split(l, "\t");
+        local l, r;
 
-		/* clean the regex 'markup' for the label */
-		l = sregex(t[2], '@^/\^@', '');
-		l = sregex(l, '@\$/;"$@', '') ~ ' [' ~ t[1] ~ ']';
+        /* clean the regex 'markup' for the label */
+        l = sregex(t[2], '@^/\^@', '');
+        l = sregex(l, '@\$/;"$@', '') ~ ' [' ~ t[1] ~ ']';
 
-		/* clean the regex itself */
-		r = sregex(t[2], '@/;"$@');
-		r = sregex(r, '@^/@');
+        /* clean the regex itself */
+        r = sregex(t[2], '@/;"$@');
+        r = sregex(r, '@^/@');
 
-		/* escape all troublesome characters */
-		r = sregex(r, "/([\(\)\*\?\[\{\}]|\])/g", sub (m) { '\' ~ m; });
+        /* escape all troublesome characters */
+        r = sregex(r, "/([\(\)\*\?\[\{\}]|\])/g", sub (m) { '\' ~ m; });
 
-		/* store the tag information */
-		mp.tags[t[0]] = {
-			'tag'	=> t[0],
-			'file'	=> t[1],
-			'regex'	=> r,
-			'label' => l
-			};
+        /* store the tag information */
+        mp.tags[t[0]] = {
+            tag:    t[0],
+            file:   t[1],
+            regex:  r,
+            label:  l
+        };
 
-		/* store the word as specially-colored */
-		mp.word_color[t[0]] = a;
-	}
+        /* store the word as specially-colored */
+        mp.word_color[t[0]] = a;
+    }
 
-	close(f);
+    close(f);
 }
 
 
 sub mp.open_tag(tag)
 /* opens a tag (uses GUI) */
 {
-	local doc, a, t;
+    local doc, a, t;
 
-	/* force loading of the tags file */
-	mp.long_op(mp.load_tags, 1);
+    /* force loading of the tags file */
+    mp.long_op(mp.load_tags, 1);
 
-	/* greps all tags containing the tag, and returns the
-	   values from mp.tags */
-	if ((t = map(grep(keys(mp.tags), '/' ~ tag ~ '/'), mp.tags)) == NULL) {
-		mp.alert(L("Tag not found."));
-		return;
-	}
+    /* greps all tags containing the tag, and returns the
+       values from mp.tags */
+    if ((t = map(grep(keys(mp.tags), '/' ~ tag ~ '/'), mp.tags)) == NULL) {
+        mp.alert(L("Tag not found."));
+        return;
+    }
 
-	/* only one? get the first one */
-	if (size(t) == 1)
-		a = 0;
-	else {
-		/* build a list to ask the user */
-		local l = map(t, sub(e) { e.label; });
+    /* only one? get the first one */
+    if (size(t) == 1)
+        a = 0;
+    else {
+        /* build a list to ask the user */
+        local l = map(t, sub(e) { e.label; });
 
-		local r = mp.form( [
-			{ 'label'	=> L("Select tag:"),
-			  'type'	=> 'list',
-			  'list'	=> l }
-			]);
+        local r = mp.form(
+            [
+                {
+                    label:  L("Select tag:"),
+                    type:   'list',
+                    list:   l
+                }
+            ]
+        );
 
-		if (r == NULL)
-			return;
-		a = r[0];
-	}
+        if (r == NULL)
+            return;
+        a = r[0];
+    }
 
-	tag = t[a];
+    tag = t[a];
 
-	/* open the file */
-	doc = mp.long_op(mp.open, tag.file);
+    /* open the file */
+    doc = mp.long_op(mp.open, tag.file);
 
-	/* move up and search */
-	mp.move_bof(doc);
-	return mp.long_op(mp.search, doc, tag.regex);
+    /* move up and search */
+    doc->move_bof();
+    doc->long_op(mp_doc.search, tag.regex);
 }
 
 
-sub mp.complete(d, list, label)
+sub mp_doc.complete(d, list, label)
 /* completes the current word given a list (uses GUI) */
 {
-	local l, a;
-	local word = mp.get_word(d);
+    local l, a;
+    local word = d->get_word();
 
-	/* takes all list elements starting with word */
-	if ((l = sort(grep(list, '/^' ~ word ~ '/'))) == NULL)
-		return 0;
+    /* takes all list elements starting with word */
+    if ((l = sort(grep(list, '/^' ~ word ~ '/'))) == NULL)
+        return 0;
 
-	if (size(l) == 1)
-		a = 0;
-	else {
-		/* more than one; ask user */
-		local r = mp.form( [
-			{ 'label'	=> label || L("Select:"),
-			  'type'	=> 'list',
-			  'list'	=> l }
-			]);
+    if (size(l) == 1)
+        a = 0;
+    else {
+        /* more than one; ask user */
+        local r = mp.form(
+            [
+                {
+                    label:  label || L("Select:"),
+                    type:   'list',
+                    list:   l
+                }
+            ]
+        );
 
-		if (r == NULL)
-			return 1;
-		a = r[0];
-	}
+        if (r == NULL)
+            return 1;
+        a = r[0];
+    }
 
-	/* accepted; substitute current word */
-	mp.store_undo(d);
+    /* accepted; substitute current word */
+    d->store_undo();
 
-	/* split line by words to take the offset of current word */
-	local r = mp.split_line_by_words(d);
-	local offset = r[1][r[2]];
+    /* split line by words to take the offset of current word */
+    local r = d->split_line_by_words();
+    local offset = r[1][r[2]];
 
-	/* substitute current word with newly selected word */
-	local w = splice(d.txt.lines[d.txt.y], l[a], offset, size(word));
+    /* substitute current word with newly selected word */
+    local w = splice(d.txt.lines[d.txt.y], l[a], offset, size(word));
 
-	/* change line and x cursor */
-	d.txt.lines[d.txt.y] = w[0];
-	d.txt.x = offset + size(l[a]);
+    /* change line and x cursor */
+    d.txt.lines[d.txt.y] = w[0];
+    d.txt.x = offset + size(l[a]);
 
-	d.txt.mod++;
+    d.txt.mod++;
 
-	return 1;
+    return 1;
 }

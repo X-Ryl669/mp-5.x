@@ -57,7 +57,7 @@ mp.actions['eval']	= sub (d) {
 };
 
 mp.actions['eval_doc']	= sub (d) {
-	local t = join(mp.get_active_area(d), "\n");
+	local t = join(d->get_active_area(), "\n");
 
 	if (t != NULL) {
 		t = eval(t);
@@ -70,7 +70,7 @@ mp.actions['eval_doc']	= sub (d) {
 			local l = regex(ERROR, [ '/, line /', '/[0-9]+/' ]);
 
 			if (size(l) == 2)
-				mp.set_y(d, l[1]);
+                d->set_y(l[1]);
 
 			ERROR = NULL;
 		}
@@ -158,9 +158,8 @@ mp.actions['about'] = sub (d) {
 	d = mp.open("<about>");
 
 	if (size(d.txt.lines) == 1) {
-		mp.insert(d, msg);
-        mp.move_bof(d);
-        mp.move_bol(d);
+        d->insert(msg);
+        d->move_bof();
 		d.txt.mod = 0;
 		d.read_only = 1;
 	}
@@ -170,8 +169,7 @@ mp.actions['about'] = sub (d) {
 mp.actions.check_for_updates = sub (d) {
     d = mp.open("<updates>");
 
-    mp.move_bof(d);
-    mp.move_bol(d);
+    d->move_bof();
     d.txt.mod   = 0;
     d.read_only = 1;
 
@@ -259,10 +257,10 @@ mp.actdesc['check_for_updates'] = LL("Check for updates...");
 sub dump(v)
 /* overwrite of the MPSL dump() function, dumping over a text document */
 {
-	local d = mp.open("<dump>");
+    local d = mp.open("<dump>");
 
-	mp.move_eof(d);
-	mp.insert(d, dumper(v));
-	d.txt.mod = 0;
-	d.read_only = 1;
+    d->move_eof();
+    d->insert(dumper(v));
+    d.txt.mod = 0;
+    d.read_only = 1;
 }

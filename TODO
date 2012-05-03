@@ -375,5 +375,8 @@ Closed
    (Thu, 19 Apr 2012 14:30:45 +0000).
  * 1287: Add an action to move to next section
    (Thu, 19 Apr 2012 14:30:45 +0000).
+ * 1299: Fix the commit on_close issue
+   (Sun, 29 Apr 2012 12:22:31 +0200).
+ * 1300: Fix make (Mon, 30 Apr 2012 12:52:48 +0200).
 
 Email bugs to angel@triptico.com

@@ -5,7 +5,7 @@
 
     Movement.
 
-    Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -21,31 +21,26 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    http://www.triptico.com
+    http://triptico.com
 
 */
 
 /** editor actions **/
 
-mp.actions['move_left']         = sub (d) { mp.move(d, mp.move_left); };
-mp.actions['move_right']        = sub (d) { mp.move(d, mp.move_right); };
-mp.actions['move_up']           = sub (d) { mp.move(d, mp.move_up); };
-mp.actions['move_down']         = sub (d) { mp.move(d, mp.move_down); };
-mp.actions['move_pgup']         = sub (d) { mp.move(d, mp.move_pgup); };
-mp.actions['move_pgdn']         = sub (d) { mp.move(d, mp.move_pgdn); };
-mp.actions['move_bol']          = sub (d) { 
-    if (mp.config.smart_bol)
-        mp.move(d, mp.move_bol_smart); 
-    else
-        mp.move(d, mp.move_bol); 
-};
-mp.actions['move_eol']          = sub (d) { mp.move(d, mp.move_eol); };
-mp.actions['move_bof']          = sub (d) { mp.move(d, mp.move_bof); };
-mp.actions['move_eof']          = sub (d) { mp.move(d, mp.move_eof); };
-mp.actions['move_word_left']    = sub (d) { mp.move(d, mp.move_word_left); };
-mp.actions['move_word_right']   = sub (d) { mp.move(d, mp.move_word_right); };
+mp.actions['move_left']         = sub (d) { d->move(mp_doc.move_left); };
+mp.actions['move_right']        = sub (d) { d->move(mp_doc.move_right); };
+mp.actions['move_up']           = sub (d) { d->move(mp_doc.move_up); };
+mp.actions['move_down']         = sub (d) { d->move(mp_doc.move_down); };
+mp.actions['move_pgup']         = sub (d) { d->move(mp_doc.move_pgup); };
+mp.actions['move_pgdn']         = sub (d) { d->move(mp_doc.move_pgdn); };
+mp.actions['move_bol']          = sub (d) { d->move(mp_doc.move_bol); };
+mp.actions['move_eol']          = sub (d) { d->move(mp_doc.move_eol); };
+mp.actions['move_bof']          = sub (d) { d->move(mp_doc.move_bof); };
+mp.actions['move_eof']          = sub (d) { d->move(mp_doc.move_eof); };
+mp.actions['move_word_left']    = sub (d) { d->move(mp_doc.move_word_left); };
+mp.actions['move_word_right']   = sub (d) { d->move(mp_doc.move_word_right); };
 
-mp.actions['goto']		= sub (d, line) {
+mp.actions['goto'] = sub (d, line) {
     if (line == NULL) {
         local t = mp.form(
             [
@@ -63,38 +58,28 @@ mp.actions['goto']		= sub (d, line) {
 
     if (line != NULL) {
         d.txt.x = 0;
-        mp.set_y(d, line - 1);
+        d->set_y(line - 1);
     }
 
     return d;
 };
 
-mp.actions['move_to_mouse_position']	= sub (d) {
+mp.actions['move_to_mouse_position'] = sub (d) {
     /* move the cursor there */
-    mp.move_to_coords_xy(d, mp.mouse_x, mp.mouse_y);
+    d->move_to_coords_xy(mp.mouse_x, mp.mouse_y);
 
     /* mouse click always unmarks */
-    mp.unmark(d);
+    d->unmark();
 
     return d;
 };
 
-mp.actions['move_mouse_wheel_up']	= sub (d) {
-    mp.move(d, sub (d) {
-        mp.move_up(d);
-        mp.move_up(d);
-        mp.move_up(d);
-        mp.move_up(d);
-    });
+mp.actions['move_mouse_wheel_up'] = sub (d) {
+    d->move(sub (d) { d->move_up()->move_up()->move_up()->move_up();});
 };
 
-mp.actions['move_mouse_wheel_down']	= sub (d) {
-    mp.move(d, sub(d) {
-        mp.move_down(d);
-        mp.move_down(d);
-        mp.move_down(d);
-        mp.move_down(d);
-    });
+mp.actions['move_mouse_wheel_down'] = sub (d) {
+    d->move(sub (d) { d->move_down()->move_down()->move_down()->move_down();});
 };
 
 mp.actions['document_list'] = sub (d) {
@@ -119,431 +104,425 @@ mp.actions['document_list'] = sub (d) {
 
 /** default key bindings **/
 
-mp.keycodes['cursor-left']			= "move_left";
-mp.keycodes['cursor-right']			= "move_right";
-mp.keycodes['cursor-up']			= "move_up";
-mp.keycodes['cursor-down']			= "move_down";
-mp.keycodes['page-up']				= "move_pgup";
-mp.keycodes['page-down']			= "move_pgdn";
-mp.keycodes['home']					= "move_bol";
-mp.keycodes['end']					= "move_eol";
-mp.keycodes['ctrl-home']			= "move_bof";
-mp.keycodes['ctrl-end']				= "move_eof";
-mp.keycodes['ctrl-cursor-left']		= "move_word_left";
-mp.keycodes['ctrl-cursor-right']	= "move_word_right";
-mp.keycodes['alt-home']				= "move_bof";
-mp.keycodes['alt-end']				= "move_eof";
-mp.keycodes['ctrl-g']				= "goto";
-mp.keycodes['mouse-left-button'] 	= "move_to_mouse_position";
-mp.keycodes['mouse-right-button'] 	= "move_to_mouse_position";
-mp.keycodes['mouse-middle-button'] 	= "move_to_mouse_position";
-mp.keycodes['mouse-wheel-up']		= "move_mouse_wheel_up";
-mp.keycodes['mouse-wheel-down']		= "move_mouse_wheel_down";
+mp.keycodes['cursor-left']          = "move_left";
+mp.keycodes['cursor-right']         = "move_right";
+mp.keycodes['cursor-up']            = "move_up";
+mp.keycodes['cursor-down']          = "move_down";
+mp.keycodes['page-up']              = "move_pgup";
+mp.keycodes['page-down']            = "move_pgdn";
+mp.keycodes['home']                 = "move_bol";
+mp.keycodes['end']                  = "move_eol";
+mp.keycodes['ctrl-home']            = "move_bof";
+mp.keycodes['ctrl-end']             = "move_eof";
+mp.keycodes['ctrl-cursor-left']     = "move_word_left";
+mp.keycodes['ctrl-cursor-right']    = "move_word_right";
+mp.keycodes['alt-home']             = "move_bof";
+mp.keycodes['alt-end']              = "move_eof";
+mp.keycodes['ctrl-g']               = "goto";
+mp.keycodes['mouse-left-button']    = "move_to_mouse_position";
+mp.keycodes['mouse-right-button']   = "move_to_mouse_position";
+mp.keycodes['mouse-middle-button']  = "move_to_mouse_position";
+mp.keycodes['mouse-wheel-up']       = "move_mouse_wheel_up";
+mp.keycodes['mouse-wheel-down']     = "move_mouse_wheel_down";
 
 /** action descriptions **/
 
-mp.actdesc['move_left']	 		= LL("Character left");
-mp.actdesc['move_right'] 		= LL("Character right");
-mp.actdesc['move_up']			= LL("Line up");
-mp.actdesc['move_down']			= LL("Line down");
-mp.actdesc['move_pgup']			= LL("Page up");
-mp.actdesc['move_pgdn']			= LL("Page down");
-mp.actdesc['move_bol']			= LL("Beginning of line");
-mp.actdesc['move_eol']			= LL("End of line");
-mp.actdesc['move_bof']			= LL("Beginning of document");
-mp.actdesc['move_eof']			= LL("End of document");
-mp.actdesc['move_word_left']		= LL("Word left");
-mp.actdesc['move_word_right']		= LL("Word right");
-mp.actdesc['goto']			= LL("Go to line...");
-mp.actdesc['move_to_mouse_position']	= LL("Move cursor to mouse click");
-mp.actdesc['move_mouse_wheel_down']	= LL("Mouse wheel up");
-mp.actdesc['move_mouse_wheel_up']	= LL("Mouse wheel down");
-mp.actdesc['document_list']		= LL("Document list");
+mp.actdesc['move_left']                 = LL("Character left");
+mp.actdesc['move_right']                = LL("Character right");
+mp.actdesc['move_up']                   = LL("Line up");
+mp.actdesc['move_down']                 = LL("Line down");
+mp.actdesc['move_pgup']                 = LL("Page up");
+mp.actdesc['move_pgdn']                 = LL("Page down");
+mp.actdesc['move_bol']                  = LL("Beginning of line");
+mp.actdesc['move_eol']                  = LL("End of line");
+mp.actdesc['move_bof']                  = LL("Beginning of document");
+mp.actdesc['move_eof']                  = LL("End of document");
+mp.actdesc['move_word_left']            = LL("Word left");
+mp.actdesc['move_word_right']           = LL("Word right");
+mp.actdesc['goto']                      = LL("Go to line...");
+mp.actdesc['move_to_mouse_position']    = LL("Move cursor to mouse click");
+mp.actdesc['move_mouse_wheel_down']     = LL("Mouse wheel up");
+mp.actdesc['move_mouse_wheel_up']       = LL("Mouse wheel down");
+mp.actdesc['document_list']             = LL("Document list");
 
 /** code **/
 
-sub mp.move(doc, func)
+sub mp_doc.move(doc, func)
 /* wrapper for movement functions, with possible shift selection */
 {
-	if (func != NULL) {
-		if (mp.shift_pressed) {
-			/* shift pressed? move selecting */
-			if (doc.txt.mark == NULL)
-				mp.mark(doc);
+    if (func != NULL) {
+        if (mp.shift_pressed) {
+            /* shift pressed? move selecting */
+            if (doc.txt.mark == NULL)
+                doc->mark();
 
-			func(doc);
-			mp.mark(doc);
-		}
-		else
-			func(doc);
-	}
+            doc->func();
+            doc->mark();
+        }
+        else
+            doc->func();
+    }
 
-	return doc;
+    return doc;
+}
+
+
+sub mp_doc.set_x(doc, x)
+/* sets the x position */
+{
+    local txt = doc.txt;
+
+    if (x < 0) {
+        /* cursor moved left of the bol; effective cursor up + eol */
+        if (txt.y > 0) {
+            /* one line up */
+            txt.y--;
+
+            /* set x to the end of the line */
+            txt.x = size(txt.lines[txt.y]);
+        }
+    }
+    else {
+        /* test if moved beyond end of line */
+        if (x > size(txt.lines[txt.y])) {
+            if (txt.y < size(txt.lines) - 1) {
+                /* cursor moved right of eol;
+                   effective cursor down + bol */
+                txt.x = 0;
+                txt.y++;
+            }
+        }
+        else
+            txt.x = x;
+    }
+
+    return doc;
+}
+
+
+sub mp_doc.set_y(doc, y)
+/* sets the y position */
+{
+    local txt = doc.txt;
+    local vx;
+
+    /* get current visual x position */
+    vx = mp.x2vx(txt.lines[txt.y], txt.x);
+
+    /* set boundaries */
+    if (y < 0)
+        y = 0;
+    if (y >= size(txt.lines))
+        y = size(txt.lines) - 1;
+
+    /* move there */
+    txt.y = y;
+
+    /* adjust new x to match previously one */
+    txt.x = mp.vx2x(txt.lines[txt.y], vx);
+
+    return doc;
+}
+
+
+sub mp_doc.move_up(doc)
+/* moves one line up */
+{
+    doc->set_y(doc.txt.y - 1);
+}
+
+
+sub mp_doc.move_down(doc)
+/* moves one line down */
+{
+    doc->set_y(doc.txt.y + 1);
+}
+
+
+sub mp_doc.move_pgup(doc)
+/* moves one page up */
+{
+    doc->set_y(doc.txt.y - mp.window.ty);
+}
+
+
+sub mp_doc.move_pgdn(doc)
+/* moves one page down */
+{
+    doc->set_y(doc.txt.y + mp.window.ty);
+}
+
+
+sub mp_doc.move_left(doc)
+/* moves one char left */
+{
+    if (doc.txt.x + doc.txt.y)
+        doc->set_x(doc.txt.x - 1);
+
+    return doc;
+}
+
+
+sub mp_doc.move_right(doc)
+/* moves one char right */
+{
+    doc->set_x(doc.txt.x + 1);
+}
+
+
+sub mp_doc.move_bol(doc)
+/* moves to the beginning of the line */
+{
+    if (mp.config.smart_bol) {
+        /* move to first non-blank char in the line,
+           or to real bol if already there */
+        local non_white = 0;
+        local l = split(doc.txt.lines[doc.txt.y]);
+
+        while (non_white < size(l) &&
+            (l[non_white] eq " " || l[non_white] eq "\t")) {
+            non_white++;
+        }
+
+        if (doc.txt.x == non_white)
+            doc.txt.x = 0;
+        else
+            doc.txt.x = non_white;
+    }
+    else
+       doc.txt.x = 0;
+
+    return doc;
+}
+
+sub mp_doc.move_eol(doc)
+/* moves to the end of the line */
+{
+    doc.txt.x = size(doc.txt.lines[doc.txt.y]);
+    return doc;
+}
+
+
+sub mp_doc.move_bof(doc)
+/* moves to the beginning of the file */
+{
+    doc.txt.x = doc.txt.y = 0;
+    return doc;
+}
+
+
+sub mp_doc.move_eof(doc)
+/* moves to the end of the file */
+{
+    doc.txt.y = size(doc.txt.lines) - 1;
+    doc->move_eol();
+}
+
+
+sub mp_doc.move_word_left(doc)
+/* moves a word to the left */
+{
+    local txt = doc.txt;
+
+    while (1) {
+        /* split by words */
+        local l = doc->split_line_by_words();
+
+        /* get current word */
+        local i = l[2];
+
+        if (i >= 0) {
+            /* if it's not at the beginning of a word,
+               move there and go */
+            if (i < size(l[1]) && txt.x != l[1][i]) {
+                txt.x = l[1][i];
+                break;
+            }
+
+            /* go to previous word */
+            i = l[2] - 1;
+
+            /* if that position exists, move there */
+            if (i >= 0) {
+                txt.x = l[1][i];
+                break;
+            }
+        }
+
+        /* no lines up? exit */
+        if (txt.y == 0)
+            break;
+
+        txt.y--;
+        txt.x = size(txt.lines[txt.y]);
+    }
+
+    return doc;
+}
+
+
+sub mp_doc.move_word_right(doc)
+/* moves a word to the right */
+{
+    local txt = doc.txt;
+
+    while (txt.y < size(txt.lines) - 1) {
+        /* split by words */
+        local l = doc->split_line_by_words();
+
+        /* get next position */
+        local i = l[2] + 1;
+
+        /* if that position exists, move there */
+        if (i < size(l[1])) {
+            txt.x = l[1][i];
+            break;
+        }
+
+        /* try next line */
+        txt.y++;
+        txt.x = 0;
+    }
+
+    return doc;
+}
+
+
+sub mp_doc.move_to_coords_xy(doc, x, y)
+/* move the cursor to the character on the visual coords x and y */
+{
+    /* set y */
+    doc->set_y(doc.txt.vy + y);
+
+    /* calculate the real position in that line
+       where the mouse click seem to be */
+    x = mp.vx2x(doc.txt.lines[doc.txt.y], doc.txt.vx + x);
+
+    /* move there */
+    doc->set_x(x);
 }
 
 
 sub mp.split_by_words(s, r)
 /* splits a string by words */
 {
-	/* if no special-purpose regex set, take global one */
-	if (r == NULL)
-		r = mp.word_regex;
+    /* if no special-purpose regex set, take global one */
+    if (r == NULL)
+        r = mp.word_regex;
 
-	return regex(s, r ~ 'g');
+    return regex(s, r ~ 'g');
 }
 
 
-sub mp.split_line_by_words(doc, r)
+sub mp_doc.split_line_by_words(doc, r)
 /* splits current line by words and returns a three element array containing
    the list of words, the list of offsets and the current position */
 {
-	local txt, l, w, c, ol, oc, p;
+    local txt, l, w, c, ol, oc, p;
 
-	txt = doc.txt;
-	l = txt.lines[txt.y];
-	ol = [];
-	oc = [];
-	p = -1;
+    txt = doc.txt;
+    l = txt.lines[txt.y];
+    ol = [];
+    oc = [];
+    p = -1;
 
-	/* if no special-purpose regex set, take global one */
-	if (r == NULL)
-		r = mp.word_regex;
+    /* if no special-purpose regex set, take global one */
+    if (r == NULL)
+        r = mp.word_regex;
 
-	while ((w = regex(l, r, c[0] + c[1])) != NULL) {
-		/* store the word */
-		push(ol, w);
+    while ((w = regex(l, r, c[0] + c[1])) != NULL) {
+        /* store the word */
+        push(ol, w);
 
-		/* get coordinates */
-		c = regex();
+        /* get coordinates */
+        c = regex();
 
-		/* push the starting column */
-		push(oc, c[0]);
+        /* push the starting column */
+        push(oc, c[0]);
 
-		/* if matching coords are between the cursor, store it */
-		if (c[0] <= txt.x && c[0] + c[1] >= txt.x)
-			p = size(ol) - 1;
-	}
+        /* if matching coords are between the cursor, store it */
+        if (c[0] <= txt.x && c[0] + c[1] >= txt.x)
+            p = size(ol) - 1;
+    }
 
-	/* it txt.x is still further than the last match, it means
-	   that the 'current' position is beyond the last word */
-	if (txt.x > c[0] + c[1])
-		p = size(ol);
+    /* it txt.x is still further than the last match, it means
+       that the 'current' position is beyond the last word */
+    if (txt.x > c[0] + c[1])
+        p = size(ol);
 
-	/* return the list of words, the list of
-	   coordinates and the current one */
-	return [ ol, oc, p ];
+    /* return the list of words, the list of
+       coordinates and the current one */
+    return [ ol, oc, p ];
 }
 
 
-sub mp.get_word(doc, r)
+sub mp_doc.get_word(doc, r)
 /* returns the word under the cursor */
 {
-	local l = mp.split_line_by_words(doc, r);
+    local l = doc->split_line_by_words(r);
 
-	/* no word over cursor? */
-	if (l[2] == -1)
-		return NULL;
+    /* no word over cursor? */
+    if (l[2] == -1)
+        return NULL;
 
-	return l[0][l[2]];
+    return l[0][l[2]];
 }
 
 
-sub mp.get_range(doc, bx, by, ex, ey, v)
+sub mp_doc.get_range(doc, bx, by, ex, ey, v)
 /* gets a range or characters from a document */
 {
-	local txt = doc.txt;
-
-	local r = [];
-
-	if (by == ey) {
-		local w;
-
-		/* block is just one line; take the inside
-		   part and push it onto the clipboard */
-
-		w = splice(txt.lines[by], NULL, bx, ex - bx);
-
-		push(r, w[1]);
-	}
-	else {
-		local w, n;
-
-		/* block has more than one line */
-
-		n = by;
-		if (v == 0) {
-			/* use normal selection block */
-
-			/* take from the beginning to the end of the first line */
-			w = splice(txt.lines[n], NULL, bx, -1);
-
-			push(r, w[1] || '');
-			n++;
-
-			/* take the central lines */
-			while (n < ey)
-				push(r, txt.lines[n++]);
-
-			/* take the last line */
-			w = splice(txt.lines[n], NULL, 0, ex);
-			push(r, w[1] || '');
-		}
-		else {
-			/* use vertical selection block */
-			while (n <= ey) {
-				w = splice(txt.lines[n++], NULL, bx, ex - bx + 1);
-				local l = w[1];
-				local p = ex - bx - size(l);
-
-				/* pad out to end of block line */
-				while (p-- >= 0)
-					l = l ~ " ";
-
-				push(r, l);
-			}
-		}
-	}
-
-	return r;
-}
-
-
-sub mp.set_x(doc, x)
-/* sets the x position */
-{
-	local txt = doc.txt;
-
-	if (x < 0) {
-		/* cursor moved left of the bol; effective cursor up + eol */
-		if (txt.y > 0) {
-			/* one line up */
-			txt.y--;
-
-			/* set x to the end of the line */
-			txt.x = size(txt.lines[txt.y]);
-		}
-	}
-	else {
-		/* test if moved beyond end of line */
-		if (x > size(txt.lines[txt.y])) {
-			if (txt.y < size(txt.lines) - 1) {
-				/* cursor moved right of eol;
-				   effective cursor down + bol */
-				txt.x = 0;
-				txt.y++;
-			}
-		}
-		else
-			txt.x = x;
-	}
-
-	return doc;
-}
-
-
-sub mp.set_y(doc, y)
-/* sets the y position */
-{
-	local txt = doc.txt;
-	local vx;
-
-	/* get current visual x position */
-	vx = mp.x2vx(txt.lines[txt.y], txt.x);
-
-	/* set boundaries */
-	if (y < 0)
-		y = 0;
-	if (y >= size(txt.lines))
-		y = size(txt.lines) - 1;
-
-	/* move there */
-	txt.y = y;
-
-	/* adjust new x to match previously one */
-	txt.x = mp.vx2x(txt.lines[txt.y], vx);
-
-	return doc;
-}
-
-
-sub mp.move_up(doc)
-/* moves one line up */
-{
-	mp.set_y(doc, doc.txt.y - 1);
-}
-
-
-sub mp.move_down(doc)
-/* moves one line down */
-{
-	mp.set_y(doc, doc.txt.y + 1);
-}
-
-
-sub mp.move_pgup(doc)
-/* moves one page up */
-{
-	mp.set_y(doc, doc.txt.y - mp.window.ty);
-}
-
-
-sub mp.move_pgdn(doc)
-/* moves one page down */
-{
-	mp.set_y(doc, doc.txt.y + mp.window.ty);
-}
-
-
-sub mp.move_left(doc)
-/* moves one char left */
-{
-	if (doc.txt.x + doc.txt.y)
-		mp.set_x(doc, doc.txt.x - 1);
-
-	return doc;
-}
-
-
-sub mp.move_right(doc)
-/* moves one char right */
-{
-	mp.set_x(doc, doc.txt.x + 1);
-}
-
-
-sub mp.move_bol(doc)
-/* moves to the beginning of the line */
-{
-	doc.txt.x = 0;
-	return doc;
-}
-
-sub mp.move_bol_smart(doc)
-/* moves to the first non-whitespace or if already there the beginning of the line */
-{
-	local non_white = 0;
-	local l = split(doc.txt.lines[doc.txt.y]);
-
-	while (non_white < size(l) && 
-			(
-				cmp(l[non_white], " ") == 0 || 
-				cmp(l[non_white], "\t") == 0)
-			) 
-	{
-		non_white++;
-	}
-	
-	if (doc.txt.x == non_white) {
-		doc.txt.x = 0;
-	} else {
-		doc.txt.x = non_white;
-	}
-}
-
-sub mp.move_eol(doc)
-/* moves to the end of the line */
-{
-	doc.txt.x = size(doc.txt.lines[doc.txt.y]);
-	return doc;
-}
-
-
-sub mp.move_bof(doc)
-/* moves to the beginning of the file */
-{
-	doc.txt.x = 0;
-	doc.txt.y = 0;
-	return doc;
-}
-
-
-sub mp.move_eof(doc)
-/* moves to the end of the file */
-{
-	doc.txt.y = size(doc.txt.lines) - 1;
-	mp.move_eol(doc);
-}
-
-
-sub mp.move_word_left(doc)
-/* moves a word to the left */
-{
-	local txt = doc.txt;
-
-	while (1) {
-		/* split by words */
-		local l = mp.split_line_by_words(doc);
-
-		/* get current word */
-		local i = l[2];
-
-		if (i >= 0) {
-			/* if it's not at the beginning of a word,
-			   move there and go */
-			if (i < size(l[1]) && txt.x != l[1][i]) {
-				txt.x = l[1][i];
-				break;
-			}
-
-			/* go to previous word */
-			i = l[2] - 1;
-
-			/* if that position exists, move there */
-			if (i >= 0) {
-				txt.x = l[1][i];
-				break;
-			}
-		}
-
-		/* no lines up? exit */
-		if (txt.y == 0)
-			break;
-
-		txt.y--;
-		txt.x = size(txt.lines[txt.y]);
-	}
-
-	return doc;
-}
-
-
-sub mp.move_word_right(doc)
-/* moves a word to the right */
-{
-	local txt = doc.txt;
-
-	while (txt.y < size(txt.lines) - 1) {
-		/* split by words */
-		local l = mp.split_line_by_words(doc);
-
-		/* get next position */
-		local i = l[2] + 1;
-
-		/* if that position exists, move there */
-		if (i < size(l[1])) {
-			txt.x = l[1][i];
-			break;
-		}
-
-		/* try next line */
-		txt.y++;
-		txt.x = 0;
-	}
-
-	return doc;
-}
-
-
-sub mp.move_to_coords_xy(doc, x, y)
-/* move the cursor to the character on the visual coords x and y */
-{
-	/* set y */
-	mp.set_y(doc, doc.txt.vy + y);
-
-	/* calculate the real position in that line
-	   where the mouse click seem to be */
-	x = mp.vx2x(doc.txt.lines[doc.txt.y], doc.txt.vx + x);
-
-	/* move there */
-	mp.set_x(doc, x);
+    local txt = doc.txt;
+
+    local r = [];
+
+    if (by == ey) {
+        local w;
+
+        /* block is just one line; take the inside
+           part and push it onto the clipboard */
+        w = splice(txt.lines[by], NULL, bx, ex - bx);
+
+        push(r, w[1]);
+    }
+    else {
+        local w, n;
+
+        /* block has more than one line */
+
+        n = by;
+        if (v == 0) {
+            /* use normal selection block */
+
+            /* take from the beginning to the end of the first line */
+            w = splice(txt.lines[n], NULL, bx, -1);
+
+            push(r, w[1] || '');
+            n++;
+
+            /* take the central lines */
+            while (n < ey)
+                push(r, txt.lines[n++]);
+
+            /* take the last line */
+            w = splice(txt.lines[n], NULL, 0, ex);
+            push(r, w[1] || '');
+        }
+        else {
+            /* use vertical selection block */
+            while (n <= ey) {
+                w = splice(txt.lines[n++], NULL, bx, ex - bx + 1);
+                local l = w[1];
+                local p = ex - bx - size(l);
+
+                /* pad out to end of block line */
+                while (p-- >= 0)
+                    l = l ~ " ";
+
+                push(r, l);
+            }
+        }
+    }
+
+    return r;
 }

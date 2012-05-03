@@ -35,7 +35,7 @@ mp.actions['new']	= sub (d) {
         d = mp.active();
     }
     else
-        d = mp.new();
+        d = mp.add(new(mp_doc));
 
     return d;
 };
@@ -52,10 +52,10 @@ mp.actions['save_as']	= sub (d, newname) {
         /* store new name */
         d.name = newname;
 
-        if (mp.long_op(mp.save, d) == -1)
+        if (d->long_op(mp_doc.save) == -1)
             mp.alert(sprintf(L("Error saving file: %s"), ERRNO));
         else
-            mp.detect_syntax(d);
+            d->detect_syntax();
     }
 
     return d;
@@ -67,23 +67,15 @@ mp.actions['save']	= sub (d) {
     if (regex(d.name, "/^<.+>$/"))
         mp.actions.save_as(d);
     else
-    if (mp.long_op(mp.save, d) == -1)
+    if (d->long_op(mp_doc.save) == -1)
         mp.alert(sprintf(L("Error saving file: %s"), ERRNO));
 
     return d;
 };
 
 mp.actions['close']	= sub (d) {
-
-    /* call all 'on_close' functions */
-    foreach (f, d.on_close) {
-
-        /* if it returns 0, cancel close */
-        if (f(d) == 0)
-            return;
-    }
-
-    mp.close();
+    if (d->query_close() != 0)
+        mp.close();
 };
 
 mp.actions['exit']	= sub (d) {
@@ -129,9 +121,8 @@ mp.actions['revert']	= sub (d) {
 
     d = mp.active();
 
-    mp.set_y(d, y);
+    d->set_y(y)->set_x(x);
     d.txt.vy = vy;
-    mp.set_x(d, x);
 
     return d;
 };
@@ -178,7 +169,7 @@ mp.actions['exec_command']	= sub (d, cmd) {
             if ((p = popen(cmd, "w")) != NULL) {
                 mp.busy(1);
 
-                foreach (l, mp.get_active_area(d))
+                foreach (l, d->get_active_area())
                     write(p, l ~ mp.config.eol);
 
                 pclose(p);
@@ -195,12 +186,12 @@ mp.actions['exec_command']	= sub (d, cmd) {
             if ((p = popen(cmd, "r")) != NULL) {
                 local l;
 
-                mp.store_undo(d);
+                d->store_undo();
                 mp.busy(1);
 
                 while ((l = read(p)) != NULL) {
-                    mp.insert(d, mp.chomp(l));
-                    mp.insert_newline(d);
+                    d->insert(mp.chomp(l));
+                    d->insert_newline();
                 }
 
                 pclose(p);
@@ -233,15 +224,15 @@ mp.actions['filter_selection'] = sub (d, cmd) {
     }
 
     if (cmd != NULL) {
-        mp.store_undo(d);
+        d->store_undo();
 
         /* if there is no selection, take full document */
         if (d.txt.mark == NULL) {
-            d->mp.move_bof()->mp.mark()->mp.move_eof()->mp.move_eol()->mp.mark();
+            d->move_bof()->mark()->move_eof()->mark();
         }
 
         /* take it out */
-        mp.cut(d);
+        d->cut();
 
         /* now feed it to the command */
         local p = popen2(cmd);
@@ -252,7 +243,7 @@ mp.actions['filter_selection'] = sub (d, cmd) {
 
             local l;
             while ((l = read(p[0])) != NULL)
-                mp.insert(d, l);
+                d->insert(l);
 
             pclose(p[0]);
         }
@@ -284,7 +275,7 @@ mp.actions['open_under_cursor'] = sub (d) {
     	local w;
 
     /* is the word under cursor file:line: ? */
-    if ((w = mp.get_word(d, '/[a-z\._0-9\/ -]+:[0-9]+:/i')) != NULL) {
+    if ((w = d->get_word('/[a-z\._0-9\/ -]+:[0-9]+:/i')) != NULL) {
         w = split(w, ':');
 
         /* drop garbage */
@@ -297,12 +288,12 @@ mp.actions['open_under_cursor'] = sub (d) {
         local n = mp.open(join(w, ':'));
 
         /* now move to the line */
-        mp.search_set_y(n, l);
+        n->search_set_y(l);
 
         d = n;
     }
     else
-    if ((w = mp.get_word(d, '/[a-z\._0-9\/:-]+/i')) != NULL) {
+    if ((w = d->get_word('/[a-z\._0-9\/:-]+/i')) != NULL) {
         d = mp.open(w);
     }
 
@@ -329,16 +320,15 @@ mp.actions['open_dropped_files'] = sub (d) {
 
 /** default key bindings **/
 
-mp.keycodes['ctrl-n']		= 'next';
-mp.keycodes['ctrl-o']		= 'open';
-mp.keycodes['ctrl-q']		= 'exit';
-mp.keycodes['ctrl-s']		= 'save';
-mp.keycodes['ctrl-w']		= 'close';
-mp.keycodes['ctrl-enter']	= 'open_under_cursor';
-mp.keycodes['alt-enter']	= 'open_under_cursor';
-mp.keycodes['dropped-files']	= 'open_dropped_files';
-
-mp.keycodes['close-window'] 	= 'exit';
+mp.keycodes['ctrl-n']           = 'next';
+mp.keycodes['ctrl-o']           = 'open';
+mp.keycodes['ctrl-q']           = 'exit';
+mp.keycodes['ctrl-s']           = 'save';
+mp.keycodes['ctrl-w']           = 'close';
+mp.keycodes['ctrl-enter']       = 'open_under_cursor';
+mp.keycodes['alt-enter']        = 'open_under_cursor';
+mp.keycodes['dropped-files']    = 'open_dropped_files';
+mp.keycodes['close-window']     = 'exit';
 
 /** action descriptions **/
 
@@ -366,7 +356,24 @@ mp.actdesc['open_dropped_files'] = LL("Open dropped files");
 sub mp.chomp(str)
 /* chomps the end of file chars from a string */
 {
-	sregex(str, "/\r*\n*$/");
+    sregex(str, "/\r*\n*$/");
+}
+
+
+sub mp_doc.query_close(doc)
+/* queries a close; if it returns 0, the closing is rejected */
+{
+    local r = 1;
+
+    if (doc.txt.mod) {
+        r = mp.confirm(L("File has changed. Save changes?"));
+
+        /* confirm? save */
+        if (r == 1)
+            mp.actions.save(d);
+    }
+
+    return r;
 }
 
 
@@ -396,7 +403,7 @@ sub mp.save_th(f, doc)
 }
 
 
-sub mp.save(doc)
+sub mp_doc.save(doc)
 /* saves a file */
 {
     local f;
@@ -440,67 +447,25 @@ sub mp.save(doc)
 }
 
 
-sub mp.save_on_close(doc)
-/* on_close function to save modified files */
+sub mp_doc.long_op(doc, func, a2, a3, a4)
 {
-    local r = 1;
+    local r;
 
-    if (doc.txt.mod) {
-        r = mp.confirm(L("File has changed. Save changes?"));
-
-        /* confirm? save */
-        if (r == 1)
-            mp.actions.save(d);
-    }
+    doc->busy(1);
+    r = doc->func(a2, a3, a4);
+    doc->busy(0);
 
     return r;
 }
 
 
-/* the document class */
-mp_doc = {
-    txt: {
-        x:      0,
-        y:      0,
-        vx:     0,
-        vy:     0,
-        mod:    0,
-        lines:  [ '' ]
-    },
-    name:       L("<unnamed>"),
-    undo:       [],
-    redo:       [],
-    syntax:     NULL,
-    on_close:   [ mp.save_on_close ],
-
-    busy:       sub (doc, b) { mp.busy(b); return doc; }
-};
-
-
-sub mp.create(filename, lines)
-/* creates a document */
+sub mp.add(doc)
+/* adds a doc to the list of documents */
 {
-    local doc = clone(mp_doc);
-
-    if (filename)
-        doc.name = filename;
-
-    if (lines)
-        doc.txt.lines = lines;
-
-	return doc;
-}
-
-
-sub mp.new(filename, lines)
-/* creates a new document */
-{
-    local doc = mp.create(filename, lines);
-
-	/* store in the list and set as active */
+    /* store in the list and set as active */
     ins(mp.docs, doc, mp.active_i);
 
-	mp.detect_syntax(doc);
+    doc->detect_syntax();
 
     return doc;
 }
@@ -509,36 +474,34 @@ sub mp.new(filename, lines)
 sub mp.next()
 /* rotates through the document list */
 {
-	if (++mp.active_i == size(mp.docs))
-		mp.active_i = 0;
+    if (++mp.active_i == size(mp.docs))
+        mp.active_i = 0;
 
-	return mp.active();
+    return mp.active();
 }
 
 
 sub mp.prev()
 /* rotates through the document list, backwards */
 {
-	if (--mp.active_i == -1)
-		mp.active_i = size(mp.docs) - 1;
+    if (--mp.active_i == -1)
+        mp.active_i = size(mp.docs) - 1;
 
-	return mp.active();
+    return mp.active();
 }
 
 
 sub mp.close()
 /* closes the active document */
 {
-	local k = mp.active_i;
+    /* delete from the list */
+    adel(mp.docs, mp.active_i);
 
-	/* delete from the list */
-	adel(mp.docs, mp.active_i);
+    /* rotate if it was the last one */
+    if (mp.active_i == size(mp.docs))
+        mp.active_i = 0;
 
-	/* rotate if it was the last one */
-	if (mp.active_i == size(mp.docs))
-		mp.active_i = 0;
-
-	/* cannot call mp.active() */
+    /* cannot call mp.active() */
 }
 
 
@@ -567,7 +530,7 @@ sub mp.open(filename, password)
             string:     sprintf(L("New file '%s'"), filename)
         };
 
-        d = mp.new(filename);
+        d = mp.add(new(mp_doc, { name: filename }));
 	}
     else
     if (s[13] != NULL) {
@@ -588,8 +551,10 @@ sub mp.open(filename, password)
         if (mp.crypt1_detect(f)) {
             if (password != NULL && password != '') {
                 /* and load the file */
-                d = mp.new(filename, mp.crypt1_load(f, password));
-                d.password = password;
+                d = mp.add(new(mp_doc, { name: filename }));
+
+                d.txt.lines     = mp.crypt1_load(f, password);
+                d.password      = password;
             }
         }
         else {
@@ -599,7 +564,8 @@ sub mp.open(filename, password)
 
             /* reopen and read */
             f = open(filename, "rb");
-            d = mp.new(filename, mp.plain_load(f));
+            d = mp.add(new(mp_doc, { name: filename }));
+            d.txt.lines = mp.plain_load(f);
         }
 
         close(f);
@@ -613,6 +579,8 @@ sub mp.open(filename, password)
 
         /* always keep original EOL */
         d.eol = mp.last_seen_eol;
+
+        d->detect_syntax();
     }
 
 	return d;
@@ -683,10 +651,11 @@ sub mp.hex_view(filename)
     if ((f = open(filename, "rb")) != NULL) {
         close(f);
 
-        d = mp.new('<' ~ filename ~ ' hex view>', []);
+        d = mp.add(new(mp_doc, { name: '<' ~ filename ~ ' hex view>' }));
+
         d.read_only = 1;
-        d.syntax = mp.syntax.hex_view;
-        d.disk_op = 1;
+        d.syntax    = mp.syntax.hex_view;
+        d.disk_op   = 1;
 
         mp.hex_view_th(filename, d);
     }
