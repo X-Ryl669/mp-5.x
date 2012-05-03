@@ -569,8 +569,8 @@ sub mp.process_cmdline()
             mp.config.text_mode = 1;
         else
         if (regex(o, '/^\+[0-9]+$/')) {
-            if (size(active_pending))
-                active_pending[-1] = active_pending[-1] ~ ':' ~ (o + 0) ~ ':';
+            if (size(mp.active_pending))
+                mp.active_pending[-1] = mp.active_pending[-1] ~ ':' ~ (o + 0) ~ ':';
         }
         else
             push(mp.active_pending, o);
