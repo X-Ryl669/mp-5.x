@@ -498,20 +498,11 @@ sub mp.open(filename, password)
     local d, s, f;
     local x, y;
 
-    x = y = -1;
-
-    /* test if filename includes :y or :y:x positioning */
-    if (regex(filename, "/.+:[0-9]+:[0-9]+:$/")) {
+    /* test if filename includes :y: or :y:x: positioning */
+    if (regex(filename, "/.+:[0-9]+:([0-9]+:)?$/")) {
         local l = split(filename, ':');
 
         x           = l[2];
-        y           = l[1];
-        filename    = l[0];
-    }
-    else
-    if (regex(filename, "/.+:[0-9]+:$/")) {
-        local l = split(filename, ':');
-
         y           = l[1];
         filename    = l[0];
     }
@@ -583,9 +574,9 @@ sub mp.open(filename, password)
     }
 
     if (d) {
-        if (y != -1)
+        if (y)
             d->search_set_y(y - 1);
-        if (x != -1)
+        if (x)
             d->set_x(x - 1);
     }
 
