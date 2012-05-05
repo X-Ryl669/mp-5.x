@@ -328,53 +328,52 @@ sub mp.test_mtime(doc)
 }
 
 
+sub mp_doc.keypress(doc, k)
+/* keypress handler */
+{
+    local a;
+
+    mp.test_mtime(doc);
+    
+    if (mp.keycodes_t == NULL)
+        mp.keycodes_t = mp.keycodes;
+    
+    /* get the action asociated to the keycode */
+    if ((a = mp.keycodes_t[k]) != NULL) {
+    
+        /* if it's a hash, store for further testing */
+        if (is_hash(a))
+            mp.keycodes_t = a;
+        else {
+            /* if it's executable, run it */
+            if (is_exec(a))
+                a(doc);
+            else
+            /* if it's an array, process it sequentially */
+            if (is_array(a))
+                foreach(l, a)
+                    mp.process_action(l);
+            else
+                mp.process_action(a);
+    
+            mp.keycodes_t = NULL;
+        }
+    }
+    else {
+        doc->insert_keystroke(k);
+        mp.keycodes_t = NULL;
+    }
+    
+    mp.shift_pressed = NULL;
+    
+    return NULL;
+}
+
+
 sub mp.process_event(k)
 /* processes a key event */
 {
-    if (size(mp.docs)) {
-        local d, a;
-
-        d = mp.active();
-
-        mp.test_mtime(d);
-    
-        if (mp.keycodes_t == NULL)
-            mp.keycodes_t = mp.keycodes;
-    
-        /* get the action asociated to the keycode */
-        if ((a = mp.keycodes_t[k]) != NULL) {
-    
-            /* if it's a hash, store for further testing */
-            if (is_hash(a))
-                mp.keycodes_t = a;
-            else {
-                /* if it's executable, run it */
-                if (is_exec(a))
-                    a(d);
-                else
-                /* if it's an array, process it sequentially */
-                if (is_array(a))
-                    foreach(l, a)
-                        mp.process_action(l);
-                else
-                    mp.process_action(a);
-    
-                mp.keycodes_t = NULL;
-            }
-        }
-        else {
-            d->insert_keystroke(k);
-            mp.keycodes_t = NULL;
-        }
-    
-        mp.shift_pressed = NULL;
-    
-        /* if there is a keypress notifier function, call it */
-        if (is_exec(d.keypress))
-            d.keypress(d, k);
-    }
-
-    return NULL;
+    mp.active()->keypress(k);
 }
 
 
