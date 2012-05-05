@@ -5,6 +5,8 @@ Release Critical Bugs
 ---------------------
 
  * 1298: Fix password prompt in encrypted files.
+ * 1301: As mp_doc.keypress() is a pure method now, those in "toys"
+   no longer process MP keycodes as next doc, close or quit.
 
 Open Bugs
 ---------
