@@ -650,6 +650,24 @@ static mpdm_t drw_push_pair(mpdm_t l, int i, int a, wchar_t * tmp)
 
 #define BUF_LINE 128
 
+static wchar_t drw_char(wchar_t c)
+{
+    if (drw_1.mark_eol) {
+        if (c == '\t')
+            c = L'\xb7';
+        else
+        if (c == '\n' || c == '\0')
+            c = L'\xb6';
+    }
+    else {
+        if (c == L'\t' || c == L'\n' || c == L'\0')
+            c = L' ';
+    }
+
+    return c;
+}
+
+
 static mpdm_t drw_line(int line)
 /* creates a list of attribute / string pairs for the current line */
 {
@@ -678,13 +696,7 @@ static mpdm_t drw_line(int line)
             /* size is 1, unless it's a tab */
             n = c == L'\t' ? t : 1;
 
-            /* fill tabs with spaces */
-            if (c == L'\0' || c == L'\t')
-                c = drw_1.mark_eol ? L'\xb7' : L' ';
-
-            /* fill EOLs with special marks or spaces */
-            if (c == L'\n')
-                c = drw_1.mark_eol ? L'\xb6' : L' ';
+            c = drw_char(c);
 
             /* if next char will not fit, use a space */
             if (m + t > drw_1.vx + drw_1.tx)
