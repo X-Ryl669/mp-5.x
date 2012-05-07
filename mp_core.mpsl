@@ -328,6 +328,13 @@ sub mp.test_mtime(doc)
 }
 
 
+sub mp_doc.paint(doc, optimize)
+/* paint method */
+{
+    return mp_c.paint(doc, optimize);
+}
+
+
 sub mp_doc.keypress(doc, k)
 /* keypress handler */
 {

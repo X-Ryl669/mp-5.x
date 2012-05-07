@@ -845,41 +845,12 @@ static mpdm_t drw_draw(mpdm_t doc, int optimize)
 /** interface **/
 
 mpdm_t mp_draw(mpdm_t doc, int optimize)
-/* main generic drawing function: if the document has a 'paint' code,
-   calls it; otherwise, call drw_draw() */
+/* main generic drawing function for drivers */
 {
-    mpdm_t r = NULL;
-    static int ppp = 0;         /* previous private paint */
-    mpdm_t f;
-    int n;
+    mpdm_t f, r = NULL;
 
-    /* if previous paint was private, disable optimizations */
-    if (ppp)
-        optimize = ppp = 0;
-
-    if (doc != NULL) {
-        if ((f = mpdm_hget_s(doc, L"pre_paint")) != NULL) {
-            mpdm_void(mpdm_exec_1(f, doc, NULL));
-        }
-
-        if ((f = mpdm_hget_s(doc, L"paint")) != NULL) {
-            ppp = 1;
-            r = mpdm_exec_2(f, doc, MPDM_I(optimize), NULL);
-        }
-        else
-            r = drw_draw(doc, optimize);
-
-        /* if there is a global post_paint list of functions, execute it */
-        if ((f = mpdm_hget_s(mp, L"post_paint")) != NULL) {
-            for (n = 0; n < mpdm_size(f); n++)
-                r = mpdm_exec_2(mpdm_aget(f, n), doc, r, NULL);
-        }
-
-        /* if doc has a post_paint list of functions, execute it */
-        if ((f = mpdm_hget_s(doc, L"post_paint")) != NULL) {
-            for (n = 0; n < mpdm_size(f); n++)
-                r = mpdm_exec_2(mpdm_aget(f, n), doc, r, NULL);
-        }
+    if ((f = mpdm_hget_s(doc, L"paint")) != NULL) {
+        r = mpdm_exec_2(f, doc, MPDM_I(optimize), NULL);
     }
 
     return r;
@@ -1007,6 +978,12 @@ static mpdm_t exit_requested(mpdm_t args, mpdm_t ctxt)
 }
 
 
+mpdm_t mp_c_paint(mpdm_t args, mpdm_t ctxt)
+{
+    return drw_draw(mpdm_aget(args, 0), mpdm_ival(mpdm_aget(args, 1)));
+}
+
+
 mpdm_t mp_vx2x(mpdm_t args, mpdm_t ctxt)
 /* interface to drw_vx2x() */
 {
@@ -1078,6 +1055,7 @@ void mp_startup(int argc, char *argv[])
 {
     mpdm_t INC;
     char *ptr;
+    mpdm_t mp_c;
 
     mpsl_startup();
 
@@ -1100,6 +1078,12 @@ void mp_startup(int argc, char *argv[])
 
     /* version */
     mpdm_hset_s(mp, L"VERSION",         MPDM_S(L"" VERSION));
+
+    /* new mp_c namespace (C interface) */
+    mp_c = MPDM_H(0);
+    mpdm_hset_s(mpdm_root(), L"mp_c", mp_c);
+
+    mpdm_hset_s(mp_c, L"paint",         MPDM_X(mp_c_paint));
 
     /* creates the INC (executable path) array */
     INC = mpdm_hset_s(mpdm_root(), L"INC", MPDM_A(0));
