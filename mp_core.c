@@ -933,7 +933,7 @@ void mp_set_y(mpdm_t doc, int y)
 /* interface to mp.set_y() */
 {
     mpdm_void(mpdm_exec_2
-              (mpdm_hget_s(mp, L"set_y"), doc, MPDM_I(y), NULL));
+              (mpdm_hget_s(doc, L"set_y"), doc, MPDM_I(y), NULL));
 }
 
 
