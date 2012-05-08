@@ -421,16 +421,10 @@ sub mp.long_op(func, a1, a2, a3, a4)
 sub mp.get_history(key)
 /* returns a history for the specified key */
 {
-    local r = NULL;
+	if (mp.history[key] == NULL)
+		mp.history[key] = [];
 
-	if (key) {
-    	if (mp.history[key] == NULL)
-    		mp.history[key] = [];
-
-        r = mp.history[key];
-    }
-
-	return r;
+    return mp.history[key];
 }
 
 
