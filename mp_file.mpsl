@@ -35,7 +35,7 @@ mp.actions['new']	= sub (d) {
         d = mp.active();
     }
     else
-        d = mp.add(new(mp_doc, { name: L("<unnamed>") }));
+        d = mp.add(new(mp_doc));
 
     return d;
 };

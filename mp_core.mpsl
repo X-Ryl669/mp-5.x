@@ -23,13 +23,35 @@
 
 */
 
-/** global data **/
+
+/** startup: language first **/
 
 /* L(x) is the same as gettext(x) */
 L = gettext;
 
 /* LL(x) is the same as x */
 sub LL(x) { x; }
+
+/* set gettext() domain */
+gettext_domain('minimum-profit', APPDIR ~ 'locale');
+
+/* test if gettext() can do a basic translation */
+if (gettext('&File') eq '&File' && ENV.LANG) {
+    /* no; try alternatives using the LANG variable */
+    local v = [ sregex(ENV.LANG, '!/!g') ]; /* es_ES.UTF-8 */
+    push(v, shift(split(v[-1], '.')));      /* es_ES */
+    push(v, shift(split(v[-1], '_')));      /* es */
+
+    foreach (l, v) {
+        eval('load("lang/' ~ l ~ '.mpsl");');
+
+        if (ERROR == NULL)
+            break;
+    }
+
+    ERROR = NULL;
+}
+
 
 /* configuration */
 
@@ -226,7 +248,7 @@ mp.actions_by_menu_label = {};
 /** MP base class **/
 
 mp_base = {
-    name:           '',
+    name:           '---',
     keycodes:       {},
     keypress:       sub (doc, key) { doc; },
     paint:          sub (doc, opt) { return []; },
@@ -239,6 +261,7 @@ mp_base = {
 /** MP document class **/
 
 mp_doc = new(mp_base, {
+    name:       L("<unnamed>"),
     txt: {
         x:      0,
         y:      0,
@@ -596,31 +619,6 @@ sub mp.load_profile()
 }
 
 
-sub mp.setup_language()
-/* sets up the language */
-{
-	/* set gettext() domain */
-	gettext_domain('minimum-profit', APPDIR ~ 'locale');
-
-	/* test if gettext() can do a basic translation */
-	if (gettext('&File') eq '&File' && ENV.LANG) {
-		/* no; try alternatives using the LANG variable */
-		local v = [ sregex(ENV.LANG, '!/!g') ];	/* es_ES.UTF-8 */
-		push(v, shift(split(v[-1], '.')));	/* es_ES */
-		push(v, shift(split(v[-1], '_')));	/* es */
-
-		foreach (l, v) {
-			eval('load("lang/' ~ l ~ '.mpsl");');
-
-			if (ERROR == NULL)
-				break;
-		}
-
-		ERROR = NULL;
-	}
-}
-
-
 sub mp.normalize_version(vs)
 /* converts a version string to something usable with cmp() */
 {
@@ -686,7 +684,6 @@ ERROR = NULL;
 /** main **/
 
 mp.load_profile();
-mp.setup_language();
 mp.drv.startup();
 mp.process_cmdline();
 mp.test_versions();
