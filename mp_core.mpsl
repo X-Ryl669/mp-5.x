@@ -238,6 +238,9 @@ mp_doc = {
     redo_q:     [],
     syntax:     NULL,
 
+    /* rendering function for MP docs in mp_core.c */
+    paint:      mp_c.paint,
+
     busy:       sub (doc, b) { mp.busy(b); return doc; }
 };
 
@@ -325,13 +328,6 @@ sub mp.test_mtime(doc)
     }
 
     return doc;
-}
-
-
-sub mp_doc.paint(doc, optimize)
-/* paint method */
-{
-    return mp_c.paint(doc, optimize);
 }
 
 
