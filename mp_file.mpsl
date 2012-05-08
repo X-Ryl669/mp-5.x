@@ -445,8 +445,6 @@ sub mp.add(doc)
     /* store in the list and set as active */
     ins(mp.docs, doc, mp.active_i);
 
-    doc->detect_syntax();
-
     return doc;
 }
 
