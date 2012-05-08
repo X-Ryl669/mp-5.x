@@ -436,7 +436,7 @@ sub mp.menu_label(action)
             l = L(mp.actdesc[action]) || action;
 
             /* is there a keycode that generates this action? */
-            foreach (i, sort(keys(keycodes))) {
+            foreach (i, sort(keys(mp.keycodes))) {
                 if (mp.keycodes[i] eq action) {
                     /* avoid mouse and window pseudo-keycodes */
                     if (!regex(i, "/window/") && !regex(i, "/mouse/")) {
