@@ -279,17 +279,6 @@ sub mp.active()
     /* get active document */
     d = mp.docs[mp.active_i];
 
-    /* if it's read only but has modifications, revert them */
-    if (d.read_only && size(d.undo_q)) {
-        while (size(d.undo_q))
-            d->undo();
-
-        mp.message = {
-            timeout:    time() + 2,
-            string:     '*' ~ L("Read-only document") ~ '*'
-        };
-    }
-
     return d;
 }
 
@@ -370,6 +359,17 @@ sub mp.process_event(k)
     
     mp.shift_pressed = NULL;
     
+    /* if it's read only but has modifications, revert them */
+    if (doc.read_only && size(doc.undo_q)) {
+        while (size(doc.undo_q))
+            doc->undo();
+
+        mp.message = {
+            timeout:    time() + 2,
+            string:     '*' ~ L("Read-only document") ~ '*'
+        };
+    }
+
     return NULL;
 }
 
