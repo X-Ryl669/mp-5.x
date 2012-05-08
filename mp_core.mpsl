@@ -424,31 +424,31 @@ sub mp.get_history(key)
 sub mp.menu_label(action)
 /* returns a label for the menu for an action */
 {
-	local l;
+    local l = NULL;
 
 	/* if action is '-', it's a menu separator */
-	if (action eq '-')
-		return NULL;
+    if (action ne '-') {
+        /* no recognized action? return */
+        if (!exists(mp.actions, action))
+            l = action ~ "?";
+        else {
+            /* get the translated description */
+            l = L(mp.actdesc[action]) || action;
 
-	/* no recognized action? return */
-	if (!exists(mp.actions, action))
-		return action ~ "?";
+            /* is there a keycode that generates this action? */
+            foreach (i, sort(keys(keycodes))) {
+                if (mp.keycodes[i] eq action) {
+                    /* avoid mouse and window pseudo-keycodes */
+                    if (!regex(i, "/window/") && !regex(i, "/mouse/")) {
+                        l = l ~ ' [' ~ i ~ ']';
+                        break;
+                    }
+                }
+            }
+        }
 
-	/* get the translated description */
-	l = L(mp.actdesc[action]) || action;
-
-	/* is there a keycode that generates this action? */
-	foreach (i, sort(keys(mp.keycodes))) {
-		if (mp.keycodes[i] eq action) {
-			/* avoid mouse and window pseudo-keycodes */
-			if (!regex(i, "/window/") && !regex(i, "/mouse/")) {
-				l = l ~ ' [' ~ i ~ ']';
-				break;
-			}
-		}
-	}
-
-	mp.actions_by_menu_label[l] = action;
+    	mp.actions_by_menu_label[l] = action;
+    }
 
 	return l;
 }
