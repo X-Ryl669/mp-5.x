@@ -5,6 +5,7 @@ Release Critical Bugs
 ---------------------
 
  * 1298: Fix password prompt in encrypted files.
+ * 1303: Fix keystrokes help in the menu.
 
 Open Bugs
 ---------
