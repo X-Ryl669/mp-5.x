@@ -226,9 +226,10 @@ mp.actions_by_menu_label = {};
 /** MP base class **/
 
 mp_base = {
-    name:       L("<unnamed>"),
-    keycodes:   {},
-    paint:      sub (doc, opt) { return []; }
+    name:           L("<unnamed>"),
+    keycodes:       {},
+    paint:          sub (doc, opt) { return []; },
+    query_close:    sub (doc) { 1; }
 };
 
 
