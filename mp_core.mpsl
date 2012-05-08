@@ -160,7 +160,8 @@ mp.actions = {};
 
 mp.actdesc = {};
 
-mp.alert_log = [];
+mp.history = {};
+
 
 /** the menu **/
 
@@ -420,14 +421,16 @@ sub mp.long_op(func, a1, a2, a3, a4)
 sub mp.get_history(key)
 /* returns a history for the specified key */
 {
-	if (key == NULL)
-		return NULL;
-	if (mp.history == NULL)
-		mp.history = {};
-	if (mp.history[key] == NULL)
-		mp.history[key] = [];
+    local r = NULL;
 
-	return mp.history[key];
+	if (key) {
+    	if (mp.history[key] == NULL)
+    		mp.history[key] = [];
+
+        r = mp.history[key];
+    }
+
+	return r;
 }
 
 
