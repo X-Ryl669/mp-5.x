@@ -428,23 +428,27 @@ sub mp.menu_label(action)
 
 	/* if action is '-', it's a menu separator */
     if (action ne '-') {
-        /* no recognized action? return */
+        /* no recognized action? */
         if (!exists(mp.actions, action))
             l = action ~ "?";
         else {
             /* get the translated description */
             l = L(mp.actdesc[action]) || action;
 
-            /* is there a keycode that generates this action? */
-            foreach (i, sort(keys(mp.keycodes))) {
-                if (mp.keycodes[i] eq action) {
-                    /* avoid mouse and window pseudo-keycodes */
-                    if (!regex(i, "/window/") && !regex(i, "/mouse/")) {
-                        l = l ~ ' [' ~ i ~ ']';
-                        break;
-                    }
-                }
-            }
+            local ks = [];
+
+            /* look for this action in mp_doc keycodes */
+            foreach (i, grep(keys(mp_doc.keycodes),
+                sub (e) { mp_doc.keycodes[e] eq action; }))
+                push(ks, i);
+
+            /* look now in global keycodes */
+            foreach (i, grep(keys(mp.keycodes),
+                sub (e) { mp.keycodes[e] eq action; }))
+                push(ks, i);
+
+            if (size(ks))
+                l = l ~ ' [' ~ join(ks, ', ') ~ ']';
         }
 
     	mp.actions_by_menu_label[l] = action;
