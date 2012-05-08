@@ -307,26 +307,6 @@ sub mp.process_action(a)
 }
 
 
-sub mp_doc.test_mtime(doc)
-/* tests for a file's mtime (uses GUI) */
-{
-    if (doc.mtime && time() > mp.mtime_test) {
-        local s;
-
-        if ((s = stat(doc.name)) != NULL && s[9] > doc.mtime) {
-            if (mp.confirm(L("File was changed externally. Reload?")) == 1)
-                mp.actions.revert(doc);
- 
-            doc.mtime = s[9];
-        }
-
-        mp.mtime_test = time() + 2;
-    }
-
-    return doc;
-}
-
-
 sub mp.process_event(k)
 /* processes a key event */
 {
