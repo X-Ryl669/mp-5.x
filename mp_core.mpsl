@@ -223,10 +223,18 @@ mp.menu = [
 mp.actions_by_menu_label = {};
 
 
-/** MP document class/base object **/
+/** MP base class **/
 
-mp_doc = {
+mp_base = {
     name:       L("<unnamed>"),
+    keycodes:   {},
+    paint:      sub (doc, opt) { return []; }
+};
+
+
+/** MP document class **/
+
+mp_doc = new(mp_base, {
     txt: {
         x:      0,
         y:      0,
@@ -239,13 +247,11 @@ mp_doc = {
     redo_q:     [],
     syntax:     NULL,
 
-    keycodes:   {},
-
     /* rendering function for MP docs in mp_core.c */
     paint:      mp_c.paint,
 
     busy:       sub (doc, b) { mp.busy(b); return doc; }
-};
+});
 
 
 
