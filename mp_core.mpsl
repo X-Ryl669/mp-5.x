@@ -230,6 +230,8 @@ mp_base = {
     keycodes:       {},
     keypress:       sub (doc, key) { doc; },
     paint:          sub (doc, opt) { return []; },
+    pre_event:      sub (doc, k) { k; },
+    post_event:     sub (doc, k) { doc; },
     query_close:    sub (doc) { 1; }
 };
 
@@ -312,46 +314,39 @@ sub mp.process_event(k)
 {
     local doc = mp.active();
 
-    /* FIXME: this should not be here */
-    doc->test_mtime();
+    /* notify the document that an event is to be processed */
+    k = doc->pre_event(k);
 
-    /* get the action or next keycode from the possible sources */
-    local a = mp.keycodes_t[k] || doc.keycodes[k] || mp.keycodes[k];
+    if (k) {
+        /* get the action or next keycode from the possible sources */
+        local a = mp.keycodes_t[k] || doc.keycodes[k] || mp.keycodes[k];
 
-    mp.keycodes_t = NULL;
+        mp.keycodes_t = NULL;
     
-    /* get the action asociated to the keycode */
-    if (a != NULL) {
-        /* if it's a hash, store for further testing */
-        if (is_hash(a))
-            mp.keycodes_t = a;
-        else {
-            /* if it's executable, run it */
-            if (is_exec(a))
-                a(doc);
-            else
-            /* if it's an array, process it sequentially */
-            if (is_array(a))
-                foreach(l, a)
-                    mp.process_action(l);
-            else
-                mp.process_action(a);
+        /* get the action asociated to the keycode */
+        if (a != NULL) {
+            /* if it's a hash, store for further testing */
+            if (is_hash(a))
+                mp.keycodes_t = a;
+            else {
+                /* if it's executable, run it */
+                if (is_exec(a))
+                    a(doc);
+                else
+                /* if it's an array, process it sequentially */
+                if (is_array(a))
+                    foreach(l, a)
+                        mp.process_action(l);
+                else
+                    mp.process_action(a);
+            }
         }
-    }
-    else
-        doc->keypress(k);
+        else
+            doc->keypress(k);
     
-    mp.shift_pressed = NULL;
-    
-    /* if it's read only but has modifications, revert them */
-    if (doc.read_only && size(doc.undo_q)) {
-        while (size(doc.undo_q))
-            doc->undo();
+        mp.shift_pressed = NULL;
 
-        mp.message = {
-            timeout:    time() + 2,
-            string:     '*' ~ L("Read-only document") ~ '*'
-        };
+        doc->post_event(k);
     }
 
     return NULL;

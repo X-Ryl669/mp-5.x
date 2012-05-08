@@ -340,20 +340,40 @@ sub mp.chomp(str)
 }
 
 
-sub mp_doc.test_mtime(doc)
-/* tests for a file's mtime (uses GUI) */
+sub mp_doc.pre_event(doc, k)
+/* an event is to be processed */
 {
     if (doc.mtime && time() > mp.mtime_test) {
         local s;
 
         if ((s = stat(doc.name)) != NULL && s[9] > doc.mtime) {
-            if (mp.confirm(L("File was changed externally. Reload?")) == 1)
+            if (mp.confirm(L("File was changed externally. Reload?")) == 1) {
                 mp.actions.revert(doc);
+                k = NULL;
+            }
  
             doc.mtime = s[9];
         }
 
         mp.mtime_test = time() + 2;
+    }
+
+    return k;
+}
+
+
+sub mp_doc.post_event(doc, k)
+/* an event has just been processed */
+{
+    /* if it's read only but has modifications, revert them */
+    if (doc.read_only && size(doc.undo_q)) {
+        while (size(doc.undo_q))
+            doc->undo();
+
+        mp.message = {
+            timeout:    time() + 2,
+            string:     '*' ~ L("Read-only document") ~ '*'
+        };
     }
 
     return doc;
