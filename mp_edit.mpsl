@@ -609,7 +609,7 @@ sub mp_doc.insert_newline(doc)
 }
 
 
-sub mp_doc.insert_keystroke(doc, key)
+sub mp_doc.keypress(doc, key)
 /* inserts from a keystroke (with undo) */
 {
     if (size(key) == 1) {
