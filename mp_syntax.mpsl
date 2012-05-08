@@ -313,7 +313,7 @@ mp.syntax.mpsl = {
 	'defs'		=>	[
 		'word1',	[
 				mp.syn_token_list( [
-					'if', 'else', 'while', 'foreach',
+					'if', 'else', 'while', 'foreach', 'for',
 					'sub', 'break', 'return', 'eq', 'ne' ]),
 				mp.syn_token_list( keys(MPSL.CORE) ),
 				'/[\{\}]/'
