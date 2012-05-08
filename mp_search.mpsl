@@ -168,12 +168,12 @@ mp.actions['grep']	= sub (d) {
 
 /** default key bindings **/
 
-mp.keycodes['f3']               = 'seek_next';
-mp.keycodes['ctrl-f3']          = 'seek_prev';
-mp.keycodes['ctrl-f']           = 'seek';
-mp.keycodes['ctrl-r']           = 'replace';
-mp.keycodes['ctrl-page-down']   = 'seek_next_char';
-mp.keycodes['ctrl-page-up']     = 'seek_prev_char';
+mp_doc.keycodes['f3']               = 'seek_next';
+mp_doc.keycodes['ctrl-f3']          = 'seek_prev';
+mp_doc.keycodes['ctrl-f']           = 'seek';
+mp_doc.keycodes['ctrl-r']           = 'replace';
+mp_doc.keycodes['ctrl-page-down']   = 'seek_next_char';
+mp_doc.keycodes['ctrl-page-up']     = 'seek_prev_char';
 
 /** action descriptions **/
 

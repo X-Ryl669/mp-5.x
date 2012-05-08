@@ -5,9 +5,6 @@ Release Critical Bugs
 ---------------------
 
  * 1298: Fix password prompt in encrypted files.
- * 1301: As mp_doc.keypress() is a pure method now, those in "toys"
-   no longer process MP keycodes as next doc, close or quit.
- * 1302: Change keycodes to be splitted in mp and mp_doc namespaces.
 
 Open Bugs
 ---------
@@ -381,5 +378,10 @@ Closed
    (Sun, 29 Apr 2012 12:22:31 +0200).
  * 1300: Fix make (Mon, 30 Apr 2012 12:52:48 +0200).
  * 1297: Fix +NNN in the command line (Thu, 03 May 2012 09:56:30 +0000).
+ * 1301: As mp_doc.keypress() is a pure method now, those in "toys"
+   no longer process MP keycodes as next doc, close or quit
+   (Tue, 08 May 2012 13:26:20 +0200).
+ * 1302: Change keycodes to be splitted in mp and mp_doc namespaces
+   (Tue, 08 May 2012 13:26:20 +0200).
 
 Email bugs to angel@triptico.com

@@ -135,10 +135,10 @@ sub mp.actions.move_section_down(d) {
 
 /** default key bindings **/
 
-mp.keycodes['f1']               = "help";
-mp.keycodes['ctrl-d']           = "section_list";
-mp.keycodes['alt-cursor-up']    = "move_section_up";
-mp.keycodes['alt-cursor-down']  = "move_section_down";
+mp_doc.keycodes['f1']               = "help";
+mp_doc.keycodes['ctrl-d']           = "section_list";
+mp_doc.keycodes['alt-cursor-up']    = "move_section_up";
+mp_doc.keycodes['alt-cursor-down']  = "move_section_down";
 
 /** action descriptions **/
 

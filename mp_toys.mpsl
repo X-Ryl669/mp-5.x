@@ -256,6 +256,9 @@ sub mp.pipes(doc, keycode)
         /* handlers */
         doc.keypress    = sub (d, k) { mp.pipes(d, k); };
 
+        /* necessary if it's of class mp_doc */
+        doc.keycodes    = {};
+
         doc.paint       = sub (d) {
             local out = [];
             local pipes = d.pipes;

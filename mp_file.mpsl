@@ -303,12 +303,12 @@ mp.actions['open_dropped_files'] = sub (d) {
 mp.keycodes['ctrl-n']           = 'next';
 mp.keycodes['ctrl-o']           = 'open';
 mp.keycodes['ctrl-q']           = 'exit';
-mp.keycodes['ctrl-s']           = 'save';
 mp.keycodes['ctrl-w']           = 'close';
-mp.keycodes['ctrl-enter']       = 'open_under_cursor';
-mp.keycodes['alt-enter']        = 'open_under_cursor';
 mp.keycodes['dropped-files']    = 'open_dropped_files';
 mp.keycodes['close-window']     = 'exit';
+mp_doc.keycodes['ctrl-s']       = 'save';
+mp_doc.keycodes['ctrl-enter']   = 'open_under_cursor';
+mp_doc.keycodes['alt-enter']    = 'open_under_cursor';
 
 /** action descriptions **/
 

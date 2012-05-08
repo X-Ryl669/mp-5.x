@@ -78,13 +78,13 @@ mp.actions['cut_lines_with_string'] = sub (d, str) {
 
 /** default key bindings **/
 
-mp.keycodes['f8']           = "unmark";
-mp.keycodes['f9']           = "mark";
-mp.keycodes['ctrl-b']       = "mark_vertical";
-mp.keycodes['ctrl-c']       = "copy_mark";
-mp.keycodes['ctrl-v']       = "paste_mark";
-mp.keycodes['ctrl-x']       = "cut_mark";
-mp.keycodes['mouse-drag']   = "mouse_drag_mark";
+mp_doc.keycodes['f8']           = "unmark";
+mp_doc.keycodes['f9']           = "mark";
+mp_doc.keycodes['ctrl-b']       = "mark_vertical";
+mp_doc.keycodes['ctrl-c']       = "copy_mark";
+mp_doc.keycodes['ctrl-v']       = "paste_mark";
+mp_doc.keycodes['ctrl-x']       = "cut_mark";
+mp_doc.keycodes['mouse-drag']   = "mouse_drag_mark";
 
 /** action descriptions **/
 

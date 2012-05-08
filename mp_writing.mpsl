@@ -69,13 +69,13 @@ mp.actions['seek_repeated_word'] = sub (d) {
 
 /** default key bindings **/
 
-mp.keycodes['f6']		= 'seek_repeated_word';
+mp_doc.keycodes['f6'] = 'seek_repeated_word';
 
 /** action descriptions **/
 
-mp.actdesc['word_count']		= LL("Count words");
-mp.actdesc['repeated_words_options']	= LL("Repeated words options...");
-mp.actdesc['seek_repeated_word']	= LL("Search repeated word");
+mp.actdesc['word_count']                = LL("Count words");
+mp.actdesc['repeated_words_options']    = LL("Repeated words options...");
+mp.actdesc['seek_repeated_word']        = LL("Search repeated word");
 
 /** data **/
 

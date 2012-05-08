@@ -81,8 +81,8 @@ mp.actions['complete_symbol'] = sub(d) {
 
 /** default key bindings **/
 
-mp.keycodes['ctrl-t'] = "find_tag";
-mp.keycodes['ctrl-u'] = "complete";
+mp_doc.keycodes['ctrl-t'] = "find_tag";
+mp_doc.keycodes['ctrl-u'] = "complete";
 
 /** action descriptions **/
 

@@ -174,11 +174,11 @@ mp.actions['vcs'] = sub (d) {
 
 /** default key bindings **/
 
-mp.keycodes['ctrl-p'] = 'vcs';
+mp_doc.keycodes['ctrl-p'] = 'vcs';
 
 /** action descriptions **/
 
-mp.keycodes['vcs'] = LL("Version Control...");
+mp.keydesc['vcs'] = LL("Version Control...");
 
 
 /** code **/

@@ -5,7 +5,7 @@
 
     Spellchecking code.
 
-    Copyright (C) 1991-2009 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    http://www.triptico.com
+    http://triptico.com
 
 */
 
@@ -29,19 +29,19 @@
 
 mp.actions['toggle_spellcheck']	= sub(d) { mp.ispell(-1); };
 mp.actions['seek_misspelled']	= sub(d) { mp.long_op(mp.search_misspelled, d) ||
-		mp.alert(L("Text not found."));
+        mp.alert(L("Text not found."));
 };
 mp.actions['ignore_last_misspell'] = sub(d) { mp.ignore_last_misspell(); };
 
 /** default key bindings **/
 
-mp.keycodes['f5']	= 'seek_misspelled';
+mp_doc.keycodes['f5']   = 'seek_misspelled';
 
 /** action descriptions **/
 
-mp.actdesc['toggle_spellcheck']		= LL("Toggle spellchecking");
-mp.actdesc['seek_misspelled']		= LL("Search misspelled word");
-mp.actdesc['ignore_last_misspell']	= LL("Ignore last misspelled word");
+mp.actdesc['toggle_spellcheck']     = LL("Toggle spellchecking");
+mp.actdesc['seek_misspelled']       = LL("Search misspelled word");
+mp.actdesc['ignore_last_misspell']  = LL("Ignore last misspelled word");
 
 /** data **/
 
