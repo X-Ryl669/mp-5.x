@@ -311,7 +311,7 @@ sub mp.process_action(a)
 }
 
 
-sub mp.test_mtime(doc)
+sub mp_doc.test_mtime(doc)
 /* tests for a file's mtime (uses GUI) */
 {
     if (doc.mtime && time() > mp.mtime_test) {
@@ -336,8 +336,8 @@ sub mp_doc.keypress(doc, k)
 {
     local a;
 
-    mp.test_mtime(doc);
-    
+    doc->test_mtime();
+
     if (mp.keycodes_t == NULL)
         mp.keycodes_t = mp.keycodes;
     
