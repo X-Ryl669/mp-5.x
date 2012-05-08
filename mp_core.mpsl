@@ -228,6 +228,7 @@ mp.actions_by_menu_label = {};
 mp_base = {
     name:           '',
     keycodes:       {},
+    keypress:       sub (doc, key) { doc; },
     paint:          sub (doc, opt) { return []; },
     query_close:    sub (doc) { 1; }
 };
