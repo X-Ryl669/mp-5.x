@@ -380,6 +380,8 @@ sub mp.build_status_line()
     }
     else
         r = mp.active()->get_status();
+
+    return r;
 }
 
 
