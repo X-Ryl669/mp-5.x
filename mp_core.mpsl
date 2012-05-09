@@ -255,7 +255,8 @@ mp_base = {
     paint:          sub (doc, opt) { return []; },
     pre_event:      sub (doc, key) { key; },
     post_event:     sub (doc, key) { doc; },
-    query_close:    sub (doc) { 1; }
+    query_close:    sub (doc) { 1; },
+    get_name:       sub (doc) { name; }
 };
 
 
@@ -468,12 +469,7 @@ sub mp.trim_with_ellipsis(str, max)
 sub mp.get_doc_names(max)
 /* returns an array with the trimmed names of the documents */
 {
-	map(
-		mp.docs,
-		sub(e) {
-			(e.txt.mod && '* ' || '') ~ mp.trim_with_ellipsis(e.name, (max || 24));
-		}
-	);
+    map(mp.docs, sub(e) {mp.trim_with_ellipsis(e->get_name(), (max || 24));});
 }
 
 
