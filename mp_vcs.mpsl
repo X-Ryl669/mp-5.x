@@ -25,6 +25,14 @@
 
 */
 
+/** default key bindings **/
+
+mp_doc.keycodes['ctrl-p'] = 'vcs';
+
+/** action descriptions **/
+
+mp.keydesc['vcs'] = LL("Version Control...");
+
 /** mp_doc commit subclass **/
 
 mp_doc_vcs = new(mp_doc, { name: '.COMMIT_MESSAGE' });
@@ -171,15 +179,6 @@ mp.actions['vcs'] = sub (d) {
         }
     }
 };
-
-/** default key bindings **/
-
-mp_doc.keycodes['ctrl-p'] = 'vcs';
-
-/** action descriptions **/
-
-mp.keydesc['vcs'] = LL("Version Control...");
-
 
 /** code **/
 
