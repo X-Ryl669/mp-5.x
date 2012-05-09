@@ -248,12 +248,13 @@ mp.actions_by_menu_label = {};
 /** MP base class **/
 
 mp_base = {
-    name:           '---',
+    name:           L("<unnamed>"),
     keycodes:       {},
+    actions:        {},
     keypress:       sub (doc, key) { doc; },
     paint:          sub (doc, opt) { return []; },
-    pre_event:      sub (doc, k) { k; },
-    post_event:     sub (doc, k) { doc; },
+    pre_event:      sub (doc, key) { key; },
+    post_event:     sub (doc, key) { doc; },
     query_close:    sub (doc) { 1; }
 };
 
@@ -261,7 +262,6 @@ mp_base = {
 /** MP document class **/
 
 mp_doc = new(mp_base, {
-    name:       L("<unnamed>"),
     txt: {
         x:      0,
         y:      0,
@@ -312,23 +312,25 @@ sub mp.active()
 }
 
 
-sub mp.process_action(a)
+sub mp.process_action(action)
 /* processes an action */
 {
-    local f, d;
+    local f, doc;
 
-    d = mp.active();
+    doc = mp.active();
 
-    if ((f = mp.actions[a]) != NULL)
-        f(d);
+    f = doc.actions[action] || mp.actions[action];
+
+    if (f != NULL)
+        f(doc);
     else {
         mp.message = {
             timeout:    time() + 2,
-            string:     sprintf(L("Unknown action '%s'"), a)
+            string:     sprintf(L("Unknown action '%s'"), action)
         };
     }
 
-    return NULL;
+    return doc;
 }
 
 
