@@ -177,34 +177,34 @@ mp_pipes = new(mp_base, {
         sx:         0,
         name:       '<pipes>',
         you_won:    0,
+        game_map:   NULL,
+        attr:       NULL,
 
         init:       sub (pipes) {
-            if (pipes.you_won || pipes.tx != mp.window.tx || pipes.ty != mp.window.ty) {
-                pipes.you_won = 0;
+            if (you_won || tx != mp.window.tx || ty != mp.window.ty) {
+                you_won = 0;
 
-                pipes.tx = mp.window.tx;
-                pipes.ty = mp.window.ty;
+                tx = mp.window.tx;
+                ty = mp.window.ty;
 
                 /* convert to integers */
-                local wx = sprintf('%d', ((tx - 2) / 3));
-                local wy = sprintf('%d', (((ty - 1) / 3) - 1));
+                wx = sprintf('%d', ((tx - 2) / 3));
+                wy = sprintf('%d', (((ty - 1) / 3) - 1));
 
-                pipes.wx = wx;
-                pipes.wy = wy;
-                pipes.sx = random(wx);
+                sx = random(wx);
 
-                pipes.game_map = map([1 .. wy - 1],
-                    sub {map([1 .. wx], sub { random(size(pipes.pieces) - 3); });}
+                game_map = map([1 .. wy - 1],
+                    sub {map([1 .. wx], sub { random(size(pieces) - 3); });}
                 );
 
                 /* add first line */
-                ins(pipes.game_map, map([1 .. wx], sub { 6; }), 0);
-                pipes.game_map[0][pipes.sx] = 7;
+                ins(game_map, map([1 .. wx], sub { 6; }), 0);
+                game_map[0][sx] = 7;
 
                 /* add last line */
-                push(pipes.game_map, map([1 .. wx], sub { 6; }));
-                pipes.game_map[wy][5] = 8;
-                pipes.game_map[wy][wx - 5] = 8;
+                push(game_map, map([1 .. wx], sub { 6; }));
+                game_map[wy][5] = 8;
+                game_map[wy][wx - 5] = 8;
             }
 
             return pipes;
@@ -212,54 +212,48 @@ mp_pipes = new(mp_base, {
         keypress:   sub (pipes, keycode) {
             pipes->init();
 
-            local x = pipes.x;
-            local y = pipes.y;
-
             if (keycode eq 'cursor-up' && y > 1)
                 y--;
-            if (keycode eq 'cursor-down'&& y < pipes.wy - 1)
+            if (keycode eq 'cursor-down'&& y < wy - 1)
                 y++;
             if (keycode eq 'cursor-left' && x > 0)
                 x--;
-            if (keycode eq 'cursor-right' && x < pipes.wx - 1)
+            if (keycode eq 'cursor-right' && x < wx - 1)
                 x++;
             if (keycode eq 'enter') {
-                local n = pipes.game_map[y][x];
+                local n = game_map[y][x];
 
-                pipes.game_map[y][x] = pipes.pieces[n].next;
+                game_map[y][x] = pieces[n].next;
             }
-
-            pipes.x = x;
-            pipes.y = y;
 
             return pipes;
         },
         verify:    sub (pipes) {
             /* reset attributes */
-            pipes.attr = map([0 .. pipes.wy], sub { [];});
+            attr = map([0 .. wy], sub { [];});
 
             /* the water input is blue */
-            pipes.attr[0][pipes.sx] = mp.colors.quotes.attr;
+            attr[0][sx] = mp.colors.quotes.attr;
 
             /* calculate the path */
-            local px = pipes.sx;
+            local px = sx;
             local py = 0;
             local c = 2; /* downwards */
             local p;
 
             /* while there is a valid path */
-            while ((p = pipes.pieces[pipes.game_map[py][px]]) && (c = p.out[c]) >= 0) {
+            while ((p = pieces[game_map[py][px]]) && (c = p.out[c]) >= 0) {
                 /* mark as valid path */
-                pipes.attr[py][px] = mp.colors.quotes.attr;
+                attr[py][px] = mp.colors.quotes.attr;
 
                 /* move in new direction */
-                px += pipes.dir[c][0];
-                py += pipes.dir[c][1];
+                px += dir[c][0];
+                py += dir[c][1];
             }
 
             if (c == -1000) {
-                pipes.attr[py][px] = mp.colors.quotes.attr;
-                pipes.you_won = 1;
+                attr[py][px] = mp.colors.quotes.attr;
+                you_won = 1;
             }
 
             return pipes;
