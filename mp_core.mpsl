@@ -330,7 +330,7 @@ sub mp.process_event(k)
     /* notify the document that an event is to be processed */
     k = doc->pre_event(k);
 
-    if (k) {
+    if (k != NULL) {
         /* get the action or next keycode from the possible sources */
         local a = mp.keycodes_t[k] || doc.keycodes[k] || mp.keycodes[k];
 
