@@ -248,20 +248,22 @@ mp.actions_by_menu_label = {};
 /** MP base class **/
 
 mp_base = {
-    name:           L("<unnamed>"),
+    name:           'MP',
     keycodes:       {},
     actions:        {},
     keypress:       sub (doc, key) { doc; },
     paint:          sub (doc, opt) { return []; },
     pre_event:      sub (doc, key) { key; },
     post_event:     sub (doc, key) { doc; },
-    query_close:    sub (doc) { 1; }
+    query_close:    sub (doc) { 1; },
+    get_name:       sub (doc) { name; }
 };
 
 
 /** MP document class **/
 
 mp_doc = new(mp_base, {
+    name:           L("<unnamed>"),
     txt: {
         x:      0,
         y:      0,
@@ -467,12 +469,8 @@ sub mp.trim_with_ellipsis(str, max)
 sub mp.get_doc_names(max)
 /* returns an array with the trimmed names of the documents */
 {
-	map(
-		mp.docs,
-		sub(e) {
-			(e.txt.mod && '* ' || '') ~ mp.trim_with_ellipsis(e.name, (max || 24));
-		}
-	);
+    max = 24;
+    mp.docs->map(sub (e) { mp.trim_with_ellipsis(e->get_name(), max);});
 }
 
 

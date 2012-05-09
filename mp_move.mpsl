@@ -147,6 +147,12 @@ mp.actdesc['document_list']             = LL("Document list");
 
 /** code **/
 
+sub mp_doc.get_name(doc)
+{
+    return doc.name ~ (doc.txt.mod && ' *' || '');
+}
+
+
 sub mp_doc.move(doc, func)
 /* wrapper for movement functions, with possible shift selection */
 {
