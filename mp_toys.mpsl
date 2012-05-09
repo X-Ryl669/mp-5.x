@@ -28,7 +28,7 @@
 /** editor actions **/
 
 mp.actions['pipes'] =   sub (d) {
-    mp.pipes();
+    mp.add(new(mp_pipes))->init();
 };
 
 /** action descriptions **/
@@ -165,103 +165,110 @@ sub mp.maze(doc, keycode)
 }
 
 
-sub mp.pipes(doc, keycode)
-{
-    local tx = mp.window.tx;
-    local ty = mp.window.ty;
+/** pipes **/
 
-    if (doc == NULL)
-        doc = mp.open('<pipes>');
+mp_pipes = new(mp_base, {
+        x:          0,
+        y:          1,
+        tx:         0,
+        ty:         0,
+        wx:         0,
+        wy:         0,
+        sx:         0,
+        name:       '<pipes>',
+        you_won:    0,
 
-    local pipes = doc.pipes;
+        init:       sub (pipes) {
+            if (pipes.you_won || pipes.tx != mp.window.tx || pipes.ty != mp.window.ty) {
+                pipes.you_won = 0;
 
-    if (pipes == NULL || pipes.you_won || pipes.tx != tx || pipes.ty != ty) {
-        /* convert to integers */
-        local wx = sprintf('%d', ((tx - 2) / 3));
-        local wy = sprintf('%d', (((ty - 1) / 3) - 1));
+                pipes.tx = mp.window.tx;
+                pipes.ty = mp.window.ty;
 
-        pipes = {
-            x:      0,
-            y:      1,
-            tx:     tx,
-            ty:     ty,
-            wx:     wx,
-            wy:     wy,
-            sx:     random(wx),
-            dir:    [[0, -1], [1, 0], [0, 1], [-1, 0]],
-            pieces: [
-                {
-                    shape:  [' # ', ' ##', '   '],
-                    out:    [-1, -1, 1, 0],
-                    next:   1
-                },
-                {
-                    shape:  ['   ', ' ##', ' # '],
-                    out:    [1, -1, -1, 2],
-                    next:   2
-                },
-                {
-                    shape:  ['   ', '## ', ' # '],
-                    out:    [3, 2, -1, -1],
-                    next:   3
-                },
-                {
-                    shape:  [' # ', '## ', '   '],
-                    out:    [-1, 0, 3, -1],
-                    next:   0
-                },
-                {
-                    shape:  [' # ', ' # ', ' # '],
-                    out:    [0, -1, 2, -1],
-                    next:   5
-                },
-                {
-                    shape:  ['   ', '###', '   '],
-                    out:    [-1, 1, -1, 3],
-                    next:   4
-                },
-                { /* blank */
-                    shape:  ['   ', '   ', '   '],
-                    out:    [-1, -1, -1, -1],
-                    next:   6
-                },
-                { /* entry pipe */
-                    shape:  ['| |', '\ /', ' # '],
-                    out:    [-1, -1, 2, -1],
-                    next:   7
-                },
-                { /* out pipe */
-                    shape:  [' # ', ' # ', '/ \'],
-                    out:    [-1, -1, -1000, -1],
-                    next:   8
-                }
-            ]
-        };
+                /* convert to integers */
+                local wx = sprintf('%d', ((tx - 2) / 3));
+                local wy = sprintf('%d', (((ty - 1) / 3) - 1));
 
-        pipes.map = map([1 .. wy - 1],
-            sub {map([1 .. wx], sub { random(size(pipes.pieces) - 3); });}
-        );
+                pipes.wx = wx;
+                pipes.wy = wy;
+                pipes.sx = random(wx);
 
-        /* add first line */
-        ins(pipes.map, map([1 .. wx], sub { 6; }), 0);
-        pipes.map[0][pipes.sx] = 7;
+                pipes.game_map = map([1 .. wy - 1],
+                    sub {map([1 .. wx], sub { random(size(pipes.pieces) - 3); });}
+                );
 
-        /* add last line */
-        push(pipes.map, map([1 .. wx], sub { 6; }));
-        pipes.map[wy][5] = 8;
-        pipes.map[wy][wx - 5] = 8;
+                /* add first line */
+                ins(pipes.game_map, map([1 .. wx], sub { 6; }), 0);
+                pipes.game_map[0][pipes.sx] = 7;
 
-        doc.pipes = pipes;
+                /* add last line */
+                push(pipes.game_map, map([1 .. wx], sub { 6; }));
+                pipes.game_map[wy][5] = 8;
+                pipes.game_map[wy][wx - 5] = 8;
+            }
 
-        /* handlers */
-        doc.keypress    = sub (d, k) { mp.pipes(d, k); };
+            return pipes;
+        },
+        keypress:   sub (pipes, keycode) {
+            pipes->init();
 
-        /* necessary if it's of class mp_doc */
-        doc.keycodes    = {};
+            local x = pipes.x;
+            local y = pipes.y;
 
-        doc.paint       = sub (d) {
+            if (keycode eq 'cursor-up' && y > 1)
+                y--;
+            if (keycode eq 'cursor-down'&& y < pipes.wy - 1)
+                y++;
+            if (keycode eq 'cursor-left' && x > 0)
+                x--;
+            if (keycode eq 'cursor-right' && x < pipes.wx - 1)
+                x++;
+            if (keycode eq 'enter') {
+                local n = pipes.game_map[y][x];
+
+                pipes.game_map[y][x] = pipes.pieces[n].next;
+            }
+
+            pipes.x = x;
+            pipes.y = y;
+
+            return pipes;
+        },
+        verify:    sub (pipes) {
+            /* reset attributes */
+            pipes.attr = map([0 .. pipes.wy], sub { [];});
+
+            /* the water input is blue */
+            pipes.attr[0][pipes.sx] = mp.colors.quotes.attr;
+
+            /* calculate the path */
+            local px = pipes.sx;
+            local py = 0;
+            local c = 2; /* downwards */
+            local p;
+
+            /* while there is a valid path */
+            while ((p = pipes.pieces[pipes.game_map[py][px]]) && (c = p.out[c]) >= 0) {
+                /* mark as valid path */
+                pipes.attr[py][px] = mp.colors.quotes.attr;
+
+                /* move in new direction */
+                px += pipes.dir[c][0];
+                py += pipes.dir[c][1];
+            }
+
+            if (c == -1000) {
+                pipes.attr[py][px] = mp.colors.quotes.attr;
+                pipes.you_won = 1;
+            }
+
+            return pipes;
+        },
+        paint:      sub (pipes) {
             local out = [];
-            local pipes = d.pipes;
+
+            pipes->init();
+            pipes->verify();
 
             foreach (n, [0 .. pipes.wy]) {
                 local l0 = [];
@@ -269,7 +276,7 @@ sub mp.pipes(doc, keycode)
                 local l2 = [];
 
                 foreach (m, [0 .. (pipes.wx - 1)]) {
-                    local p = pipes.map[n][m];
+                    local p = pipes.game_map[n][m];
                     local s = pipes.pieces[p].shape;
                     local c;
 
@@ -294,57 +301,55 @@ sub mp.pipes(doc, keycode)
             }
 
             return out;
-        };
+        },
+
+        dir:        [[0, -1], [1, 0], [0, 1], [-1, 0]],
+        pieces: [
+            {
+                shape:  [' # ', ' ##', '   '],
+                out:    [-1, -1, 1, 0],
+                next:   1
+            },
+            {
+                shape:  ['   ', ' ##', ' # '],
+                out:    [1, -1, -1, 2],
+                next:   2
+            },
+            {
+                shape:  ['   ', '## ', ' # '],
+                out:    [3, 2, -1, -1],
+                next:   3
+            },
+            {
+                shape:  [' # ', '## ', '   '],
+                out:    [-1, 0, 3, -1],
+                next:   0
+            },
+            {
+                shape:  [' # ', ' # ', ' # '],
+                out:    [0, -1, 2, -1],
+                next:   5
+            },
+            {
+                shape:  ['   ', '###', '   '],
+                out:    [-1, 1, -1, 3],
+                next:   4
+            },
+            { /* blank */
+                shape:  ['   ', '   ', '   '],
+                out:    [-1, -1, -1, -1],
+                next:   6
+            },
+            { /* entry pipe */
+                shape:  ['| |', '\ /', ' # '],
+                out:    [-1, -1, 2, -1],
+                next:   7
+            },
+            { /* out pipe */
+                shape:  [' # ', ' # ', '/ \'],
+                out:    [-1, -1, -1000, -1],
+                next:   8
+            }
+        ]
     }
-
-	local x = pipes.x;
-	local y = pipes.y;
-
-	if (keycode eq 'cursor-up' && y > 1)
-		y--;
-	if (keycode eq 'cursor-down'&& y < pipes.wy - 1)
-		y++;
-	if (keycode eq 'cursor-left' && x > 0)
-		x--;
-	if (keycode eq 'cursor-right' && x < pipes.wx - 1)
-		x++;
-    if (keycode eq 'enter') {
-        local n = pipes.map[y][x];
-
-        pipes.map[y][x] = pipes.pieces[n].next;
-    }
-
-    pipes.x = x;
-    pipes.y = y;
-
-    /* reset attributes */
-    pipes.attr = map([0 .. pipes.wy], sub { [];});
-
-    /* the water input is blue */
-    pipes.attr[0][pipes.sx] = mp.colors.quotes.attr;
-
-    /* calculate the path */
-    local px = pipes.sx;
-    local py = 0;
-    local c = 2; /* downwards */
-    local p;
-
-    /* while there is a valid path */
-    while ((p = pipes.pieces[pipes.map[py][px]]) && (c = p.out[c]) >= 0) {
-        /* mark as valid path */
-        pipes.attr[py][px] = mp.colors.quotes.attr;
-
-        /* move in new direction */
-        px += pipes.dir[c][0];
-        py += pipes.dir[c][1];
-    }
-
-    if (c == -1000) {
-        pipes.attr[py][px] = mp.colors.quotes.attr;
-        pipes.you_won = 1;
-    }
-
-    doc->undo();
-
-    return doc;
-}
+);
