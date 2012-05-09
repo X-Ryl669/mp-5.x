@@ -432,28 +432,22 @@ sub mp.menu_label(action)
 
 	/* if action is '-', it's a menu separator */
     if (action ne '-') {
-        /* no recognized action? */
-        if (!exists(mp.actions, action))
-            l = action ~ "?";
-        else {
-            /* get the translated description */
-            l = L(mp.actdesc[action]) || action;
+        l = L(mp.actdesc[action]) || action;
 
-            local ks = [];
+        local ks = [];
 
-            /* look for this action in mp_doc keycodes */
-            foreach (i, grep(keys(mp_doc.keycodes),
-                sub (e) { mp_doc.keycodes[e] eq action; }))
-                push(ks, i);
+        /* look for this action in mp_doc keycodes */
+        foreach (i, grep(keys(mp_doc.keycodes),
+            sub (e) { mp_doc.keycodes[e] eq action; }))
+            push(ks, i);
 
-            /* look now in global keycodes */
-            foreach (i, grep(keys(mp.keycodes),
-                sub (e) { mp.keycodes[e] eq action; }))
-                push(ks, i);
+        /* look now in global keycodes */
+        foreach (i, grep(keys(mp.keycodes),
+            sub (e) { mp.keycodes[e] eq action; }))
+            push(ks, i);
 
-            if (size(ks))
-                l = l ~ ' [' ~ join(ks, ', ') ~ ']';
-        }
+        if (size(ks))
+            l = l ~ ' [' ~ join(ks, ', ') ~ ']';
 
     	mp.actions_by_menu_label[l] = action;
     }

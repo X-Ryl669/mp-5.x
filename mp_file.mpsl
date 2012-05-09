@@ -43,7 +43,7 @@ mp.actions['new']	= sub (d) {
 mp.actions['next']	= sub (d) { mp.next(); };
 mp.actions['prev']	= sub (d) { mp.prev(); };
 
-mp.actions['save_as']	= sub (d, newname) {
+mp_doc.actions['save_as'] = sub (d, newname) {
 
     if (newname == NULL)
         newname = mp.savefile(L("Save file as:"));
@@ -61,11 +61,11 @@ mp.actions['save_as']	= sub (d, newname) {
     return d;
 };
 
-mp.actions['save']	= sub (d) {
+mp_doc.actions['save'] = sub (d) {
 
     /* name is <unnamed> or something similar; ask for one */
     if (regex(d.name, "/^<.+>$/"))
-        mp.actions.save_as(d);
+        mp_doc.actions.save_as(d);
     else
     if (d->long_op(mp_doc.save) == -1)
         mp.alert(sprintf(L("Error saving file: %s"), ERRNO));
