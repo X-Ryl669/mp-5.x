@@ -248,7 +248,7 @@ mp.actions_by_menu_label = {};
 /** MP base class **/
 
 mp_base = {
-    name:           L("<unnamed>"),
+    name:           'MP',
     keycodes:       {},
     actions:        {},
     keypress:       sub (doc, key) { doc; },
@@ -262,6 +262,7 @@ mp_base = {
 /** MP document class **/
 
 mp_doc = new(mp_base, {
+    name:           L("<unnamed>"),
     txt: {
         x:      0,
         y:      0,
