@@ -263,7 +263,7 @@ mp_doc = new(mp_base, {
     syntax:     NULL,
 
     /* rendering function for MP docs in mp_core.c */
-    paint:      mp_c.paint,
+    paint:      mp_c.render,
 
     busy:       sub (doc, b) { mp.busy(b); return doc; }
 });
