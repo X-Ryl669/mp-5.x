@@ -80,21 +80,6 @@ else
 
 /* status line */
 mp.config.status_format = "%m%n %x,%y [%l] %R%O %s %e %t";
-mp.status_line_info = {
-	'%V'	=>	mp.VERSION,
-	'%m'	=>	sub { mp.active.disk_op && '!' || (mp.active.txt.mod && '*' || ''); },
-	'%x'	=>	sub { mp.active.txt.x + 1; },
-	'%y'	=>	sub { mp.active.txt.y + 1; },
-	'%l'	=>	sub { size(mp.active.txt.lines); },
-	'%R'	=>	sub { mp.macro.process_event && 'R' || ''; },
-	'%O'	=>	sub { mp.config.insert && 'O' || ''; },
-	'%s'	=>	sub { mp.active.syntax.name; },
-	'%t'	=>	sub { mp.tags[mp.active()->get_word()].label; },
-	'%n'	=>	sub { mp.active.name; },
-	'%w'	=>	sub { mp.active()->word_count(); },
-	'%e'	=>	sub { mp.active.encoding || ''; },
-	'%%'	=>	'%'
-};
 
 /* a regex for selecting words */
 mp.word_regex = "/[[:alnum:]_]+/i";
@@ -256,7 +241,8 @@ mp_base = {
     pre_event:      sub (doc, key) { key; },
     post_event:     sub (doc, key) { doc; },
     query_close:    sub (doc) { 1; },
-    get_name:       sub (doc) { name; }
+    get_name:       sub (doc) { name; },
+    get_status:     sub (doc) { name; }
 };
 
 
@@ -383,15 +369,17 @@ sub mp.process_event(k)
 sub mp.build_status_line()
 /* returns the string to be drawn in the status line */
 {
-	if (mp.message) {
-		/* is the message still active? */
-		if (mp.message.timeout > time())
-			return mp.message.string;
+    local r;
 
-		mp.message = NULL;
-	}
+    if (mp.message) {
+        r = mp.message.string;
 
-	return sregex(mp.config.status_format, "/%./g", mp.status_line_info);
+        /* is the message still active? */
+        if (mp.message.timeout <= time())
+            mp.message = NULL;
+    }
+    else
+        r = mp.active()->get_status();
 }
 
 
