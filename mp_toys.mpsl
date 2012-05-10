@@ -267,20 +267,20 @@ mp_pipes = new(mp_base, {
 
             pipes->init();
 
-            foreach (n, [0 .. pipes.wy]) {
+            foreach (n, [0 .. wy]) {
                 local l0 = [];
                 local l1 = [];
                 local l2 = [];
 
-                foreach (m, [0 .. (pipes.wx - 1)]) {
-                    local p = pipes.game_map[n][m];
-                    local s = pipes.pieces[p].shape;
+                foreach (m, [0 .. (wx - 1)]) {
+                    local p = game_map[n][m];
+                    local s = pieces[p].shape;
                     local c;
 
-                    if (n == pipes.y && m == pipes.x)
+                    if (n == y && m == x)
                         c = mp.colors.cursor.attr;
                     else
-                        c = pipes.attr[n][m] || mp.colors.normal.attr;
+                        c = attr[n][m] || mp.colors.normal.attr;
 
                     push(l0, c, s[0]);
                     push(l1, c, s[1]);
@@ -290,13 +290,13 @@ mp_pipes = new(mp_base, {
                 push(out, l0, l1, l2);
             }
 
-            if (pipes.state eq 'WON') {
+            if (state eq 'WON') {
                 out[0] = [
                     mp.colors.cursor.attr,
                     L("You won! Press any key.")
                 ];
 
-                pipes.state = 'RST';
+                state = 'RST';
             }
 
             return out;
