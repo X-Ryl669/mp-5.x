@@ -147,6 +147,33 @@ mp.actdesc['document_list']             = LL("Document list");
 
 /** code **/
 
+sub mp_doc._get_name(doc)
+{
+    return doc.txt.mod && (doc.name ~ ' *') || doc.name;
+}
+
+
+sub mp_doc.get_status(doc)
+{
+    return sregex(mp.config.status_format, "/%./g", {
+            '%V'    =>  mp.VERSION,
+            '%m'    =>  sub { mp.active.txt.mod && '*' || ''; },
+            '%x'    =>  sub { mp.active.txt.x + 1; },
+            '%y'    =>  sub { mp.active.txt.y + 1; },
+            '%l'    =>  sub { size(mp.active.txt.lines); },
+            '%R'    =>  sub { mp.macro.process_event && 'R' || ''; },
+            '%O'    =>  sub { mp.config.insert && 'O' || ''; },
+            '%s'    =>  sub { mp.active.syntax.name; },
+            '%t'    =>  sub { mp.tags[mp.active()->get_word()].label; },
+            '%n'    =>  sub { mp.active.name; },
+            '%w'    =>  sub { mp.active()->word_count(); },
+            '%e'    =>  sub { mp.active.encoding || ''; },
+            '%%'    =>  '%'
+        }
+    );
+}
+
+
 sub mp_doc.move(doc, func)
 /* wrapper for movement functions, with possible shift selection */
 {

@@ -80,21 +80,6 @@ else
 
 /* status line */
 mp.config.status_format = "%m%n %x,%y [%l] %R%O %s %e %t";
-mp.status_line_info = {
-	'%V'	=>	mp.VERSION,
-	'%m'	=>	sub { mp.active.disk_op && '!' || (mp.active.txt.mod && '*' || ''); },
-	'%x'	=>	sub { mp.active.txt.x + 1; },
-	'%y'	=>	sub { mp.active.txt.y + 1; },
-	'%l'	=>	sub { size(mp.active.txt.lines); },
-	'%R'	=>	sub { mp.macro.process_event && 'R' || ''; },
-	'%O'	=>	sub { mp.config.insert && 'O' || ''; },
-	'%s'	=>	sub { mp.active.syntax.name; },
-	'%t'	=>	sub { mp.tags[mp.active()->get_word()].label; },
-	'%n'	=>	sub { mp.active.name; },
-	'%w'	=>	sub { mp.active()->word_count(); },
-	'%e'	=>	sub { mp.active.encoding || ''; },
-	'%%'	=>	'%'
-};
 
 /* a regex for selecting words */
 mp.word_regex = "/[[:alnum:]_]+/i";
@@ -248,20 +233,23 @@ mp.actions_by_menu_label = {};
 /** MP base class **/
 
 mp_base = {
-    name:           L("<unnamed>"),
+    name:           'MP',
     keycodes:       {},
     actions:        {},
     keypress:       sub (doc, key) { doc; },
     paint:          sub (doc, opt) { return []; },
     pre_event:      sub (doc, key) { key; },
     post_event:     sub (doc, key) { doc; },
-    query_close:    sub (doc) { 1; }
+    query_close:    sub (doc) { 1; },
+    get_name:       sub (doc) { name; },
+    get_status:     sub (doc) { name; }
 };
 
 
 /** MP document class **/
 
 mp_doc = new(mp_base, {
+    name:           L("<unnamed>"),
     txt: {
         x:      0,
         y:      0,
@@ -275,7 +263,7 @@ mp_doc = new(mp_base, {
     syntax:     NULL,
 
     /* rendering function for MP docs in mp_core.c */
-    paint:      mp_c.paint,
+    paint:      mp_c.render,
 
     busy:       sub (doc, b) { mp.busy(b); return doc; }
 });
@@ -342,7 +330,7 @@ sub mp.process_event(k)
     /* notify the document that an event is to be processed */
     k = doc->pre_event(k);
 
-    if (k) {
+    if (k != NULL) {
         /* get the action or next keycode from the possible sources */
         local a = mp.keycodes_t[k] || doc.keycodes[k] || mp.keycodes[k];
 
@@ -381,15 +369,19 @@ sub mp.process_event(k)
 sub mp.build_status_line()
 /* returns the string to be drawn in the status line */
 {
-	if (mp.message) {
-		/* is the message still active? */
-		if (mp.message.timeout > time())
-			return mp.message.string;
+    local r;
 
-		mp.message = NULL;
-	}
+    if (mp.message) {
+        r = mp.message.string;
 
-	return sregex(mp.config.status_format, "/%./g", mp.status_line_info);
+        /* is the message still active? */
+        if (mp.message.timeout <= time())
+            mp.message = NULL;
+    }
+    else
+        r = mp.active()->get_status();
+
+    return r;
 }
 
 
@@ -467,12 +459,7 @@ sub mp.trim_with_ellipsis(str, max)
 sub mp.get_doc_names(max)
 /* returns an array with the trimmed names of the documents */
 {
-	map(
-		mp.docs,
-		sub(e) {
-			(e.txt.mod && '* ' || '') ~ mp.trim_with_ellipsis(e.name, (max || 24));
-		}
-	);
+    map(mp.docs, sub(e) {mp.trim_with_ellipsis(e->get_name(), (max || 24));});
 }
 
 

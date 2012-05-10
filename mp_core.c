@@ -850,7 +850,13 @@ mpdm_t mp_draw(mpdm_t doc, int optimize)
     mpdm_t f, r = NULL;
 
     if ((f = mpdm_hget_s(doc, L"paint")) != NULL) {
-        r = mpdm_exec_2(f, doc, MPDM_I(optimize), NULL);
+        /* create a context to contain the object itself
+           (i.e. call as a method) */
+        mpdm_t ctxt = mpdm_ref(MPDM_A(0));
+
+        mpdm_push(ctxt, doc);
+        r = mpdm_exec_2(f, doc, MPDM_I(optimize), ctxt);
+        mpdm_unref(ctxt);
     }
 
     return r;
@@ -978,7 +984,7 @@ static mpdm_t exit_requested(mpdm_t args, mpdm_t ctxt)
 }
 
 
-mpdm_t mp_c_paint(mpdm_t args, mpdm_t ctxt)
+mpdm_t mp_c_render(mpdm_t args, mpdm_t ctxt)
 {
     return drw_draw(mpdm_aget(args, 0), mpdm_ival(mpdm_aget(args, 1)));
 }
@@ -1083,7 +1089,7 @@ void mp_startup(int argc, char *argv[])
     mp_c = MPDM_H(0);
     mpdm_hset_s(mpdm_root(), L"mp_c", mp_c);
 
-    mpdm_hset_s(mp_c, L"paint",         MPDM_X(mp_c_paint));
+    mpdm_hset_s(mp_c, L"render", MPDM_X(mp_c_render));
 
     /* creates the INC (executable path) array */
     INC = mpdm_hset_s(mpdm_root(), L"INC", MPDM_A(0));
