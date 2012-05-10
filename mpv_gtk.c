@@ -2310,6 +2310,10 @@ static mpdm_t run_filechooser(mpdm_t a, gboolean save)
 
     build_form_data(NULL);
 
+    /* override stupid GTK3 "optimal" current folder */
+    char tmp[2048];
+    gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dlg), getcwd(tmp, sizeof(tmp)));
+
     gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dlg), TRUE);
     response = gtk_dialog_run(GTK_DIALOG(dlg));
 
