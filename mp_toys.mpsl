@@ -171,11 +171,11 @@ mp_pipes = new(mp_base, {
         name:       '<pipes>',
         x:          0,
         y:          1,
-        tx:         0,
-        ty:         0,
-        wx:         0,
-        wy:         0,
-        sx:         0,
+        tx:         -1,
+        ty:         -1,
+        wx:         -1,
+        wy:         -1,
+        sx:         -1,
         state:      'RST',
         game_map:   NULL,
         attr:       NULL,
@@ -245,11 +245,11 @@ mp_pipes = new(mp_base, {
             /* calculate the path */
             local px = sx;
             local py = 0;
-            local c = 2; /* downwards */
+            local c = 'D'; /* downwards */
             local p;
 
             /* while there is a valid path */
-            while ((p = pieces[game_map[py][px]]) && (c = p.out[c]) >= 0) {
+            while ((p = pieces[game_map[py][px]]) && (c = p.out[c]) && dir[c]) {
                 /* mark as valid path */
                 attr[py][px] = mp.colors.quotes.attr;
 
@@ -258,7 +258,7 @@ mp_pipes = new(mp_base, {
                 py += dir[c][1];
             }
 
-            if (c == -1000) {
+            if (c eq 'WIN') {
                 attr[py][px] = mp.colors.quotes.attr;
                 state = 'WON';
             }
@@ -305,51 +305,56 @@ mp_pipes = new(mp_base, {
             return out;
         },
 
-        dir:        [[0, -1], [1, 0], [0, 1], [-1, 0]],
+        dir: {
+            U:  [ 0, -1],
+            R:  [ 1,  0],
+            D:  [ 0,  1],
+            L:  [-1,  0]
+        },
         pieces: [
             {
                 shape:  [' # ', ' ##', '   '],
-                out:    [-1, -1, 1, 0],
+                out:    { D: 'R', L: 'U' },
                 next:   1
             },
             {
                 shape:  ['   ', ' ##', ' # '],
-                out:    [1, -1, -1, 2],
+                out:    { U: 'R', L: 'D' },
                 next:   2
             },
             {
                 shape:  ['   ', '## ', ' # '],
-                out:    [3, 2, -1, -1],
+                out:    { U: 'L', R: 'D' },
                 next:   3
             },
             {
                 shape:  [' # ', '## ', '   '],
-                out:    [-1, 0, 3, -1],
+                out:    { R: 'U', D: 'L' },
                 next:   0
             },
             {
                 shape:  [' # ', ' # ', ' # '],
-                out:    [0, -1, 2, -1],
+                out:    { U: 'U', D: 'D' },
                 next:   5
             },
             {
                 shape:  ['   ', '###', '   '],
-                out:    [-1, 1, -1, 3],
+                out:    { R: 'R', L: 'L' },
                 next:   4
             },
             { /* blank */
                 shape:  ['   ', '   ', '   '],
-                out:    [-1, -1, -1, -1],
+                out:    {},
                 next:   6
             },
             { /* entry pipe */
                 shape:  ['| |', '\ /', ' # '],
-                out:    [-1, -1, 2, -1],
+                out:    { D: 'D' },
                 next:   7
             },
             { /* out pipe */
                 shape:  [' # ', ' # ', '/ \'],
-                out:    [-1, -1, -1000, -1],
+                out:    { D: 'WIN' },
                 next:   8
             }
         ]
