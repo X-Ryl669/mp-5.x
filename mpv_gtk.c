@@ -2480,10 +2480,13 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
     	
     	w = (monitor_one_size.width * 3) / 4;
     	h = (monitor_one_size.height * 2) / 3;
-    } else {
+    }
+    else {
     	w = (gdk_screen_get_width(screen) * 3) / 4;
     	h = (gdk_screen_get_height(screen) * 2) / 3;
     }
+
+    gtk_window_set_default_size(GTK_WINDOW(window), w, h);
 
     g_signal_connect(G_OBJECT(window), "delete_event",
                      G_CALLBACK(delete_event), NULL);
@@ -2522,7 +2525,6 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
     /* the Minimum Profit area */
     area = gtk_drawing_area_new();
     gtk_box_pack_start(GTK_BOX(hbox), area, TRUE, TRUE, 0);
-    gtk_widget_set_size_request(GTK_WIDGET(area), w, h);
     gtk_widget_set_events(GTK_WIDGET(area), GDK_BUTTON_PRESS_MASK |
                           GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK
                           | GDK_LEAVE_NOTIFY_MASK);
