@@ -21,7 +21,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    http://www.triptico.com
+    http://triptico.com
 
 */
 
@@ -168,6 +168,7 @@ sub mp.maze(doc, keycode)
 /** pipes **/
 
 mp_pipes = new(mp_base, {
+        name:       '<pipes>',
         x:          0,
         y:          1,
         tx:         0,
@@ -175,11 +176,13 @@ mp_pipes = new(mp_base, {
         wx:         0,
         wy:         0,
         sx:         0,
-        name:       '<pipes>',
         state:      'RST',
         game_map:   NULL,
         attr:       NULL,
 
+        get_status: sub (pipes) {
+            L("Pipes - carry water from top to bottom by turning the pipes");
+        },
         init:       sub (pipes) {
             if (state eq 'RST' || tx != mp.window.tx || ty != mp.window.ty) {
                 tx = mp.window.tx;
