@@ -850,7 +850,13 @@ mpdm_t mp_draw(mpdm_t doc, int optimize)
     mpdm_t f, r = NULL;
 
     if ((f = mpdm_hget_s(doc, L"paint")) != NULL) {
-        r = mpdm_exec_2(f, doc, MPDM_I(optimize), NULL);
+        /* create a context to contain the object itself
+           (i.e. call as a method) */
+        mpdm_t ctxt = mpdm_ref(MPDM_A(0));
+
+        mpdm_push(ctxt, doc);
+        r = mpdm_exec_2(f, doc, MPDM_I(optimize), ctxt);
+        mpdm_unref(ctxt);
     }
 
     return r;
