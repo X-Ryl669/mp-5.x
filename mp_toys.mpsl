@@ -176,14 +176,12 @@ mp_pipes = new(mp_base, {
         wy:         0,
         sx:         0,
         name:       '<pipes>',
-        you_won:    0,
+        state:      'RST',
         game_map:   NULL,
         attr:       NULL,
 
         init:       sub (pipes) {
-            if (you_won || tx != mp.window.tx || ty != mp.window.ty) {
-                you_won = 0;
-
+            if (state eq 'RST' || tx != mp.window.tx || ty != mp.window.ty) {
                 tx = mp.window.tx;
                 ty = mp.window.ty;
 
@@ -205,6 +203,10 @@ mp_pipes = new(mp_base, {
                 push(game_map, map([1 .. wx], sub { 6; }));
                 game_map[wy][5] = 8;
                 game_map[wy][wx - 5] = 8;
+
+                state = 'PLAY';
+
+                pipes->verify();
             }
 
             return pipes;
@@ -224,6 +226,8 @@ mp_pipes = new(mp_base, {
                 local n = game_map[y][x];
 
                 game_map[y][x] = pieces[n].next;
+
+                pipes->verify();
             }
 
             return pipes;
@@ -253,7 +257,7 @@ mp_pipes = new(mp_base, {
 
             if (c == -1000) {
                 attr[py][px] = mp.colors.quotes.attr;
-                you_won = 1;
+                state = 'WON';
             }
 
             return pipes;
@@ -262,7 +266,6 @@ mp_pipes = new(mp_base, {
             local out = [];
 
             pipes->init();
-            pipes->verify();
 
             foreach (n, [0 .. pipes.wy]) {
                 local l0 = [];
@@ -287,11 +290,13 @@ mp_pipes = new(mp_base, {
                 push(out, l0, l1, l2);
             }
 
-            if (pipes.you_won) {
+            if (pipes.state eq 'WON') {
                 out[0] = [
                     mp.colors.cursor.attr,
                     L("You won! Press any key.")
                 ];
+
+                pipes.state = 'RST';
             }
 
             return out;
