@@ -5,7 +5,7 @@
 
     Text User Interface.
 
-    Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    http://www.triptico.com
+    http://triptico.com
 
 */
 
@@ -353,10 +353,50 @@ sub mp.tui.confirm(msg, def, ypos)
 }
 
 
+sub mp.tui.draw_scrollbar(doc)
+/* draws a vertical read-only scrollbar */
+{
+    local ty = mp.window.ty - 1;
+
+    /* draw scrollbar only if doc is longer than the window height */
+    if (size(doc.txt.lines) > ty) {
+        local y1, y2, n;
+
+        y1 = sprintf("%d", (doc.txt.vy * ty) / size(doc.txt.lines));
+        y2 = sprintf("%d", ((doc.txt.vy + ty) * ty) / size(doc.txt.lines));
+
+        /* draw at least 1 line of "thumb" */
+        if (y1 == y2)
+            y2++;
+
+    	mp.tui.attr(mp.colors.normal.attr);
+        for (n = 0; n < y1; n++) {
+            mp.tui.move(mp.window.tx - 1, n);
+            mp.tui.addstr(' ');
+        }
+
+    	mp.tui.attr(mp.colors.cursor.attr);
+        for (n = y1; n < y2; n++) {
+            mp.tui.move(mp.window.tx - 1, n);
+            mp.tui.addstr(' ');
+        }
+
+    	mp.tui.attr(mp.colors.normal.attr);
+        for (n = y2; n < ty; n++) {
+            mp.tui.move(mp.window.tx - 1, n);
+            mp.tui.addstr(' ');
+        }
+    }
+}
+
+
 sub mp.tui.draw(doc)
 {
 	/* draw the document part */
 	mp.tui.doc_draw(doc);
+
+    /* draws the scrollbar */
+    mp.tui.draw_scrollbar(doc);
 
 	/* draw the status line */
 	mp.tui.attr(mp.colors.normal.attr);
