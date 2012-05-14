@@ -327,6 +327,9 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
         case L'=':
             f = L"alt-=";
             break;
+        case L'[':
+            f = L"ansi";
+            break;
         }
 
         shift = 0;

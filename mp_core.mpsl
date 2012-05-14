@@ -161,7 +161,9 @@ mp.colors = {
 /* hash of specially coloured words */
 mp.word_color = {};
 
-mp.keycodes = {};
+mp.keycodes = {
+    ansi: {}
+};
 
 mp.actions = {};
 
