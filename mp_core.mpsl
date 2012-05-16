@@ -291,7 +291,7 @@ sub mp.active()
 {
     /* if there is a list of pending files to open, do it */
     while (size(mp.active_pending))
-        mp.open(pop(mp.active_pending));
+        mp.actions.open(NULL, pop(mp.active_pending));
 
     /* empty document list? create a new, empty one */
     if (size(mp.docs) == 0)

@@ -4,7 +4,6 @@ Minimum Profit 5 TODO / Bug List
 Release Critical Bugs
 ---------------------
 
- * 1298: Fix password prompt in encrypted files.
 
 Open Bugs
 ---------
@@ -385,5 +384,7 @@ Closed
    (Tue, 08 May 2012 13:26:20 +0200).
  * 1303: Fix keystrokes help in the menu
    (Tue, 08 May 2012 15:17:57 +0200).
+ * 1298: Fix password prompt in encrypted files
+   (Wed, 16 May 2012 18:27:21 +0200).
 
 Email bugs to angel@triptico.com
