@@ -91,9 +91,28 @@ mp.actions['open']	= sub (d, filename) {
     if (filename == NULL)
         filename = mp.openfile(L("File to open:"));
 
-    if (filename != NULL && filename ne "")
-        if (mp.long_op(mp.open, filename) == NULL && ERRNO != NULL)
-            mp.alert(sprintf("Error opening '%s': %s", filename, ERRNO));
+    if (filename != NULL && filename ne "") {
+        if (mp.long_op(mp.open, filename) == NULL) {
+            if (ERRNO == NULL) {
+                /* not open but no ERRNO: it's encrypted */
+                local f = mp.form(
+                    [
+                        {
+                            type: 'password',
+                            label: L("Password:")
+                        }
+                    ]
+                );
+
+                if (f != NULL) {
+                    if (mp.long_op(mp.open, filename, f[0]) == NULL)
+                        mp.alert(sprintf(L("Bad password for file '%s'"), filename));
+                }
+            }
+            else
+                mp.alert(sprintf(L("Error opening '%s': %s"), filename, ERRNO));
+        }
+    }
 
     return filename;
 };
@@ -558,6 +577,8 @@ sub mp.open(filename, password)
             string:     sprintf(L("New file '%s'"), filename)
         };
 
+        ERRNO = NULL;
+
         d = mp.add(new(mp_doc, { name: filename }));
 	}
     else
@@ -598,17 +619,22 @@ sub mp.open(filename, password)
 
         close(f);
 
-        /* store mtime */
-        s = stat(filename);
-        d.mtime = s[9];
+        if (d) {
+            /* store mtime */
+            s = stat(filename);
+            d.mtime = s[9];
 
-        /* store the encoding */
-        d.encoding = DETECTED_ENCODING || ENCODING || '';
+            /* store the encoding */
+            d.encoding = DETECTED_ENCODING || ENCODING || '';
 
-        /* always keep original EOL */
-        d.eol = mp.last_seen_eol;
+            /* always keep original EOL */
+            d.eol = mp.last_seen_eol;
 
-        d->detect_syntax();
+            d->detect_syntax();
+
+            /* ignore further system errors */
+            ERRNO = NULL;
+        }
     }
 
     if (d) {
