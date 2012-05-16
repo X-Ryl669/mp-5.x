@@ -107,8 +107,7 @@ sub mp.crypt1_load(fd, password)
     /* the mpcrypt1\n\0 signature has already been read */
 
     /* init */
-    local a4 = new(arcfour);
-    a4->init(password);
+    local a4 = new(arcfour)->init(password);
 
     while ((c = getchar(fd)) != NULL) {
         /* decrypt byte and concat */
@@ -141,8 +140,7 @@ sub mp.crypt1_save(fd, lines, password)
     putchar(fd, "");
 
     /* init */
-    local a4 = new(arcfour);
-    a4->init(password);
+    local a4 = new(arcfour)->init(password);
 
     /* loop the lines */
     foreach (l, lines) {
