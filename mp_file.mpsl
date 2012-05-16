@@ -110,7 +110,7 @@ mp.actions['open']	= sub (d, filename) {
                 }
             }
             else
-                mp.alert(sprintf(L("Error opening '%s': %s"), filename, ERRNO));
+                mp.alert(sprintf(L("Error opening file '%s': %s"), filename, ERRNO));
         }
     }
 
@@ -598,6 +598,8 @@ sub mp.open(filename, password)
         f = open(filename, "rb");
 
         if (mp.crypt1_detect(f)) {
+            ERRNO = NULL;
+
             if (password != NULL && password != '') {
                 /* and load the file */
                 d = mp.add(new(mp_doc, { name: filename }));
