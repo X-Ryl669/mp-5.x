@@ -968,7 +968,7 @@ mpdm_t mp_process_keyseq(mpdm_t key)
 }
 
 
-mpdm_t mp_exit(mpdm_t args, mpdm_t ctxt)
+mpdm_t mp_c_exit(mpdm_t args, mpdm_t ctxt)
 /* exit the editor (set mp_exit_requested) */
 {
     mp_exit_requested = 1;
@@ -1076,7 +1076,6 @@ void mp_startup(int argc, char *argv[])
     /* basic functions and data */
     mpdm_hset_s(mp, L"x2vx",            MPDM_X(mp_x2vx));
     mpdm_hset_s(mp, L"vx2x",            MPDM_X(mp_vx2x));
-    mpdm_hset_s(mp, L"exit",            MPDM_X(mp_exit));
     mpdm_hset_s(mp, L"window",          MPDM_H(0));
     mpdm_hset_s(mp, L"drv",             MPDM_H(0));
 
@@ -1087,6 +1086,7 @@ void mp_startup(int argc, char *argv[])
     mp_c = MPDM_H(0);
     mpdm_hset_s(mpdm_root(), L"mp_c", mp_c);
 
+    mpdm_hset_s(mp_c, L"exit",              MPDM_X(mp_c_exit));
     mpdm_hset_s(mp_c, L"plain_load",        MPDM_X(mp_c_plain_load));
     mpdm_hset_s(mp_c, L"exit_requested",    MPDM_X(mp_c_exit_requested));
     mpdm_hset_s(mp_c, L"render",            MPDM_X(mp_c_render));

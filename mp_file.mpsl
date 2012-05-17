@@ -83,7 +83,7 @@ mp.actions['exit']	= sub {
         mp.save_session();
 
     if (mp.actions.close_all())
-        mp.exit();
+        mp_c.exit();
 };
 
 mp.actions['open'] = sub (d, filename) {

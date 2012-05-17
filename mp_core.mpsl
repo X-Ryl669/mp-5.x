@@ -508,7 +508,7 @@ sub mp.process_cmdline()
     while (o = shift(ARGV)) {
         if (o eq '-h' || o eq '--help') {
             mp.usage();
-            mp.exit();
+            mp_c.exit();
             return;
         }
         else
@@ -562,7 +562,7 @@ sub mp.process_cmdline()
     if (ERROR) {
         mp.exit_message = ERROR ~ "\n";
         ERROR = NULL;
-        mp.exit();
+        mp_c.exit();
         return;
     }
 
