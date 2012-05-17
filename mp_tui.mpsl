@@ -666,7 +666,7 @@ sub mp.drv.busy(onoff)
 
 sub mp.drv.main_loop()
 {
-	while (!mp.exit_requested()) {
+	while (!mp_c.exit_requested()) {
 		mp.tui.draw(mp.active());
 
 		mp.process_event(mp.tui.getkey());

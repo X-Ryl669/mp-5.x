@@ -977,7 +977,7 @@ mpdm_t mp_exit(mpdm_t args, mpdm_t ctxt)
 }
 
 
-static mpdm_t exit_requested(mpdm_t args, mpdm_t ctxt)
+static mpdm_t mp_c_exit_requested(mpdm_t args, mpdm_t ctxt)
 /* returns the value of the mp_exit_requested variable */
 {
     return MPDM_I(mp_exit_requested);
@@ -1077,7 +1077,6 @@ void mp_startup(int argc, char *argv[])
     mpdm_hset_s(mp, L"x2vx",            MPDM_X(mp_x2vx));
     mpdm_hset_s(mp, L"vx2x",            MPDM_X(mp_vx2x));
     mpdm_hset_s(mp, L"exit",            MPDM_X(mp_exit));
-    mpdm_hset_s(mp, L"exit_requested",  MPDM_X(exit_requested));
     mpdm_hset_s(mp, L"plain_load",      MPDM_X(mp_plain_load));
     mpdm_hset_s(mp, L"window",          MPDM_H(0));
     mpdm_hset_s(mp, L"drv",             MPDM_H(0));
@@ -1089,7 +1088,8 @@ void mp_startup(int argc, char *argv[])
     mp_c = MPDM_H(0);
     mpdm_hset_s(mpdm_root(), L"mp_c", mp_c);
 
-    mpdm_hset_s(mp_c, L"render", MPDM_X(mp_c_render));
+    mpdm_hset_s(mp_c, L"exit_requested",    MPDM_X(mp_c_exit_requested));
+    mpdm_hset_s(mp_c, L"render",            MPDM_X(mp_c_render));
 
     /* creates the INC (executable path) array */
     INC = mpdm_hset_s(mpdm_root(), L"INC", MPDM_A(0));
