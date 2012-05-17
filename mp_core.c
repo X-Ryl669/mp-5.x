@@ -1074,7 +1074,6 @@ void mp_startup(int argc, char *argv[])
     mpdm_hset_s(mpdm_root(), L"mp", mp);
 
     /* basic functions and data */
-    mpdm_hset_s(mp, L"window",          MPDM_H(0));
     mpdm_hset_s(mp, L"drv",             MPDM_H(0));
 
     /* version */

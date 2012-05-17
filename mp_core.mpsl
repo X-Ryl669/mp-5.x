@@ -92,6 +92,8 @@ if (regex("test", mp.word_regex) == NULL)
 mp.docs = [];
 mp.active_i = 0;
 
+mp.window = {};
+
 /* allowed color names (order matters, match the Unix curses one) */
 mp.color_names = [
     "default",
