@@ -409,7 +409,7 @@ sub mp_doc.query_close(doc)
 
         /* confirm? save */
         if (r == 1)
-            mp.actions.save(d);
+            mp_doc.actions.save(doc);
     }
 
     return r;
