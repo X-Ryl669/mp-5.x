@@ -145,7 +145,7 @@ mp.actdesc['document_list']             = LL("Document list");
 
 /** code **/
 
-sub mp_doc._get_name(doc)
+sub mp_doc.get_name(doc)
 {
     return doc.txt.mod && (doc.name ~ ' *') || doc.name;
 }
