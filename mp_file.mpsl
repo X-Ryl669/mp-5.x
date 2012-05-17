@@ -361,7 +361,7 @@ sub mp_doc.pre_event(doc, k)
 
         if ((s = stat(doc.name)) != NULL && s[9] > doc.mtime) {
             if (mp.confirm(L("File was changed externally. Reload?")) == 1) {
-                mp.actions.revert(doc);
+                doc->actions.revert();
                 k = NULL;
             }
  
