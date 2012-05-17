@@ -232,7 +232,7 @@ sub mp_doc.set_y(doc, y)
     local vx;
 
     /* get current visual x position */
-    vx = mp.x2vx(txt.lines[txt.y], txt.x);
+    vx = mp_c.x2vx(txt.lines[txt.y], txt.x);
 
     /* set boundaries */
     if (y < 0)
@@ -244,7 +244,7 @@ sub mp_doc.set_y(doc, y)
     txt.y = y;
 
     /* adjust new x to match previously one */
-    txt.x = mp.vx2x(txt.lines[txt.y], vx);
+    txt.x = mp_c.vx2x(txt.lines[txt.y], vx);
 
     return doc;
 }
@@ -421,7 +421,7 @@ sub mp_doc.move_to_coords_xy(doc, x, y)
 
     /* calculate the real position in that line
        where the mouse click seem to be */
-    x = mp.vx2x(doc.txt.lines[doc.txt.y], doc.txt.vx + x);
+    x = mp_c.vx2x(doc.txt.lines[doc.txt.y], doc.txt.vx + x);
 
     /* move there */
     doc->set_x(x);

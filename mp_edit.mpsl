@@ -373,7 +373,7 @@ sub mp_doc.delete_line(doc)
     local vx;
 
     /* take current position */
-    vx = mp.x2vx(txt.lines[txt.y], txt.x);
+    vx = mp_c.x2vx(txt.lines[txt.y], txt.x);
 
     /* if it's the only line, just replace it */
     if (size(txt.lines) == 1)
@@ -388,7 +388,7 @@ sub mp_doc.delete_line(doc)
         txt.y = size(txt.lines) - 1;
 
     /* move to previous x position */
-    txt.x = mp.vx2x(txt.lines[txt.y], vx);
+    txt.x = mp_c.vx2x(txt.lines[txt.y], vx);
 
     txt.mod++;
 
@@ -545,7 +545,7 @@ sub mp_doc.wrap_words(doc)
 
     if (mp.config.word_wrap) {
         /* take the column where the cursor is */
-        local c = mp.x2vx(txt.lines[txt.y], txt.x);
+        local c = mp_c.x2vx(txt.lines[txt.y], txt.x);
 
         if (c >= mp.config.word_wrap &&
             regex(txt.lines[txt.y], "/^.{1," ~ mp.config.word_wrap ~ "}[ \t]/")) {

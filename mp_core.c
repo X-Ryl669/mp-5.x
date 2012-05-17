@@ -990,7 +990,7 @@ mpdm_t mp_c_render(mpdm_t args, mpdm_t ctxt)
 }
 
 
-mpdm_t mp_vx2x(mpdm_t args, mpdm_t ctxt)
+mpdm_t mp_c_vx2x(mpdm_t args, mpdm_t ctxt)
 /* interface to drw_vx2x() */
 {
     return
@@ -999,7 +999,7 @@ mpdm_t mp_vx2x(mpdm_t args, mpdm_t ctxt)
 }
 
 
-mpdm_t mp_x2vx(mpdm_t args, mpdm_t ctxt)
+mpdm_t mp_c_x2vx(mpdm_t args, mpdm_t ctxt)
 /* interface to drw_x2vx() */
 {
     return
@@ -1074,8 +1074,6 @@ void mp_startup(int argc, char *argv[])
     mpdm_hset_s(mpdm_root(), L"mp", mp);
 
     /* basic functions and data */
-    mpdm_hset_s(mp, L"x2vx",            MPDM_X(mp_x2vx));
-    mpdm_hset_s(mp, L"vx2x",            MPDM_X(mp_vx2x));
     mpdm_hset_s(mp, L"window",          MPDM_H(0));
     mpdm_hset_s(mp, L"drv",             MPDM_H(0));
 
@@ -1086,6 +1084,8 @@ void mp_startup(int argc, char *argv[])
     mp_c = MPDM_H(0);
     mpdm_hset_s(mpdm_root(), L"mp_c", mp_c);
 
+    mpdm_hset_s(mp_c, L"x2vx",              MPDM_X(mp_c_x2vx));
+    mpdm_hset_s(mp_c, L"vx2x",              MPDM_X(mp_c_vx2x));
     mpdm_hset_s(mp_c, L"exit",              MPDM_X(mp_c_exit));
     mpdm_hset_s(mp_c, L"plain_load",        MPDM_X(mp_c_plain_load));
     mpdm_hset_s(mp_c, L"exit_requested",    MPDM_X(mp_c_exit_requested));
