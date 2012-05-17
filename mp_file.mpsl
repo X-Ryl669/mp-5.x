@@ -27,8 +27,8 @@
 
 /** editor actions **/
 
-mp.actions['new']	= sub (d) {
-    d = mp.find_file_by_name(L("<unnamed>"));
+mp.actions['new']	= sub {
+    local d = mp.find_file_by_name(L("<unnamed>"));
 
     if (d != -1) {
         mp.active_i = d;
@@ -40,8 +40,8 @@ mp.actions['new']	= sub (d) {
     return d;
 };
 
-mp.actions['next']	= sub (d) { mp.next(); };
-mp.actions['prev']	= sub (d) { mp.prev(); };
+mp.actions['next'] = sub { mp.next(); };
+mp.actions['prev'] = sub { mp.prev(); };
 
 mp_doc.actions['save_as'] = sub (d, newname) {
 
@@ -78,7 +78,7 @@ mp.actions['close']	= sub (d) {
         mp.close();
 };
 
-mp.actions['exit']	= sub (d) {
+mp.actions['exit']	= sub {
     if (mp.config.auto_sessions)
         mp.save_session();
 
@@ -86,8 +86,7 @@ mp.actions['exit']	= sub (d) {
         mp.exit();
 };
 
-mp.actions['open']	= sub (d, filename) {
-
+mp.actions['open'] = sub (d, filename) {
     if (filename == NULL)
         filename = mp.openfile(L("File to open:"));
 
@@ -117,7 +116,7 @@ mp.actions['open']	= sub (d, filename) {
     return filename;
 };
 
-mp.actions['revert']	= sub (d) {
+mp_doc.actions['revert'] = sub (d) {
     /* save current name */
     local p = d.name;
 
@@ -146,22 +145,19 @@ mp.actions['revert']	= sub (d) {
     return d;
 };
 
-mp.actions['open_config_file']	= sub (d) {
-
+mp.actions['open_config_file']	= sub {
     mp.open(HOMEDIR ~ ".mp.mpsl");
 };
 
-mp.actions['sync'] = sub (d) {
-
+mp.actions['sync'] = sub {
     /* save all modified documents */
     foreach (d, grep(mp.docs, sub (e) { e.txt.mod; }))
-        mp.actions.save(d);
+        mp_doc.actions.save(d);
 
     return d;
 };
 
-mp.actions['exec_command']	= sub (d, cmd) {
-
+mp_doc.actions['exec_command'] = sub (d, cmd) {
     if (cmd == NULL) {
         local t = mp.form(
             [
@@ -225,8 +221,7 @@ mp.actions['exec_command']	= sub (d, cmd) {
     return d;
 };
 
-mp.actions['filter_selection'] = sub (d, cmd) {
-
+mp_doc.actions['filter_selection'] = sub (d, cmd) {
     if (cmd == NULL) {
         local t = mp.form(
             [
@@ -272,12 +267,11 @@ mp.actions['filter_selection'] = sub (d, cmd) {
 };
 
 mp.actions['close_all'] = sub {
-
     local s;
 
     while (s = size(mp.docs)) {
         local doc = mp.docs[mp.active_i];
-		
+
         /* close current document */
         mp.actions.close(doc);
 
@@ -290,7 +284,7 @@ mp.actions['close_all'] = sub {
     return 1;
 };
 
-mp.actions['open_under_cursor'] = sub (d) {
+mp_doc.actions['open_under_cursor'] = sub (d) {
     local w;
 
     if ((w = d->get_word("/[^ \t]+/")) != NULL)
@@ -299,19 +293,19 @@ mp.actions['open_under_cursor'] = sub (d) {
     return d;
 };
 
-mp.actions['hex_view']	= sub (d) {
-	local n;
+mp.actions['hex_view']	= sub {
+    local n;
 
-	if ((n = mp.openfile(L("File to open:"))) != NULL && n ne "")
-		if (mp.long_op(mp.hex_view, n) == NULL && ERRNO != NULL)
-			mp.alert(sprintf("Error opening '%s': %s", n, ERRNO));
+    if ((n = mp.openfile(L("File to open:"))) != NULL && n ne "")
+        if (mp.long_op(mp.hex_view, n) == NULL && ERRNO != NULL)
+            mp.alert(sprintf("Error opening '%s': %s", n, ERRNO));
         else
             d = n;
 
     return d;
 };
 
-mp.actions['open_dropped_files'] = sub (d) {
+mp.actions['open_dropped_files'] = sub {
     while (size(mp.dropped_files))
         mp.open(shift(mp.dropped_files));
 };
