@@ -5,7 +5,7 @@
 
     Editing.
 
-    Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -21,14 +21,14 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    http://www.triptico.com
+    http://triptico.com
 
 */
 
 
 /** editor actions **/
 
-mp.actions['insert_line']	= sub (d) {
+mp_doc.actions['insert_line'] = sub (d) {
     d->store_undo()->insert_newline();
 
     if (d.syntax == NULL)
@@ -37,25 +37,25 @@ mp.actions['insert_line']	= sub (d) {
     return d;
 };
 
-mp.actions['delete_line']       = sub (d) { d->store_undo()->delete_line(); };
-mp.actions['insert_space']      = sub (d) { d->store_undo()->insert_space(); };
-mp.actions['insert_tab']        = sub (d) { d->store_undo()->insert_tab(); };
-mp.actions['insert_real_tab']   = sub (d) { d->store_undo()->insert("\t"); };
-mp.actions['delete']            = sub (d) { d->store_undo()->delete_char(); };
+mp_doc.actions['delete_line']       = sub (d) { d->store_undo()->delete_line(); };
+mp_doc.actions['insert_space']      = sub (d) { d->store_undo()->insert_space(); };
+mp_doc.actions['insert_tab']        = sub (d) { d->store_undo()->insert_tab(); };
+mp_doc.actions['insert_real_tab']   = sub (d) { d->store_undo()->insert("\t"); };
+mp_doc.actions['delete']            = sub (d) { d->store_undo()->delete_char(); };
 
-mp.actions['delete_left']	= sub (d) {
+mp_doc.actions['delete_left']	= sub (d) {
     if (d.txt.x + d.txt.y)
         d->store_undo()->move_left()->delete_char();
 
     return d;
 };
 
-mp.actions['indent_block'] = sub (d) {
+mp_doc.actions['indent_block'] = sub (d) {
     d->store_undo();
 
     if (d.txt.mark == NULL)
         d->set_x(0)->insert_tab();
-	else {
+    else {
         local currentY = d.txt.y;
         local startY   = d.txt.mark.by;
         local endY     = d.txt.mark.ey;
@@ -81,7 +81,7 @@ mp.actions['indent_block'] = sub (d) {
     return d;
 };
 
-mp.actions['unindent_block'] = sub(d) {
+mp_doc.actions['unindent_block'] = sub(d) {
     d->store_undo();
 
     if (d.txt.mark == NULL) {
@@ -92,11 +92,11 @@ mp.actions['unindent_block'] = sub(d) {
         local startY   = d.txt.mark.by;
         local endY     = d.txt.mark.ey;
         local times    = endY - startY;
-	
+
         d->unmark();
-	
+
         d->set_y(startY);
-	
+
         /* use to be while d.txt.y <= endY, but that entered an endless loop when
             you were unindenting a block including the very last line in the file */
         while (times >= 0) {
@@ -115,10 +115,10 @@ mp.actions['unindent_block'] = sub(d) {
     return d;
 };
 
-mp.actions['undo']		= sub (d) { d->undo(); };
-mp.actions['redo']		= sub (d) { d->redo(); };
+mp_doc.actions['undo'] = sub (d) { d->undo(); };
+mp_doc.actions['redo'] = sub (d) { d->redo(); };
 
-mp.actions['join_paragraph'] = sub (d) {
+mp_doc.actions['join_paragraph'] = sub (d) {
     d->store_undo();
 
     if (d.txt.mark) {
@@ -142,8 +142,7 @@ mp.actions['join_paragraph'] = sub (d) {
     return d;
 };
 
-mp.actions['word_wrap_paragraph'] = sub (d) {
-
+mp_doc.actions['word_wrap_paragraph'] = sub (d) {
     if(mp.config.word_wrap == 0)
         mp.alert(L("Word wrapping must be set"));
     else {
@@ -171,8 +170,7 @@ mp.actions['word_wrap_paragraph'] = sub (d) {
     return d;
 };
 
-mp.actions['line_options']	= sub (d) {
-
+mp.actions['line_options']	= sub {
     /* convert special characters on end of line */
     local lt = mp.backslash_codes(mp.config.eol, 1);
 
@@ -222,8 +220,7 @@ mp.actions['line_options']	= sub (d) {
     }
 };
 
-mp.actions['tab_options']	= sub (d) {
-
+mp.actions['tab_options']	= sub {
 	local t = mp.form( [
 		{ 'label'	=> L("Tab size") ~ ':',
 		  'type'	=> 'text',
@@ -244,7 +241,9 @@ mp.actions['tab_options']	= sub (d) {
 	}
 };
 
-mp.actions['toggle_insert'] = sub (d) { mp.config.insert = !mp.config.insert; };
+mp.actions['toggle_insert'] = sub {
+    mp.config.insert = !mp.config.insert;
+};
 
 /** default key bindings **/
 
