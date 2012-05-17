@@ -65,7 +65,7 @@ mp_doc.actions['save'] = sub (d) {
 
     /* name is <unnamed> or something similar; ask for one */
     if (regex(d.name, "/^<.+>$/"))
-        mp_doc.actions.save_as(d);
+        d->actions.save_as();
     else
     if (d->long_op(mp_doc.save) == -1)
         mp.alert(sprintf(L("Error saving file: %s"), ERRNO));
@@ -152,7 +152,7 @@ mp.actions['open_config_file']	= sub {
 mp.actions['sync'] = sub {
     /* save all modified documents */
     foreach (d, grep(mp.docs, sub (e) { e.txt.mod; }))
-        mp_doc.actions.save(d);
+        d->actions.save();
 
     return d;
 };
@@ -403,7 +403,7 @@ sub mp_doc.query_close(doc)
 
         /* confirm? save */
         if (r == 1)
-            mp_doc.actions.save(doc);
+            doc->actions.save();
     }
 
     return r;

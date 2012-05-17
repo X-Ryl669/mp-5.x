@@ -164,7 +164,7 @@ mp.actions['vcs'] = sub (d) {
                     log->insert(cmd ~ ":\n\n");
                 }
 
-                mp_doc.actions.exec_command(log, cmd);
+                log->actions.exec_command(cmd);
 
                 if (opts.unique_log) {
                     log->detect_syntax()->move_bof();
@@ -196,7 +196,7 @@ sub mp_doc_vcs.query_close(doc)
 
             log->move_eof();
             log->insert(cmd ~ ":\n\n");
-            mp_doc.actions.exec_command(log, cmd);
+            log->actions.exec_command(cmd);
             log->insert("\n");
 
             log.txt.mod     = 0;
