@@ -610,7 +610,7 @@ sub mp.open(filename, password)
             /* reopen and read */
             f = open(filename, "rb");
             d = mp.add(new(mp_doc, { name: filename }));
-            d.txt.lines = mp.plain_load(f);
+            d.txt.lines = mp_c.plain_load(f);
         }
 
         close(f);
