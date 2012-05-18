@@ -4,7 +4,7 @@
 
     GTK driver.
 
-    Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    http://www.triptico.com
+    http://triptico.com
 
 */
 
@@ -171,7 +171,7 @@ static void update_window_size(void)
 #endif
 
     /* store the 'window' size */
-    v = mpdm_hget_s(mp, L"window");
+    v = mpdm_hget_s(MP, L"window");
     mpdm_hset_s(v, L"tx", MPDM_I(tx));
     mpdm_hset_s(v, L"ty", MPDM_I(ty));
 
@@ -192,7 +192,7 @@ static void build_fonts(void)
         pango_font_description_free(font);
 
     /* get current configuration */
-    if ((c = mpdm_hget_s(mp, L"config")) != NULL) {
+    if ((c = mpdm_hget_s(MP, L"config")) != NULL) {
         mpdm_t v;
 
         if ((v = mpdm_hget_s(c, L"font_size")) != NULL)
@@ -242,7 +242,7 @@ static void build_colors(void)
     int n, s;
 
     /* gets the color definitions and attribute names */
-    colors = mpdm_hget_s(mp, L"colors");
+    colors = mpdm_hget_s(MP, L"colors");
     l = mpdm_ref(mpdm_keys(colors));
     s = mpdm_size(l);
 
@@ -345,7 +345,7 @@ static void build_menu(void)
     mpdm_t m;
 
     /* gets the current menu */
-    if ((m = mpdm_hget_s(mp, L"menu")) == NULL)
+    if ((m = mpdm_hget_s(MP, L"menu")) == NULL)
         return;
 
     /* if it's the same, do nothing */
@@ -403,7 +403,7 @@ static void switch_page(GtkNotebook * notebook, gpointer * page,
 /* 'switch_page' handler (filetabs) */
 {
     /* sets the active one */
-    mpdm_hset_s(mp, L"active_i", MPDM_I(pg_num));
+    mpdm_hset_s(MP, L"active_i", MPDM_I(pg_num));
 
     gtk_widget_grab_focus(area);
     redraw();
@@ -459,7 +459,7 @@ static void draw_filetabs(void)
 
     /* set the active one */
     gtk_notebook_set_current_page(GTK_NOTEBOOK(file_tabs),
-                          mpdm_ival(mpdm_hget_s(mp, L"active_i")));
+                          mpdm_ival(mpdm_hget_s(MP, L"active_i")));
 
     /* reconnect signal */
     g_signal_connect(G_OBJECT(file_tabs), "switch_page",
@@ -549,7 +549,7 @@ static void draw_scrollbar(void)
     pos = mpdm_ival(mpdm_hget_s(v, L"vy"));
     max = mpdm_size(mpdm_hget_s(v, L"lines"));
 
-    v = mpdm_hget_s(mp, L"window");
+    v = mpdm_hget_s(MP, L"window");
     size = mpdm_ival(mpdm_hget_s(v, L"ty"));
 
     adjustment = gtk_range_get_adjustment(GTK_RANGE(scrollbar));
@@ -709,7 +709,7 @@ static void gtk_drv_paint(mpdm_t doc, int optimize)
 
 static void redraw(void)
 {
-    if (mpdm_size(mpdm_hget_s(mp, L"docs")))
+    if (mpdm_size(mpdm_hget_s(MP, L"docs")))
         gtk_drv_paint(mp_active(), 0);
 }
 
@@ -1035,7 +1035,7 @@ static gint key_press_event(GtkWidget * widget, GdkEventKey * event,
 
     /* set mp.shift_pressed */
     if (event->state & (GDK_SHIFT_MASK))
-        mpdm_hset_s(mp, L"shift_pressed", MPDM_I(1));
+        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
 
     /* reserve alt for menu mnemonics */
 /*	if (GDK_MOD1_MASK & event->state)
@@ -1670,8 +1670,8 @@ static gint button_press_event(GtkWidget * widget, GdkEventButton * event,
     x = ((int) event->x) / font_width;
     y = ((int) event->y) / font_height;
 
-    mpdm_hset_s(mp, L"mouse_x", MPDM_I(x));
-    mpdm_hset_s(mp, L"mouse_y", MPDM_I(y));
+    mpdm_hset_s(MP, L"mouse_x", MPDM_I(x));
+    mpdm_hset_s(MP, L"mouse_y", MPDM_I(y));
 
     switch (event->button) {
     case 1:
@@ -1725,8 +1725,8 @@ static gint motion_notify_event(GtkWidget * widget, GdkEventMotion * event,
         y = ((int) event->y) / font_height;
 
         if (ox != x && oy != y) {
-            mpdm_hset_s(mp, L"mouse_to_x", MPDM_I(x));
-            mpdm_hset_s(mp, L"mouse_to_y", MPDM_I(y));
+            mpdm_hset_s(MP, L"mouse_to_x", MPDM_I(x));
+            mpdm_hset_s(MP, L"mouse_to_y", MPDM_I(y));
 
             mp_process_event(MPDM_LS(L"mouse-drag"));
             gtk_drv_paint(mp_active(), 1);
@@ -1820,7 +1820,7 @@ static void selection_get(GtkWidget * widget,
         return;
 
     /* gets the clipboard and joins */
-    d = mpdm_hget_s(mp, L"clipboard");
+    d = mpdm_hget_s(MP, L"clipboard");
 
     if (mpdm_size(d) == 0)
         return;
@@ -1853,8 +1853,8 @@ static void selection_received(GtkWidget * widget,
         g_free(wptr);
 
         /* split and set as the clipboard */
-        mpdm_hset_s(mp, L"clipboard", mpdm_split_s(d, L"\n"));
-        mpdm_hset_s(mp, L"clipboard_vertical", MPDM_I(0));
+        mpdm_hset_s(MP, L"clipboard", mpdm_split_s(d, L"\n"));
+        mpdm_hset_s(MP, L"clipboard_vertical", MPDM_I(0));
 
         /* wait no more for the selection */
         wait_for_selection = 0;
@@ -2417,7 +2417,7 @@ static mpdm_t gtk_drv_shutdown(mpdm_t a, mpdm_t ctxt)
 {
     mpdm_t v;
 
-    if ((v = mpdm_hget_s(mp, L"exit_message")) != NULL) {
+    if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL) {
         mpdm_write_wcs(stdout, mpdm_string(v));
         printf("\n");
     }
@@ -2612,7 +2612,7 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
 
     build_colors();
 
-    if ((v = mpdm_hget_s(mp, L"config")) != NULL &&
+    if ((v = mpdm_hget_s(MP, L"config")) != NULL &&
         mpdm_ival(mpdm_hget_s(v, L"maximize")) > 0)
         maximize = 1;
 
