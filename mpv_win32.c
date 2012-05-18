@@ -108,7 +108,7 @@ static void update_window_size(void)
     ty = (rect.bottom - rect.top - tab_height) / font_height;
 
     /* store the 'window' size */
-    v = mpdm_hget_s(mp, L"window");
+    v = mpdm_hget_s(MP, L"window");
     mpdm_hset_s(v, L"tx", MPDM_I(tx));
     mpdm_hset_s(v, L"ty", MPDM_I(ty));
 }
@@ -130,7 +130,7 @@ static void build_fonts(HDC hdc)
     }
 
     /* get current configuration */
-    if ((c = mpdm_hget_s(mp, L"config")) != NULL) {
+    if ((c = mpdm_hget_s(MP, L"config")) != NULL) {
         if ((v = mpdm_hget_s(c, L"font_size")) != NULL)
             font_size = mpdm_ival(v);
         else
@@ -175,7 +175,7 @@ static void build_colors(void)
     int n, s;
 
     /* gets the color definitions and attribute names */
-    colors = mpdm_hget_s(mp, L"colors");
+    colors = mpdm_hget_s(MP, L"colors");
     l = mpdm_ref(mpdm_keys(colors));
     s = mpdm_size(l);
 
@@ -233,7 +233,7 @@ static void build_menu(void)
     int win32_menu_id = 1000;
 
     /* gets the current menu */
-    if ((m = mpdm_hget_s(mp, L"menu")) == NULL)
+    if ((m = mpdm_hget_s(MP, L"menu")) == NULL)
         return;
 
     if (menu != NULL)
@@ -334,7 +334,7 @@ static void draw_filetabs(void)
     mpdm_unref(names);
 
     /* set the active one */
-    TabCtrl_SetCurSel(hwtabs, mpdm_ival(mpdm_hget_s(mp, L"active_i")));
+    TabCtrl_SetCurSel(hwtabs, mpdm_ival(mpdm_hget_s(MP, L"active_i")));
 }
 
 
@@ -355,7 +355,7 @@ static void draw_scrollbar(void)
     pos = mpdm_ival(mpdm_hget_s(v, L"vy"));
     max = mpdm_size(mpdm_hget_s(v, L"lines"));
 
-    v = mpdm_hget_s(mp, L"window");
+    v = mpdm_hget_s(MP, L"window");
     size = mpdm_ival(mpdm_hget_s(v, L"ty"));
 
     si.cbSize = sizeof(si);
@@ -476,7 +476,7 @@ static void win32_vkey(int c)
 
     /* set mp.shift_pressed */
     if (GetKeyState(VK_SHIFT) & 0x8000)
-        mpdm_hset_s(mp, L"shift_pressed", MPDM_I(1));
+        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
 
     if (GetKeyState(VK_CONTROL) & 0x8000) {
         switch (c) {
@@ -758,7 +758,7 @@ static void win32_akey(int k)
 
     /* set mp.shift_pressed */
     if (GetKeyState(VK_SHIFT) & 0x8000)
-        mpdm_hset_s(mp, L"shift_pressed", MPDM_I(1));
+        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
 
     switch (k) {
     case ctrl(' '):
@@ -938,7 +938,7 @@ static void dropped_files(HDROP hDrop)
 
     DragFinish(hDrop);
 
-    mpdm_hset_s(mp, L"dropped_files", a);
+    mpdm_hset_s(MP, L"dropped_files", a);
 
     mpdm_unref(a);
 
@@ -999,7 +999,7 @@ long STDCALL WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
 
     case WM_PAINT:
 
-        if (mpdm_size(mpdm_hget_s(mp, L"docs")))
+        if (mpdm_size(mpdm_hget_s(MP, L"docs")))
             win32_draw(hwnd, mp_active());
 
         return 0;
@@ -1030,8 +1030,8 @@ long STDCALL WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
         x = (LOWORD(lparam)) / font_width;
         y = (HIWORD(lparam) - tab_height) / font_height;
 
-        mpdm_hset_s(mp, L"mouse_x", MPDM_I(x));
-        mpdm_hset_s(mp, L"mouse_y", MPDM_I(y));
+        mpdm_hset_s(MP, L"mouse_x", MPDM_I(x));
+        mpdm_hset_s(MP, L"mouse_y", MPDM_I(y));
 
         switch (msg) {
         case WM_LBUTTONDOWN:
@@ -1064,8 +1064,8 @@ long STDCALL WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
             x = (LOWORD(lparam)) / font_width;
             y = (HIWORD(lparam) - tab_height) / font_height;
 
-            mpdm_hset_s(mp, L"mouse_to_x", MPDM_I(x));
-            mpdm_hset_s(mp, L"mouse_to_y", MPDM_I(y));
+            mpdm_hset_s(MP, L"mouse_to_x", MPDM_I(x));
+            mpdm_hset_s(MP, L"mouse_to_y", MPDM_I(y));
 
             mp_process_event(MPDM_LS(L"mouse-drag"));
 
@@ -1118,7 +1118,7 @@ long STDCALL WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
             int n = TabCtrl_GetCurSel(hwtabs);
 
             /* set mp.active_i to this */
-            mpdm_hset_s(mp, L"active_i", MPDM_I(n));
+            mpdm_hset_s(MP, L"active_i", MPDM_I(n));
 
             redraw();
         }
@@ -1149,7 +1149,7 @@ static mpdm_t win32_drv_clip_to_sys(mpdm_t a, mpdm_t ctxt)
     int s;
 
     /* convert the clipboard to DOS text */
-    d = mpdm_hget_s(mp, L"clipboard");
+    d = mpdm_hget_s(MP, L"clipboard");
 
     if (mpdm_size(d) == 0)
         return NULL;
@@ -1195,8 +1195,8 @@ static mpdm_t win32_drv_sys_to_clip(mpdm_t a, mpdm_t ctxt)
         d = mpdm_ref(mpdm_split_s(v, L"\r\n"));
 
         /* and set as the clipboard */
-        mpdm_hset_s(mp, L"clipboard", d);
-        mpdm_hset_s(mp, L"clipboard_vertical", MPDM_I(0));
+        mpdm_hset_s(MP, L"clipboard", d);
+        mpdm_hset_s(MP, L"clipboard_vertical", MPDM_I(0));
 
         GlobalUnlock(hclp);
 
@@ -1231,7 +1231,7 @@ static mpdm_t win32_drv_shutdown(mpdm_t a, mpdm_t ctxt)
 
     SendMessage(hwnd, WM_CLOSE, 0, 0);
 
-    if ((v = mpdm_hget_s(mp, L"exit_message")) != NULL) {
+    if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL) {
         char *ptr = mpdm_wcstombs(mpdm_string(v), NULL);
         MessageBox(NULL, ptr, "mp " VERSION, MB_ICONWARNING | MB_OK);
         free(ptr);
@@ -1829,7 +1829,7 @@ static mpdm_t win32_drv_startup(mpdm_t a, mpdm_t ctxt)
     ShowWindow(hwstatus, SW_SHOW);
     UpdateWindow(hwstatus);
 
-    if ((v = mpdm_hget_s(mp, L"config")) != NULL &&
+    if ((v = mpdm_hget_s(MP, L"config")) != NULL &&
         mpdm_ival(mpdm_hget_s(v, L"maximize")) > 0)
         SendMessage(hwnd, WM_SYSCOMMAND, SC_MAXIMIZE, 0);
 
