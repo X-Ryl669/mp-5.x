@@ -204,6 +204,8 @@ static int drw_get_attr(wchar_t * color_name)
 static int drw_prepare(mpdm_t doc)
 /* prepares the document for screen drawing */
 {
+    mp = mpdm_hget_s(mpdm_root(), L"mp");
+
     mpdm_t window   = mpdm_hget_s(mp, L"window");
     mpdm_t config   = mpdm_hget_s(mp, L"config");
     mpdm_t txt      = mpdm_hget_s(doc, L"txt");

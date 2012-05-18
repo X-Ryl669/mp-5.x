@@ -52,6 +52,7 @@ if (gettext('&File') eq '&File' && ENV.LANG) {
     ERROR = NULL;
 }
 
+mp = {};
 
 mp.VERSION = mp_c.VERSION;
 

@@ -587,6 +587,7 @@ static mpdm_t nc_doc_draw(mpdm_t args, mpdm_t ctxt)
 static void build_colors(void)
 /* builds the colors */
 {
+    mpdm_t mp;
     mpdm_t colors;
     mpdm_t color_names;
     mpdm_t l;
@@ -607,8 +608,10 @@ static void build_colors(void)
 #endif
 
     /* gets the color definitions and attribute names */
-    colors = mpdm_hget_s(mp, L"colors");
+    mp          = mpdm_hget_s(mpdm_root(), L"mp");
+    colors      = mpdm_hget_s(mp, L"colors");
     color_names = mpdm_hget_s(mp, L"color_names");
+
     l = mpdm_ref(mpdm_keys(colors));
     s = mpdm_size(l);
 
@@ -677,7 +680,9 @@ static mpdm_t ncursesw_drv_shutdown(mpdm_t a, mpdm_t ctxt)
 
     endwin();
 
-    if ((v = mpdm_hget_s(mp, L"exit_message")) != NULL) {
+    v = mpdm_hget_s(mpdm_root(), L"mp");
+
+    if ((v = mpdm_hget_s(v, L"exit_message")) != NULL) {
         mpdm_write_wcs(stdout, mpdm_string(v));
         printf("\n");
     }
