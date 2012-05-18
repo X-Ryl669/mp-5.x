@@ -129,7 +129,7 @@ sub mp.maze(doc, keycode)
 
 		doc.keypress = sub(d, k) { mp.maze(d, k); };
 
-		doc.paint = sub(d) { map(d.maze.map, sub(e) { [8, join(e)];}); };
+		doc.render = sub(d) { map(d.maze.map, sub(e) { [8, join(e)];}); };
 	}
 
 	local x = maze.x;
@@ -265,7 +265,7 @@ mp_pipes = new(mp_base, {
 
             return pipes;
         },
-        paint:      sub (pipes) {
+        render:      sub (pipes) {
             local out = [];
 
             pipes->init();

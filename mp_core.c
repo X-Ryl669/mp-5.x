@@ -846,7 +846,7 @@ mpdm_t mp_draw(mpdm_t doc, int optimize)
 {
     mpdm_t f, r = NULL;
 
-    if ((f = mpdm_hget_s(doc, L"paint")) != NULL) {
+    if ((f = mpdm_hget_s(doc, L"render")) != NULL) {
         /* create a context to contain the object itself
            (i.e. call as a method) */
         mpdm_t ctxt = mpdm_ref(MPDM_A(0));

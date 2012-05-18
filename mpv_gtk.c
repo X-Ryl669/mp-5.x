@@ -576,7 +576,7 @@ static void draw_scrollbar(void)
 }
 
 
-static void gtk_drv_paint(mpdm_t doc, int optimize)
+static void gtk_drv_render(mpdm_t doc, int optimize)
 /* GTK document draw function */
 {
     GdkRectangle gr;
@@ -710,7 +710,7 @@ static void gtk_drv_paint(mpdm_t doc, int optimize)
 static void redraw(void)
 {
     if (mpdm_size(mpdm_hget_s(MP, L"docs")))
-        gtk_drv_paint(mp_active(), 0);
+        gtk_drv_render(mp_active(), 0);
 }
 
 
@@ -735,7 +735,7 @@ static gint key_release_event(GtkWidget * widget, GdkEventKey * event,
 /* 'key_release_event' handler */
 {
     if (mp_keypress_throttle(0))
-        gtk_drv_paint(mp_active(), 0);
+        gtk_drv_render(mp_active(), 0);
 
     return 0;
 }
@@ -1651,7 +1651,7 @@ static gint key_press_event(GtkWidget * widget, GdkEventKey * event,
         gtk_main_quit();
 
     if (mp_keypress_throttle(1))
-        gtk_drv_paint(mp_active(), 1);
+        gtk_drv_render(mp_active(), 1);
 
     return 0;
 }
@@ -1729,7 +1729,7 @@ static gint motion_notify_event(GtkWidget * widget, GdkEventMotion * event,
             mpdm_hset_s(MP, L"mouse_to_y", MPDM_I(y));
 
             mp_process_event(MPDM_LS(L"mouse-drag"));
-            gtk_drv_paint(mp_active(), 1);
+            gtk_drv_render(mp_active(), 1);
         }
     }
 
@@ -2403,7 +2403,7 @@ static mpdm_t gtk_drv_main_loop(mpdm_t a, mpdm_t ctxt)
 /* main loop */
 {
     if (!mp_exit_requested) {
-        gtk_drv_paint(mp_active(), 0);
+        gtk_drv_render(mp_active(), 0);
 
         gtk_main();
     }

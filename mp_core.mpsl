@@ -235,7 +235,7 @@ mp_base = {
     keycodes:       {},
     actions:        {},
     keypress:       sub (doc, key) { doc; },
-    paint:          sub (doc, opt) { return []; },
+    render:         sub (doc, opt) { return []; },
     pre_event:      sub (doc, key) { key; },
     post_event:     sub (doc, key) { doc; },
     query_close:    sub (doc) { 1; },
@@ -261,7 +261,7 @@ mp_doc = new(mp_base, {
     syntax:     NULL,
 
     /* rendering function for MP docs in mp_core.c */
-    paint:      mp_c.render,
+    render:     mp_c.render,
 
     busy:       sub (doc, b) { mp.busy(b); return doc; }
 });
