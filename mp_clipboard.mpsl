@@ -27,16 +27,16 @@
 
 /** editor actions **/
 
-mp.actions['unmark']        = sub (d) { d->unmark(); };
-mp.actions['mark']          = sub (d) { d->mark(); };
-mp.actions['mark_vertical'] = sub (d) { d->mark_vertical(); };
+mp_doc.actions['unmark']        = sub (d) { d->unmark(); };
+mp_doc.actions['mark']          = sub (d) { d->mark(); };
+mp_doc.actions['mark_vertical'] = sub (d) { d->mark_vertical(); };
 
-mp.actions['copy_mark']   = sub (d) { d->busy(1)->copy()->unmark()->busy(0); };
-mp.actions['paste_mark']  = sub (d) { d->busy(1)->store_undo()->paste()->busy(0); };
-mp.actions['cut_mark']    = sub (d) { d->busy(1)->store_undo()->cut()->busy(0); };
-mp.actions['delete_mark'] = sub (d) { d->busy(1)->store_undo()->delete_mark()->busy(0); };
+mp_doc.actions['copy_mark']   = sub (d) { d->busy(1)->copy()->unmark()->busy(0); };
+mp_doc.actions['paste_mark']  = sub (d) { d->busy(1)->store_undo()->paste()->busy(0); };
+mp_doc.actions['cut_mark']    = sub (d) { d->busy(1)->store_undo()->cut()->busy(0); };
+mp_doc.actions['delete_mark'] = sub (d) { d->busy(1)->store_undo()->delete_mark()->busy(0); };
 
-mp.actions['mouse_drag_mark'] = sub (d) {
+mp_doc.actions['mouse_drag_mark'] = sub (d) {
     /* no selection yet? move to initial click and mark */
     if (d.txt.mark == NULL)
         d->mark();
@@ -50,9 +50,9 @@ mp.actions['mouse_drag_mark'] = sub (d) {
     return d;
 };
 
-mp.actions['mark_all'] = sub (d) { d->move_bof()->mark()->move_eof()->mark(); };
+mp_doc.actions['mark_all'] = sub (d) { d->move_bof()->mark()->move_eof()->mark(); };
 
-mp.actions['cut_lines_with_string'] = sub (d, str) {
+mp_doc.actions['cut_lines_with_string'] = sub (d, str) {
     if (str == NULL) {
         local r = mp.form(
             [
