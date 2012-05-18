@@ -92,8 +92,6 @@ static void update_window_size(void)
 static void nc_sigwinch(int s)
 /* SIGWINCH signal handler */
 {
-    mpdm_t v;
-
     /* invalidate main window */
     clearok(stdscr, 1);
     refresh();
@@ -677,9 +675,7 @@ static mpdm_t ncursesw_drv_shutdown(mpdm_t a, mpdm_t ctxt)
 
     endwin();
 
-    v = mpdm_hget_s(mpdm_root(), L"mp");
-
-    if ((v = mpdm_hget_s(v, L"exit_message")) != NULL) {
+    if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL) {
         mpdm_write_wcs(stdout, mpdm_string(v));
         printf("\n");
     }
