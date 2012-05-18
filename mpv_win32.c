@@ -1752,7 +1752,7 @@ static void register_functions(void)
 {
     mpdm_t drv;
 
-    drv = mpdm_hget_s(mp, L"drv");
+    drv = mpdm_hget_s(mpdm_root(), L"mp_drv");
     mpdm_hset_s(drv, L"main_loop",   MPDM_X(win32_drv_main_loop));
     mpdm_hset_s(drv, L"shutdown",    MPDM_X(win32_drv_shutdown));
     mpdm_hset_s(drv, L"clip_to_sys", MPDM_X(win32_drv_clip_to_sys));
@@ -1848,9 +1848,10 @@ int win32_drv_detect(int *argc, char ***argv)
             return 0;
     }
 
-    drv = mpdm_hget_s(mp, L"drv");
-    mpdm_hset_s(drv, L"id", MPDM_LS(L"win32"));
-    mpdm_hset_s(drv, L"startup", MPDM_X(win32_drv_startup));
+    drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
+
+    mpdm_hset_s(drv, L"id",         MPDM_LS(L"win32"));
+    mpdm_hset_s(drv, L"startup",    MPDM_X(win32_drv_startup));
 
     return 1;
 }

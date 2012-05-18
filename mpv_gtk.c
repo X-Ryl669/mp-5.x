@@ -2430,7 +2430,7 @@ static void register_functions(void)
 {
     mpdm_t drv;
 
-    drv = mpdm_hget_s(mp, L"drv");
+    drv = mpdm_hget_s(mpdm_root(), L"mp_drv");
     mpdm_hset_s(drv, L"main_loop",   MPDM_X(gtk_drv_main_loop));
     mpdm_hset_s(drv, L"shutdown",    MPDM_X(gtk_drv_shutdown));
     mpdm_hset_s(drv, L"clip_to_sys", MPDM_X(gtk_drv_clip_to_sys));
@@ -2633,7 +2633,7 @@ int gtk_drv_detect(int *argc, char ***argv)
     if (!gtk_init_check(argc, argv))
         return 0;
 
-    drv = mpdm_hget_s(mp, L"drv");
+    drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
 
 #if CONFOPT_GTK == 3
     mpdm_hset_s(drv, L"id", MPDM_LS(L"gtk3"));

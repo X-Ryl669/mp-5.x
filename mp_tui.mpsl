@@ -417,7 +417,7 @@ sub mp.tui.draw(doc)
 
 /** interface **/
 
-sub mp.drv.alert(msg)
+sub mp_drv.alert(msg)
 {
 	mp.tui.prompt(msg ~ L(" [ENTER]"));
 
@@ -425,25 +425,25 @@ sub mp.drv.alert(msg)
 }
 
 
-sub mp.drv.openfile(prompt)
+sub mp_drv.openfile(prompt)
 {
 	mp.tui.readline(prompt, 'openfile', NULL, { 'file' => 1 } );
 }
 
 
-sub mp.drv.savefile(prompt)
+sub mp_drv.savefile(prompt)
 {
 	mp.tui.readline(prompt, 'savefile', NULL, { 'file' => 1 } );
 }
 
 
-sub mp.drv.confirm(msg, def)
+sub mp_drv.confirm(msg, def)
 {
 	mp.tui.confirm(msg, def);
 }
 
 
-sub mp.drv.form(widgets)
+sub mp_drv.form(widgets)
 {
 	local r = [];
 	local pos = mp.window.ty - size(widgets);
@@ -494,7 +494,7 @@ sub mp.drv.form(widgets)
 }
 
 
-sub mp.drv.menu()
+sub mp_drv.menu()
 {
 	local mx = 0;
 	local action = NULL;
@@ -658,13 +658,13 @@ sub mp.drv.menu()
 }
 
 
-sub mp.drv.busy(onoff)
+sub mp_drv.busy(onoff)
 {
 	mp.tui.prompt(onoff && L("Please, wait...") || '');
 }
 
 
-sub mp.drv.main_loop()
+sub mp_drv.main_loop()
 {
 	while (!mp_c.exit_requested()) {
 		mp.tui.draw(mp.active());

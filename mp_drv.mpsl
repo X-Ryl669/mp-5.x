@@ -3,7 +3,7 @@
     Minimum Profit 5.x
     A Programmer's Text Editor
 
-    Copyright (C) 1991-2007 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -19,13 +19,13 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    http://www.triptico.com
+    http://triptico.com
 
 */
 
 /** editor actions **/
 
-mp.actions['menu']	= sub (d) { mp.drv.menu(); };
+mp.actions['menu']	= sub (d) { mp_drv.menu(); };
 
 /** default key bindings **/
 
@@ -40,20 +40,20 @@ mp.actdesc['menu']			= LL("Menu");
 
 /** default UI functions (dummy) **/
 
-sub mp.drv.menu()				{ return NULL; }
-sub mp.drv.clip_to_sys()		{ return NULL; }
-sub mp.drv.sys_to_clip()		{ return NULL; }
-sub mp.drv.update_ui()			{ return NULL; }
-sub mp.drv.timer(msecs,func)	{ return NULL; }
-sub mp.drv.busy(onoff)			{ return NULL; }
+sub mp_drv.menu()               { return NULL; }
+sub mp_drv.clip_to_sys()        { return NULL; }
+sub mp_drv.sys_to_clip()        { return NULL; }
+sub mp_drv.update_ui()          { return NULL; }
+sub mp_drv.timer(msecs,func)    { return NULL; }
+sub mp_drv.busy(onoff)          { return NULL; }
 
 /** driver wrappers **/
 
-sub mp.update_ui()			{ mp.drv.update_ui(); }
-sub mp.alert(msg)			{ mp.drv.alert(msg); }
-sub mp.confirm(msg)			{ mp.drv.confirm(msg); }
-sub mp.openfile(prompt)		{ mp.drv.openfile(prompt); }
-sub mp.savefile(prompt)		{ mp.drv.savefile(prompt); }
-sub mp.form(widgets)		{ mp.drv.form(widgets); }
-sub mp.timer(msecs,func)	{ mp.drv.timer(msecs,func); }
-sub mp.busy(onoff)			{ mp.drv.busy(onoff); }
+sub mp.update_ui()			{ mp_drv.update_ui(); }
+sub mp.alert(msg)			{ mp_drv.alert(msg); }
+sub mp.confirm(msg)			{ mp_drv.confirm(msg); }
+sub mp.openfile(prompt)		{ mp_drv.openfile(prompt); }
+sub mp.savefile(prompt)		{ mp_drv.savefile(prompt); }
+sub mp.form(widgets)		{ mp_drv.form(widgets); }
+sub mp.timer(msecs,func)	{ mp_drv.timer(msecs,func); }
+sub mp.busy(onoff)			{ mp_drv.busy(onoff); }

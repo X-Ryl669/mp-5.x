@@ -153,7 +153,7 @@ mp.actions['about'] = sub (d) {
 	"Mailing list: mp-subscribe@lists.triptico.com\n");
 
 	local mpdm = MPDM();
-	msg = sprintf(msg, mp.VERSION, (mp.drv.id || 'unknown'), mpdm.version, MPSL.VERSION);
+	msg = sprintf(msg, mp.VERSION, (mp_drv.id || 'unknown'), mpdm.version, MPSL.VERSION);
 
 	d = mp.open("<about>");
 
@@ -184,7 +184,7 @@ mp.actions.check_for_updates = sub (d) {
         write(f, "GET /download/mp_release_notes HTTP/1.1\r\n");
         write(f, "Host: triptico.com\r\n");
         write(f, "User-Agent: Minimum Profit ",
-            mp.VERSION, " (", mp.drv.id, ") Update Checker\r\n");
+            mp.VERSION, " (", mp_drv.id, ") Update Checker\r\n");
         write(f, "Connection: close\r\n\r\n");
 
         /* ignore HTTP response */

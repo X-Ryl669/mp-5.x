@@ -206,7 +206,7 @@ sub mp_doc.copy(doc)
             mp.clipboard = doc->get_active_area();
             mp.clipboard_vertical = doc.txt.mark.vertical;
 
-            mp.drv.clip_to_sys();
+            mp_drv.clip_to_sys();
         }
     }
     else {
@@ -215,7 +215,7 @@ sub mp_doc.copy(doc)
 
         mp.clipboard = doc;
         mp.clipboard_vertical = 0;
-        mp.drv.clip_to_sys();
+        mp_drv.clip_to_sys();
     }
 
     return doc;
@@ -245,7 +245,7 @@ sub mp_doc.cut(doc)
 /* cut (copy + delete) selected mark */
 {
     doc->copy()->delete_mark();
-    mp.drv.clip_to_sys();
+    mp_drv.clip_to_sys();
 
     return doc;
 }
@@ -261,7 +261,7 @@ sub mp_doc.cut(doc)
  */
 sub mp_doc.paste(doc)
 {
-    mp.drv.sys_to_clip();
+    mp_drv.sys_to_clip();
 
     if (doc == NULL)
         return join(mp.clipboard, "\n");
@@ -362,7 +362,7 @@ sub mp_doc.cut_lines_with_string(doc, str)
         doc->insert(p.txt.lines);
 
     mp.clipboard = r;
-    mp.drv.clip_to_sys();
+    mp_drv.clip_to_sys();
 
     return doc;
 }

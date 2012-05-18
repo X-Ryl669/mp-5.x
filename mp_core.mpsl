@@ -75,10 +75,7 @@ mp.config = {
 };
 
 /* default end of line, system dependent */
-if (mp.drv.id eq 'win32')
-	mp.config.eol = "\r\n";
-else
-	mp.config.eol = "\n";
+mp.config.eol = mp_drv.id eq 'win32' && "\r\n" || "\n";
 
 /* status line */
 mp.config.status_format = "%m%n %x,%y [%l] %R%O %s %e %t";
@@ -673,8 +670,8 @@ ERROR = NULL;
 /** main **/
 
 mp.load_profile();
-mp.drv.startup();
+mp_drv.startup();
 mp.process_cmdline();
 mp.test_versions();
-mp.drv.main_loop();
-mp.drv.shutdown();
+mp_drv.main_loop();
+mp_drv.shutdown();

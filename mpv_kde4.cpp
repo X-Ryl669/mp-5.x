@@ -451,7 +451,7 @@ static void register_functions(void)
 {
     mpdm_t drv;
 
-    drv = mpdm_hget_s(mp, L"drv");
+    drv = mpdm_hget_s(mpdm_root(), L"mp_drv");
     mpdm_hset_s(drv, L"main_loop",   MPDM_X(kde4_drv_main_loop));
     mpdm_hset_s(drv, L"shutdown",    MPDM_X(kde4_drv_shutdown));
     mpdm_hset_s(drv, L"clip_to_sys", MPDM_X(kde4_drv_clip_to_sys));
@@ -524,9 +524,10 @@ extern "C" int kde4_drv_detect(int *argc, char ***argv)
     /* this is where it crashes if no X server */
     app = new KApplication(x11_display);
 
-    drv = mpdm_hget_s(mp, L"drv");
-    mpdm_hset_s(drv, L"id", MPDM_LS(L"kde4"));
-    mpdm_hset_s(drv, L"startup", MPDM_X(kde4_drv_startup));
+    drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
+
+    mpdm_hset_s(drv, L"id",         MPDM_LS(L"kde4"));
+    mpdm_hset_s(drv, L"startup",    MPDM_X(kde4_drv_startup));
 
     return 1;
 }

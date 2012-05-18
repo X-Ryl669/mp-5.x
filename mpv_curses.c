@@ -782,9 +782,10 @@ static void register_functions(void)
     mpdm_t drv;
     mpdm_t tui;
 
-    drv = mpdm_hget_s(mp, L"drv");
-    mpdm_hset_s(drv, L"timer", MPDM_X(ncursesw_drv_timer));
-    mpdm_hset_s(drv, L"shutdown", MPDM_X(ncursesw_drv_shutdown));
+    drv = mpdm_hget_s(mpdm_root(), L"mp_drv");
+
+    mpdm_hset_s(drv, L"timer",      MPDM_X(ncursesw_drv_timer));
+    mpdm_hset_s(drv, L"shutdown",   MPDM_X(ncursesw_drv_shutdown));
 
     tui = mpsl_eval(MPDM_LS(L"load('mp_tui.mpsl');"), NULL, NULL);
 
@@ -844,9 +845,10 @@ int ncursesw_drv_detect(int *argc, char ***argv)
 {
     mpdm_t drv;
 
-    drv = mpdm_hget_s(mp, L"drv");
-    mpdm_hset_s(drv, L"id", MPDM_LS(L"curses"));
-    mpdm_hset_s(drv, L"startup", MPDM_X(ncursesw_drv_startup));
+    drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
+
+    mpdm_hset_s(drv, L"id",         MPDM_LS(L"curses"));
+    mpdm_hset_s(drv, L"startup",    MPDM_X(ncursesw_drv_startup));
 
     return 1;
 }

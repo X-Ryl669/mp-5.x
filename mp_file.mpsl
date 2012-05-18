@@ -191,8 +191,7 @@ mp_doc.actions['exec_command'] = sub (d, cmd) {
                 mp.busy(0);
             }
             else
-                mp.drv.alert(
-                    sprintf(L("Error writing to command '%s'"), cmd));
+                mp.alert(sprintf(L("Error writing to command '%s'"), cmd));
         }
         else {
             /* no; execute command and insert into cursor */
@@ -213,8 +212,7 @@ mp_doc.actions['exec_command'] = sub (d, cmd) {
                 mp.busy(0);
             }
             else
-                mp.drv.alert(
-                    sprintf(L("Error reading from command '%s'"), cmd));
+                mp.alert(sprintf(L("Error reading from command '%s'"), cmd));
         }
     }
 
