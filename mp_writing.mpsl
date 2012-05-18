@@ -27,7 +27,7 @@
 
 /** editor actions **/
 
-mp.actions['word_count'] = sub (d) {
+mp_doc.actions['word_count'] = sub (d) {
     local c = d->long_op(d.word_count);
 
     mp.alert(sprintf(L("Lines: %d Words: %d"),
@@ -35,7 +35,7 @@ mp.actions['word_count'] = sub (d) {
 };
 
 
-mp.actions['repeated_words_options'] = sub (d) {
+mp.actions['repeated_words_options'] = sub {
     local r = mp.form(
         [
             {
@@ -60,7 +60,7 @@ mp.actions['repeated_words_options'] = sub (d) {
 };
 
 
-mp.actions['seek_repeated_word'] = sub (d) {
+mp_doc.actions['seek_repeated_word'] = sub (d) {
     local c = d->long_op(mp_doc.repeated_words, mp.config.rw_num_chars, mp.config.rw_max_dist);
 
     if (!c)
