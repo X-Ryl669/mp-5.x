@@ -33,7 +33,7 @@ mp.config.recursive_grep = 0;
 
 /** editor actions **/
 
-mp.actions['seek'] 	= sub (d) {
+mp_doc.actions['seek'] = sub (d) {
     local t = mp.form(
         [
             {
@@ -59,19 +59,19 @@ mp.actions['seek'] 	= sub (d) {
     return d;
 };
 
-mp.actions['seek_next']	= sub (d) {
+mp_doc.actions['seek_next'] = sub (d) {
     d->long_op(mp_doc.search, NULL) || mp.alert(L("Text not found."));
 
     return d;
 };
 
-mp.actions['seek_prev']	= sub (d) {
+mp_doc.actions['seek_prev'] = sub (d) {
     d->long_op(mp_doc.search_back, NULL) || mp.alert(L("Text not found."));
 
     return d;
 };
 
-mp.actions['replace']	= sub (d) {
+mp_doc.actions['replace'] = sub (d) {
     local r = mp.form(
         [
             {
@@ -108,10 +108,10 @@ mp.actions['replace']	= sub (d) {
     return d;
 };
 
-mp.actions['seek_next_char'] = sub (d) { d->seek_prev_or_next_char(mp_doc.search); };
-mp.actions['seek_prev_char'] = sub (d) { d->seek_prev_or_next_char(mp_doc.search_back); };
+mp_doc.actions['seek_next_char'] = sub (d) { d->seek_prev_or_next_char(mp_doc.search); };
+mp_doc.actions['seek_prev_char'] = sub (d) { d->seek_prev_or_next_char(mp_doc.search_back); };
 
-mp.actions['grep']	= sub (d) {
+mp.actions['grep']	= sub {
     local r = mp.form(
         [
             {
