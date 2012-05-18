@@ -53,6 +53,8 @@ if (gettext('&File') eq '&File' && ENV.LANG) {
 }
 
 
+mp.VERSION = mp_c.VERSION;
+
 /* configuration */
 
 mp.config = {

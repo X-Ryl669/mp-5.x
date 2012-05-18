@@ -1076,13 +1076,12 @@ void mp_startup(int argc, char *argv[])
     /* basic functions and data */
     mpdm_hset_s(mp, L"drv",             MPDM_H(0));
 
-    /* version */
-    mpdm_hset_s(mp, L"VERSION",         MPDM_S(L"" VERSION));
-
     /* new mp_c namespace (C interface) */
     mp_c = MPDM_H(0);
     mpdm_hset_s(mpdm_root(), L"mp_c", mp_c);
 
+    /* version */
+    mpdm_hset_s(mp_c, L"VERSION",           MPDM_S(L"" VERSION));
     mpdm_hset_s(mp_c, L"x2vx",              MPDM_X(mp_c_x2vx));
     mpdm_hset_s(mp_c, L"vx2x",              MPDM_X(mp_c_vx2x));
     mpdm_hset_s(mp_c, L"exit",              MPDM_X(mp_c_exit));
