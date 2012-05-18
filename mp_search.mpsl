@@ -109,7 +109,7 @@ mp.actions['replace']	= sub (d) {
 };
 
 mp.actions['seek_next_char'] = sub (d) { d->seek_prev_or_next_char(mp_doc.search); };
-mp.actions['seek_prev_char'] = sub (d) { d->seek_prev_or_next_char(d, mp_doc.search_back); };
+mp.actions['seek_prev_char'] = sub (d) { d->seek_prev_or_next_char(mp_doc.search_back); };
 
 mp.actions['grep']	= sub (d) {
     local r = mp.form(
