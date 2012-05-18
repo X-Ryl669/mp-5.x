@@ -77,6 +77,17 @@ static void set_attr(void)
 }
 
 
+static void update_window_size(void)
+{
+    mpdm_t v;
+
+    v = mpdm_hget_s(mpdm_root(), L"mp");
+    v = mpdm_hget_s(v, L"window");
+    mpdm_hset_s(v, L"tx", MPDM_I(COLS));
+    mpdm_hset_s(v, L"ty", MPDM_I(LINES));
+}
+
+
 #ifndef NCURSES_VERSION
 
 static void nc_sigwinch(int s)
@@ -89,9 +100,7 @@ static void nc_sigwinch(int s)
     refresh();
 
     /* re-set dimensions */
-    v = mpdm_hget_s(mp, L"window");
-    mpdm_hset_s(v, L"tx", MPDM_I(COLS));
-    mpdm_hset_s(v, L"ty", MPDM_I(LINES));
+    update_window_size();
 
     /* reattach */
     signal(SIGWINCH, nc_sigwinch);
@@ -492,12 +501,8 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
         case KEY_RESIZE:
 
             /* handle ncurses resizing */
+            update_window_size();
             f = NULL;
-            {
-                mpdm_t v = mpdm_hget_s(mp, L"window");
-                mpdm_hset_s(v, L"tx", MPDM_I(COLS));
-                mpdm_hset_s(v, L"ty", MPDM_I(LINES));
-            }
 
             break;
         case L'\e':
@@ -787,19 +792,9 @@ static void register_functions(void)
     mpdm_hset_s(drv, L"timer",      MPDM_X(ncursesw_drv_timer));
     mpdm_hset_s(drv, L"shutdown",   MPDM_X(ncursesw_drv_shutdown));
 
+    /* execute tui */
     tui = mpsl_eval(MPDM_LS(L"load('mp_tui.mpsl');"), NULL, NULL);
 
-    /* FIXME: if tui failed, a fatal error must be shown */
-
-/*	if((e = mpdm_hget_s(mpdm_root(), L"ERROR")) != NULL)
-	{
-		mpdm_write_wcs(stdout, mpdm_string(e));
-		printf("\n");
-
-		return(0);
-	}*/
-
-    /* execute tui */
     mpdm_hset_s(tui, L"getkey",     MPDM_X(nc_getkey));
     mpdm_hset_s(tui, L"addstr",     MPDM_X(tui_addstr));
     mpdm_hset_s(tui, L"move",       MPDM_X(tui_move));
@@ -814,8 +809,6 @@ static void register_functions(void)
 
 static mpdm_t ncursesw_drv_startup(mpdm_t a)
 {
-    mpdm_t v;
-
     register_functions();
 
     initscr();
@@ -827,9 +820,7 @@ static mpdm_t ncursesw_drv_startup(mpdm_t a)
 
     build_colors();
 
-    v = mpdm_hget_s(mp, L"window");
-    mpdm_hset_s(v, L"tx", MPDM_I(COLS));
-    mpdm_hset_s(v, L"ty", MPDM_I(LINES));
+    update_window_size();
 
 #ifndef NCURSES_VERSION
     signal(SIGWINCH, nc_sigwinch);
