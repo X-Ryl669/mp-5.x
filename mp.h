@@ -27,6 +27,7 @@ extern "C" {
 #endif
 
 extern int mp_exit_requested;
+#define MP mpdm_hget_s(mpdm_root(), L"mp")
 
 mpdm_t mp_draw(mpdm_t doc, int optimize);
 

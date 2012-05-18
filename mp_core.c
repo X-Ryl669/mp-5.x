@@ -39,9 +39,6 @@
 /* exit requested? */
 int mp_exit_requested = 0;
 
-/* main namespace */
-mpdm_t mp = NULL;
-
 /** private data for drawing syntax-highlighted text **/
 
 struct drw_1_info {
@@ -204,10 +201,8 @@ static int drw_get_attr(wchar_t * color_name)
 static int drw_prepare(mpdm_t doc)
 /* prepares the document for screen drawing */
 {
-    mp = mpdm_hget_s(mpdm_root(), L"mp");
-
-    mpdm_t window   = mpdm_hget_s(mp, L"window");
-    mpdm_t config   = mpdm_hget_s(mp, L"config");
+    mpdm_t window   = mpdm_hget_s(MP, L"window");
+    mpdm_t config   = mpdm_hget_s(MP, L"config");
     mpdm_t txt      = mpdm_hget_s(doc, L"txt");
     mpdm_t lines    = mpdm_hget_s(txt, L"lines");
     int x           = mpdm_ival(mpdm_hget_s(txt, L"x"));
@@ -241,14 +236,14 @@ static int drw_prepare(mpdm_t doc)
     drw_1.n_lines = drw_1.ty + drw_1.p_lines;
 
     /* get the mp.colors structure and the most used attributes */
-    drw_1.colors = mpdm_hget_s(mp, L"colors");
+    drw_1.colors = mpdm_hget_s(MP, L"colors");
     drw_1.normal_attr = drw_get_attr(L"normal");
     drw_1.cursor_attr = drw_get_attr(L"cursor");
 
     /* store the syntax highlight structure */
     drw_1.syntax = mpdm_hget_s(doc, L"syntax");
 
-    drw_1.word_color_func = mpdm_hget_s(mp, L"word_color_func");
+    drw_1.word_color_func = mpdm_hget_s(MP, L"word_color_func");
 
     mpdm_ref(txt);
     mpdm_unref(drw_1.txt);
@@ -258,10 +253,10 @@ static int drw_prepare(mpdm_t doc)
     drw_2.y = y;
 
     /* last search regex */
-    drw_1.last_search = mpdm_hget_s(mp, L"last_search");
+    drw_1.last_search = mpdm_hget_s(MP, L"last_search");
 
     /* redraw trigger */
-    drw_1.redraw = mpdm_ival(mpdm_hget_s(mp, L"redraw_counter"));
+    drw_1.redraw = mpdm_ival(mpdm_hget_s(MP, L"redraw_counter"));
 
     /* compare drw_1 with drw_1_o; if they are the same,
        no more expensive calculations on drw_2 are needed */
@@ -342,15 +337,15 @@ static void drw_words(void)
     mpdm_t word_color_func = NULL;
 
     /* take the hash of word colors, if any */
-    if ((word_color = mpdm_hget_s(mp, L"word_color")) == NULL)
+    if ((word_color = mpdm_hget_s(MP, L"word_color")) == NULL)
         return;
 
     /* get the regex for words */
-    if ((r = mpdm_hget_s(mp, L"word_regex")) == NULL)
+    if ((r = mpdm_hget_s(MP, L"word_regex")) == NULL)
         return;
 
     /* get the word color function */
-    word_color_func = mpdm_hget_s(mp, L"word_color_func");
+    word_color_func = mpdm_hget_s(MP, L"word_color_func");
 
     while ((t = mpdm_regex(drw_2.v, r, o)) != NULL) {
         int attr = -1;
@@ -900,7 +895,7 @@ int mp_keypress_throttle(int keydown)
 mpdm_t mp_active(void)
 /* interface to mp.active() */
 {
-    return mpdm_exec(mpdm_hget_s(mp, L"active"), NULL, NULL);
+    return mpdm_exec(mpdm_hget_s(MP, L"active"), NULL, NULL);
 }
 
 
@@ -908,7 +903,7 @@ void mp_process_action(mpdm_t action)
 /* interface to mp.process_action() */
 {
     mpdm_void(mpdm_exec_1
-              (mpdm_hget_s(mp, L"process_action"), action, NULL));
+              (mpdm_hget_s(MP, L"process_action"), action, NULL));
 }
 
 
@@ -916,7 +911,7 @@ void mp_process_event(mpdm_t keycode)
 /* interface to mp.process_event() */
 {
     mpdm_void(mpdm_exec_1
-              (mpdm_hget_s(mp, L"process_event"), keycode, NULL));
+              (mpdm_hget_s(MP, L"process_event"), keycode, NULL));
 }
 
 
@@ -931,42 +926,42 @@ void mp_set_y(mpdm_t doc, int y)
 mpdm_t mp_build_status_line(void)
 /* interface to mp.build_status_line() */
 {
-    return mpdm_exec(mpdm_hget_s(mp, L"build_status_line"), NULL, NULL);
+    return mpdm_exec(mpdm_hget_s(MP, L"build_status_line"), NULL, NULL);
 }
 
 
 mpdm_t mp_get_history(mpdm_t key)
 /* interface to mp.get_history() */
 {
-    return mpdm_exec_1(mpdm_hget_s(mp, L"get_history"), key, NULL);
+    return mpdm_exec_1(mpdm_hget_s(MP, L"get_history"), key, NULL);
 }
 
 
 mpdm_t mp_get_doc_names(void)
 /* interface to mp.get_doc_names() */
 {
-    return mpdm_exec(mpdm_hget_s(mp, L"get_doc_names"), NULL, NULL);
+    return mpdm_exec(mpdm_hget_s(MP, L"get_doc_names"), NULL, NULL);
 }
 
 
 mpdm_t mp_menu_label(mpdm_t action)
 /* interface to mp.menu_label() */
 {
-    return mpdm_exec_1(mpdm_hget_s(mp, L"menu_label"), action, NULL);
+    return mpdm_exec_1(mpdm_hget_s(MP, L"menu_label"), action, NULL);
 }
 
 
 mpdm_t mp_pending_key(void)
 /* interface to mp.pending_key() */
 {
-    return mpdm_exec_1(mpdm_hget_s(mp, L"pending_key"), NULL, NULL);
+    return mpdm_exec_1(mpdm_hget_s(MP, L"pending_key"), NULL, NULL);
 }
 
 
 mpdm_t mp_process_keyseq(mpdm_t key)
 /* interface to mp.process_keyseq() */
 {
-    return mpdm_exec_1(mpdm_hget_s(mp, L"process_keyseq"), key, NULL);
+    return mpdm_exec_1(mpdm_hget_s(MP, L"process_keyseq"), key, NULL);
 }
 
 
@@ -1022,7 +1017,7 @@ mpdm_t mp_c_plain_load(mpdm_t args, mpdm_t ctxt)
     mpdm_ref(a);
 
     /* clean last seen EOL */
-    mpdm_hset_s(mp, L"last_seen_eol", NULL);
+    mpdm_hset_s(MP, L"last_seen_eol", NULL);
 
     /* NOTE: this code rewrites a value, which is *illegal*,
        to avoid generating too much residual values */
@@ -1051,7 +1046,7 @@ mpdm_t mp_c_plain_load(mpdm_t args, mpdm_t ctxt)
         mpdm_push(a, MPDM_LS(L""));
 
     /* store the last seen EOL */
-    mpdm_hset_s(mp, L"last_seen_eol", MPDM_LS(eol == 2 ? L"\r\n" : L"\n"));
+    mpdm_hset_s(MP, L"last_seen_eol", MPDM_LS(eol == 2 ? L"\r\n" : L"\n"));
 
     mpdm_unrefnd(a);
 
@@ -1070,10 +1065,6 @@ void mp_startup(int argc, char *argv[])
     /* reset the structures */
     memset(&drw_1, '\0', sizeof(drw_1));
     memset(&drw_1_o, '\0', sizeof(drw_1_o));
-
-    /* create main namespace */
-    mp = MPDM_H(0);
-    mpdm_hset_s(mpdm_root(), L"mp", mp);
 
     /* new mp_c namespace (C interface) */
     mp_c = mpdm_hset_s(mpdm_root(), L"mp_c", MPDM_H(0));

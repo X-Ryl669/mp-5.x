@@ -81,8 +81,7 @@ static void update_window_size(void)
 {
     mpdm_t v;
 
-    v = mpdm_hget_s(mpdm_root(), L"mp");
-    v = mpdm_hget_s(v, L"window");
+    v = mpdm_hget_s(MP, L"window");
     mpdm_hset_s(v, L"tx", MPDM_I(COLS));
     mpdm_hset_s(v, L"ty", MPDM_I(LINES));
 }
@@ -587,7 +586,6 @@ static mpdm_t nc_doc_draw(mpdm_t args, mpdm_t ctxt)
 static void build_colors(void)
 /* builds the colors */
 {
-    mpdm_t mp;
     mpdm_t colors;
     mpdm_t color_names;
     mpdm_t l;
@@ -608,9 +606,8 @@ static void build_colors(void)
 #endif
 
     /* gets the color definitions and attribute names */
-    mp          = mpdm_hget_s(mpdm_root(), L"mp");
-    colors      = mpdm_hget_s(mp, L"colors");
-    color_names = mpdm_hget_s(mp, L"color_names");
+    colors      = mpdm_hget_s(MP, L"colors");
+    color_names = mpdm_hget_s(MP, L"color_names");
 
     l = mpdm_ref(mpdm_keys(colors));
     s = mpdm_size(l);

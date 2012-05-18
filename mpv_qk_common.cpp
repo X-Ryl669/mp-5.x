@@ -86,7 +86,7 @@ static void build_colors(void)
     int n, s;
 
     /* gets the color definitions and attribute names */
-    colors = mpdm_hget_s(mp, L"colors");
+    colors = mpdm_hget_s(MP, L"colors");
     l = mpdm_ref(mpdm_keys(colors));
     s = mpdm_size(l);
 
@@ -149,7 +149,7 @@ static QFont build_font(int rebuild)
         int font_size = 12;
         mpdm_t w = NULL;
 
-        if ((c = mpdm_hget_s(mp, L"config")) != NULL) {
+        if ((c = mpdm_hget_s(MP, L"config")) != NULL) {
             mpdm_t v;
 
             if ((v = mpdm_hget_s(c, L"font_size")) != NULL)
@@ -180,7 +180,7 @@ static void build_menu(void)
     mpdm_t m;
 
     /* gets the current menu */
-    if ((m = mpdm_hget_s(mp, L"menu")) == NULL)
+    if ((m = mpdm_hget_s(MP, L"menu")) == NULL)
         return;
 
     menubar->clear();
@@ -226,7 +226,7 @@ static void draw_scrollbar(void)
     static int ovy = -1;
     static int oty = -1;
     mpdm_t txt = mpdm_hget_s(mp_active(), L"txt");
-    mpdm_t window = mpdm_hget_s(mp, L"window");
+    mpdm_t window = mpdm_hget_s(MP, L"window");
     int vy = mpdm_ival(mpdm_hget_s(txt, L"vy"));
     int ty = mpdm_ival(mpdm_hget_s(window, L"ty"));
     int l = mpdm_size(mpdm_hget_s(txt, L"lines")) - ty;
@@ -255,7 +255,7 @@ static void draw_filetabs(void)
 
     /* get mp.active_i now, because it can be changed
        from the signal handler */
-    i = mpdm_ival(mpdm_hget_s(mp, L"active_i"));
+    i = mpdm_ival(mpdm_hget_s(MP, L"active_i"));
 
     /* is the list different from the previous one? */
     if (mpdm_cmp(names, last) != 0) {
@@ -332,7 +332,7 @@ void MPArea::paintEvent(QPaintEvent *)
     font_height = painter.fontMetrics().height();
 
     /* calculate window size */
-    w = mpdm_hget_s(mp, L"window");
+    w = mpdm_hget_s(MP, L"window");
     mpdm_hset_s(w, L"tx", MPDM_I(this->width() / font_width));
     mpdm_hset_s(w, L"ty", MPDM_I(this->height() / font_height));
 
@@ -419,7 +419,7 @@ void MPArea::keyPressEvent(QKeyEvent * event)
 
     /* set mp.shift_pressed */
     if (event->modifiers() & Qt::ShiftModifier)
-        mpdm_hset_s(mp, L"shift_pressed", MPDM_I(1));
+        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
 
     if (event->modifiers() & Qt::ControlModifier) {
         switch (event->key()) {
@@ -834,8 +834,8 @@ void MPArea::mousePressEvent(QMouseEvent * event)
 
     QPoint pos = event->pos();
 
-    mpdm_hset_s(mp, L"mouse_x", MPDM_I(pos.x() / font_width));
-    mpdm_hset_s(mp, L"mouse_y", MPDM_I(pos.y() / font_height));
+    mpdm_hset_s(MP, L"mouse_x", MPDM_I(pos.x() / font_width));
+    mpdm_hset_s(MP, L"mouse_y", MPDM_I(pos.y() / font_height));
 
     switch (event->button()) {
     case Qt::LeftButton:
@@ -879,8 +879,8 @@ void MPArea::mouseMoveEvent(QMouseEvent * event)
         y = pos.y() / font_height;
 
         if (ox != x && oy != y) {
-            mpdm_hset_s(mp, L"mouse_to_x", MPDM_I(x));
-            mpdm_hset_s(mp, L"mouse_to_y", MPDM_I(y));
+            mpdm_hset_s(MP, L"mouse_to_x", MPDM_I(x));
+            mpdm_hset_s(MP, L"mouse_to_y", MPDM_I(y));
 
             mp_process_event(MPDM_LS(L"mouse-drag"));
 
@@ -933,7 +933,7 @@ void MPArea::dropEvent(QDropEvent * event)
             mpdm_push(l, MPDM_S(ptr));
     }
 
-    mpdm_hset_s(mp, L"dropped_files", l);
+    mpdm_hset_s(MP, L"dropped_files", l);
 
     event->acceptProposedAction();
     mp_process_event(MPDM_LS(L"dropped-files"));
@@ -966,7 +966,7 @@ void MPArea::from_filetabs(int value)
 {
     if (value >= 0) {
         /* sets the active one */
-        mpdm_hset_s(mp, L"active_i", MPDM_I(value));
+        mpdm_hset_s(MP, L"active_i", MPDM_I(value));
         area->update();
     }
 }
@@ -977,7 +977,7 @@ void MPArea::from_menu(QAction * action)
     mpdm_t label = qstring_to_str(action->text());
     label = mpdm_sregex(label, MPDM_LS(L"/&/"), NULL, 0);
 
-    mpdm_t a = mpdm_hget_s(mp, L"actions_by_menu_label");
+    mpdm_t a = mpdm_hget_s(MP, L"actions_by_menu_label");
 
     mp_process_action(mpdm_hget(a, label));
     area->update();
@@ -1025,7 +1025,7 @@ static mpdm_t qt4_drv_shutdown(mpdm_t a, mpdm_t ctxt)
 {
     mpdm_t v;
 
-    if ((v = mpdm_hget_s(mp, L"exit_message")) != NULL) {
+    if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL) {
         mpdm_write_wcs(stdout, mpdm_string(v));
         printf("\n");
     }
@@ -1041,7 +1041,7 @@ static mpdm_t qt4_drv_clip_to_sys(mpdm_t a, mpdm_t ctxt)
     QClipboard *qc = QApplication::clipboard();
 
     /* gets the clipboard and joins */
-    v = mpdm_hget_s(mp, L"clipboard");
+    v = mpdm_hget_s(MP, L"clipboard");
 
     if (mpdm_size(v) != 0) {
         v = mpdm_join_s(v, L"\n");
@@ -1058,8 +1058,8 @@ static mpdm_t qt4_drv_sys_to_clip(mpdm_t a, mpdm_t ctxt)
     QString qs = qc->text(QClipboard::Selection);
 
     /* split and set as the clipboard */
-    mpdm_hset_s(mp, L"clipboard", mpdm_split_s(qstring_to_str(qs), L"\n"));
-    mpdm_hset_s(mp, L"clipboard_vertical", MPDM_I(0));
+    mpdm_hset_s(MP, L"clipboard", mpdm_split_s(qstring_to_str(qs), L"\n"));
+    mpdm_hset_s(MP, L"clipboard_vertical", MPDM_I(0));
 
     return NULL;
 }
