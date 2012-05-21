@@ -35,7 +35,7 @@ mp.keydesc['vcs'] = LL("Version Control...");
 
 /** mp_doc commit subclass **/
 
-mp_doc_vcs = new(mp_doc, { name: '.COMMIT_MESSAGE' });
+global mp_doc_vcs = new(mp_doc, { name: '.COMMIT_MESSAGE' });
 
 
 /** data **/

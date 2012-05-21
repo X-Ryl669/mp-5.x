@@ -167,7 +167,7 @@ sub mp.maze(doc, keycode)
 
 /** pipes **/
 
-mp_pipes = new(mp_base, {
+global mp_pipes = new(mp_base, {
         name:       '<pipes>',
         x:          0,
         y:          1,

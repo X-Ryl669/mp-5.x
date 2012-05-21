@@ -54,7 +54,7 @@ if (gettext('&File') eq '&File' && ENV.LANG) {
 
 /** main namespace **/
 
-mp = {
+global mp = {
     VERSION:    mp_c.VERSION,
 
     /* document list */
@@ -232,7 +232,7 @@ mp = {
 
 /** MP base class **/
 
-mp_base = {
+global mp_base = {
     name:           'MP',
     keycodes:       {},
     actions:        {},
@@ -249,23 +249,24 @@ mp_base = {
 
 /** MP document class **/
 
-mp_doc = new(mp_base, {
-    name:       L("<unnamed>"),
-    txt: {
-        x:      0,
-        y:      0,
-        vx:     0,
-        vy:     0,
-        mod:    0,
-        lines:  [ '' ]
-    },
-    undo_q:     [],
-    redo_q:     [],
-    syntax:     NULL,
+global mp_doc = new(mp_base, {
+        name:       L("<unnamed>"),
+        txt: {
+            x:      0,
+            y:      0,
+            vx:     0,
+            vy:     0,
+            mod:    0,
+            lines:  [ '' ]
+        },
+        undo_q:     [],
+        redo_q:     [],
+        syntax:     NULL,
 
-    /* rendering function for MP docs in mp_core.c */
-    render:     mp_c.render
-});
+        /* rendering function for MP docs in mp_core.c */
+        render:     mp_c.render
+    }
+);
 
 
 
