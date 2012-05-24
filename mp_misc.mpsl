@@ -21,13 +21,13 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    http://www.triptico.com
+    http://triptico.com
 
 */
 
 /** editor actions **/
 
-mp.actions['eval']	= sub (d) { 
+mp.actions['eval']  = sub { 
     local t = mp.form(
         [
             {
@@ -56,7 +56,7 @@ mp.actions['eval']	= sub (d) {
     }
 };
 
-mp.actions['eval_doc']	= sub (d) {
+mp_doc.actions['eval_doc']  = sub (d) {
 	local t = join(d->get_active_area(), "\n");
 
 	if (t != NULL) {
@@ -77,7 +77,7 @@ mp.actions['eval_doc']	= sub (d) {
 	}
 };
 
-mp.actions['exec_action'] = sub(d) {
+mp_doc.actions['exec_action'] = sub(d) {
     local l = mp.actions->keys()->sort();
 
     l = map(l, sub (e) { e ~ ' - ' ~ L(mp.actdesc[e] || ''); });
@@ -95,11 +95,11 @@ mp.actions['exec_action'] = sub(d) {
     if (r != NULL) {
         local a = regex(l[r[0]], '/^[^ ]+/');
 
-        mp.active()->mp.actions[a]();
+        d->mp.actions[a]();
     }
 };
 
-mp.actions['encoding']	= sub (d) {
+mp.actions['encoding']  = sub {
     local t = mp.form(
         [
             {
@@ -115,59 +115,56 @@ mp.actions['encoding']	= sub (d) {
             mp.alert(L("Invalid encoding ") ~ t[0]);
 };
 
-mp.actions['zoom_in'] 	= sub (d) {
-
-	mp.config.font_size++;
-	mp.update_ui();
+mp.actions['zoom_in']   = sub {
+    mp.config.font_size++;
+    mp.update_ui();
 };
 
-mp.actions['zoom_out'] 	= sub (d) {
-
-	if (mp.config.font_size > 4) {
-		mp.config.font_size--;
-		mp.update_ui();
-	}
+mp.actions['zoom_out']  = sub {
+    if (mp.config.font_size > 4) {
+        mp.config.font_size--;
+        mp.update_ui();
+    }
 };
 
-mp.actions['about'] = sub (d) {
-	local msg = L(
-	"Minimum Profit %s (%s) - Programmer Text Editor\n\n"\
-	"Components: MPDM %s, MPSL %s\n\n"\
-	"Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com> and others\n"\
-	"\n"\
-	"This program is free software; you can redistribute it and/or\n"\
-	"modify it under the terms of the GNU General Public License\n"\
-	"as published by the Free Software Foundation; either version 2\n"\
-	"of the License, or (at your option) any later version.\n"\
-	"\n"\
-	"This program is distributed in the hope that it will be useful,\n"\
-	"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"\
-	"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"\
-	"See the GNU General Public License for more details.\n"\
-	"\n"\
-	"You should have received a copy of the GNU General Public License\n"\
-	"along with this program; if not, write to the Free Software Foundation,\n"\
-	"Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.\n"\
-	"\n"\
-	"Home page: http://triptico.com/software/mp.html\n"\
-	"Mailing list: mp-subscribe@lists.triptico.com\n");
+mp.actions['about'] = sub {
+    local msg = L(
+    "Minimum Profit %s (%s) - Programmer Text Editor\n\n"\
+    "Components: MPDM %s, MPSL %s\n\n"\
+    "Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com> and others\n"\
+    "\n"\
+    "This program is free software; you can redistribute it and/or\n"\
+    "modify it under the terms of the GNU General Public License\n"\
+    "as published by the Free Software Foundation; either version 2\n"\
+    "of the License, or (at your option) any later version.\n"\
+    "\n"\
+    "This program is distributed in the hope that it will be useful,\n"\
+    "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"\
+    "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"\
+    "See the GNU General Public License for more details.\n"\
+    "\n"\
+    "You should have received a copy of the GNU General Public License\n"\
+    "along with this program; if not, write to the Free Software Foundation,\n"\
+    "Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.\n"\
+    "\n"\
+    "Home page: http://triptico.com/software/mp.html\n"\
+    "Mailing list: mp-subscribe@lists.triptico.com\n");
 
-	local mpdm = MPDM();
-	msg = sprintf(msg, mp.VERSION, (mp_drv.id || 'unknown'), mpdm.version, MPSL.VERSION);
+    local mpdm = MPDM();
+    msg = sprintf(msg, mp.VERSION, (mp_drv.id || 'unknown'), mpdm.version, MPSL.VERSION);
 
-	d = mp.open("<about>");
+    local d = mp.open("<about>");
 
-	if (size(d.txt.lines) == 1) {
-        d->insert(msg);
-        d->move_bof();
-		d.txt.mod = 0;
-		d.read_only = 1;
-	}
+    if (size(d.txt.lines) == 1) {
+        d->insert(msg)->move_bof();
+        d.txt.mod = 0;
+        d.read_only = 1;
+    }
 };
 
 
-mp.actions.check_for_updates = sub (d) {
-    d = mp.open("<updates>");
+mp.actions.check_for_updates = sub {
+    local d = mp.open("<updates>");
 
     d->move_bof();
     d.txt.mod   = 0;
@@ -259,8 +256,7 @@ sub dump(v)
 {
     local d = mp.open("<dump>");
 
-    d->move_eof();
-    d->insert(dumper(v));
+    d->move_eof()->insert(dumper(v));
     d.txt.mod = 0;
     d.read_only = 1;
 }
