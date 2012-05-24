@@ -96,7 +96,7 @@ mp.vcs = {
 
 /** editor actions **/
 
-mp.actions['vcs'] = sub (d) {
+mp.actions['vcs'] = sub {
     local v = NULL;
 
     /* find which VCS apply to current directory */
