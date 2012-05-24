@@ -4,6 +4,9 @@ Minimum Profit 5 TODO / Bug List
 Release Critical Bugs
 ---------------------
 
+ * 1304: Fix `exec_action' to include all actions.
+ * 1305: Refactor the hex viewer to be object-oriented and
+   an hex editor.
 
 Open Bugs
 ---------
