@@ -27,25 +27,26 @@
 
 /** editor actions **/
 
-mp.actions['record_macro']	= sub (d) { mp.record_macro(); };
-mp.actions['play_macro']	= sub (d) { mp.play_macro(); };
+mp.actions['record_macro']  = sub { mp.record_macro(); };
+mp.actions['play_macro']    = sub { mp.play_macro(); };
 
 /** default key bindings **/
 
-mp.keycodes['f10']	= "record_macro";
-mp.keycodes['ctrl-f10']	= "record_macro";
-mp.keycodes['f7']	= "play_macro";
+mp.keycodes['f10']      = "record_macro";
+mp.keycodes['ctrl-f10'] = "record_macro";
+mp.keycodes['f7']       = "play_macro";
 
 /** action descriptions **/
 
-mp.actdesc['record_macro']	= LL("Record macro");
-mp.actdesc['play_macro']	= LL("Play macro");
+mp.actdesc['record_macro']  = LL("Record macro");
+mp.actdesc['play_macro']    = LL("Play macro");
 
 /* learning/recording data */
 
-mp.macro = {};
-mp.macro.process_event = NULL;
-mp.macro.keycodes = NULL;
+mp.macro = {
+    process_event:  NULL,
+    keycodes:       NULL
+};
 
 /** code **/
 
