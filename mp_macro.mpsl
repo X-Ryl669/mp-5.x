@@ -33,7 +33,7 @@ mp.actions['play_macro']    = sub { mp.play_macro(); };
 /** default key bindings **/
 
 mp.keycodes['f10']      = "record_macro";
-mp.keycodes['ctrl-f10'] = "record_macro";
+mp.keycodes['ctrl-f10'] = "f10";
 mp.keycodes['f7']       = "play_macro";
 
 /** action descriptions **/

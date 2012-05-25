@@ -319,7 +319,7 @@ mp.keycodes['dropped-files']    = 'open_dropped_files';
 mp.keycodes['close-window']     = 'exit';
 mp_doc.keycodes['ctrl-s']       = 'save';
 mp_doc.keycodes['ctrl-enter']   = 'open_under_cursor';
-mp_doc.keycodes['alt-enter']    = 'open_under_cursor';
+mp_doc.keycodes['alt-enter']    = 'ctrl-enter';
 
 /** action descriptions **/
 

@@ -30,9 +30,9 @@ mp.actions['menu']	= sub (d) { mp_drv.menu(); };
 /** default key bindings **/
 
 mp.keycodes['ctrl-a']		= 'menu';
-mp.keycodes['alt-a']		= 'menu';
+mp.keycodes['alt-a']		= 'ctrl-a';
 mp.keycodes['ctrl-space']	= 'menu';
-mp.keycodes['alt-space']	= 'menu';
+mp.keycodes['alt-space']	= 'ctrl-a';
 
 /** action descriptions **/
 
