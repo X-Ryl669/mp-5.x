@@ -351,7 +351,7 @@ sub mp.process_event(k)
                     foreach(l, a)
                         mp.process_action(l);
                 else
-                    mp.process_action(a);
+                    mp.process_action(doc.keycodes[a] || mp.keycodes[a] || a);
             }
         }
         else
