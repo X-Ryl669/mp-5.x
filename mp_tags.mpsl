@@ -30,8 +30,7 @@ mp.config.ctags_cmd = "ctags *";
 
 /** editor actions **/
 
-mp.actions['find_tag']	= sub(d) {
-
+mp_doc.actions['find_tag']	= sub(d) {
     local tag = d->get_word();
 
     /* ask for it, taking the word under the cursor */
@@ -50,17 +49,17 @@ mp.actions['find_tag']	= sub(d) {
         mp.open_tag(r[0]);
 };
 
-mp.actions['complete'] = sub(d) {
+mp_doc.actions['complete'] = sub(d) {
 
     local words = {};
 
-    mp.busy(1);
+    d->busy(1);
 
     foreach (l, d.txt.lines)
         foreach (w, mp.split_by_words(l))
             words[w]++;
 
-    mp.busy(0);
+    d->busy(0);
 
     /* if the current word happens only one time, delete it */
     local w = d->get_word();
@@ -71,7 +70,7 @@ mp.actions['complete'] = sub(d) {
     d->complete(keys(words));
 };
 
-mp.actions['complete_symbol'] = sub(d) {
+mp_doc.actions['complete_symbol'] = sub(d) {
 
     mp.long_op(mp.load_tags, 1);
 

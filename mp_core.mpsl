@@ -429,13 +429,11 @@ sub mp.menu_label(action)
         local ks = [];
 
         /* look for this action in mp_doc keycodes */
-        foreach (i, grep(keys(mp_doc.keycodes),
-            sub (e) { mp_doc.keycodes[e] eq action; }))
+        foreach (i, mp_doc.keycodes->grep(sub(k, v) {v eq action;})->keys())
             push(ks, i);
 
         /* look now in global keycodes */
-        foreach (i, grep(keys(mp.keycodes),
-            sub (e) { mp.keycodes[e] eq action; }))
+        foreach (i, mp.keycodes->grep(sub(k, v) {v eq action;})->keys())
             push(ks, i);
 
         if (size(ks))

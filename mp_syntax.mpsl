@@ -27,7 +27,7 @@
 
 /** editor actions **/
 
-sub mp.actions.help(d) {
+sub mp_doc.actions.help(d) {
     local w, h, r;
 
     /* get the special word regex separator for help (if any) */
@@ -36,9 +36,7 @@ sub mp.actions.help(d) {
     /* if there is a word at the cursor position,
         try searching for help */
     if ((w = d->get_word(r)) != NULL) {
-        mp.busy(1);
-        h = d->help(w);
-        mp.busy(0);
+        h = d->busy(1)->help(w)->busy(0);
     }
 
     if (h == NULL)
@@ -56,7 +54,7 @@ sub mp.actions.help(d) {
     }
 }
 
-sub mp.actions.section_list(d) {
+sub mp_doc.actions.section_list(d) {
     local l = d->section_list();
 
     if (l == NULL)
@@ -97,7 +95,7 @@ sub mp.actions.section_list(d) {
 }
 
 
-sub mp.actions.move_section_up(d) {
+sub mp_doc.actions.move_section_up(d) {
     local pos = -1;
 
     foreach (e, d->section_list()) {
@@ -116,7 +114,7 @@ sub mp.actions.move_section_up(d) {
 }
 
 
-sub mp.actions.move_section_down(d) {
+sub mp_doc.actions.move_section_down(d) {
     local pos = d.txt.y;
 
     foreach (e, d->section_list()) {

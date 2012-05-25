@@ -27,11 +27,13 @@
 
 /** editor actions **/
 
-mp.actions['toggle_spellcheck']	= sub(d) { mp.ispell(-1); };
-mp.actions['seek_misspelled']	= sub(d) { mp.long_op(mp.search_misspelled, d) ||
-        mp.alert(L("Text not found."));
+mp.actions['toggle_spellcheck']     = sub { mp.ispell(-1); };
+mp.actions['ignore_last_misspell']  = sub { mp.ignore_last_misspell(); };
+
+mp_doc.actions['seek_misspelled']   = sub (d) {
+    d->long_op(d.search_misspelled) || mp.alert(L("Text not found."));
 };
-mp.actions['ignore_last_misspell'] = sub(d) { mp.ignore_last_misspell(); };
+
 
 /** default key bindings **/
 
@@ -56,35 +58,34 @@ mp.spelling_cache = {};
 sub mp.open_ispell_pipe
 /* opens the pipe to ispell */
 {
-	local p, l;
+    local p, l;
 
-	/* open the pipe */
-	if ((p = popen(mp.config.ispell_cmd, "r+")) == NULL)
-		return NULL;
+    /* open the pipe */
+    if ((p = popen(mp.config.ispell_cmd, "r+")) == NULL)
+        return NULL;
 
-	/* read the first line */
-	l = read(p);
+    /* read the first line */
+    l = read(p);
 
-	/* check for the signature */
-	if (! regex(l, '/^@\(#\) International Ispell/')) {
-		pclose(p);
-		return NULL;
-	}
+    /* check for the signature */
+    if (! regex(l, '/^@\(#\) International Ispell/')) {
+        pclose(p);
+        return NULL;
+    }
 
-	/* store the pipe */
-	mp.ispell_pipe = p;
+    /* store the pipe */
+    mp.ispell_pipe = p;
 }
 
 
 sub mp.close_ispell_pipe
 /* closes the pipe to ispell */
 {
-	if (mp.ispell_pipe == NULL)
-		return;
-
-	/* close and delete */
-	pclose(mp.ispell_pipe);
-	mp.ispell_pipe = NULL;
+    if (mp.ispell_pipe != NULL) {
+        /* close and delete */
+        pclose(mp.ispell_pipe);
+        mp.ispell_pipe = NULL;
+    }
 }
 
 
@@ -98,70 +99,70 @@ sub mp.close_ispell_pipe
  */
 sub mp.is_word_misspelled(w)
 {
-	local l;
-	local ret = 0;
+    local l;
+    local ret = 0;
 
-	if (exists(mp.spelling_cache, w))
-		return mp.spelling_cache[w];
+    if (exists(mp.spelling_cache, w))
+        return mp.spelling_cache[w];
 
-	if (mp.ispell_pipe == NULL) {
-		if (mp.open_ispell_pipe() == NULL) {
-			return -1;
-		}
-	}
+    if (mp.ispell_pipe == NULL) {
+        if (mp.open_ispell_pipe() == NULL) {
+            return -1;
+        }
+    }
 
-	/* NULL is never misspelled */
-	if (w == NULL)
-		return 0;
+    /* NULL is never misspelled */
+    if (w == NULL)
+        return 0;
 
-	/* write the word */
-	write(mp.ispell_pipe, w ~ "\n");
+    /* write the word */
+    write(mp.ispell_pipe, w ~ "\n");
 
-	/* wait for the response */
-	if ((l = read(mp.ispell_pipe)) == NULL) {
-		mp.close_ispell_pipe();
-		return -2;
-	}
+    /* wait for the response */
+    if ((l = read(mp.ispell_pipe)) == NULL) {
+        mp.close_ispell_pipe();
+        return -2;
+    }
 
-	local t = l;
+    local t = l;
 
-	/* drop all lines until an empty one */
-	while (t ne "\n")
-		t = read(mp.ispell_pipe);
+    /* drop all lines until an empty one */
+    while (t ne "\n")
+        t = read(mp.ispell_pipe);
 
-	/* take first char of the response */
-	l = regex(l, '/^./');
+    /* take first char of the response */
+    l = regex(l, '/^./');
 
-	/* if it's not a '*' nor a '+', it's misspelled */
-	if (l ne '*' && l ne '+')
-		ret = 1;
+    /* if it's not a '*' nor a '+', it's misspelled */
+    if (l ne '*' && l ne '+')
+        ret = 1;
 
-	mp.spelling_cache[w] = ret;
+    mp.spelling_cache[w] = ret;
 
-	return ret;
+    return ret;
 }
 
 
 sub mp.ispell_word_color_func(w)
 /* mp.word_color_func() for ispell */
 {
-	local l, a;
+    local l, a;
 
-	a = -1;
+    a = -1;
 
-	/* attributes must exist before entering here */
-	if (mp.colors.spell.attr != NULL) {
-		ret = mp.is_word_misspelled(w);
+    /* attributes must exist before entering here */
+    if (mp.colors.spell.attr != NULL) {
+        ret = mp.is_word_misspelled(w);
 
-		/* error? disable further misspelling color */
-		if (ret < 0)
-			mp.word_color_func = NULL;
-		else
-		if (ret > 0)
-			a = mp.colors.spell.attr;
-	}
+        /* error? disable further misspelling color */
+        if (ret < 0)
+            mp.word_color_func = NULL;
+        else
+        if (ret > 0)
+            a = mp.colors.spell.attr;
+    }
 
-	return a;
+    return a;
 }
 
 
@@ -176,13 +177,13 @@ sub mp.ispell_word_color_func(w)
  */
 sub mp.ispell(b)
 {
-	if (b == -1)
-		b = mp.word_color_func == NULL && 1 || 0;
+    if (b == -1)
+        b = mp.word_color_func == NULL && 1 || 0;
 
-	if (b && mp.is_word_misspelled() != -1)
-		mp.word_color_func = mp.ispell_word_color_func;
-	else
-		mp.word_color_func = NULL;
+    if (b && mp.is_word_misspelled() != -1)
+        mp.word_color_func = mp.ispell_word_color_func;
+    else
+        mp.word_color_func = NULL;
 }
 
 
@@ -195,41 +196,41 @@ sub mp.ispell(b)
  * otherwise, the cursor is moved just after that word and
  * returns 1.
  */
-sub mp.search_misspelled(doc)
+sub mp_doc.search_misspelled(doc)
 {
-	local txt = doc.txt;
-	local x = txt.x;
-	local y = txt.y;
+    local txt = doc.txt;
+    local x = txt.x;
+    local y = txt.y;
 
-	while (y < size(txt.lines)) {
-		local l = txt.lines[y];
-		local w;
+    while (y < size(txt.lines)) {
+        local l = txt.lines[y];
+        local w;
 
-		while ((w = regex(l, mp.word_regex, x)) != NULL) {
-			local n = regex();
-			local r = mp.is_word_misspelled(w);
+        while ((w = regex(l, mp.word_regex, x)) != NULL) {
+            local n = regex();
+            local r = mp.is_word_misspelled(w);
 
-			/* error? fail immediately */
-			if (r < 0)
-				return 0;
+            /* error? fail immediately */
+            if (r < 0)
+                return 0;
 
-			x = n[0] + n[1];
+            x = n[0] + n[1];
 
-			if (r == 1) {
-				/* store word for later */
-				mp.last_misspelled_word = w;
+            if (r == 1) {
+                /* store word for later */
+                mp.last_misspelled_word = w;
 
                 doc->set_y(y)->set_x(x);
 
-				return 1;
-			}
-		}
+                return 1;
+            }
+        }
 
-		x = 0;
-		y++;
-	}
+        x = 0;
+        y++;
+    }
 
-	return 0;
+    return 0;
 }
 
 
@@ -241,6 +242,6 @@ sub mp.search_misspelled(doc)
  */
 sub mp.ignore_last_misspell()
 {
-	if (mp.last_misspelled_word)
-		mp.spelling_cache[mp.last_misspelled_word] = 0;
+    if (mp.last_misspelled_word)
+        mp.spelling_cache[mp.last_misspelled_word] = 0;
 }

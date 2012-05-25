@@ -66,7 +66,7 @@ arcfour = {
 
 /** editor actions **/
 
-mp.actions['set_password'] = sub(d) {
+mp_doc.actions['set_password'] = sub(d) {
     local r = mp.form(
         [
             {
