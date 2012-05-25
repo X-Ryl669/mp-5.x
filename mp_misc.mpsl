@@ -90,8 +90,8 @@ mp_doc.actions['insert_next_item'] = sub(doc) {
     doc->store_undo()->insert(' * ' ~ (n + 1) ~ ': ');
 };
 
-mp_doc.actions['exec_action'] = sub(d) {
-    local l = mp.actions->keys()->sort();
+mp_doc.actions['exec_action'] = sub {
+    local l = join(keys(mp.actions), keys(mp_doc.actions))->sort();
 
     l = map(l, sub (e) { e ~ ' - ' ~ L(mp.actdesc[e] || ''); });
 
@@ -108,7 +108,7 @@ mp_doc.actions['exec_action'] = sub(d) {
     if (r != NULL) {
         local a = regex(l[r[0]], '/^[^ ]+/');
 
-        d->mp.actions[a]();
+        mp.process_action(a);
     }
 };
 

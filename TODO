@@ -4,7 +4,6 @@ Minimum Profit 5 TODO / Bug List
 Release Critical Bugs
 ---------------------
 
- * 1304: Fix `exec_action' to include all actions.
  * 1305: Refactor the hex viewer to be object-oriented and
    an hex editor.
 
@@ -389,5 +388,7 @@ Closed
    (Tue, 08 May 2012 15:17:57 +0200).
  * 1298: Fix password prompt in encrypted files
    (Wed, 16 May 2012 18:27:21 +0200).
+ * 1304: Fix `exec_action' to include all actions
+   (Fri, 25 May 2012 13:13:53 +0200).
 
 Email bugs to angel@triptico.com
