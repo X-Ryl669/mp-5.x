@@ -62,19 +62,6 @@ mp.actions['build']	= sub {
 };
 
 
-mp_doc.actions['insert_next_item'] = sub(doc) {
-    local n = 0;
-
-    foreach (l, doc.txt.lines) {
-        local r = regex(l, ['/^ \* /', '/[0-9]+/', '/: /']);
-
-        if (r[1] > n)
-            n = r[1];
-    }
-
-    doc->store_undo()->insert(' * ' ~ (n + 1) ~ ': ');
-};
-
 /** Default key bindings **/
 
 mp.keycodes['f2'] = "build";
@@ -82,7 +69,6 @@ mp.keycodes['f2'] = "build";
 /** action descriptions **/
 
 mp.actdesc['build']             = LL("Build project...");
-mp.actdesc['insert_next_item']  = LL("Insert next item");
 
 
 /** code **/
