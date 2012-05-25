@@ -134,7 +134,7 @@ mp.actions['vcs'] = sub {
             mp.vcs_target = t[0];
 
             local opts  = v.opts[l[mp.vcs_target]];
-            local cmd   = sprintf(l[mp.vcs_target], d.name);
+            local cmd   = sprintf(l[mp.vcs_target], mp.active.name);
 
             if (opts.commit_cmd) {
                 /* create a commit message editor document */
