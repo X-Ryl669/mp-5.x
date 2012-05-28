@@ -357,6 +357,7 @@ mp.syntax.sh = {
 	'id'		=>	'sh',
 	'name'		=>	'Shell script',
 	'filenames'	=>	[ '/\.sh$/i', '/makefile/i' ],
+	'help'		=>	[ "man %s" ],
 	'defs'		=>	[
 		'word1',	[
 				mp.syn_token_list( [
