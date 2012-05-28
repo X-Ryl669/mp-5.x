@@ -36,7 +36,9 @@ sub mp_doc.actions.help(d) {
     /* if there is a word at the cursor position,
         try searching for help */
     if ((w = d->get_word(r)) != NULL) {
-        h = d->busy(1)->help(w)->busy(0);
+        d->busy(1);
+        h = d->help(w);
+        d->busy(0);
     }
 
     if (h == NULL)
