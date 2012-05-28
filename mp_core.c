@@ -61,6 +61,7 @@ struct drw_1_info {
     int preread_lines;          /* lines to pre-read (for synhi blocks) */
     int mark_eol;               /* mark end of lines */
     int redraw;                 /* redraw trigger */
+    int vwrap;                  /* visual wrap value */
 };
 
 struct drw_1_info drw_1;
@@ -257,6 +258,9 @@ static int drw_prepare(mpdm_t doc)
 
     /* redraw trigger */
     drw_1.redraw = mpdm_ival(mpdm_hget_s(MP, L"redraw_counter"));
+
+    /* visual wrap */
+    drw_1.vwrap = mpdm_ival(mpdm_hget_s(config, L"visual_wrap"));
 
     /* compare drw_1 with drw_1_o; if they are the same,
        no more expensive calculations on drw_2 are needed */
@@ -720,6 +724,65 @@ static mpdm_t drw_line(int line)
 }
 
 
+static mpdm_t drw_vwrap(void)
+{
+    mpdm_t r = mpdm_ref(MPDM_A(0));
+    int o = drw_2.offsets[drw_1.p_lines];
+    wchar_t tmp[BUF_LINE];
+    wchar_t c;
+
+    while (mpdm_size(r) <= drw_1.ty) {
+        int m, z, a;
+        mpdm_t l = NULL;
+
+        /* find the maximum column with a blank that does not force a wrapping */
+        for (z = drw_1.tx - 1, m = 0; m < drw_1.tx; m++) {
+            if ((c = drw_2.ptr[o + m]) == L' ' || c == L'\t' || c == L'\n' || c == L'\0') {
+                z = m;
+
+                if (c == L'\n' || c == L'\0')
+                    break;
+            }
+        }
+
+        a = drw_2.attrs[o];
+        m = 0;
+
+        /* now create string/attr pairs up to z */
+        while (m <= z) {
+            int i = 0;
+
+            while (m <= z && drw_2.attrs[o] == a) {
+                int n;
+
+                /* take char and size */
+                c = drw_2.ptr[o];
+
+                /* size is 1, unless it's a tab */
+                n = c == L'\t' ? drw_wcwidth(m, c) : 1;
+
+                /* fill the string */
+                for (; n > 0; n--)
+                    tmp[i++] = drw_char(c);
+
+                o++;
+                m++;
+            }
+
+            l = drw_push_pair(l, i, a, tmp);
+            a = drw_2.attrs[o];
+        }
+
+        mpdm_push(r, l);
+
+        if (c == L'\0')
+            break;
+    }
+
+    return mpdm_unrefnd(r);
+}
+
+
 static mpdm_t drw_as_array(void)
 /* returns an mpdm array of ty elements, which are also arrays of
    attribute - string pairs */
@@ -827,7 +890,10 @@ static mpdm_t drw_draw(mpdm_t doc, int optimize)
     drw_matching_paren();
 
     /* convert to an array of string / atribute pairs */
-    r = drw_as_array();
+    if (drw_1.vwrap)
+        r = drw_vwrap();
+    else
+        r = drw_as_array();
 
     /* optimize */
     r = drw_optimize_array(r, optimize);
