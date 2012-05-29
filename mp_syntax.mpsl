@@ -330,6 +330,7 @@ mp.syntax.mpsl = {
             "/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",     /* single-quoted strings */
             "/\b-?[0-9]+\b/",                           /* numbers */
             "/\b0x[0-9a-f]+\b/i",                       /* hex numbers */
+            "/\b0b[0-1]+\b/i",                          /* binary numbers */
             '/\w+\s*:/',                                /* JS-type hashes */
             "/\b[0-9[:upper:]_]+\b/"                    /* all-caps words */
         ],
