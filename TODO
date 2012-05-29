@@ -46,7 +46,6 @@ Pending Enhancements
    different.
  * 1225: Add a regex (or similar) filter for lines. Lines matching it
    (or not) won't appear on screen.
- * 1275: Add a 'Writing' menu bar.
  * 1279: Add a new visual wrap mode.
  * 1280: Study a way to convert MP to a "portable" application, i.e.
    to be formed by just the executable with all MPSL code embedded
@@ -390,5 +389,6 @@ Closed
    (Wed, 16 May 2012 18:27:21 +0200).
  * 1304: Fix `exec_action' to include all actions
    (Fri, 25 May 2012 13:13:53 +0200).
+ * 1275: Add a 'Writing' menu bar (Tue, 29 May 2012 13:49:24 +0200).
 
 Email bugs to angel@triptico.com
