@@ -1123,7 +1123,7 @@ msgstr "&Proyecto"
 
 #: mp_core.mpsl:222
 msgid "&Writing"
-msgstr "&Escritura"
+msgstr "E&scritura"
 
 #: mp_file.mpsl:108
 #, c-format
