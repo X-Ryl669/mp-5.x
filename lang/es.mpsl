@@ -266,5 +266,12 @@ __I18N__ = {
 	"Update Minimum Profit from http://triptico.com/software/mp.html" => "Actualiza Minimum Profit desde http://triptico.com/software/mp.html",
 	"Cannot connect -- please try later." => "Imposible conectar. Int\x{00e9}ntalo m\x{00e1}s tarde.",
 	"Check for updates..." => "Comprobar actualizaciones...",
+	"&Project" => "&Proyecto",
+	"&Writing" => "&Escritura",
+	"Bad password for file '%s'" => "Password incorrecta para el fichero '%s'",
+	"Error opening file '%s': %s" => "Error abriendo el fichero '%s': %s",
+	"Move one section up" => "Mover a la secci\x{00f3}n anterior",
+	"Move one section down" => "Mover a la secci\x{00f3}n siguiente",
+	"Pipes - carry water from top to bottom by turning the pipes" => "Tuber\x{00ed}as - Lleva el agua de arriba a abajo girando las tuber\x{00ed}as",
 	"-" => "-"
 };
