@@ -90,4 +90,4 @@ foreach (f, glob('po/*.po')) { /**/
 	close(o);
 }
 
-mp.exit();
+mp_c.exit();
