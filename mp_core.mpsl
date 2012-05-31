@@ -642,6 +642,12 @@ sub mp.test_versions()
 }
 
 
+sub mp.exit()
+{
+    mp_c.exit();
+}
+
+
 /** modules **/
 
 local mp_modules = [
