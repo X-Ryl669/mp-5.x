@@ -1730,9 +1730,7 @@ static mpdm_t win32_drv_timer(mpdm_t a, mpdm_t ctxt)
     if (msecs > 0 && func != NULL)
         SetTimer(hwnd, 1, msecs, NULL);
 
-    mpdm_ref(func);
-    mpdm_unref(timer_func);
-    timer_func = func;
+    mpdm_set(&timer_func, func);
 
     return NULL;
 }

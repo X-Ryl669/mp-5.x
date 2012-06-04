@@ -2376,9 +2376,7 @@ static mpdm_t gtk_drv_timer(mpdm_t a, mpdm_t ctxt)
     if (msecs > 0 && func != NULL)
         prev = g_timeout_add(msecs, timer_callback, NULL);
 
-    mpdm_ref(func);
-    mpdm_unref(timer_func);
-    timer_func = func;
+    mpdm_set(&timer_func, func);
 
     return NULL;
 }

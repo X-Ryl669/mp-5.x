@@ -246,9 +246,7 @@ static int drw_prepare(mpdm_t doc)
 
     drw_1.word_color_func = mpdm_hget_s(MP, L"word_color_func");
 
-    mpdm_ref(txt);
-    mpdm_unref(drw_1.txt);
-    drw_1.txt = txt;
+    mpdm_set(&drw_1.txt, txt);
 
     drw_2.x = x;
     drw_2.y = y;
@@ -302,8 +300,7 @@ static int drw_prepare(mpdm_t doc)
     drw_2.size--;
 
     /* now create a value */
-    mpdm_unref(drw_2.v);
-    drw_2.v = mpdm_ref(MPDM_ENS(drw_2.ptr, drw_2.size));
+    mpdm_set(&drw_2.v, MPDM_ENS(drw_2.ptr, drw_2.size));
 
     /* alloc and init space for the attributes */
     drw_2.attrs = realloc(drw_2.attrs, drw_2.size + 1);
@@ -832,9 +829,7 @@ static mpdm_t drw_optimize_array(mpdm_t a, int optimize)
         mpdm_unrefnd(r);
     }
 
-    mpdm_ref(a);
-    mpdm_unref(drw_2.old);
-    drw_2.old = a;
+    mpdm_set(&drw_2.old, a);
 
     mpdm_unref(a);
 

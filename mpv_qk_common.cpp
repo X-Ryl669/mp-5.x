@@ -1070,9 +1070,7 @@ static mpdm_t qt4_drv_timer(mpdm_t a, mpdm_t ctxt)
     int msecs = mpdm_ival(mpdm_aget(a, 0));
     mpdm_t func = mpdm_aget(a, 1);
 
-    mpdm_ref(func);
-    mpdm_unref(timer_func);
-    timer_func = func;
+    mpdm_set(&timer_func, func);
 
     if (timer_func == NULL)
         area->timer->stop();
