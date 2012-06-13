@@ -95,7 +95,6 @@ msgstr "Файл '%s' не найден."
 msgid "Can't create file '%s'."
 msgstr "Невозможно создать файл '%s'."
 
-#: mp_file.mpsl:400
 msgid "File has changed. Save changes?"
 msgstr "Файл изменен. Сохранить?"
 
@@ -660,8 +659,6 @@ msgstr ""
 msgid "Save file as:"
 msgstr "Сохранить файл как:"
 
-#: mp_file.mpsl:56 mp_file.mpsl:71
-#, c-format
 msgid "Error saving file: %s"
 msgstr "Ошибка сохранения файла: %s"
 
@@ -782,7 +779,6 @@ msgstr "Опции строки"
 msgid "Tab options..."
 msgstr "Опции табудяции"
 
-#: mp_file.mpsl:125
 msgid "File has changed. Are you sure?"
 msgstr "Файл был изменен. Вы уверены?"
 
@@ -1200,7 +1196,6 @@ msgstr ""
 msgid "Gathered information on %s:"
 msgstr ""
 
-#: mp_file.mpsl:361
 msgid "File was changed externally. Reload?"
 msgstr ""
 
@@ -1309,4 +1304,24 @@ msgstr ""
 
 #: mp_toys.mpsl:184
 msgid "Pipes - carry water from top to bottom by turning the pipes"
+msgstr ""
+
+#: mp_file.mpsl:56 mp_file.mpsl:71
+#, c-format
+msgid "Error saving '%s': %s"
+msgstr ""
+
+#: mp_file.mpsl:125
+#, c-format
+msgid "'%s' has changed. Are you sure?"
+msgstr ""
+
+#: mp_file.mpsl:361
+#, c-format
+msgid "'%s' was changed externally. Reload?"
+msgstr ""
+
+#: mp_file.mpsl:400
+#, c-format
+msgid "'%s' has changed. Save changes?"
 msgstr ""

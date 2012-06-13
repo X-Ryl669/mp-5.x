@@ -273,5 +273,9 @@ __I18N__ = {
 	"Move one section up" => "Mover a la secci\x{00f3}n anterior",
 	"Move one section down" => "Mover a la secci\x{00f3}n siguiente",
 	"Pipes - carry water from top to bottom by turning the pipes" => "Tuber\x{00ed}as - Lleva el agua de arriba a abajo girando las tuber\x{00ed}as",
+	"Error saving '%s': %s" => "Error salvando '%s': %s",
+	"'%s' has changed. Are you sure?" => "'%s' ha cambiado. \x{00bf}Est\x{00e1} seguro?",
+	"'%s' was changed externally. Reload?" => "'%s' fue cambiado externamente. \x{00bf}Recargarlo?",
+	"'%s' has changed. Save changes?" => "'%s' ha cambiado. \x{00bf}Guardar cambios?",
 	"-" => "-"
 };

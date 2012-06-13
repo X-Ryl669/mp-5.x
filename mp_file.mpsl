@@ -53,7 +53,7 @@ mp_doc.actions['save_as'] = sub (d, newname) {
         d.name = newname;
 
         if (d->long_op(mp_doc.save) == -1)
-            mp.alert(sprintf(L("Error saving file: %s"), ERRNO));
+            mp.alert(sprintf(L("Error saving '%s': %s"), d.name, ERRNO));
         else
             d->detect_syntax();
     }
@@ -68,7 +68,7 @@ mp_doc.actions['save'] = sub (d) {
         d->actions.save_as();
     else
     if (d->long_op(mp_doc.save) == -1)
-        mp.alert(sprintf(L("Error saving file: %s"), ERRNO));
+        mp.alert(sprintf(L("Error saving '%s': %s"), d.name, ERRNO));
 
     return d;
 };
@@ -122,7 +122,7 @@ mp_doc.actions['revert'] = sub (d) {
 
     if (d.txt.mod) {
         local r;
-        r = mp.confirm(L("File has changed. Are you sure?"));
+        r = mp.confirm(sprintf(L("'%s' has changed. Are you sure?"), p));
 
         /* cancel? don't close */
         if (r == 0 || r == 2)
@@ -358,7 +358,7 @@ sub mp_doc.pre_event(doc, k)
         local s;
 
         if ((s = stat(doc.name)) != NULL && s[9] > doc.mtime) {
-            if (mp.confirm(L("File was changed externally. Reload?")) == 1) {
+            if (mp.confirm(sprintf(L("'%s' was changed externally. Reload?"), doc.name)) == 1) {
                 doc->actions.revert();
                 k = NULL;
             }
@@ -397,7 +397,7 @@ sub mp_doc.query_close(doc)
     local r = 1;
 
     if (doc.txt.mod) {
-        r = mp.confirm(L("File has changed. Save changes?"));
+        r = mp.confirm(sprintf(L("'%s' has changed. Save changes?"), doc.name));
 
         /* confirm? save */
         if (r == 1)
@@ -706,7 +706,7 @@ sub mp.hex_view(filename)
     if ((f = open(filename, "rb")) != NULL) {
         close(f);
 
-        d = mp.add(new(mp_doc, { name: '<' ~ filename ~ ' hex view>' }));
+        d = mp.add(new(mp_doc, { name: sprintf(L('<%s hex view>'), d.name) }));
 
         d.read_only = 1;
         d.syntax    = mp.syntax.hex_view;

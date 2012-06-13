@@ -48,7 +48,6 @@ msgstr "Fichero '%s' no encontrado."
 msgid "Can't create file '%s'."
 msgstr "Imposible crear fichero '%s'."
 
-#: mp_file.mpsl:400
 msgid "File has changed. Save changes?"
 msgstr "El fichero ha cambiado. ¿Salvar cambios?"
 
@@ -579,8 +578,6 @@ msgstr "Recortar por palabras un párrafo"
 msgid "Save file as:"
 msgstr "Salvar fichero como:"
 
-#: mp_file.mpsl:56 mp_file.mpsl:71
-#, c-format
 msgid "Error saving file: %s"
 msgstr "Error salvando fichero: %s"
 
@@ -701,7 +698,6 @@ msgstr "Opciones de línea..."
 msgid "Tab options..."
 msgstr "Opciones de tabulación..."
 
-#: mp_file.mpsl:125
 msgid "File has changed. Are you sure?"
 msgstr "El fichero ha cambiado. ¿Está seguro?"
 
@@ -1036,7 +1032,6 @@ msgstr ""
 msgid "Gathered information on %s:"
 msgstr "Información recopilada sobre %s:"
 
-#: mp_file.mpsl:361
 msgid "File was changed externally. Reload?"
 msgstr "El fichero se cambió externamente. ¿Recargar?"
 
@@ -1146,3 +1141,23 @@ msgstr "Mover a la sección siguiente"
 #: mp_toys.mpsl:184
 msgid "Pipes - carry water from top to bottom by turning the pipes"
 msgstr "Tuberías - Lleva el agua de arriba a abajo girando las tuberías"
+
+#: mp_file.mpsl:56 mp_file.mpsl:71
+#, c-format
+msgid "Error saving '%s': %s"
+msgstr "Error salvando '%s': %s"
+
+#: mp_file.mpsl:125
+#, c-format
+msgid "'%s' has changed. Are you sure?"
+msgstr "'%s' ha cambiado. ¿Está seguro?"
+
+#: mp_file.mpsl:361
+#, c-format
+msgid "'%s' was changed externally. Reload?"
+msgstr "'%s' fue cambiado externamente. ¿Recargarlo?"
+
+#: mp_file.mpsl:400
+#, c-format
+msgid "'%s' has changed. Save changes?"
+msgstr "'%s' ha cambiado. ¿Guardar cambios?"
