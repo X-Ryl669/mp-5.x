@@ -4,8 +4,6 @@ Minimum Profit 5 TODO / Bug List
 Release Critical Bugs
 ---------------------
 
- * 1305: Refactor the hex viewer to be object-oriented.
-
 Open Bugs
 ---------
 
@@ -389,5 +387,8 @@ Closed
  * 1304: Fix `exec_action' to include all actions
    (Fri, 25 May 2012 13:13:53 +0200).
  * 1275: Add a 'Writing' menu bar (Tue, 29 May 2012 13:49:24 +0200).
+ * 1305: Refactor the hex viewer to be object-oriented
+   (Wed, 13 Jun 2012 14:35:28 +0000).
+
 
 Email bugs to angel@triptico.com

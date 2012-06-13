@@ -109,7 +109,7 @@ mp.actions['open'] = sub (d, filename) {
                 }
             }
             else
-                mp.alert(sprintf(L("Error opening file '%s': %s"), filename, ERRNO));
+                mp.alert(sprintf(L("Error opening '%s': %s"), filename, ERRNO));
         }
     }
 
@@ -295,10 +295,12 @@ mp.actions['hex_view']	= sub {
     local n;
 
     if ((n = mp.openfile(L("File to open:"))) != NULL && n ne "")
-        if (mp.long_op(mp.hex_view, n) == NULL && ERRNO != NULL)
+        local d = new(mp_hex_view, { name: n})->init();
+
+        if (d == NULL)
             mp.alert(sprintf("Error opening '%s': %s", n, ERRNO));
         else
-            d = n;
+            mp.add(d);
 
     return d;
 };
@@ -642,78 +644,116 @@ sub mp.open(filename, password)
 }
 
 
-sub mp.hex_view_th(filename, d)
-/* mp.hex_view() helper */
-{
-    local c;
-    local l      = [];
-    local offset = 0;
+/** hexadecimal viewer object **/
 
-    local lines = d.txt.lines;
+global mp_hex_view = new(mp_base, {
+        name:           '<hex view>',
+        offset:         0,
+        bpl:            8,
 
-    local f = open(filename, 'rb');
+        get_status: sub (hex) {
+            sprintf("HEX %s - 0x%06x (%d)", name, offset, offset);
+        },
+        init:       sub (hex) {
+            local f;
 
-    while (1) {
-        if ((c = getchar(f)) != NULL)
-            push(l, c);
+            if ((f = open(name, "rb")) == NULL)
+                hex = NULL;
+            else
+                close(f);
 
-        if (size(l) == 16 || c == NULL) {
-            local h = '';
-            local a = ' ';
+            return hex;
+        },
+        keypress:   sub (hex, keycode) {
+            local f = open(name, "rb");
 
-            /* add hex view */
-            foreach (v, l) {
-                h = h ~ sprintf(' %02X', ord(v));
+            if (keycode eq 'cursor-down')
+                offset += bpl;
+            else
+            if (keycode eq 'cursor-up')
+                offset -= bpl;
+            else
+            if (keycode eq 'page-down')
+                offset += bpl * (mp.window.ty - 1);
+            else
+            if (keycode eq 'page-up')
+                offset -= bpl * (mp.window.ty - 1);
+            else
+            if (keycode eq 'home')
+                offset = 0;
+            else
+            if (keycode eq 'end')
+                offset = 0x7fffffff;
 
-                if (ord(v) == 0x0a)
-                    v = "\x{00b6}";
-                else
-                if (ord(v) < 32 || ord(v) > 126)
-                    v = "\x{00b7}";
+            if (offset < 0)
+                offset = 0;
 
-                a = a ~ v;
+            fseek(f, 0, 2);
+            if (offset >= ftell(f))
+                offset = ftell(f) - bpl;
+
+            close(f);
+
+            return hex;
+        },
+        render:     sub (hex) {
+            local out = [];
+            local f;
+
+            f = open(name, "rb");
+            fseek(f, offset, 0);
+
+            /* calculate bytes per line */
+            bpl = 100;
+
+            while ((14 + (bpl * 4)) > mp.window.tx)
+                bpl--;
+
+            while (size(out) < mp.window.ty) {
+                local nv, av, n, c;
+
+                nv = av = '';
+                local ov = sprintf("%06X", ftell(f));
+
+                for (n = 0; n < bpl; n++) {
+                    if ((c = getchar(f)) == NULL)
+                        break;
+
+                    nv = nv ~ sprintf(" %02X", ord(c));
+
+                    if (ord(c) == 0x0a)
+                        c = "\x{00b6}";
+                    else
+                    if (ord(c) < 32 || ord(c) > 126)
+                        c = "\x{00b7}";
+
+                    av = av ~ c;
+                }
+
+                while (n < bpl) {
+                    nv = nv ~ '   ';
+                    av = av ~ ' ';
+                    n++;
+                }
+
+                push(out,
+                    [
+                        mp.colors.word1.attr, '| ' ~ ov ~ ' |',
+                        mp.colors.normal.attr, nv,
+                        mp.colors.word2.attr, ' | ' ~ av ~ ' |'
+                    ]
+                );
+
+                if (c == NULL)
+                    break;
             }
 
-            local n = 16 - size(l);
+            while (size(out) < mp.window.ty)
+                push(out, []);
 
-            /* fill up to 16 */
-            while (n--) {
-                h = h ~ '   ';
-                a = a ~ ' ';
-            }
+            close(f);
 
-            push(lines, join([ sprintf('| %06X', offset), h, a, ''], ' |'));
-            offset += 16;
-            l = [];
-
-            if (c == NULL)
-                break;
+            return out;
         }
     }
-
-    close(f);
-
-    d.disk_op = 0;
-}
-
-
-sub mp.hex_view(filename)
-/* shows a file as an hex dump */
-{
-    local f;
-    local d = NULL;
-
-    if ((f = open(filename, "rb")) != NULL) {
-        close(f);
-
-        d = mp.add(new(mp_doc, { name: sprintf(L('<%s hex view>'), d.name) }));
-
-        d.read_only = 1;
-        d.syntax    = mp.syntax.hex_view;
-        d.disk_op   = 1;
-
-        mp.hex_view_th(filename, d);
-    }
-
-    return d;
-}
+);

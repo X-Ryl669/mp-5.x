@@ -553,8 +553,12 @@ sub mp.process_cmdline()
         if (o eq '-x') {
             local s = shift(ARGV);
 
-            if (mp.hex_view(s) == NULL)
+            local d = new(mp_hex_view, { name: s })->init();
+
+            if (d == NULL)
                 ERROR = sprintf(L("Cannot open '%s'"), s);
+            else
+                mp.add(d);
         }
         else
         if (o eq '-txt')

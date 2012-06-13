@@ -13,6 +13,7 @@ Minimum Profit Release Notes
      actions), so they can be used as aliases.
    - Encodings are now selected from a list.
    - The Curses interface now includes a read-only scrollbar.
+   - A much faster hexadecimal viewer.
  - Other changes:
    - Al MP code has been refactored to use MPSL 2.2.x object-oriented
      capabilities.
