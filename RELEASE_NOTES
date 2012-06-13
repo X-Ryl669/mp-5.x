@@ -1,13 +1,19 @@
 Minimum Profit Release Notes
 ============================
 
-5.2.3
+5.3.0
 -----
 
  - New improvements:
    - New actions `move_section_up' and `move_section_down'
      (bound by default to `alt-cursor-up' and `alt-cursor-down').
    - VCS commands can have a common or private log.
+   - The menu has been reorganized.
+   - Keycode targets can also be other keycodes (not only editor
+     actions), so they can be used as aliases.
+ - Other changes:
+   - Al MP code has been refactored to use MPSL 2.2.x object-oriented
+     capabilities.
 
 5.2.2
 -----
