@@ -11,6 +11,8 @@ Minimum Profit Release Notes
    - The menu has been reorganized.
    - Keycode targets can also be other keycodes (not only editor
      actions), so they can be used as aliases.
+   - Encodings are now selected from a list.
+   - The Curses interface now includes a read-only scrollbar.
  - Other changes:
    - Al MP code has been refactored to use MPSL 2.2.x object-oriented
      capabilities.
