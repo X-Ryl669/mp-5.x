@@ -592,7 +592,7 @@ sub mp.open(filename, password)
         if (mp.crypt1_detect(f)) {
             ERRNO = NULL;
 
-            if (password != NULL && password != '') {
+            if (password != NULL && password ne '') {
                 /* and load the file */
                 d = mp.add(new(mp_doc, { name: filename }));
 
