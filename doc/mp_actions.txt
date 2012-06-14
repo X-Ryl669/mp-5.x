@@ -24,6 +24,13 @@ in a read-only document. Compiler errors and warnings will be highlighted and
 can be navigated by using the `seek_next' and `seek_prev' actions (keys `f3' and
 `ctrl-f3'). The `open_under_cursor' action can be used to edit each error or warning.
 
+check_for_updates
+-----------------
+
+_Check for updates..._
+
+Checks if there is a new version.
+
 close
 -----
 
@@ -440,6 +447,22 @@ _Character right_ (`cursor-right')
 Moves the cursor one character to the right. If it's over the end of
 the line, moves to the first character of the next line.
 
+move_section_down
+-----------------
+
+_Move one section down_
+
+Moves to the previous section, if the current document has a syntax
+detection that include sections.
+
+move_section_up
+---------------
+
+_Move one section up_
+
+Moves to the next section, if the current document has a syntax
+detection that include sections.
+
 move_to_mouse_position
 ----------------------
 
@@ -532,6 +555,13 @@ paste_mark
 _Paste block_ (`ctrl-v')
 
 Pastes the text in the clipboard into the cursor position.
+
+pipes
+-----
+
+_Play "Pipes"_
+
+Executes the "Pipes" game.
 
 play_macro
 ----------
@@ -737,6 +767,14 @@ unmark
 _Unmark block_ (`f8')
 
 Unmarks the selected block.
+
+vcs
+---
+
+_Version Control..._
+
+Opens the version control options, if current directory
+has a detected one.
 
 word_count
 ----------
