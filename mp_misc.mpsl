@@ -218,12 +218,17 @@ mp.actions.check_for_updates = sub {
         read(f);
 
         /* read until current version is found or EOF */
+        local st = 0;
+
         while ((l = read(f)) != NULL) {
             l = mp.chomp(l);
 
-            if (cmp(mp.normalize_version(l),
-                    mp.normalize_version(mp.VERSION)) == 0)
-                break;
+            if (regex(l, "/^[0-9]+\.[0-9]+\.[0-9]+$/")) {
+                st = cmp(mp.normalize_version(l), mp.normalize_version(mp.VERSION));
+
+                if (st <= 0)
+                    break;
+            }
 
             push(c, l);
         }
@@ -231,7 +236,10 @@ mp.actions.check_for_updates = sub {
         close(f);
 
         if (size(c) == 0) {
-            c = [L("You already have the latest version."), ''];
+            if (st < 0)
+                c = [L("You have an unreleased version newer than stable ones."), ''];
+            else
+                c = [L("You already have the latest version."), ''];
         }
         else {
             ins(c, "", 0);
