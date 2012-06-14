@@ -15,7 +15,7 @@ Minimum Profit Release Notes
    - The Curses interface now includes a read-only scrollbar.
    - A much faster hexadecimal viewer.
  - Other changes:
-   - Al MP code has been refactored to use MPSL 2.2.x object-oriented
+   - Al MP code has been refactored to use new MPSL object-oriented
      capabilities.
 
 5.2.2
