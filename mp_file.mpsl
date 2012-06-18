@@ -54,7 +54,7 @@ mp_doc.actions['save_as'] = sub (d, newname) {
 
         if (d->long_op(mp_doc.save) == -1)
             mp.alert(sprintf(L("Error saving '%s': %s"),
-                        mp.trim_with_ellipsis(d.name), ERRNO));
+                        mp.trim(d.name, 32), ERRNO));
         else
             d->detect_syntax();
     }
@@ -70,7 +70,7 @@ mp_doc.actions['save'] = sub (d) {
     else
     if (d->long_op(mp_doc.save) == -1)
         mp.alert(sprintf(L("Error saving '%s': %s"),
-                        mp.trim_with_ellipsis(d.name), ERRNO));
+                        mp.trim(d.name, 32), ERRNO));
 
     return d;
 };
@@ -108,12 +108,12 @@ mp.actions['open'] = sub (d, filename) {
                 if (f != NULL) {
                     if (mp.long_op(mp.open, filename, f[0]) == NULL)
                         mp.alert(sprintf(L("Bad password for file '%s'"),
-                            mp.trim_with_ellipsis(filename)));
+                            mp.trim(filename, 32)));
                 }
             }
             else
                 mp.alert(sprintf(L("Error opening '%s': %s"),
-                            mp.trim_with_ellipsis(filename), ERRNO));
+                            mp.trim(filename, 32), ERRNO));
         }
     }
 
@@ -127,7 +127,7 @@ mp_doc.actions['revert'] = sub (d) {
     if (d.txt.mod) {
         local r;
         r = mp.confirm(sprintf(L("'%s' has changed. Are you sure?"),
-                            mp.trim_with_ellipsis(p)));
+                            mp.trim(p, 32)));
 
         /* cancel? don't close */
         if (r == 0 || r == 2)
@@ -304,7 +304,7 @@ mp.actions['hex_view']	= sub {
 
         if (d == NULL)
             mp.alert(sprintf("Error opening '%s': %s",
-                        mp.trim_with_ellipsis(n), ERRNO));
+                        mp.trim(n, 32), ERRNO));
         else
             mp.add(d);
 
@@ -367,7 +367,7 @@ sub mp_doc.pre_event(doc, k)
 
         if ((s = stat(doc.name)) != NULL && s[9] > doc.mtime) {
             if (mp.confirm(sprintf(L("'%s' was changed externally. Reload?"),
-                mp.trim_with_ellipsis(doc.name))) == 1) {
+                mp.trim(doc.name, 32))) == 1) {
                 doc->actions.revert();
                 k = NULL;
             }
@@ -407,7 +407,7 @@ sub mp_doc.query_close(doc)
 
     if (doc.txt.mod) {
         r = mp.confirm(sprintf(L("'%s' has changed. Save changes?"),
-                    mp.trim_with_ellipsis(doc.name)));
+                    mp.trim(doc.name, 32)));
 
         /* confirm? save */
         if (r == 1)
