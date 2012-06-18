@@ -140,7 +140,7 @@ install: $(INSTALL_MSG) installdoc $(INSTALLMO)
 	install -m 644 lang/*.mpsl $(PREFIX)/share/$(APPNAME)/lang
 	./mkinstalldirs $(PREFIX)/share/man/man1
 	[ -f $(APPNAME).1 ] && install -m 644 $(APPNAME).1 $(PREFIX)/share/man/man1/$(APPNAME).1 || true
-	( cd $(MPSL) ; [ -x mpsl ] && install mpsl $(PREFIX)/bin || true )
+	( cd $(MPSL) ; make install )
 
 installdoc:
 	./mkinstalldirs $(PREFIX)/share/doc/$(APPNAME)
