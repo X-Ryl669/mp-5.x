@@ -248,6 +248,16 @@ global mp = {
 };
 
 
+/* new color scheme */
+mp.colors.normal.gui        = [ 0x000000, 0xeeeeee ];
+mp.colors.quotes.gui        = [ 0x006666, 0xeeeeee ];
+mp.colors.comments.gui      = [ 0x880000, 0xeeeeee ];
+mp.colors.word1.gui         = [ 0x000088, 0xeeeeee ];
+mp.colors.word2.gui         = [ 0x660066, 0xeeeeee ];
+mp.colors.word3.gui         = [ 0x666600, 0xeeeeee ];
+mp.colors.documentation.gui = [ 0x8888ff, 0xeeeeee ];
+
+
 /** MP base class **/
 
 global mp_base = {
