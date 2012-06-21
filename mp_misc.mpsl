@@ -285,6 +285,7 @@ sub dump(v)
     local d = mp.open("<dump>");
 
     d->move_eof()->insert(dumper(v));
-    d.txt.mod = 0;
+    d.txt.mod   = 0;
     d.read_only = 1;
+    d.syntax    = mp.syntax.mpsl;
 }
