@@ -137,6 +137,10 @@ global mp = {
             gui:    [ 0xff6666, 0xffffff ],
             flags:  [ 'bright' ]
         },
+        word3: {
+            text:   [ 'blue', 'default' ],
+            gui:    [ 0x000088, 0xffffff ]
+        },
         tag: {
             text:   [ 'cyan', 'default' ],
             gui:    [ 0x8888ff, 0xffffff ],

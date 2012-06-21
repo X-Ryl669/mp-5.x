@@ -191,9 +191,12 @@ mp.syntax.c = {
 				"int_fast8_t", "int_fast16_t", "int_fast32_t", "int_fast64_t",
 				"uint_fast8_t", "uint_fast16_t", "uint_fast32_t", "uint_fast64_t",
 				"intptr_t", "uintptr_t", "intmax_t", "uintmax_t"
-				 ]),
-				'/[-=<>:\?\+\*\/\!\%&\|~\^\.]+/'
+				 ])
 		],
+        'word3', [
+				'/[-=<>:\?\+\*\/\!\%&\|~\^\.\{\}\(\)\[]+/',
+                '/]/'
+        ],
 		'quotes',	[
 			/* from http://ad.hominem.org/log/2005/05/quoted_strings.php */
 			"/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/",	/* double-quoted strings */
