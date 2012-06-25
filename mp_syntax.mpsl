@@ -243,7 +243,7 @@ mp.syntax.mpsl = {
             mp.syn_token_list(keys(MPSL.CORE))
         ],
         'word2', [
-            "/(NULL|local|global)/"
+            "/(NULL|local|global|this)/"
         ],
         'word3', [
             '/]/',
