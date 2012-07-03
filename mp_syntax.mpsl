@@ -274,7 +274,7 @@ mp.syntax.mpsl = {
         /* take the first line */
         local f = d.txt.lines[0];
 
-        return regex(f, '|^#!\s*/usr/bin/(env )?mpsl|');
+        return regex(f, '|^#!\s*/usr/(local/)?bin/(env )?mpsl|');
     },
     section:    [ '/(^[A-Za-z_]|^\/\*\*.*\*\*\/$)/' ]
 };
