@@ -372,14 +372,14 @@ sub mp.tui.draw_scrollbar(doc)
     	mp.tui.attr(mp.colors.normal.attr);
 
         for (n = 0; n < ty; n++) {
-            if (n == y1)
+            if (n >= y1 && n < y2) {
             	mp.tui.attr(mp.colors.cursor.attr);
-            if (n == y2)
-            	mp.tui.attr(mp.colors.normal.attr);
-
-            mp.tui.move(mp.window.tx - 1, n);
-            mp.tui.addstr(' ');
+                mp.tui.move(mp.window.tx - 1, n);
+                mp.tui.addstr(' ');
+            }
         }
+
+    	mp.tui.attr(mp.colors.normal.attr);
     }
 }
 
