@@ -1,6 +1,13 @@
 Minimum Profit Release Notes
 ============================
 
+5.2.4
+-----
+
+ - mp.add_keyseq() has been reimplemented and no longer needs
+   the initial [, as it already assumes it's used only for ANSI
+   sequences (so you may need to tweak your own definitions).
+
 5.2.3
 -----
 
