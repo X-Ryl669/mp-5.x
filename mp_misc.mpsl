@@ -289,3 +289,21 @@ sub dump(v)
     d.read_only = 1;
     d.syntax    = mp.syntax.mpsl;
 }
+
+
+sub mp.add_keyseq(seq, keycode)
+{
+    local p = mp.keycodes.ansi;
+    local l = split(seq);
+    local v = pop(l);
+
+    /* split by character and store as a chain of hashes
+       with the keycode as the final, scalar value */
+    foreach (k, l) {
+        if (! p[k])
+            p[k] = {};
+        p = p[k];
+    }
+
+    p[v] = keycode;
+}

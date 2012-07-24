@@ -164,10 +164,6 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
     wchar_t *f = NULL;
     mpdm_t k = NULL;
 
-    /* any pending key? return it */
-    if ((k = mp_pending_key()) != NULL)
-        return k;
-
     f = nc_getwch();
 
     if (f[0] == -1) {
@@ -333,9 +329,9 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
         case L'=':
             f = L"alt-=";
             break;
-/*        case L'[':
+        case L'[':
             f = L"ansi";
-            break;*/
+            break;
         }
 
         shift = 0;
@@ -509,18 +505,8 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
         }
     }
 
-    if (f != NULL) {
-        mpdm_t t;
-
-        k = mpdm_ref(MPDM_S(f));
-
-        if ((t = mp_process_keyseq(k)) != k) {
-            mpdm_unref(k);
-            k = t;
-        }
-        else
-            mpdm_unrefnd(t);
-    }
+    if (f != NULL)
+        k = MPDM_S(f);
 
     return k;
 }

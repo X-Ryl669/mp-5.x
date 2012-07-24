@@ -684,7 +684,6 @@ local mp_modules = [
     'spell',
     'misc',
     'crypt',
-    'keyseq',
     'session',
     'build',
     'writing',
