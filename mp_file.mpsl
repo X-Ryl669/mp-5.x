@@ -626,6 +626,16 @@ sub mp.open(filename, password)
 
             close(f);
         }
+        else
+        if (s[2] & 0040000) {
+            /* it's a directory: show it */
+            ERRNO = NULL;
+
+            d = mp.add(new(mp_doc, {name: sprintf('Listing of %s', filename)}));
+
+            d.txt.lines = glob(NULL, filename);
+            d.read_only = 1;
+        }
 
         if (d) {
             /* store mtime */
