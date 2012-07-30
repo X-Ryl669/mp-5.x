@@ -585,12 +585,14 @@ sub mp.open(filename, password)
 	}
     else
     if (s[13] != NULL) {
+        local r;
+
         /* canonicalize, if possible */
         filename = s[13];
 
         /* look again for this filename in the open files */
-        if ((s = mp.find_file_by_name(filename)) != -1) {
-            mp.active_i = s;
+        if ((r = mp.find_file_by_name(filename)) != -1) {
+            mp.active_i = r;
             d = mp.active();
         }
     }
@@ -627,7 +629,6 @@ sub mp.open(filename, password)
 
         if (d) {
             /* store mtime */
-            s = stat(filename);
             d.mtime = s[9];
 
             /* store the encoding */
