@@ -499,12 +499,15 @@ static gint scroll_event(GtkWidget * widget, GdkEventScroll * event)
     case GDK_SCROLL_RIGHT:
         ptr = L"mouse-wheel-right";
         break;
+    default:
+        ptr = NULL;
+        break;
     }
 
-    if (ptr != NULL)
+    if (ptr != NULL) {
         mp_process_event(MPDM_S(ptr));
-
-    redraw();
+        redraw();
+    }
 
     return 0;
 }
@@ -2504,12 +2507,22 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
 #endif
     gtk_notebook_set_scrollable(GTK_NOTEBOOK(file_tabs), 1);
 
+#if CONFOPT_GTK == 2
     vbox = gtk_vbox_new(FALSE, 2);
+#endif
+#if CONFOPT_GTK == 3
+    vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
+#endif
     gtk_container_add(GTK_CONTAINER(window), vbox);
 
     build_menu();
 
+#if CONFOPT_GTK == 2
     hbox = gtk_hbox_new(FALSE, 0);
+#endif
+#if CONFOPT_GTK == 3
+    hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+#endif
     gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(hbox), menu_bar, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(hbox), file_tabs, TRUE, TRUE, 0);
@@ -2517,7 +2530,12 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
     gtk_notebook_popup_enable(GTK_NOTEBOOK(file_tabs));
 
     /* horizontal box holding the text and the scrollbar */
+#if CONFOPT_GTK == 2
     hbox = gtk_hbox_new(FALSE, 2);
+#endif
+#if CONFOPT_GTK == 3
+    hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
+#endif
     gtk_box_pack_start(GTK_BOX(vbox), hbox, TRUE, TRUE, 0);
 
     /* the Minimum Profit area */
@@ -2582,7 +2600,12 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
                      G_CALLBACK(switch_page), NULL);
 
     /* the scrollbar */
+#if CONFOPT_GTK == 2
     scrollbar = gtk_vscrollbar_new(NULL);
+#endif
+#if CONFOPT_GTK == 3
+    scrollbar = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, NULL);
+#endif
     gtk_box_pack_start(GTK_BOX(hbox), scrollbar, FALSE, FALSE, 0);
 
     g_signal_connect(G_OBJECT
