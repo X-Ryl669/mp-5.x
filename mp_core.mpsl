@@ -262,6 +262,7 @@ mp.colors.documentation.gui = [ 0x8888ff, 0xeeeeee ];
 /** MP base class **/
 
 global mp_base = {
+    title:          NULL,
     name:           'MP',
     keycodes:       {},
     actions:        {},

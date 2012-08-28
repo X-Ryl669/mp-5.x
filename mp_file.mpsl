@@ -631,7 +631,11 @@ sub mp.open(filename, password)
             /* it's a directory: show it */
             ERRNO = NULL;
 
-            d = mp.add(new(mp_doc, {name: sprintf('Listing of %s', filename)}));
+            d = mp.add(new(mp_doc, {
+                    title:  sprintf(L("<listing of %s>"), filename),
+                    name:   filename
+                }
+            ));
 
             d.txt.lines = glob(NULL, filename);
             d.read_only = 1;
