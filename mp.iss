@@ -30,6 +30,8 @@ Name: "{group}\Minimum Profit"; Filename: "{app}\mp-5.exe"
 [Registry]
 Root: HKCR; Subkey: "*\shell\Open with MP"; ValueType: string;
 Root: HKCR; Subkey: "*\shell\Open with MP\command"; ValueType: string; ValueData: "{app}\mp-5.exe %1"
+Root: HKCR; Subkey: "*\shell\Hex view with MP"; ValueType: string;
+Root: HKCR; Subkey: "*\shell\Hex view with MP\command"; ValueType: string; ValueData: "{app}\mp-5.exe -x %1"
 Root: HKCR; Subkey: "Directory\shell\minimum_profit"; ValueType: string; ValueData: "Open MP Here"
 Root: HKCR; Subkey: "Directory\shell\minimum_profit\command"; ValueType: string; ValueData: "{app}\mp-5.exe -d %1"
 
