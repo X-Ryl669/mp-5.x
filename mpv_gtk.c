@@ -183,10 +183,11 @@ static void build_fonts(void)
 /* builds the fonts */
 {
     char tmp[128];
-    int font_size = 12;
-    const char *font_face = "Mono";
     mpdm_t c;
     mpdm_t w = NULL;
+    int font_size           = 12;
+    const char *font_face   = "Mono";
+    double font_weight      = 0.0;
 
     if (font != NULL)
         pango_font_description_free(font);
@@ -206,12 +207,21 @@ static void build_fonts(void)
         }
         else
             mpdm_hset_s(c, L"font_face", MPDM_MBS(font_face));
+
+        if ((v = mpdm_hget_s(c, L"font_weight")) != NULL)
+            font_weight = mpdm_rval(v) * 1000.0;
+        else
+            mpdm_hset_s(c, L"font_weight", MPDM_R(font_weight / 1000.0));
     }
 
-    snprintf(tmp, sizeof(tmp) - 1, "%s %d", font_face, font_size);
+    snprintf(tmp, sizeof(tmp) - 1, "%s Thin %d", font_face, font_size);
     tmp[sizeof(tmp) - 1] = '\0';
 
     font = pango_font_description_from_string(tmp);
+
+    if (font_weight > 0.0)
+        pango_font_description_set_weight(font, font_weight);
+
     update_window_size();
 
     mpdm_unref(w);
