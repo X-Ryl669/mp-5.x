@@ -119,10 +119,11 @@ static void build_fonts(HDC hdc)
 {
     TEXTMETRIC tm;
     int n;
-    int font_size = 10;
-    char *font_face = "Lucida Console";
     mpdm_t v = NULL;
     mpdm_t c;
+    int font_size       = 10;
+    char *font_face     = "Lucida Console";
+    double font_weight  = 0.0;
 
     if (font_normal != NULL) {
         SelectObject(hdc, GetStockObject(SYSTEM_FONT));
@@ -142,15 +143,24 @@ static void build_fonts(HDC hdc)
         }
         else
             mpdm_hset_s(c, L"font_face", MPDM_MBS(font_face));
+
+        if ((v = mpdm_hget_s(c, L"font_weight")) != NULL)
+            font_weight = mpdm_rval(v) * 1000.0;
+        else
+            mpdm_hset_s(c, L"font_weight", MPDM_R(font_weight / 1000.0));
     }
 
     /* create fonts */
     n = -MulDiv(font_size, GetDeviceCaps(hdc, LOGPIXELSY), 72);
 
-    font_normal = CreateFont(n, 0, 0, 0, 0, 0, 0,
+    if ((font_normal = CreateFont(n, 0, 0, 0, (int) font_weight, 0, 0,
+                             0, 0, 0, 0, 0, 0, font_face)) == NULL)
+        font_normal = CreateFont(n, 0, 0, 0, 0, 0, 0,
                              0, 0, 0, 0, 0, 0, font_face);
 
-    font_underline = CreateFont(n, 0, 0, 0, 0, 0, 1,
+    if ((font_underline = CreateFont(n, 0, 0, 0, (int) font_weight, 0, 1,
+                                0, 0, 0, 0, 0, 0, font_face)) == NULL)
+        font_underline = CreateFont(n, 0, 0, 0, 0, 0, 1,
                                 0, 0, 0, 0, 0, 0, font_face);
 
     SelectObject(hdc, font_normal);
@@ -158,7 +168,7 @@ static void build_fonts(HDC hdc)
 
     /* store sizes */
     font_height = tm.tmHeight;
-    font_width = tm.tmAveCharWidth;
+    font_width  = tm.tmAveCharWidth;
 
     update_window_size();
 
