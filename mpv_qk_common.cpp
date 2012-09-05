@@ -145,9 +145,10 @@ static QFont build_font(int rebuild)
 
     if (rebuild) {
         mpdm_t c;
-        char *font_face = (char *) "Mono";
-        int font_size = 12;
         mpdm_t w = NULL;
+        int font_size       = 12;
+        char *font_face     = (char *) "Mono";
+        double font_weight  = 0.0;
 
         if ((c = mpdm_hget_s(MP, L"config")) != NULL) {
             mpdm_t v;
@@ -163,9 +164,18 @@ static QFont build_font(int rebuild)
             }
             else
                 mpdm_hset_s(c, L"font_face", MPDM_MBS(font_face));
+
+            if ((v = mpdm_hget_s(c, L"font_weight")) != NULL)
+                font_weight = mpdm_rval(v) * 100.0;
+            else
+                mpdm_hset_s(c, L"font_weight", MPDM_R(font_weight / 100.0));
         }
 
         font = QFont(QString(font_face), font_size);
+
+        if (font_weight > 0.0)
+            font.setWeight((int) font_weight);
+
         mpdm_unref(w);
     }
 
