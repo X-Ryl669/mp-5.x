@@ -201,17 +201,17 @@ static void build_fonts(void)
         else
             mpdm_hset_s(c, L"font_size", MPDM_I(font_size));
 
+        if ((v = mpdm_hget_s(c, L"font_weight")) != NULL)
+            font_weight = mpdm_rval(v) * 1000.0;
+        else
+            mpdm_hset_s(c, L"font_weight", MPDM_R(font_weight / 1000.0));
+
         if ((v = mpdm_hget_s(c, L"font_face")) != NULL) {
             w = mpdm_ref(MPDM_2MBS(v->data));
             font_face = w->data;
         }
         else
             mpdm_hset_s(c, L"font_face", MPDM_MBS(font_face));
-
-        if ((v = mpdm_hget_s(c, L"font_weight")) != NULL)
-            font_weight = mpdm_rval(v) * 1000.0;
-        else
-            mpdm_hset_s(c, L"font_weight", MPDM_R(font_weight / 1000.0));
     }
 
     snprintf(tmp, sizeof(tmp) - 1, "%s Thin %d", font_face, font_size);

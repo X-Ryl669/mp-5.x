@@ -158,17 +158,17 @@ static QFont build_font(int rebuild)
             else
                 mpdm_hset_s(c, L"font_size", MPDM_I(font_size));
 
+            if ((v = mpdm_hget_s(c, L"font_weight")) != NULL)
+                font_weight = mpdm_rval(v) * 100.0;
+            else
+                mpdm_hset_s(c, L"font_weight", MPDM_R(font_weight / 100.0));
+
             if ((v = mpdm_hget_s(c, L"font_face")) != NULL) {
                 w = mpdm_ref(MPDM_2MBS((wchar_t *) v->data));
                 font_face = (char *) w->data;
             }
             else
                 mpdm_hset_s(c, L"font_face", MPDM_MBS(font_face));
-
-            if ((v = mpdm_hget_s(c, L"font_weight")) != NULL)
-                font_weight = mpdm_rval(v) * 100.0;
-            else
-                mpdm_hset_s(c, L"font_weight", MPDM_R(font_weight / 100.0));
         }
 
         font = QFont(QString(font_face), font_size);
