@@ -60,6 +60,13 @@ mp.config.font_size
 The font size to be used in GUI environments. By defaults it's 12 on Qt4, KDE
 and GTK and 10 on MS Windows.
 
+mp.config.font_weight
+---------------------
+
+The font weight to be used in GUI environments. It's a floating point number 
+from 0 to 1, where lower values give thinner fonts and higher values bolder
+ones. The special value 0 (default) means don't care about the font weight.
+
 mp.config.global_replace
 ------------------------
 

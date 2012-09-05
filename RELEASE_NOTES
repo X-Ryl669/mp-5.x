@@ -7,6 +7,7 @@ Minimum Profit Release Notes
  - mp.add_keyseq() has been reimplemented and no longer needs
    the initial [, as it already assumes it's used only for ANSI
    sequences (so you may need to tweak your own definitions).
+ - New configuration directive `font_weight'.
 
 5.2.3
 -----
