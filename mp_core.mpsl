@@ -248,15 +248,70 @@ global mp = {
 };
 
 
-/* new color scheme */
+/** new color schemes **/
+
+/* don't remember where I took this one */
 /*
 mp.colors.normal.gui        = [ 0x000000, 0xeeeeee ];
+mp.colors.cursor.gui        = [ 0x000000, 0xeeeeee ];
 mp.colors.quotes.gui        = [ 0x006666, 0xeeeeee ];
 mp.colors.comments.gui      = [ 0x880000, 0xeeeeee ];
 mp.colors.word1.gui         = [ 0x000088, 0xeeeeee ];
 mp.colors.word2.gui         = [ 0x660066, 0xeeeeee ];
 mp.colors.word3.gui         = [ 0x666600, 0xeeeeee ];
 mp.colors.documentation.gui = [ 0x8888ff, 0xeeeeee ];
+*/
+
+/* Tomorrow: https://github.com/chriskempson/tomorrow-theme */
+/*
+mp.colors.normal.gui        = [ 0x4d4d4c, 0xffffff ];
+mp.colors.cursor.gui        = [ 0x4d4d4c, 0xffffff ];
+mp.colors.quotes.gui        = [ 0x3e999f, 0xffffff ];
+mp.colors.comments.gui      = [ 0x8e908c, 0xffffff ];
+mp.colors.word1.gui         = [ 0x4271ae, 0xffffff ];
+mp.colors.word2.gui         = [ 0xeab700, 0xffffff ];
+mp.colors.word3.gui         = [ 0xf5871f, 0xffffff ];
+mp.colors.documentation.gui = [ 0x8959a8, 0xffffff ];
+mp.colors.selection.gui     = [ 0xd6d6d6, 0x000000 ];
+*/
+
+/* Tomorrow Night Eighties: https://github.com/chriskempson/tomorrow-theme */
+/*
+mp.colors.normal.gui        = [ 0xcccccc, 0x2d2d2d ];
+mp.colors.cursor.gui        = [ 0xcccccc, 0x2d2d2d ];
+mp.colors.quotes.gui        = [ 0x66cccc, 0x2d2d2d ];
+mp.colors.comments.gui      = [ 0x999999, 0x2d2d2d ];
+mp.colors.word1.gui         = [ 0x6699cc, 0x2d2d2d ];
+mp.colors.word2.gui         = [ 0xffcc66, 0x2d2d2d ];
+mp.colors.word3.gui         = [ 0xf99157, 0x2d2d2d ];
+mp.colors.documentation.gui = [ 0xcc99cc, 0x2d2d2d ];
+mp.colors.selection.gui     = [ 0xf2777a, 0x000000 ];
+*/
+
+/* Tomorrow Night: https://github.com/chriskempson/tomorrow-theme */
+/*
+mp.colors.normal.gui        = [ 0xc5c8c6, 0x1d1f21 ];
+mp.colors.cursor.gui        = [ 0xc5c8c6, 0x1d1f21 ];
+mp.colors.quotes.gui        = [ 0x8abeb7, 0x1d1f21 ];
+mp.colors.comments.gui      = [ 0x969896, 0x1d1f21 ];
+mp.colors.word1.gui         = [ 0x81a2be, 0x1d1f21 ];
+mp.colors.word2.gui         = [ 0xf0c674, 0x1d1f21 ];
+mp.colors.word3.gui         = [ 0xde935f, 0x1d1f21 ];
+mp.colors.documentation.gui = [ 0xb294bb, 0x1d1f21 ];
+mp.colors.selection.gui     = [ 0xcc6666, 0x000000 ];
+*/
+
+/* Tomorrow Night Bright: https://github.com/chriskempson/tomorrow-theme */
+/*
+mp.colors.normal.gui        = [ 0xeaeaea, 0x000000 ];
+mp.colors.cursor.gui        = [ 0xeaeaea, 0x000000 ];
+mp.colors.quotes.gui        = [ 0x70c0b1, 0x000000 ];
+mp.colors.comments.gui      = [ 0x969896, 0x000000 ];
+mp.colors.word1.gui         = [ 0x7aa6da, 0x000000 ];
+mp.colors.word2.gui         = [ 0xe7c547, 0x000000 ];
+mp.colors.word3.gui         = [ 0xe7c547, 0x000000 ];
+mp.colors.documentation.gui = [ 0xc397d8, 0x000000 ];
+mp.colors.selection.gui     = [ 0xd54e53, 0x000000 ];
 */
 
 /** MP base class **/
