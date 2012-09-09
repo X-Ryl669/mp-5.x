@@ -180,9 +180,9 @@ if [ "$MPSL" != "NOTFOUND" ] ; then
     3.*)
         echo "Incompatible version (3.x)"
         echo
-        echo "You have the 3.x branch of MPSL, which is unsuitable"
-        echo "to build Minimum Profit for now. You need to pick"
-        echo "the 2.x branch instead."
+        echo "You have the '3.x' branch of MPSL, which is unsuitable"
+        echo "to build this version of Minimum Profit. You need to checkout"
+        echo "the 'master' branch instead."
         exit 1
         ;;
     *)
