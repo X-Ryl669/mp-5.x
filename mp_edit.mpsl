@@ -580,16 +580,11 @@ sub mp_doc.insert_tab(doc)
         local y = doc.txt.y;
 
         while (y > 0) {
+            local l = splice(doc.txt.lines[--y], NULL, 0, doc.txt.x);
 
-            local l = doc.txt.lines[--y];
-
-            if (l = l->sregex(sprintf('/^.{%d}/', doc.txt.x))) {
-                l = l->regex("/^[^ \t]*[ \t]*/");
-
-                if (l) {
-                    doc->insert(l->sregex("/[^ \t]/g", ' '));
-                    return doc;
-                }
+            if (l[0]) {
+                doc->insert(regex(l[0], "/^[^ \t]*[ \t]*/")->sregex("/[^ \t]/g", ' '));
+                return doc;
             }
         }
     }
