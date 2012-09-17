@@ -577,11 +577,12 @@ sub mp_doc.insert_tab(doc)
 /* inserts a tab */
 {
     if (mp.config.dynamic_tabs) {
-        local y = doc.txt.y - 1;
+        local y = doc.txt.y;
 
-        while (y >= 0) {
+        while (y > 0) {
 
-            local l = doc.txt.lines[y];
+            local l = doc.txt.lines[--y];
+
             if (l = l->sregex(sprintf('/^.{%d}/', doc.txt.x))) {
                 l = l->regex("/^[^ \t]*[ \t]*/");
 
@@ -590,8 +591,6 @@ sub mp_doc.insert_tab(doc)
                     return doc;
                 }
             }
-
-            y++;
         }
     }
 
