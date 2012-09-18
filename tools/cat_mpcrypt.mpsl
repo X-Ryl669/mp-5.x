@@ -39,20 +39,20 @@ var Arcfour = {
     }
 };
 
-if (file) {
+if file {
     var f = sys.open(file, "rb");
 
-    if (f != NULL) {
+    if f != NULL {
         /* pick first line */
         var l = f.read();
 
-        if (l.cmp("mpcrypt1\n") == 0 && f.getchar().ord() == 0) {
-            if (password) {
+        if l.cmp("mpcrypt1\n") == 0 && f.getchar().ord() == 0 {
+            if password {
                 var c, a4 = new(Arcfour);
 
                 a4.init(password);
 
-                while ((c = f.getchar()) != NULL) {
+                while c = f.getchar() != NULL {
                     c = (c.ord() ^ a4.byte()).chr();
                     STDOUT.putchar(c);
                 }
@@ -65,7 +65,7 @@ if (file) {
             f.close();
             f = sys.open(file, "rb");
 
-            while (l = f.read())
+            while l = f.read()
                 sys.p(l);
         }
 
