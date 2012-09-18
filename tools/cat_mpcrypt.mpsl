@@ -40,7 +40,7 @@ var Arcfour = {
 };
 
 if (file) {
-    var f = open(file, "rb");
+    var f = sys.open(file, "rb");
 
     if (f != NULL) {
         /* pick first line */
@@ -58,24 +58,24 @@ if (file) {
                 }
             }
             else
-                print("Password needed.\n");
+                sys.print("Password needed.\n");
         }
         else {
             /* non-encrypted: reopen */
             f.close();
-            f = open(file, "rb");
+            f = sys.open(file, "rb");
 
             while (l = f.read())
-                print(l);
+                sys.print(l);
         }
 
         f.close();
     }
     else {
         f.dump();
-        print("Error opening \"", file, "\": ", "\n");
+        sys.print("Error opening \"", file, "\": ", "\n");
     }
 }
 else {
-     print("Usage: cat_mpcrypt {file} [{password}]\n");
+     sys.print("Usage: cat_mpcrypt {file} [{password}]\n");
 }
