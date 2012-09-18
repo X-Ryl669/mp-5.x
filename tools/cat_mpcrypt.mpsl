@@ -2,11 +2,8 @@
 
 /* MPSL3 encrypted MP document cat */
 
-/*var password = ARGV[1];
-var file     = ARGV[2];*/
-
-var password = '1234';
-var file     = 'qq';
+var file     = ARGV[0];
+var password = ARGV[1];
 
 var Arcfour = {
     i:      0,
@@ -58,7 +55,7 @@ if (file) {
 
                 while ((c = f.getchar()) != NULL) {
                     c = (c.ord() ^ a4.byte()).chr();
-                    print(c);
+                    STDOUT.putchar(c);
                 }
             }
             else
