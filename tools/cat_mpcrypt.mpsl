@@ -58,7 +58,7 @@ if (file) {
                 }
             }
             else
-                sys.print("Password needed.\n");
+                sys.p("Password needed.\n");
         }
         else {
             /* non-encrypted: reopen */
@@ -66,16 +66,15 @@ if (file) {
             f = sys.open(file, "rb");
 
             while (l = f.read())
-                sys.print(l);
+                sys.p(l);
         }
 
         f.close();
     }
     else {
-        f.dump();
-        sys.print("Error opening \"", file, "\": ", "\n");
+        sys.p("Error opening \"", file, "\": ", ERRNO, "\n");
     }
 }
 else {
-     sys.print("Usage: cat_mpcrypt {file} [{password}]\n");
+    sys.p("Usage: cat_mpcrypt {file} [{password}]\n");
 }
