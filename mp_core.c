@@ -423,7 +423,7 @@ static void drw_multiline_regex(mpdm_t a, int attr)
             else {
                 /* it's a regex */
                 /* while the regex matches, fill attributes */
-                while (!mpdm_is_null(mpdm_regex(drw_2.v, r, o)))
+                while (!mpdm_is_null(mpdm_regex(drw_2.v, r, o)) && mpdm_regex_size)
                     o = drw_fill_attr_regex(attr);
             }
         }
