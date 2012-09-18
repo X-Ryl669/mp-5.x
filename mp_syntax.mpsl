@@ -288,7 +288,7 @@ mp.syntax.mpsl3 = {
             mp.syn_token_list(
                 [
                     'if', 'else', 'while', 'foreach',
-                    'sub', 'break', 'return'
+                    'sub', 'break', 'return', 'new'
                 ]
             )
         ],
@@ -325,7 +325,7 @@ mp.syntax.mpsl3 = {
         /* take the first line */
         local f = d.txt.lines[0];
 
-        return regex(f, '|^#!\s*/usr/(local/)?bin/(env )?mpsl3|');
+        return regex(f, '|^#!.*mpsl3|');
     },
     section:    [ '/(^[A-Za-z_]|^\/\*\*.*\*\*\/$)/' ]
 };
