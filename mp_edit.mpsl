@@ -576,13 +576,16 @@ sub mp_doc.insert_space(doc)
 sub mp_doc.insert_tab(doc)
 /* inserts a tab */
 {
-    if (doc.txt.y && mp.config.dynamic_tabs) {
-        local pl = doc.txt.lines[doc.txt.y - 1];
+    if (mp.config.dynamic_tabs) {
+        local y = doc.txt.y;
 
-        if ((pl = regex(pl, "/[^ \t]*[ \t]+/", doc.txt.x)) != NULL) {
-            pl = sregex(pl, "/[^\t]/g", ' ');
-            doc->insert(pl);
-            return doc;
+        while (y > 0) {
+            local l = splice(doc.txt.lines[--y], NULL, 0, doc.txt.x);
+
+            if (l[0]) {
+                doc->insert(regex(l[0], "/^[^ \t]*[ \t]*/")->sregex("/[^ \t]/g", ' '));
+                return doc;
+            }
         }
     }
 
