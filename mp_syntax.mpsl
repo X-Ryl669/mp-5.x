@@ -230,7 +230,7 @@ mp.syntax.c = {
 
 mp.syntax.mpsl = {
     id:         'mpsl',
-    name:       'MPSL',
+    name:       'MPSL2',
     filenames:  [ '/\.mpsl?$/i' ],
     defs:       [
         'word1', [
@@ -275,6 +275,57 @@ mp.syntax.mpsl = {
         local f = d.txt.lines[0];
 
         return regex(f, '|^#!\s*/usr/(local/)?bin/(env )?mpsl|');
+    },
+    section:    [ '/(^[A-Za-z_]|^\/\*\*.*\*\*\/$)/' ]
+};
+
+mp.syntax.mpsl3 = {
+    id:         'mpsl3',
+    name:       'MPSL3',
+    filenames:  [ '/\.mpsl?$/i' ],
+    defs:       [
+        'word1', [
+            mp.syn_token_list(
+                [
+                    'if', 'else', 'while', 'foreach',
+                    'sub', 'break', 'return'
+                ]
+            )
+        ],
+        'word2', [
+            "/(NULL|var|this)/"
+        ],
+        'word3', [
+            '/]/',
+            '/[\.-=<>\?\+\*\/\!\%&\|\{\}\[]+/'
+        ],
+        'quotes', [
+            /* from http://ad.hominem.org/log/2005/05/quoted_strings.php */
+            "/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/", /* double-quoted strings */
+            "/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",     /* single-quoted strings */
+            "/\b-?[0-9]+\b/",                           /* numbers */
+            "/\b0x[0-9a-f]+\b/i",                       /* hex numbers */
+            "/\b0b[0-1]+\b/i",                          /* binary numbers */
+            '/\w+\s*:/',                                /* JS-type hashes */
+            "/\b[0-9[:upper:]_]+\b/"                    /* all-caps words */
+        ],
+        'word3',    [
+            '/:/'
+        ],
+        'comments', [
+            '|//.*$|m',                                 /* C++ */
+            [ '|/\*|', '|\*/|' ]                        /* C-like */
+        ],
+        'documentation', [
+            [ "|/\*\*\n|", '|\*/|' ],                   /* mp_doccer */
+            '/^/\*\*.*\*\*/$/m'                         /* section mark */
+        ]
+    ],
+    detect: sub (d) {
+        /* take the first line */
+        local f = d.txt.lines[0];
+
+        return regex(f, '|^#!\s*/usr/(local/)?bin/(env )?mpsl3|');
     },
     section:    [ '/(^[A-Za-z_]|^\/\*\*.*\*\*\/$)/' ]
 };
