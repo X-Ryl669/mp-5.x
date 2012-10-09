@@ -11,6 +11,7 @@ Minimum Profit Release Notes
  - Fixes:
    - Dynamic tab tweking.
    - Avoid hangups when trying to highlight 0 size regexes.
+   - Minor VCS fixes.
 
 5.2.3
 -----
