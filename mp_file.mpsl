@@ -134,19 +134,20 @@ mp_doc.actions['revert'] = sub (d) {
             return d;
     }
 
-    local t = d.txt;
+    d->store_undo();
 
     mp.close();
     if (mp.long_op(mp.open, p) == NULL && ERRNO != NULL)
         mp.alert(sprintf("Error opening '%s': %s", p, ERRNO));
 
-    d = mp.active();
+    local nd = mp.active();
 
-    push(d.undo_q, t);
-    d->set_y(t.y)->set_x(tx);
-    d.txt.vy = t.vy;
+    nd.undo_q = d.undo_q;
 
-    return d;
+    nd->set_y(d.txt.y)->set_x(d.txt.x);
+    nd.txt.vy = d.txt.vy;
+
+    return nd;
 };
 
 mp.actions['open_config_file']	= sub {
