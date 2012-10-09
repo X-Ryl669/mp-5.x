@@ -117,7 +117,8 @@ mp.actions['vcs'] = sub {
     if (v == NULL)
         mp.alert(L("This directory is not under a supported version control system"));
     else {
-        local l = sort(keys(v.opts))->map(sub (e) { sprintf(e, mp.active.name); });
+        local l = sort(keys(v.opts))->
+            map(sub (e) { sprintf(e, regex(mp.active.name, '/[^\/\\]+$/')); });
 
         local t = mp.form(
             [
