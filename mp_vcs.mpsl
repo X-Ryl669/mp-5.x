@@ -45,12 +45,12 @@ mp.vcs = {
         id:     'Git',
         check:  [ '.git', '../.git', '../../.git' ],
         opts:   {
-            'git diff'          => { unique_log: 1 },
-            'git status'        => NULL,
-            'git log'           => { unique_log: 1 },
-            "git diff '%s'"     => { unique_log: 1 },
-            "git log '%s'"      => { unique_log: 1 },
             "git add '%s'"      => NULL,
+            'git log'           => { unique_log: 1 },
+            "git log '%s'"      => { unique_log: 1 },
+            'git diff'          => { unique_log: 1 },
+            "git diff '%s'"     => { unique_log: 1 },
+            'git status'        => NULL,
             "git blame '%s'"    => { unique_log: 1 },
             "git checkout '%s'" => NULL,
             "git stash"         => NULL,
@@ -117,7 +117,7 @@ mp.actions['vcs'] = sub {
     if (v == NULL)
         mp.alert(L("This directory is not under a supported version control system"));
     else {
-        local l = sort(keys(v.opts));
+        local l = sort(keys(v.opts))->map(sub (e) { sprintf(e, mp.active.name); });
 
         local t = mp.form(
             [
@@ -134,7 +134,7 @@ mp.actions['vcs'] = sub {
             mp.vcs_target = t[0];
 
             local opts  = v.opts[l[mp.vcs_target]];
-            local cmd   = sprintf(l[mp.vcs_target], mp.active.name);
+            local cmd   = l[mp.vcs_target];
 
             if (opts.commit_cmd) {
                 /* create a commit message editor document */
