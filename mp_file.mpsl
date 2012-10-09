@@ -134,9 +134,7 @@ mp_doc.actions['revert'] = sub (d) {
             return d;
     }
 
-    local x     = d.txt.x;
-    local y     = d.txt.y;
-    local vy    = d.txt.vy;
+    local t = d.txt;
 
     mp.close();
     if (mp.long_op(mp.open, p) == NULL && ERRNO != NULL)
@@ -144,8 +142,9 @@ mp_doc.actions['revert'] = sub (d) {
 
     d = mp.active();
 
-    d->set_y(y)->set_x(x);
-    d.txt.vy = vy;
+    push(d.undo_q, t);
+    d->set_y(t.y)->set_x(tx);
+    d.txt.vy = t.vy;
 
     return d;
 };
