@@ -4,10 +4,15 @@ Minimum Profit Release Notes
 5.2.4
 -----
 
- - mp.add_keyseq() has been reimplemented and no longer needs
-   the initial [, as it already assumes it's used only for ANSI
-   sequences (so you may need to tweak your own definitions).
- - New configuration directive `font_weight'.
+ - New features:
+   - New configuration directive `font_weight'.
+   - New action `insert_time_stamp', that inserts the current
+     timestamp according to the format in the
+     `mp.config.time_stamp_format' configuration directive.
+ - Changes:
+   - mp.add_keyseq() has been reimplemented and no longer needs
+     the initial [, as it already assumes it's used only for ANSI
+     sequences (so you may need to tweak your own definitions).
  - Fixes:
    - Dynamic tab tweking.
    - Avoid hangups when trying to highlight 0 size regexes.

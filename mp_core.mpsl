@@ -78,7 +78,8 @@ global mp = {
         keep_eol:               1,
         smart_bol:              1,
         eol:                    (mp_drv.id eq 'win32' && "\r\n" || "\n"),
-        status_format:          "%m%n %x,%y [%l] %R%O %s %e %t"
+        status_format:          "%m%n %x,%y [%l] %R%O %s %e %t",
+        time_stamp_format:      "%a, %d %b %Y %H:%M:%S %z"
     },
 
     /* regular expression matching a word (test fallback) */
@@ -230,7 +231,7 @@ global mp = {
                 'seek_repeated_word', '-',
                 'word_count', '-',
                 'word_wrap_paragraph', 'join_paragraph', '-',
-                'insert_next_item'
+                'insert_next_item', 'insert_time_stamp'
             ]
         ],
         [

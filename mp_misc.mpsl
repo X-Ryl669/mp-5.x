@@ -90,6 +90,10 @@ mp_doc.actions['insert_next_item'] = sub(doc) {
     doc->store_undo()->insert(' * ' ~ (n + 1) ~ ': ');
 };
 
+mp_doc.actions['insert_time_stamp'] = sub(doc) {
+    doc->store_undo()->insert(strftime(mp.config.time_stamp_format));
+};
+
 mp_doc.actions['exec_action'] = sub {
     local l = join(keys(mp.actions), keys(mp_doc.actions))->sort();
 
@@ -271,6 +275,7 @@ mp.actdesc['eval']              = LL("Execute MPSL code...");
 mp.actdesc['eval_doc']          = LL("Execute document as MPSL");
 mp.actdesc['exec_action']       = LL("Execute action on document...");
 mp.actdesc['insert_next_item']  = LL("Insert next item");
+mp.actdesc['insert_time_stamp'] = LL("Insert time stamp");
 mp.actdesc['encoding']          = LL("Set charset encoding...");
 mp.actdesc['zoom_in']           = LL("Bigger font");
 mp.actdesc['zoom_out']          = LL("Smaller font");
