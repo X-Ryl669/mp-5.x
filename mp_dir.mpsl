@@ -34,9 +34,17 @@ sub mp_doc_dir.setup(doc)
     doc.title = sprintf(L("<listing of %s>"), doc.name);
 
     /* get the directory content */
-    doc.dir_content = glob(NULL, doc.name)->grep("@[^/]$@");
+    doc.dir_content = glob(NULL, doc.name)->
+        grep("@[^/]$@")->
+        map(sub (e) { local l = split(e, '/'); e = l[-1]; });
 
-    doc.txt.lines = [];
+    doc.txt.lines = [
+        '# ' ~ L("Directory editor"),
+        '# ' ~ L("Deleting a line deletes the file."),
+        '# ' ~ L("Changing a line renames the file."),
+        '# ' ~ L("Keep the 'number:' untouched."),
+        '#'
+    ];
 
     for (n = 0; n < size(doc.dir_content); n++)
         push(doc.txt.lines, sprintf("%d: %s", n, doc.dir_content[n]));
