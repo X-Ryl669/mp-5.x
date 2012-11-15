@@ -745,7 +745,8 @@ local mp_modules = [
     'build',
     'writing',
     'toys',
-    'vcs'
+    'vcs',
+    'dir'
 ];
 
 foreach (m, mp_modules) {
