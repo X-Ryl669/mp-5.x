@@ -354,7 +354,7 @@ sub mp_doc.cut_lines_with_string(doc, str)
             p->delete_line();
         }
         else
-            p>move_down();
+            p->move_down();
     }
 
     /* if p is the working document, move content back to doc */
