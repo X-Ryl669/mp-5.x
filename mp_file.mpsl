@@ -52,7 +52,7 @@ mp_doc.actions['save_as'] = sub (d, newname) {
         /* store new name */
         d.name = newname;
 
-        if (d->long_op(mp_doc.save) == -1)
+        if (d->long_op(d.save) == -1)
             mp.alert(sprintf(L("Error saving '%s': %s"),
                         mp.trim(d.name, 32), ERRNO));
         else
@@ -68,7 +68,7 @@ mp_doc.actions['save'] = sub (d) {
     if (regex(d.name, "/^<.+>$/"))
         d->actions.save_as();
     else
-    if (d->long_op(mp_doc.save) == -1)
+    if (d->long_op(d.save) == -1)
         mp.alert(sprintf(L("Error saving '%s': %s"),
                         mp.trim(d.name, 32), ERRNO));
 

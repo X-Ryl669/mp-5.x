@@ -29,7 +29,27 @@ global mp_doc_dir = new(mp_doc);
 
 sub mp_doc_dir.setup(doc)
 {
+    local n;
+
     doc.title = sprintf(L("<listing of %s>"), doc.name);
 
-    doc.txt.lines = glob(NULL, doc.name);
+    /* get the directory content */
+    doc.dir_content = glob(NULL, doc.name);
+
+    doc.txt.lines = [];
+
+    for (n = 0; n < size(doc.dir_content); n++)
+        push(doc.txt.lines, sprintf("%d: %s", n, doc.dir_content[n]));
+
+    doc.txt.mod = 0;
+}
+
+
+sub mp_doc_dir.save(doc)
+{
+    mp.alert("Saving directory");
+
+    doc->setup();
+
+    return 0;
 }
