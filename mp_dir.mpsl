@@ -47,7 +47,7 @@ sub mp_doc_dir.setup(doc)
     ];
 
     for (n = 0; n < size(doc.dir_content); n++)
-        push(doc.txt.lines, sprintf("%d: %s", n, doc.dir_content[n]));
+        push(doc.txt.lines, sprintf("%d: %s", n + 1, doc.dir_content[n]));
 
     doc.txt.mod = 0;
 }
@@ -55,7 +55,24 @@ sub mp_doc_dir.setup(doc)
 
 sub mp_doc_dir.save(doc)
 {
-    mp.alert("Saving directory");
+    /* rename changed files */
+    foreach (l, doc.txt.lines) {
+        local p = l->split(': ');
+        local n = p[0];
+
+        if (n > 0) {
+            if (doc.dir_content[n - 1] ne p[1])
+                print("rename ", doc.dir_content[n - 1], " to ", p[1], "\n");
+
+            doc.dir_content[n - 1] = NULL;
+        }
+    }
+
+    /* delete unreferenced files */
+    foreach (l, doc.dir_content) {
+        if (l != NULL)
+            print("delete ", l, "\n");
+    }
 
     doc->setup();
 
