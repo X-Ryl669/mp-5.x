@@ -34,7 +34,7 @@ sub mp_doc_dir.setup(doc)
     doc.title = sprintf(L("<listing of %s>"), doc.name);
 
     /* get the directory content */
-    doc.dir_content = glob(NULL, doc.name);
+    doc.dir_content = glob(NULL, doc.name)->grep("@[^/]$@");
 
     doc.txt.lines = [];
 
