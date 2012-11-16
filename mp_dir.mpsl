@@ -72,12 +72,19 @@ sub mp_doc_dir.save(doc)
         local n;
 
         if (size(p) == 2 && (n = p[0]) > 0 && p[1]) {
-            if (doc.dir_content[n - 1] ne p[1]) {
-                push(doc.dir_log,
-                    sprintf(L("# renamed '%s' to '%s'"),
-                        doc.dir_content[n - 1], p[1]
-                    )
-                );
+            local op = doc.dir_content[n - 1];
+            local np = p[1];
+
+            if (op ne np) {
+                local m;
+
+                if (rename(op, np) == -1)
+                    m = sprintf(L("# error renaming '%s' to '%s' (%s)"),
+                        op, np, ERRNO);
+                else
+                    m = sprintf(L("# renamed '%s' to '%s'"), op, np);
+
+                push(doc.dir_log, m);
             }
 
             doc.dir_content[n - 1] = NULL;
@@ -87,7 +94,14 @@ sub mp_doc_dir.save(doc)
     /* delete unreferenced files */
     foreach (l, doc.dir_content) {
         if (l != NULL) {
-            push(doc.dir_log, sprintf(L("# deleted '%s'"), l));
+            local m;
+
+            if (unlink(l) == -1)
+                m = sprintf(L("# error deleting '%s' (%s)"), l, ERRNO);
+            else
+                m = sprintf(L("# deleted '%s'"), l);
+
+            push(doc.dir_log, m);
         }
     }
 
