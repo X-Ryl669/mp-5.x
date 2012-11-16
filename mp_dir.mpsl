@@ -68,10 +68,10 @@ sub mp_doc_dir.save(doc)
 
     /* rename changed files */
     foreach (l, doc.txt.lines) {
-        local p = l->split(': ');
-        local n = p[0];
+        local p = l->sscanf("%d: %s");
+        local n;
 
-        if (n > 0) {
+        if (size(p) == 2 && (n = p[0]) > 0 && p[1]) {
             if (doc.dir_content[n - 1] ne p[1]) {
                 push(doc.dir_log,
                     sprintf(L("# renamed '%s' to '%s'"),
