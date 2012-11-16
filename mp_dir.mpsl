@@ -50,11 +50,6 @@ sub mp_doc_dir.setup(doc)
     for (n = 0; n < size(doc.dir_content); n++)
         push(doc.txt.lines, sprintf("%d: %s", n + 1, doc.dir_content[n]));
 
-    if (doc.dir_log) {
-        foreach (l, doc.dir_log)
-            push(doc.txt.lines, l);
-    }
-
     doc.txt.mod = 0;
 
     if (doc.txt.y > size(doc.txt.lines))
@@ -64,7 +59,12 @@ sub mp_doc_dir.setup(doc)
 
 sub mp_doc_dir.save(doc)
 {
-    doc.dir_log = [];
+    local log = new(mp_doc, {
+        name: sprintf(L("<changes to directory '%s'>"), doc.name)
+        }
+    );
+
+    log.txt.lines = [];
 
     /* rename changed files */
     foreach (l, doc.txt.lines) {
@@ -84,7 +84,7 @@ sub mp_doc_dir.save(doc)
                 else
                     m = sprintf(L("# renamed '%s' to '%s'"), op, np);
 
-                push(doc.dir_log, m);
+                push(log.txt.lines, m);
             }
 
             doc.dir_content[n - 1] = NULL;
@@ -101,11 +101,14 @@ sub mp_doc_dir.save(doc)
             else
                 m = sprintf(L("# deleted '%s'"), l);
 
-            push(doc.dir_log, m);
+            push(log.txt.lines, m);
         }
     }
 
-    doc->setup();
+    mp.add(log);
+    log.read_only = 1;
+
+    doc.txt.mod = 0;
 
     return 0;
 }
