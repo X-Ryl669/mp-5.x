@@ -39,30 +39,46 @@ sub mp_doc_dir.setup(doc)
         map(sub (e) { local l = split(e, '/'); e = l[-1]; });
 
     doc.txt.lines = [
-        '# ' ~ L("Directory editor"),
-        '# ' ~ L("Deleting a line deletes the file."),
-        '# ' ~ L("Changing a line renames the file."),
-        '# ' ~ L("Keep the 'number:' untouched."),
-        '#'
-    ];
+        L("Directory editor"),
+        L("Deleting a line deletes the file;"),
+        L("Changing a line renames the file;"),
+        L("Saving commits the changes."),
+        L("(Keep the 'number:' on each line untouched)"),
+        ''
+    ]->map(sub(e) { '# ' ~ e;});
 
     for (n = 0; n < size(doc.dir_content); n++)
         push(doc.txt.lines, sprintf("%d: %s", n + 1, doc.dir_content[n]));
 
+    if (doc.dir_log) {
+        foreach (l, doc.dir_log)
+            push(doc.txt.lines, l);
+    }
+
     doc.txt.mod = 0;
+
+    if (doc.txt.y > size(doc.txt.lines))
+        doc.txt.y = size(doc.txt.lines);
 }
 
 
 sub mp_doc_dir.save(doc)
 {
+    doc.dir_log = [];
+
     /* rename changed files */
     foreach (l, doc.txt.lines) {
         local p = l->split(': ');
         local n = p[0];
 
         if (n > 0) {
-            if (doc.dir_content[n - 1] ne p[1])
-                print("rename ", doc.dir_content[n - 1], " to ", p[1], "\n");
+            if (doc.dir_content[n - 1] ne p[1]) {
+                push(doc.dir_log,
+                    sprintf(L("# renamed '%s' to '%s'"),
+                        doc.dir_content[n - 1], p[1]
+                    )
+                );
+            }
 
             doc.dir_content[n - 1] = NULL;
         }
@@ -70,8 +86,9 @@ sub mp_doc_dir.save(doc)
 
     /* delete unreferenced files */
     foreach (l, doc.dir_content) {
-        if (l != NULL)
-            print("delete ", l, "\n");
+        if (l != NULL) {
+            push(doc.dir_log, sprintf(L("# deleted '%s'"), l));
+        }
     }
 
     doc->setup();
