@@ -2290,7 +2290,14 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
 }
 
 
-static mpdm_t run_filechooser(mpdm_t a, gboolean save)
+enum {
+    FC_OPEN,
+    FC_SAVE,
+    FC_FOLDER
+};
+
+
+static mpdm_t run_filechooser(mpdm_t a, int type)
 /* openfile driver function */
 {
     GtkWidget *dlg;
@@ -2302,15 +2309,17 @@ static mpdm_t run_filechooser(mpdm_t a, gboolean save)
     if ((ptr = v_to_utf8(mpdm_aget(a, 0))) == NULL)
         return (NULL);
 
-    if (!save) {
+    switch (type) {
+    case FC_OPEN:
         dlg = gtk_file_chooser_dialog_new(ptr, GTK_WINDOW(window),
                                           GTK_FILE_CHOOSER_ACTION_OPEN,
                                           GTK_STOCK_CANCEL,
                                           GTK_RESPONSE_CANCEL,
                                           GTK_STOCK_OK, GTK_RESPONSE_OK,
                                           NULL);
-    }
-    else {
+        break;
+
+    case FC_SAVE:
         dlg = gtk_file_chooser_dialog_new(ptr, GTK_WINDOW(window),
                                           GTK_FILE_CHOOSER_ACTION_SAVE,
                                           GTK_STOCK_CANCEL,
@@ -2318,7 +2327,18 @@ static mpdm_t run_filechooser(mpdm_t a, gboolean save)
                                           GTK_RESPONSE_OK, NULL);
         gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER
                                                        (dlg), TRUE);
+        break;
+
+    case FC_FOLDER:
+        dlg = gtk_file_chooser_dialog_new(ptr, GTK_WINDOW(window),
+                                          GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+                                          GTK_STOCK_CANCEL,
+                                          GTK_RESPONSE_CANCEL,
+                                          GTK_STOCK_OK, GTK_RESPONSE_OK,
+                                          NULL);
+        break;
     }
+
     g_free(ptr);
 
     build_form_data(NULL);
@@ -2352,14 +2372,21 @@ static mpdm_t run_filechooser(mpdm_t a, gboolean save)
 static mpdm_t gtk_drv_openfile(mpdm_t a, mpdm_t ctxt)
 /* openfile driver function */
 {
-    return run_filechooser(a, FALSE);
+    return run_filechooser(a, FC_OPEN);
 }
 
 
 static mpdm_t gtk_drv_savefile(mpdm_t a, mpdm_t ctxt)
 /* savefile driver function */
 {
-    return run_filechooser(a, TRUE);
+    return run_filechooser(a, FC_SAVE);
+}
+
+
+static mpdm_t gtk_drv_openfolder(mpdm_t a, mpdm_t ctxt)
+/* openfolder driver function */
+{
+    return run_filechooser(a, FC_FOLDER);
 }
 
 
@@ -2454,6 +2481,7 @@ static void register_functions(void)
     mpdm_hset_s(drv, L"openfile",    MPDM_X(gtk_drv_openfile));
     mpdm_hset_s(drv, L"savefile",    MPDM_X(gtk_drv_savefile));
     mpdm_hset_s(drv, L"form",        MPDM_X(gtk_drv_form));
+    mpdm_hset_s(drv, L"openfolder",  MPDM_X(gtk_drv_openfolder));
 }
 
 
