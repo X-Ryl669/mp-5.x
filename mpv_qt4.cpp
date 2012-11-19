@@ -277,6 +277,23 @@ static mpdm_t qt4_drv_savefile(mpdm_t a, mpdm_t ctxt)
 }
 
 
+static mpdm_t qt4_drv_openfolder(mpdm_t a, mpdm_t ctxt)
+{
+    QString r;
+    char tmp[128];
+
+    getcwd(tmp, sizeof(tmp));
+
+    /* 1# arg: prompt */
+    r = QFileDialog::getExistingDirectory(window,
+                                    str_to_qstring(mpdm_aget(a, 0)),
+                                    tmp,
+                                    QFileDialog::ShowDirsOnly);
+
+    return qstring_to_str(r);
+}
+
+
 class MPForm : public QDialog
 {
 public:
@@ -484,6 +501,7 @@ static void register_functions(void)
     mpdm_hset_s(drv, L"openfile",    MPDM_X(qt4_drv_openfile));
     mpdm_hset_s(drv, L"savefile",    MPDM_X(qt4_drv_savefile));
     mpdm_hset_s(drv, L"form",        MPDM_X(qt4_drv_form));
+    mpdm_hset_s(drv, L"openfolder",  MPDM_X(qt4_drv_openfolder));
 }
 
 
