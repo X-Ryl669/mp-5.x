@@ -437,6 +437,16 @@ sub mp_drv.savefile(prompt)
 }
 
 
+sub mp_drv.openfolder(prompt)
+{
+    mp.tui.readline(prompt, 'openfolder', NULL, {
+        file:   1,
+        folder: 1
+        }
+    );
+}
+
+
 sub mp_drv.confirm(msg, def)
 {
 	mp.tui.confirm(msg, def);
