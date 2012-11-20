@@ -34,7 +34,7 @@ msgstr "Funzione morta"
 msgid "Line to go to:"
 msgstr "Numero riga:"
 
-#: mp_core.mpsl:266 mp_file.mpsl:31 mp_file.mpsl:463 mp_session.mpsl:64
+#: mp_core.mpsl:340 mp_file.mpsl:31 mp_file.mpsl:463 mp_session.mpsl:64
 #: mp_session.mpsl:72
 msgid "<unnamed>"
 msgstr "<Senza nome>"
@@ -181,23 +181,23 @@ msgid ""
 "\n"
 msgstr ""
 
-#: mp_core.mpsl:176
+#: mp_core.mpsl:182
 msgid "&File"
 msgstr "&Archivio"
 
-#: mp_core.mpsl:187
+#: mp_core.mpsl:194
 msgid "&Edit"
 msgstr "&Edita"
 
-#: mp_core.mpsl:198
+#: mp_core.mpsl:205
 msgid "&Search"
 msgstr "&Cerca"
 
-#: mp_core.mpsl:205
+#: mp_core.mpsl:212
 msgid "&Go to"
 msgstr "&Vai A"
 
-#: mp_core.mpsl:232
+#: mp_core.mpsl:239
 msgid "&Options"
 msgstr "&Opzioni"
 
@@ -412,7 +412,7 @@ msgstr "Lunghezza del tab..."
 msgid "Menu"
 msgstr "Menu"
 
-#: mp_misc.mpsl:277
+#: mp_misc.mpsl:282
 msgid "About..."
 msgstr "Circa..."
 
@@ -658,19 +658,19 @@ msgstr ""
 msgid "Exit value:\n"
 msgstr ""
 
-#: mp_misc.mpsl:270
+#: mp_misc.mpsl:274
 msgid "Execute MPSL code..."
 msgstr ""
 
-#: mp_misc.mpsl:271
+#: mp_misc.mpsl:275
 msgid "Execute document as MPSL"
 msgstr ""
 
-#: mp_misc.mpsl:275
+#: mp_misc.mpsl:280
 msgid "Bigger font"
 msgstr ""
 
-#: mp_misc.mpsl:276
+#: mp_misc.mpsl:281
 msgid "Smaller font"
 msgstr ""
 
@@ -780,7 +780,7 @@ msgstr ""
 msgid "Encoding (utf-8, iso8859-1, etc.; empty, current locale)"
 msgstr ""
 
-#: mp_misc.mpsl:133
+#: mp_misc.mpsl:137
 msgid "Invalid encoding "
 msgstr ""
 
@@ -789,7 +789,7 @@ msgstr ""
 msgid "Lines: %d Words: %d"
 msgstr ""
 
-#: mp_misc.mpsl:274
+#: mp_misc.mpsl:279
 msgid "Set charset encoding..."
 msgstr ""
 
@@ -801,7 +801,7 @@ msgstr ""
 msgid "Toggle spellchecking"
 msgstr ""
 
-#: mp_tui.mpsl:663
+#: mp_tui.mpsl:673
 msgid "Please, wait..."
 msgstr ""
 
@@ -862,12 +862,12 @@ msgstr ""
 msgid "Save session"
 msgstr ""
 
-#: mp_core.mpsl:330
+#: mp_core.mpsl:404
 #, c-format
 msgid "Unknown action '%s'"
 msgstr ""
 
-#: mp_edit.mpsl:621
+#: mp_edit.mpsl:624
 #, c-format
 msgid "Unbound keystroke '%s'"
 msgstr ""
@@ -882,12 +882,12 @@ msgstr ""
 msgid "%d replaces"
 msgstr ""
 
-#: mp_core.mpsl:539 mp_core.mpsl:559
+#: mp_core.mpsl:613 mp_core.mpsl:633
 #, c-format
 msgid "Cannot open '%s'"
 msgstr ""
 
-#: mp_core.mpsl:633
+#: mp_core.mpsl:707
 #, c-format
 msgid "WARNING: %s version found is %s, but %s is needed"
 msgstr ""
@@ -1053,7 +1053,7 @@ msgid ""
 "Mailing list: mp-subscribe@lists.triptico.com\n"
 msgstr ""
 
-#: mp_core.mpsl:482
+#: mp_core.mpsl:556
 #, c-format
 msgid ""
 "Minimum Profit %s - Programmer Text Editor\n"
@@ -1076,7 +1076,7 @@ msgid ""
 "Mailing list: mp-subscribe@lists.triptico.com\n"
 msgstr ""
 
-#: mp_misc.mpsl:273
+#: mp_misc.mpsl:277
 msgid "Insert next item"
 msgstr ""
 
@@ -1092,11 +1092,11 @@ msgstr ""
 msgid "Mark all"
 msgstr ""
 
-#: mp_misc.mpsl:101
+#: mp_misc.mpsl:105
 msgid "Select action to execute:"
 msgstr ""
 
-#: mp_misc.mpsl:272
+#: mp_misc.mpsl:276
 msgid "Execute action on document..."
 msgstr ""
 
@@ -1179,7 +1179,7 @@ msgid ""
 "Mailing list: mp-subscribe@lists.triptico.com\n"
 msgstr ""
 
-#: mp_syntax.mpsl:953
+#: mp_syntax.mpsl:1018
 #, c-format
 msgid "Gathered information on %s:"
 msgstr ""
@@ -1187,7 +1187,7 @@ msgstr ""
 msgid "File was changed externally. Reload?"
 msgstr ""
 
-#: mp_misc.mpsl:151
+#: mp_misc.mpsl:155
 #, c-format
 msgid ""
 "Minimum Profit %s (%s) - Programmer Text Editor\n"
@@ -1222,12 +1222,12 @@ msgstr ""
 msgid "This directory is not under a supported version control system"
 msgstr ""
 
-#: mp_vcs.mpsl:125
+#: mp_vcs.mpsl:126
 #, c-format
 msgid "Available %s commands"
 msgstr ""
 
-#: mp_vcs.mpsl:145 mp_vcs.mpsl:155 mp_vcs.mpsl:161
+#: mp_vcs.mpsl:146 mp_vcs.mpsl:156 mp_vcs.mpsl:162
 #, c-format
 msgid "<%s output>"
 msgstr ""
@@ -1244,31 +1244,31 @@ msgstr ""
 msgid "You won! Press any key."
 msgstr ""
 
-#: mp_misc.mpsl:242
+#: mp_misc.mpsl:246
 msgid "You already have the latest version."
 msgstr ""
 
-#: mp_misc.mpsl:246
+#: mp_misc.mpsl:250
 msgid "There are new versions available:"
 msgstr ""
 
-#: mp_misc.mpsl:247
+#: mp_misc.mpsl:251
 msgid "Update Minimum Profit from http://triptico.com/software/mp.html"
 msgstr ""
 
-#: mp_misc.mpsl:251
+#: mp_misc.mpsl:255
 msgid "Cannot connect -- please try later."
 msgstr ""
 
-#: mp_misc.mpsl:278
+#: mp_misc.mpsl:283
 msgid "Check for updates..."
 msgstr ""
 
-#: mp_core.mpsl:214
+#: mp_core.mpsl:221
 msgid "&Project"
 msgstr ""
 
-#: mp_core.mpsl:222
+#: mp_core.mpsl:229
 msgid "&Writing"
 msgstr ""
 
@@ -1317,14 +1317,76 @@ msgstr ""
 msgid "Error opening '%s': %s"
 msgstr ""
 
-#: mp_misc.mpsl:117
+#: mp_misc.mpsl:121
 msgid "<current locale>"
 msgstr ""
 
-#: mp_misc.mpsl:122
+#: mp_misc.mpsl:126
 msgid "Available encodings"
 msgstr ""
 
-#: mp_misc.mpsl:240
+#: mp_misc.mpsl:244
 msgid "You have a development version newer than any stable release."
+msgstr ""
+
+#: mp_dir.mpsl:33
+msgid "Folder to open"
+msgstr ""
+
+#: mp_dir.mpsl:42
+msgid "Open folder..."
+msgstr ""
+
+#: mp_dir.mpsl:55
+#, c-format
+msgid "<listing of %s>"
+msgstr ""
+
+#: mp_dir.mpsl:63
+msgid "Directory editor"
+msgstr ""
+
+#: mp_dir.mpsl:64
+msgid "Deleting a line deletes the file;"
+msgstr ""
+
+#: mp_dir.mpsl:65
+msgid "Changing a line renames the file;"
+msgstr ""
+
+#: mp_dir.mpsl:66
+msgid "Saving commits the changes."
+msgstr ""
+
+#: mp_dir.mpsl:67
+msgid "(Keep the 'number:' on each line untouched)"
+msgstr ""
+
+#: mp_dir.mpsl:84
+#, c-format
+msgid "<changes to directory '%s'>"
+msgstr ""
+
+#: mp_dir.mpsl:103
+#, c-format
+msgid "# error renaming '%s' to '%s' (%s)"
+msgstr ""
+
+#: mp_dir.mpsl:106
+#, c-format
+msgid "# renamed '%s' to '%s'"
+msgstr ""
+
+#: mp_dir.mpsl:121
+#, c-format
+msgid "# error deleting '%s' (%s)"
+msgstr ""
+
+#: mp_dir.mpsl:123
+#, c-format
+msgid "# deleted '%s'"
+msgstr ""
+
+#: mp_misc.mpsl:278
+msgid "Insert time stamp"
 msgstr ""
