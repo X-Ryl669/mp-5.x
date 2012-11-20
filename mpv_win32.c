@@ -4,7 +4,7 @@
 
     Win32 driver.
 
-    Copyright (C) 1991-2010 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -1717,6 +1717,34 @@ static mpdm_t win32_drv_savefile(mpdm_t a, mpdm_t ctxt)
 }
 
 
+static mpdm_t win32_drv_openfolder(mpdm_t a, mpdm_t ctxt)
+/* openfolder driver function */
+{
+    mpdm_t r = NULL;
+    BROWSEINFO bi;
+    char tmp[16384];
+    char *ptr;
+
+    /* 1# arg: prompt */
+    ptr = mpdm_wcstombs(mpdm_string(mpdm_aget(a, 0)), NULL);
+
+    memset(&bi, '\0', sizeof(bi));
+    bi.hwndOwner        = hwnd;
+    bi.pidlRoot         = NULL;
+    bi.pszDisplayName   = tmp;
+    bi.lpszTitle        = ptr;
+    bi.ulFlags          = BIF_RETURNONLYFSDIRS;
+
+    if (SHBrowseForFolder(&bi) != NULL) {
+        r = MPDM_MBS(tmp);
+    }
+
+    free(ptr);
+
+    return r;
+}
+
+
 static mpdm_t win32_drv_update_ui(mpdm_t a, mpdm_t ctxt)
 {
     build_fonts(GetDC(hwnd));
@@ -1773,6 +1801,7 @@ static void register_functions(void)
     mpdm_hset_s(drv, L"openfile",    MPDM_X(win32_drv_openfile));
     mpdm_hset_s(drv, L"savefile",    MPDM_X(win32_drv_savefile));
     mpdm_hset_s(drv, L"form",        MPDM_X(win32_drv_form));
+    mpdm_hset_s(drv, L"openfolder",  MPDM_X(win32_drv_openfolder));
 }
 
 
