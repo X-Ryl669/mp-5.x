@@ -1724,6 +1724,7 @@ static mpdm_t win32_drv_openfolder(mpdm_t a, mpdm_t ctxt)
     BROWSEINFO bi;
     char tmp[16384];
     char *ptr;
+    LPITEMIDLIST i;
 
     /* 1# arg: prompt */
     ptr = mpdm_wcstombs(mpdm_string(mpdm_aget(a, 0)), NULL);
@@ -1735,8 +1736,9 @@ static mpdm_t win32_drv_openfolder(mpdm_t a, mpdm_t ctxt)
     bi.lpszTitle        = ptr;
     bi.ulFlags          = BIF_RETURNONLYFSDIRS;
 
-    if (SHBrowseForFolder(&bi) != NULL) {
-        r = MPDM_MBS(tmp);
+    if ((i = SHBrowseForFolder(&bi)) != NULL) {
+        if (SHGetPathFromIDList(i, tmp) != 0)
+            r = MPDM_MBS(tmp);
     }
 
     free(ptr);
