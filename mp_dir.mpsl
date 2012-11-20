@@ -75,6 +75,8 @@ sub mp_doc_dir.setup(doc)
 
     if (doc.txt.y > size(doc.txt.lines))
         doc.txt.y = size(doc.txt.lines);
+
+    doc.mtime = NULL;
 }
 
 
@@ -130,6 +132,8 @@ sub mp_doc_dir.save(doc)
     log.read_only = 1;
 
     doc.txt.mod = 0;
+
+    doc->setup();
 
     return 0;
 }
