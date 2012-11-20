@@ -182,6 +182,7 @@ global mp = {
             LL("&File"), [
                 'new', 'open', 'save', 'save_as', 'close', 'revert',
                 'open_under_cursor',
+                '-', 'open_folder',
                 '-', 'hex_view',
                 '-', 'set_password',
                 '-', 'open_config_file', 'open_templates_file',

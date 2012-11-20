@@ -25,7 +25,28 @@
 
 */
 
+/** editor actions **/
+
+mp.actions['open_folder'] = sub {
+    local f;
+
+    if ((f = mp_drv.openfolder(L("Folder to open"))) != NULL) {
+        local d = mp.add(new(mp_doc_dir, { name: f }));
+        d->setup();
+    }
+};
+
+
+/** action descriptions **/
+
+mp.actdesc['open_folder'] = LL("Open folder...");
+
+/** mp_doc_dir subclass **/
+
 global mp_doc_dir = new(mp_doc);
+
+
+/** code **/
 
 sub mp_doc_dir.setup(doc)
 {
