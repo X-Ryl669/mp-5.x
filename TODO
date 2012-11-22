@@ -4,7 +4,7 @@ Minimum Profit 5 TODO / Bug List
 Release Critical Bugs
 ---------------------
 
- * 1306: Fix win32 file permissions.
+None!
 
 Open Bugs
 ---------
@@ -29,6 +29,7 @@ Open Bugs
  * 1282: The timer function in the Curses driver does not work
    while pressing keys.
  * 1285: Fix KDE build.
+ * 1306: Fix win32 file permissions.
 
 Pending Enhancements
 --------------------
