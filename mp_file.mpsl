@@ -774,6 +774,23 @@ global mp_hex_view = new(mp_base, {
             close(f);
 
             return out;
+        },
+        actions:    {
+            seek:       sub (d) {
+                local t = mp.form(
+                    [
+                        {
+                            label:   L("Hex string to seek:"),
+                            type:    'text',
+                            history: 'search-hex'
+                        }
+                    ]
+                );
+
+                if (t != NULL) {
+                    mp_drv.alert(L"TBD");
+                }
+            }
         }
     }
 );
