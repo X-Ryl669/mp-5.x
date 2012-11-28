@@ -788,7 +788,7 @@ global mp_hex_view = new(mp_base, {
                 );
 
                 if (t != NULL) {
-                    mp_drv.alert(L"TBD");
+                    mp_drv.alert("TBD");
                 }
             }
         }
