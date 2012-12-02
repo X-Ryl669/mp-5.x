@@ -5,7 +5,7 @@
 
     Macro recording (learning mode).
 
-    Copyright (C) 1991-2007 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    http://www.triptico.com
+    http://triptico.com
 
 */
 
@@ -45,7 +45,8 @@ mp.actdesc['play_macro']    = LL("Play macro");
 
 mp.macro = {
     process_event:  NULL,
-    keycodes:       NULL
+    keycodes:       NULL,
+    lock:           0
 };
 
 /** code **/
@@ -53,45 +54,47 @@ mp.macro = {
 sub mp.process_event_and_record(k)
 /* patched version of mp.process_event() */
 {
-	/* records */
-	push(mp.macro.keycodes, k);
+    /* records */
+    push(mp.macro.keycodes, k);
 
-	/* calls the real mp.process_event() function */
-	mp.macro.process_event(k);
+    /* calls the real mp.process_event() function */
+    mp.macro.process_event(k);
 }
 
 
 sub mp.record_macro
 /* start recording a macro */
 {
-	if (mp.macro.process_event == NULL) {
-		/* if still not recording, store the real mp.process_event()
-		   function and replace it by ours */
-		mp.macro.process_event = mp.process_event;
-		mp.process_event = mp.process_event_and_record;
-
-		/* reset keycode list */
-		mp.macro.keycodes = [];
-	}
-	else {
-		/* unpatch mp.process_event() */
-		mp.process_event = mp.macro.process_event;
-		mp.macro.process_event = NULL;
-
-		/* drop the last keycode (that triggered mp.record_macro()) */
-		if (mp.keycodes[mp.macro.keycodes[-1]] eq 'record_macro')
-			pop(mp.macro.keycodes);
-	}
+    if (!mp.macro.lock) {
+        if (mp.macro.process_event == NULL) {
+            /* if still not recording, store the real mp.process_event()
+               function and replace it by ours */
+            mp.macro.process_event = mp.process_event;
+            mp.process_event = mp.process_event_and_record;
+    
+            /* reset keycode list */
+            mp.macro.keycodes = [];
+        }
+        else {
+            /* unpatch mp.process_event() */
+            mp.process_event = mp.macro.process_event;
+            mp.macro.process_event = NULL;
+        }
+    }
 }
 
 sub mp.play_macro
 /* play a macro */
 {
-	/* if it's recording, stop now */
-	if (mp.macro.process_event != NULL)
-		mp.record_macro();
+    /* if it's recording, stop now */
+    if (mp.macro.process_event != NULL)
+        mp.record_macro();
 
-	/* process all stored keycodes */
-	foreach (k, mp.macro.keycodes)
-		mp.process_event(k);
+    mp.macro.lock = 1;
+
+    /* process all stored keycodes */
+    foreach (k, mp.macro.keycodes)
+        mp.process_event(k);
+
+    mp.macro.lock = 0;
 }
