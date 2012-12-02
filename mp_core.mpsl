@@ -244,9 +244,7 @@ global mp = {
                 'pipes', '-', 'check_for_updates', 'about'
             ]
         ]
-    ],
-
-    actions_by_menu_label:  {}
+    ]
 };
 
 
@@ -525,8 +523,6 @@ sub mp.menu_label(action)
 
         if (size(ks))
             l = l ~ ' [' ~ join(ks, ', ') ~ ']';
-
-    	mp.actions_by_menu_label[l] = action;
     }
 
 	return l;

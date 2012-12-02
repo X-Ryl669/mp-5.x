@@ -4,7 +4,7 @@
 
     Code common to Qt4 and KDE4 drivers.
 
-    Copyright (C) 2009/2010 Angel Ortega <angel@triptico.com>
+    Copyright (C) 2009/2012 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-    http://www.triptico.com
+    http://triptico.com
 
 */
 
@@ -32,6 +32,10 @@ static int mouse_down = 0;
 static int key_down = 0;
 
 mpdm_t timer_func = NULL;
+
+/* hash of qactions to MP actions */
+QHash <QAction *, mpdm_t> qaction_to_action;
+
 
 /** code **/
 
@@ -217,8 +221,10 @@ static void build_menu(void)
 
             if (*wptr == L'-')
                 menu->addSeparator();
-            else
-                menu->addAction(str_to_qstring(mp_menu_label(w)));
+            else {
+                mpdm_ref(w);
+                qaction_to_action[menu->addAction(str_to_qstring(mp_menu_label(w)))] = w;
+            }
         }
 
         menubar->addMenu(menu);
@@ -984,12 +990,8 @@ void MPArea::from_filetabs(int value)
 
 void MPArea::from_menu(QAction * action)
 {
-    mpdm_t label = qstring_to_str(action->text());
-    label = mpdm_sregex(label, MPDM_LS(L"/&/"), NULL, 0);
+    mp_process_action(qaction_to_action[action]);
 
-    mpdm_t a = mpdm_hget_s(MP, L"actions_by_menu_label");
-
-    mp_process_action(mpdm_hget(a, label));
     area->update();
 }
 
