@@ -788,7 +788,17 @@ global mp_hex_view = new(mp_base, {
                 );
 
                 if (t != NULL) {
-                    mp_drv.alert("TBD");
+                    local s = t[0];
+                    local data = [];
+
+                    /* expand hexstring to an array */
+                    while (s->size() > 0) {
+                        t = splice(s, NULL, 0, 2);
+                        push(data, '0x' ~ t[1]);
+                        s = t[0];
+                    }
+
+                    data->dump();
                 }
             }
         }
