@@ -798,9 +798,37 @@ global mp_hex_view = new(mp_base, {
                         s = t[0];
                     }
 
-                    data->dump();
+                    local f = open(d.name, "rb");
+                    fseek(f, 0, 2);
+                    local max = ftell(f) - data->size();
+                    local o = d.offset + 1;
+                    local found = 0;
+
+                    while (!found && o < max) {
+                        local n;
+                        fseek(f, o, 0);
+
+                        found = 1;
+
+                        for (n = 0; found && n < data->size(); n++) {
+                            local c = getchar(f);
+
+                            if (c == NULL || ord(c) != data[n])
+                                found = 0;
+                        }
+
+                        o++;
+                    }
+
+                    if (found)
+                        d.offset = o - data->size() + 1;
+
+                    close(f);
                 }
             }
+        },
+        keycodes:   {
+            "ctrl-f" =>     'seek'
         }
     }
 );
