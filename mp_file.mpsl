@@ -671,6 +671,8 @@ global mp_hex_view = new(mp_base, {
         offset:         0,
         bpl:            8,
         data:           [],
+        f_offset:       0,
+        f_size:         0,
 
         get_status: sub (hex) {
             sprintf("HEX %s - 0x%06x (%d)", name, offset, offset);
@@ -711,7 +713,7 @@ global mp_hex_view = new(mp_base, {
 
             fseek(f, 0, 2);
             if (offset >= ftell(f))
-                offset = ftell(f) - bpl;
+                offset = ftell(f);
 
             close(f);
 
@@ -721,14 +723,17 @@ global mp_hex_view = new(mp_base, {
             local out = [];
             local f;
 
-            f = open(name, "rb");
-            fseek(f, offset, 0);
-
             /* calculate bytes per line */
             bpl = 100;
 
             while ((14 + (bpl * 4)) > mp.window.tx)
                 bpl--;
+
+            /* round offset */
+            offset = sprintf("%d", offset / bpl) * bpl;
+
+            f = open(name, "rb");
+            fseek(f, offset, 0);
 
             while (size(out) < mp.window.ty) {
                 local nv, av, n, c;
@@ -781,7 +786,7 @@ global mp_hex_view = new(mp_base, {
                 local f = open(d.name, "rb");
                 fseek(f, 0, 2);
                 local max = ftell(f) - d.data->size();
-                local o = d.offset + 1;
+                local o = d.f_offset + 1;
                 local found = 0;
 
                 while (!found && o < max) {
@@ -800,8 +805,11 @@ global mp_hex_view = new(mp_base, {
                     o++;
                 }
 
-                if (found)
-                    d.offset = o - d.data->size() + 1;
+                if (found) {
+                    d.f_offset  = o;
+                    d.f_size    = d.data->size();
+                    d.offset    = sprintf("%d", o / d.bpl) * d.bpl;
+                }
 
                 close(f);
             },
@@ -828,6 +836,8 @@ global mp_hex_view = new(mp_base, {
                         push(d.data, '0x' ~ t[1]);
                         s = t[0];
                     }
+
+                    d.f_offset = d.offset;
 
                     d.actions.seek_next(d);
                 }
