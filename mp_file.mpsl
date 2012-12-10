@@ -825,7 +825,7 @@ global mp_hex_view = new(mp_base, {
                 mp.busy(0);
 
                 if (found) {
-                    d.f_offset  = o - d.data->size() + 1;
+                    d.f_offset  = o - 1;
                     d.f_size    = d.data->size();
                     d.offset    = d.f_offset;
                 }
