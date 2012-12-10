@@ -721,12 +721,12 @@ global mp_hex_view = new(mp_base, {
         },
         render:     sub (hex) {
             local out = [];
-            local f;
+            local f, o;
 
             /* calculate bytes per line */
             bpl = 100;
 
-            while ((14 + (bpl * 4)) > mp.window.tx)
+            while ((12 + (bpl * 4)) > mp.window.tx)
                 bpl--;
 
             /* round offset */
@@ -734,6 +734,8 @@ global mp_hex_view = new(mp_base, {
 
             f = open(name, "rb");
             fseek(f, offset, 0);
+
+            o = offset;
 
             while (size(out) < mp.window.ty) {
                 local ov, nv, av, n, c;
@@ -743,20 +745,23 @@ global mp_hex_view = new(mp_base, {
                     mp.colors.word2.attr,
                     ' | '
                 ];
-
                 ov = [
                     mp.colors.word1.attr,
-                    sprintf("| %06X |", ftell(f))
+                    sprintf(" %06X |", ftell(f))
                 ];
 
                 for (n = 0; n < bpl; n++) {
+                    local a = 0;
+
                     if ((c = getchar(f)) == NULL)
                         break;
 
-                    push(nv,
-                        mp.colors.normal.attr,
-                        sprintf(" %02X", ord(c))
-                    );
+                    if (o >= f_offset && o < f_offset + f_size)
+                        a = mp.colors.search.attr;
+                    else
+                        a = mp.colors.normal.attr;
+
+                    push(nv, a, sprintf(" %02X", ord(c)));
 
                     if (ord(c) == 0x0a)
                         c = "\x{00b6}";
@@ -764,7 +769,9 @@ global mp_hex_view = new(mp_base, {
                     if (ord(c) < 32 || ord(c) > 126)
                         c = "\x{00b7}";
 
-                    push(av, mp.colors.word2.attr, c);
+                    push(av, a, c);
+
+                    o++;
                 }
 
                 while (n < bpl) {
@@ -794,6 +801,8 @@ global mp_hex_view = new(mp_base, {
                 local o = d.f_offset + 1;
                 local found = 0;
 
+                mp.busy(1);
+
                 while (!found && o < max) {
                     local n;
                     fseek(f, o, 0);
@@ -813,12 +822,15 @@ global mp_hex_view = new(mp_base, {
                     o++;
                 }
 
+                mp.busy(0);
+
                 if (found) {
-                    d.f_offset  = d.offset = o;
+                    d.f_offset  = o - d.data->size() + 1;
                     d.f_size    = d.data->size();
+                    d.offset    = d.f_offset;
                 }
                 else
-                    d.f_size    = 0;
+                    mp.alert(L("Not found."));
 
                 close(f);
             },
