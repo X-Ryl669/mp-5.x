@@ -736,16 +736,27 @@ global mp_hex_view = new(mp_base, {
             fseek(f, offset, 0);
 
             while (size(out) < mp.window.ty) {
-                local nv, av, n, c;
+                local ov, nv, av, n, c;
 
-                nv = av = '';
-                local ov = sprintf("%06X", ftell(f));
+                nv = [];
+                av = [
+                    mp.colors.word2.attr,
+                    ' | '
+                ];
+
+                ov = [
+                    mp.colors.word1.attr,
+                    sprintf("| %06X |", ftell(f))
+                ];
 
                 for (n = 0; n < bpl; n++) {
                     if ((c = getchar(f)) == NULL)
                         break;
 
-                    nv = nv ~ sprintf(" %02X", ord(c));
+                    push(nv,
+                        mp.colors.normal.attr,
+                        sprintf(" %02X", ord(c))
+                    );
 
                     if (ord(c) == 0x0a)
                         c = "\x{00b6}";
@@ -753,22 +764,16 @@ global mp_hex_view = new(mp_base, {
                     if (ord(c) < 32 || ord(c) > 126)
                         c = "\x{00b7}";
 
-                    av = av ~ c;
+                    push(av, mp.colors.word2.attr, c);
                 }
 
                 while (n < bpl) {
-                    nv = nv ~ '   ';
-                    av = av ~ ' ';
+                    push(nv, mp.colors.normal.attr, '   ');
+                    push(av, mp.colors.word2.attr,  ' ');
                     n++;
                 }
 
-                push(out,
-                    [
-                        mp.colors.word1.attr, '| ' ~ ov ~ ' |',
-                        mp.colors.normal.attr, nv,
-                        mp.colors.word2.attr, ' | ' ~ av ~ ' |'
-                    ]
-                );
+                push(out, ov->join(nv)->join(av));
 
                 if (c == NULL)
                     break;
