@@ -802,14 +802,18 @@ global mp_hex_view = new(mp_base, {
                             found = 0;
                     }
 
+                    if (n < d.data->size())
+                        found = 0;
+
                     o++;
                 }
 
                 if (found) {
-                    d.f_offset  = o;
+                    d.f_offset  = d.offset = o;
                     d.f_size    = d.data->size();
-                    d.offset    = sprintf("%d", o / d.bpl) * d.bpl;
                 }
+                else
+                    d.f_size    = 0;
 
                 close(f);
             },
