@@ -761,7 +761,11 @@ global mp_hex_view = new(mp_base, {
                     else
                         a = mp.colors.normal.attr;
 
-                    push(nv, a, sprintf(" %02X", ord(c)));
+                    if (o == f_offset)
+                        push(nv, mp.colors.normal.attr, ' ',
+                            a, sprintf("%02X", ord(c)));
+                    else
+                        push(nv, a, sprintf(" %02X", ord(c)));
 
                     if (ord(c) == 0x0a)
                         c = "\x{00b6}";
