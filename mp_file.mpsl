@@ -666,6 +666,24 @@ sub mp.open(filename, password)
 
 /** hexadecimal viewer object **/
 
+sub join_by_attr(line)
+{
+    local r = [ line->shift(), line->shift() ];
+
+    while (line->size()) {
+        local a = line->shift();
+        local s = line->shift();
+
+        if (r[-2] == a)
+            r[-1] = r[-1] ~ s;
+        else
+            push(r, a, s);
+    }
+
+    return r;
+}
+
+
 global mp_hex_view = new(mp_base, {
         name:           '<hex view>',
         offset:         0,
@@ -784,7 +802,7 @@ global mp_hex_view = new(mp_base, {
                     n++;
                 }
 
-                push(out, ov->join(nv)->join(av));
+                push(out, ov->join(nv)->join(av)->join_by_attr());
 
                 if (c == NULL)
                     break;
