@@ -170,8 +170,7 @@ mp.actions['about'] = sub {
     "along with this program; if not, write to the Free Software Foundation,\n"\
     "Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.\n"\
     "\n"\
-    "Home page: http://triptico.com/software/mp.html\n"\
-    "Mailing list: mp-subscribe@lists.triptico.com\n");
+    "Home page: http://triptico.com/software/mp.html\n");
 
     local mpdm = MPDM();
     msg = sprintf(msg, mp.VERSION, (mp_drv.id || 'unknown'), mpdm.version, MPSL.VERSION);
