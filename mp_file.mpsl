@@ -818,37 +818,15 @@ global mp_hex_view = new(mp_base, {
         actions:    {
             seek_next:  sub (d) {
                 local f = open(d.name, "rb");
-                fseek(f, 0, 2);
-                local max = ftell(f) - d.data->size();
-                local o = d.f_offset + 1;
-                local found = 0;
+                fseek(f, d.f_offset + 1);
 
                 mp.busy(1);
-
-                while (!found && o < max) {
-                    local n;
-                    fseek(f, o, 0);
-
-                    found = 1;
-
-                    for (n = 0; found && n < d.data->size(); n++) {
-                        local c = getchar(f);
-
-                        if (c == NULL || ord(c) != d.data[n])
-                            found = 0;
-                    }
-
-                    if (n < d.data->size())
-                        found = 0;
-
-                    o++;
-                }
-
+                local found = mp_c.search_hex(f, d.data);
                 mp.busy(0);
 
                 if (found) {
-                    d.f_offset  = o - 1;
-                    d.f_size    = d.data->size();
+                    d.f_offset  = ftell(f);
+                    d.f_size    = d.data->size() / 2;
                     d.offset    = d.f_offset;
                 }
                 else
@@ -869,19 +847,8 @@ global mp_hex_view = new(mp_base, {
                 );
 
                 if (t != NULL) {
-                    local s = t[0];
-
-                    d.data = [];
-
-                    /* expand hexstring to an array */
-                    while (s->size() > 0) {
-                        t = splice(s, NULL, 0, 2);
-                        push(d.data, '0x' ~ t[1]);
-                        s = t[0];
-                    }
-
-                    d.f_offset = d.offset;
-
+                    d.data = t[0];
+                    d.f_offset = d.offset - 1;
                     d.actions.seek_next(d);
                 }
             }

@@ -1150,6 +1150,9 @@ mpdm_t mp_c_search_hex(mpdm_t args, mpdm_t ctxt)
         }
     }
 
+    if (found)
+        fseek(f, o, 0);
+
     free(ptr);
 
     return MPDM_I(found);
