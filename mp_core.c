@@ -1101,6 +1101,61 @@ mpdm_t mp_c_plain_load(mpdm_t args, mpdm_t ctxt)
 }
 
 
+mpdm_t mp_c_search_hex(mpdm_t args, mpdm_t ctxt)
+/* search the hex string str in the file */
+{
+    mpdm_t fd = mpdm_aget(args, 0);
+    mpdm_t str = mpdm_aget(args, 1);
+    FILE *f = mpdm_get_filehandle(fd);
+    wchar_t *s = mpdm_string(str);
+    int n = 0;
+    char *ptr;
+    off_t o;
+    int found = 0;
+
+    /* parse str into a binary buffer */
+    ptr = malloc(wcslen(s) + 1);
+    while (s[0] && s[1]) {
+        char tmp[3];
+        int c;
+
+        tmp[0] = (char)s[0];
+        tmp[1] = (char)s[1];
+        sscanf(tmp, "%02x", &c);
+
+        ptr[n++] = (char) c;
+        s += 2;
+    }
+    ptr[n] = 0;
+
+    /* start searching */
+    o = ftell(f);
+    while (!found && !feof(f)) {
+        int c;
+
+        fseek(f, o, 0);
+        n = 0;
+
+        while (!found && (c = fgetc(f)) != EOF) {
+            if (c == ptr[n]) {
+                n++;
+
+                if (ptr[n] == '\0')
+                    found = 1;
+            }
+            else {
+                o++;
+                break;
+            }
+        }
+    }
+
+    free(ptr);
+
+    return MPDM_I(found);
+}
+
+
 void mp_startup(int argc, char *argv[])
 {
     mpdm_t INC;
@@ -1124,6 +1179,7 @@ void mp_startup(int argc, char *argv[])
     mpdm_hset_s(mp_c, L"plain_load",        MPDM_X(mp_c_plain_load));
     mpdm_hset_s(mp_c, L"exit_requested",    MPDM_X(mp_c_exit_requested));
     mpdm_hset_s(mp_c, L"render",            MPDM_X(mp_c_render));
+    mpdm_hset_s(mp_c, L"search_hex",        MPDM_X(mp_c_search_hex));
 
     /* creates the INC (executable path) array */
     INC = mpdm_hset_s(mpdm_root(), L"INC", MPDM_A(0));
