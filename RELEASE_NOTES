@@ -4,6 +4,8 @@ Minimum Profit Release Notes
 5.2.5
 -----
 
+ - New features:
+   - Hex view is searchable.
  - Fixed bugs:
    - Avoid crashes in `play_macro' action.
    - Fixed failing menus on Qt4.
