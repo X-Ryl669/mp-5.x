@@ -821,6 +821,56 @@ mp.syntax.grutatxt = {
 };
 
 
+mp.syntax.js = {
+    id:         'js',
+    name:       'JavaScript',
+    filenames:  [
+        '/\.js$/i'
+    ],
+    defs:       [
+        'word1', [
+            mp.syn_token_list(
+                [
+                    "break", "case", "catch", "continue", "debugger",
+                    "default", "delete", "do", "else", "finally",
+                    "for", "function", "if", "in", "instanceof",
+                    "return", "switch", "throw", "try", "while", "with"
+                ]
+            )
+        ],
+        'word2', [
+            mp.syn_token_list(
+                [
+                    "new", "this", "typeof", "var", "void"
+                ]
+            )
+        ],
+        'word3', [
+            '/[-=<>:\?\+\*\/\!\%&\|~\^\.\{\}\(\)\[]+/',
+            '/]/'
+        ],
+        'quotes', [
+            /* from http://ad.hominem.org/log/2005/05/quoted_strings.php */
+            "/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/", /* double-quoted strings */
+            "/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",     /* single-quoted strings */
+            "/\b-?[0-9]+\b/",                           /* numbers */
+            "/\b[0-9]+e[0-9]+\b/",                      /* numbers in exp format */
+            "/\b0[0-7]+\b/",                            /* octal numbers */
+            "/\b0x[0-9a-f]+\b/i",                       /* hex numbers */
+            "/\b(true|false|null)\b/"                   /* symbolic constant names */
+        ],
+        'comments', [
+            [ '|/\*|', '|\*/|' ]                       /* C-like */
+        ],
+        'documentation', [
+            [ "|/\*\*\n|", '|\*/|' ],                   /* mp_doccer */
+            '/^/\*\*.*\*\*/$/m'                         /* section mark */
+        ]
+    ],
+    section:    [ '/(^\/\*\*.*\*\*\/$|^#pragma mark|^[A-Za-z_])/' ]
+};
+
+
 /** code **/
 
 sub mp_doc.detect_syntax(doc)

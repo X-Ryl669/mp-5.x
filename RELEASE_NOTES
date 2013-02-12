@@ -6,6 +6,7 @@ Minimum Profit Release Notes
 
  - New features:
    - Hex view is searchable.
+   - New syntax highlight for JavaScript.
  - Fixed bugs:
    - Avoid crashes in `play_macro' action.
    - Fixed failing menus on Qt4.
