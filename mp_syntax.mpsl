@@ -860,7 +860,8 @@ mp.syntax.js = {
             "/\b(true|false|null)\b/"                   /* symbolic constant names */
         ],
         'comments', [
-            [ '|/\*|', '|\*/|' ]                       /* C-like */
+            [ '|/\*|', '|\*/|' ],                       /* C-like */
+            '|//.*$|m',                                 /* C++ */
         ],
         'documentation', [
             [ "|/\*\*\n|", '|\*/|' ],                   /* mp_doccer */
