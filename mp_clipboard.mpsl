@@ -121,11 +121,16 @@ sub mp_doc.mark(doc)
 
     if (txt.mark == NULL) {
         /* no mark; create one */
-        txt.mark = {};
-        txt.mark.ax = txt.mark.bx = txt.mark.ex = txt.x;
-        txt.mark.ay = txt.mark.by = txt.mark.ey = txt.y;
-        txt.mark.vertical = 0;
-        txt.mark.incomplete = 1;
+        txt.mark = {
+            ax:         txt.x,
+            bx:         txt.x,
+            ex:         txt.x,
+            ay:         txt.y,
+            by:         txt.y,
+            ey:         txt.y,
+            vertical:   0,
+            incomplete: 1
+        };
     }
     else {
         /* mark exists; extend current one */
@@ -134,17 +139,21 @@ sub mp_doc.mark(doc)
             if (txt.y < txt.mark.ay ||
                 (txt.y == txt.mark.ay && txt.x < txt.mark.ax)) {
                 /* move the beginning of the block */
-                txt.mark.bx = txt.x;
-                txt.mark.by = txt.y;
-                txt.mark.ex = txt.mark.ax;
-                txt.mark.ey = txt.mark.ay;
+                txt.mark ~= {
+                    bx: txt.x,
+                    by: txt.y,
+                    ex: txt.mark.ax,
+                    ey: txt.mark.ay
+                };
             }
             else {
                 /* move the end of the block */
-                txt.mark.ex = txt.x;
-                txt.mark.ey = txt.y;
-                txt.mark.bx = txt.mark.ax;
-                txt.mark.by = txt.mark.ay;
+                txt.mark ~= {
+                    ex: txt.x,
+                    ey: txt.y,
+                    bx: txt.mark.ax,
+                    by: txt.mark.ay
+                };
             }
         }
         else {
