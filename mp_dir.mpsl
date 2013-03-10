@@ -91,7 +91,7 @@ sub mp_doc_dir.save(doc)
 
     /* rename changed files */
     foreach (l, doc.txt.lines) {
-        local p = l->sscanf("%d: %s");
+        local p = l->sscanf("%d: %S");
         local n;
 
         if (size(p) == 2 && (n = p[0]) > 0 && p[1]) {
