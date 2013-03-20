@@ -313,47 +313,47 @@ global mp_pipes = new(mp_base, {
         },
         pieces: [
             {
-                shape:  [' # ', ' ##', '   '],
+                shape:  [" \x{2551} ", " \x{255a}\x{2550}", "   "],
                 out:    { D: 'R', L: 'U' },
                 next:   1
             },
             {
-                shape:  ['   ', ' ##', ' # '],
+                shape:  ["   ", " \x{2554}\x{2550}", " \x{2551} "],
                 out:    { U: 'R', L: 'D' },
                 next:   2
             },
             {
-                shape:  ['   ', '## ', ' # '],
+                shape:  ["   ", "\x{2550}\x{2557} ", " \x{2551} "],
                 out:    { U: 'L', R: 'D' },
                 next:   3
             },
             {
-                shape:  [' # ', '## ', '   '],
+                shape:  [" \x{2551} ", "\x{2550}\x{255d} ", "   "],
                 out:    { R: 'U', D: 'L' },
                 next:   0
             },
             {
-                shape:  [' # ', ' # ', ' # '],
+                shape:  [" \x{2551} ", " \x{2551} ", " \x{2551} "],
                 out:    { U: 'U', D: 'D' },
                 next:   5
             },
             {
-                shape:  ['   ', '###', '   '],
+                shape:  ["   ", "\x{2550}\x{2550}\x{2550}", "   "],
                 out:    { R: 'R', L: 'L' },
                 next:   4
             },
             { /* blank */
-                shape:  ['   ', '   ', '   '],
+                shape:  ["   ", "   ", "   "],
                 out:    {},
                 next:   6
             },
             { /* entry pipe */
-                shape:  ['| |', '\ /', ' # '],
+                shape:  ["\x{2551} \x{2551}", "\\ /", " \x{2551} "],
                 out:    { D: 'D' },
                 next:   7
             },
             { /* out pipe */
-                shape:  [' # ', ' # ', '/ \'],
+                shape:  [" \x{2551} ", " \x{2551} ", "/ \\"],
                 out:    { D: 'WIN' },
                 next:   8
             }
