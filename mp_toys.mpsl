@@ -215,6 +215,8 @@ global mp_pipes = new(mp_base, {
             return pipes;
         },
         keypress:   sub (pipes, keycode) {
+            local toggle = 0;
+
             pipes->init();
 
             if (keycode eq 'cursor-up' && y > 1)
@@ -225,11 +227,24 @@ global mp_pipes = new(mp_base, {
                 x--;
             if (keycode eq 'cursor-right' && x < wx - 1)
                 x++;
-            if (keycode eq 'enter') {
+            if (keycode eq 'enter')
+                toggle = 1;
+            if (keycode eq 'mouse-left-button') {
+                local ty = sprintf("%d", mp.mouse_y / 3);
+
+                if (ty >= 1 && ty < wy) {
+                    local tx = sprintf("%d", mp.mouse_x / 3);
+
+                    if (tx >= 0 && tx < wx) {
+                        x = tx; y = ty;
+                        toggle = 1;
+                    }
+                }
+            }
+
+            if (toggle) {
                 local n = game_map[y][x];
-
                 game_map[y][x] = pieces[n].next;
-
                 pipes->verify();
             }
 
