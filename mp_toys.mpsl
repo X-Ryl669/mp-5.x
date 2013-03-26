@@ -190,7 +190,7 @@ global mp_pipes = new(mp_base, {
 
                 /* convert to integers */
                 wx = sprintf('%d', ((tx - 2) / 3));
-                wy = sprintf('%d', (((ty - 1) / 3) - 1));
+                wy = sprintf('%d', (((ty - 1) / 2) - 1));
 
                 sx = random(wx);
 
@@ -230,7 +230,7 @@ global mp_pipes = new(mp_base, {
             if (keycode eq 'enter')
                 toggle = 1;
             if (keycode eq 'mouse-left-button') {
-                local ty = sprintf("%d", mp.mouse_y / 3);
+                local ty = sprintf("%d", mp.mouse_y / 2);
 
                 if (ty >= 1 && ty < wy) {
                     local tx = sprintf("%d", mp.mouse_x / 3);
@@ -288,7 +288,6 @@ global mp_pipes = new(mp_base, {
             foreach (n, [0 .. wy]) {
                 local l0 = [];
                 local l1 = [];
-                local l2 = [];
 
                 foreach (m, [0 .. (wx - 1)]) {
                     local p = game_map[n][m];
@@ -302,10 +301,9 @@ global mp_pipes = new(mp_base, {
 
                     push(l0, c, s[0]);
                     push(l1, c, s[1]);
-                    push(l2, c, s[2]);
                 }
 
-                push(out, l0, l1, l2);
+                push(out, l0, l1);
             }
 
             if (state eq 'WON') {
@@ -328,47 +326,47 @@ global mp_pipes = new(mp_base, {
         },
         pieces: [
             {
-                shape:  [" \x{2551} ", " \x{255a}\x{2550}", "   "],
+                shape:  ["\x{2502} \x{2514}", "\x{2514}\x{2500}\x{2500}"],
                 out:    { D: 'R', L: 'U' },
                 next:   1
             },
             {
-                shape:  ["   ", " \x{2554}\x{2550}", " \x{2551} "],
+                shape:  ["\x{250c}\x{2500}\x{2500}", "\x{2502} \x{250c}"],
                 out:    { U: 'R', L: 'D' },
                 next:   2
             },
             {
-                shape:  ["   ", "\x{2550}\x{2557} ", " \x{2551} "],
+                shape:  ["\x{2500}\x{2500}\x{2510}", "\x{2510} \x{2502}"],
                 out:    { U: 'L', R: 'D' },
                 next:   3
             },
             {
-                shape:  [" \x{2551} ", "\x{2550}\x{255d} ", "   "],
+                shape:  ["\x{2518} \x{2502}", "\x{2500}\x{2500}\x{2518}"],
                 out:    { R: 'U', D: 'L' },
                 next:   0
             },
             {
-                shape:  [" \x{2551} ", " \x{2551} ", " \x{2551} "],
+                shape:  ["\x{2502} \x{2502}", "\x{2502} \x{2502}"],
                 out:    { U: 'U', D: 'D' },
                 next:   5
             },
             {
-                shape:  ["   ", "\x{2550}\x{2550}\x{2550}", "   "],
+                shape:  ["\x{2500}\x{2500}\x{2500}", "\x{2500}\x{2500}\x{2500}"],
                 out:    { R: 'R', L: 'L' },
                 next:   4
             },
             { /* blank */
-                shape:  ["   ", "   ", "   "],
+                shape:  ["   ", "   "],
                 out:    {},
                 next:   6
             },
             { /* entry pipe */
-                shape:  ["\x{2551} \x{2551}", "\\ /", " \x{2551} "],
+                shape:  ["\x{2502} \x{2502}", "\\ /"],
                 out:    { D: 'D' },
                 next:   7
             },
             { /* out pipe */
-                shape:  [" \x{2551} ", " \x{2551} ", "/ \\"],
+                shape:  ["\x{2502} \x{2502}", "/ \\"],
                 out:    { D: 'WIN' },
                 next:   8
             }
