@@ -405,6 +405,9 @@ sub mp.grep(rx, spec, base, rec, r)
     if (spec eq '')
         spec = NULL;
 
+    if (base eq '')
+        base = NULL;
+
     all = glob(spec, base);
 
     if (r == NULL)
