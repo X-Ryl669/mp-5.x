@@ -5,7 +5,7 @@
 
     Syntax highlight definitions.
 
-    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2013 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -504,7 +504,7 @@ mp.syntax.html = {
 				"value", "action", "width", "height",
 				"content", "http-equiv", "src", "alt",
 				"bgcolor", "text", "link", "vlink", "alink",
-				"media" ])
+				"media", "id", "rel" ])
 		],
 		'quotes',	[
 			"/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/",	/* double-quoted strings */
