@@ -1,6 +1,13 @@
 Minimum Profit Release Notes
 ============================
 
+5.2.7
+-----
+
+ - New features:
+   - `open_under_cursor' also works over diff file marks (those
+     starting with @@).
+
 5.2.6
 -----
 

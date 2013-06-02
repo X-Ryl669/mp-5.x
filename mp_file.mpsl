@@ -290,6 +290,18 @@ mp.actions['close_all'] = sub {
 mp_doc.actions['open_under_cursor'] = sub (d) {
     local w;
 
+    if (d.txt.lines[d.txt.y]->regex('/^@@ /')) {
+        /* it's a diff mark */
+
+        /* pick line */
+        local l = d.txt.lines[d.txt.y]->regex('/[0-9]+/');
+
+        /* pick filename */
+        local f = d.txt.lines[d.txt.y - 1]->regex('/[^\/]+$/');
+
+        d = mp.open(f ~ ':' ~ l ~ ':');
+    }
+    else
     if ((w = d->get_word("/[^ \t]+/")) != NULL)
         d = mp.open(w);
 
