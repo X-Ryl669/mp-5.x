@@ -661,7 +661,7 @@ mp.syntax.diff = {
         'word2',    [ '/^\-.+$/m' ],
         'quotes',   [ '/^@@.+@@.*$/m' ]
     ],
-    section:        [ '/^--- ', '/^@@/' ],
+    section:        [ '/^@@/' ],
     detect:         sub (d) {
         local r, n;
 

@@ -296,8 +296,8 @@ mp_doc.actions['open_under_cursor'] = sub (d) {
         /* pick line */
         local l = d.txt.lines[d.txt.y]->regex('/[0-9]+/');
 
-        /* pick filename */
-        local f = d.txt.lines[d.txt.y - 1]->regex('/[^\/]+$/');
+        /* pick filename (stripping mark from previous line) */
+        local f = d.txt.lines[d.txt.y - 1]->sregex('/^\+\+\+ .\//');
 
         d = mp.open(f ~ ':' ~ l ~ ':');
     }
