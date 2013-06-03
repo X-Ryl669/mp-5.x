@@ -980,11 +980,12 @@ static mpdm_t drw_draw(mpdm_t doc, int optimize)
     /* highlight the matching paren */
     drw_matching_paren();
 
-    drw_remap_basic_vwrap();
-
     /* convert to an array of string / atribute pairs */
-    if (drw_1.vwrap)
-        r = drw_vwrap();
+    if (drw_1.vwrap) {
+        drw_remap_basic_vwrap();
+        r = drw_remap_to_array();
+//        r = drw_vwrap();
+    }
     else
         r = drw_as_array();
 
