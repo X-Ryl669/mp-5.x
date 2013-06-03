@@ -84,6 +84,11 @@ static struct {
     int mark_offset;            /* offset to the marked block */
     int mark_size;              /* size of mark_o_attr */
     char *mark_o_attr;          /* saved attributes for the mark */
+
+    wchar_t *cmap;
+    int *amap;
+    int *vx2x;
+    int *vy2y;
 } drw_2;
 
 /** code **/
@@ -307,6 +312,13 @@ static int drw_prepare(mpdm_t doc)
     memset(drw_2.attrs, drw_1.normal_attr, drw_2.size + 1);
 
     drw_2.visible = drw_line_offset(drw_1.vy);
+
+    /* (re)create the maps */
+    n = drw_1.tx * drw_1.ty;
+    drw_2.cmap  = realloc(drw_2.cmap, n * sizeof(wchar_t));
+    drw_2.amap  = realloc(drw_2.amap, n * sizeof(int));
+    drw_2.vx2x  = realloc(drw_2.vx2x, n * sizeof(int));
+    drw_2.vy2y  = realloc(drw_2.vy2y, n * sizeof(int));
 
     return 1;
 }
@@ -666,6 +678,90 @@ static wchar_t drw_char(wchar_t c)
 }
 
 
+static void drw_map_1(int mx, int my, wchar_t c, int a, int x, int y)
+{
+    int o = mx + my * drw_1.tx;
+
+    drw_2.cmap[o] = c;
+    drw_2.amap[o] = a;
+    drw_2.vx2x[o] = x;
+    drw_2.vy2y[o] = y;
+}
+
+
+static void drw_remap_basic_vwrap(void)
+{
+    int i = drw_2.offsets[drw_1.p_lines];
+    int mx, my;
+    int x, y;
+
+    x = 0;
+    y = drw_1.vy;
+
+    for (my = 0; my < drw_1.ty; my++) {
+        wchar_t c = ' ';
+        mx = 0;
+
+        while (mx < drw_1.tx) {
+            c = drw_2.ptr[i];
+            int t = drw_wcwidth(x, c);
+            int n;
+
+            if (c == '\0')
+                break;
+
+            for (n = 0; n < t && mx < drw_1.tx; n++)
+                drw_map_1(mx++, my, drw_char(c), drw_2.attrs[i], x++, y);
+
+            i++;
+
+            if (c == '\n')
+                break;
+        }
+
+        while (mx < drw_1.tx)
+            drw_map_1(mx++, my, '.', -1, x, y);
+
+        if (c == '\n') {
+            x = 0;
+            y++;
+        }
+    }
+}
+
+
+static mpdm_t drw_remap_to_array(void)
+{
+    mpdm_t r = mpdm_ref(MPDM_A(0));
+    wchar_t *line = malloc((drw_1.tx + 1) * sizeof(wchar_t));
+    int my;
+
+    for (my = 0; my < drw_1.ty; my++) {
+        mpdm_t l = NULL;
+        int o = my * drw_1.tx;
+        int mx = 0;
+
+        while (mx < drw_1.tx && drw_2.amap[o] != -1) {
+            int i = 0;
+            int a = drw_2.amap[o];
+
+            while (a == drw_2.amap[o] && mx++ < drw_1.tx)
+                line[i++] = drw_2.cmap[o++];
+
+            line[i] = L'\0';
+
+            l = drw_push_pair(l, i, a, line);
+        }
+
+        mpdm_push(r, l);
+    }
+
+    free(line);
+
+    return mpdm_unrefnd(r);
+}
+
+
 static mpdm_t drw_line(int line)
 /* creates a list of attribute / string pairs for the current line */
 {
@@ -883,6 +979,8 @@ static mpdm_t drw_draw(mpdm_t doc, int optimize)
 
     /* highlight the matching paren */
     drw_matching_paren();
+
+    drw_remap_basic_vwrap();
 
     /* convert to an array of string / atribute pairs */
     if (drw_1.vwrap)
