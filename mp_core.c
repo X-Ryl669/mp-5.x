@@ -711,12 +711,14 @@ static void drw_remap_basic_vwrap(void)
                 break;
 
             for (n = 0; n < t && mx < drw_1.tx; n++)
-                drw_map_1(mx++, my, drw_char(c), drw_2.attrs[i], x++, y);
+                drw_map_1(mx++, my, drw_char(c), drw_2.attrs[i], x, y);
 
             i++;
 
             if (c == '\n')
                 break;
+
+            x++;
         }
 
         while (mx < drw_1.tx)
@@ -1150,6 +1152,21 @@ mpdm_t mp_c_x2vx(mpdm_t args, mpdm_t ctxt)
                (mpdm_aget(args, 0), mpdm_ival(mpdm_aget(args, 1))));
 }
 
+
+mpdm_t mp_c_vpos2pos(mpdm_t args, mpdm_t ctxt)
+{
+    int x = mpdm_ival(mpdm_aget(args, 0));
+    int y = mpdm_ival(mpdm_aget(args, 1));
+    mpdm_t r = mpdm_ref(MPDM_A(2));
+    int i = x + y * drw_1.tx;
+
+    mpdm_aset(r, MPDM_I(drw_2.vx2x[i]), 0);
+    mpdm_aset(r, MPDM_I(drw_2.vy2y[i]), 1);
+
+    return mpdm_unrefnd(r);
+}
+
+
 mpdm_t mp_c_plain_load(mpdm_t args, mpdm_t ctxt)
 /* loads a plain file into an array (highly optimized one) */
 {
@@ -1277,6 +1294,7 @@ void mp_startup(int argc, char *argv[])
     mpdm_hset_s(mp_c, L"VERSION",           MPDM_S(L"" VERSION));
     mpdm_hset_s(mp_c, L"x2vx",              MPDM_X(mp_c_x2vx));
     mpdm_hset_s(mp_c, L"vx2x",              MPDM_X(mp_c_vx2x));
+    mpdm_hset_s(mp_c, L"vpos2pos",          MPDM_X(mp_c_vpos2pos));
     mpdm_hset_s(mp_c, L"exit",              MPDM_X(mp_c_exit));
     mpdm_hset_s(mp_c, L"plain_load",        MPDM_X(mp_c_plain_load));
     mpdm_hset_s(mp_c, L"exit_requested",    MPDM_X(mp_c_exit_requested));
