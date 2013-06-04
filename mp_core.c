@@ -699,12 +699,12 @@ static void drw_remap_basic_vwrap(void)
     y = drw_1.vy;
 
     for (my = 0; my < drw_1.ty; my++) {
-        wchar_t c = ' ';
+        wchar_t c;
         mx = 0;
 
-        while (mx < drw_1.tx) {
+        do {
             c = drw_2.ptr[i];
-            int t = drw_wcwidth(x, c);
+            int t = drw_wcwidth(mx, c);
             int n;
 
             if (c == '\0')
@@ -719,10 +719,9 @@ static void drw_remap_basic_vwrap(void)
                 break;
 
             x++;
-        }
+        } while (mx < drw_1.tx);
 
-        while (mx < drw_1.tx)
-            drw_map_1(mx++, my, '.', -1, x, y);
+        drw_map_1(mx, my, '.', -1, x, y);
 
         if (c == '\n') {
             x = 0;
