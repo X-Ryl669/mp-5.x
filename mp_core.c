@@ -314,7 +314,7 @@ static int drw_prepare(mpdm_t doc)
     drw_2.visible = drw_line_offset(drw_1.vy);
 
     /* (re)create the maps */
-    n = drw_1.tx * drw_1.ty;
+    n = (drw_1.tx + 1) * drw_1.ty;
     drw_2.cmap  = realloc(drw_2.cmap, n * sizeof(wchar_t));
     drw_2.amap  = realloc(drw_2.amap, n * sizeof(int));
     drw_2.vx2x  = realloc(drw_2.vx2x, n * sizeof(int));
@@ -680,7 +680,7 @@ static wchar_t drw_char(wchar_t c)
 
 static void drw_map_1(int mx, int my, wchar_t c, int a, int x, int y)
 {
-    int o = mx + my * drw_1.tx;
+    int o = mx + my * (drw_1.tx + 1);
 
     drw_2.cmap[o] = c;
     drw_2.amap[o] = a;
@@ -740,7 +740,7 @@ static mpdm_t drw_remap_to_array(void)
 
     for (my = 0; my < drw_1.ty; my++) {
         mpdm_t l = NULL;
-        int o = my * drw_1.tx;
+        int o = my * (drw_1.tx + 1);
         int mx = 0;
 
         while (mx < drw_1.tx && drw_2.amap[o] != -1) {
@@ -1158,7 +1158,7 @@ mpdm_t mp_c_vpos2pos(mpdm_t args, mpdm_t ctxt)
     int x = mpdm_ival(mpdm_aget(args, 0));
     int y = mpdm_ival(mpdm_aget(args, 1));
     mpdm_t r = mpdm_ref(MPDM_A(2));
-    int i = x + y * drw_1.tx;
+    int i = x + y * (drw_1.tx + 1);
 
     mpdm_aset(r, MPDM_I(drw_2.vx2x[i]), 0);
     mpdm_aset(r, MPDM_I(drw_2.vy2y[i]), 1);
