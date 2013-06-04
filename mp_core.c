@@ -689,6 +689,15 @@ static void drw_map_1(int mx, int my, wchar_t c, int a, int x, int y)
 }
 
 
+static void vpos2pos(int mx, int my, int *x, int *y)
+{
+    int o = mx + my * (drw_1.tx + 1);
+
+    *x = drw_2.vx2x[o];
+    *y = drw_2.vy2y[o];
+}
+
+
 static void drw_remap_basic_vwrap(void)
 {
     int i = drw_2.offsets[drw_1.p_lines];
@@ -721,7 +730,8 @@ static void drw_remap_basic_vwrap(void)
             x++;
         } while (mx < drw_1.tx);
 
-        drw_map_1(mx, my, '.', -1, x, y);
+        while (mx < drw_1.tx)
+            drw_map_1(mx++, my, '.', -1, x, y);
 
         if (c == '\n') {
             x = 0;
@@ -1154,13 +1164,14 @@ mpdm_t mp_c_x2vx(mpdm_t args, mpdm_t ctxt)
 
 mpdm_t mp_c_vpos2pos(mpdm_t args, mpdm_t ctxt)
 {
+    mpdm_t r = mpdm_ref(MPDM_A(2));
     int x = mpdm_ival(mpdm_aget(args, 0));
     int y = mpdm_ival(mpdm_aget(args, 1));
-    mpdm_t r = mpdm_ref(MPDM_A(2));
-    int i = x + y * (drw_1.tx + 1);
 
-    mpdm_aset(r, MPDM_I(drw_2.vx2x[i]), 0);
-    mpdm_aset(r, MPDM_I(drw_2.vy2y[i]), 1);
+    vpos2pos(x, y, &x, &y);
+
+    mpdm_aset(r, MPDM_I(x), 0);
+    mpdm_aset(r, MPDM_I(y), 1);
 
     return mpdm_unrefnd(r);
 }
