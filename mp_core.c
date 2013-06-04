@@ -741,6 +741,57 @@ static void drw_remap_basic_vwrap(void)
 }
 
 
+static void drw_remap_truncate(void)
+{
+    int i = drw_2.offsets[drw_1.p_lines];
+    int mx, my;
+    int x, y;
+
+    x = 0;
+    y = drw_1.vy;
+
+    for (my = 0; my < drw_1.ty; my++) {
+        wchar_t c;
+        int ax = 0;
+        mx = 0;
+
+        do {
+            c = drw_2.ptr[i];
+            int t = drw_wcwidth(mx, c);
+            int n;
+
+            if (c == '\0')
+                break;
+
+            for (n = 0; n < t && mx < drw_1.tx; n++) {
+                if (ax >= drw_1.vx)
+                    drw_map_1(mx++, my, drw_char(c), drw_2.attrs[i], x, y);
+                ax++;
+            }
+
+            i++;
+
+            if (c == '\n')
+                break;
+
+            x++;
+
+        } while (mx < drw_1.tx);
+
+        while (mx < drw_1.tx)
+            drw_map_1(mx++, my, '.', -1, x, y);
+
+        while (c != '\n' && c != '\0')
+            c = drw_2.ptr[i++];
+
+        if (c == '\n') {
+            x = 0;
+            y++;
+        }
+    }
+}
+
+
 static mpdm_t drw_remap_to_array(void)
 {
     mpdm_t r = mpdm_ref(MPDM_A(0));
@@ -748,7 +799,7 @@ static mpdm_t drw_remap_to_array(void)
     int my;
 
     for (my = 0; my < drw_1.ty; my++) {
-        mpdm_t l = NULL;
+        mpdm_t l = MPDM_A(0);
         int o = my * (drw_1.tx + 1);
         int mx = 0;
 
@@ -825,65 +876,6 @@ static mpdm_t drw_line(int line)
     }
 
     return drw_push_pair(l, i, a, tmp);
-}
-
-
-static mpdm_t drw_vwrap(void)
-{
-    mpdm_t r = mpdm_ref(MPDM_A(0));
-    int o = drw_2.offsets[drw_1.p_lines];
-    wchar_t tmp[BUF_LINE];
-    wchar_t c;
-
-    while (mpdm_size(r) <= drw_1.ty) {
-        int m, z, a;
-        mpdm_t l = NULL;
-
-        /* find the maximum column with a blank that does not force a wrapping */
-        for (z = drw_1.tx - 1, m = 0; m < drw_1.tx; m++) {
-            if ((c = drw_2.ptr[o + m]) == L' ' || c == L'\t' || c == L'\n' || c == L'\0') {
-                z = m;
-
-                if (c == L'\n' || c == L'\0')
-                    break;
-            }
-        }
-
-        a = drw_2.attrs[o];
-        m = 0;
-
-        /* now create string/attr pairs up to z */
-        while (m <= z) {
-            int i = 0;
-
-            while (m <= z && drw_2.attrs[o] == a) {
-                int n;
-
-                /* take char and size */
-                c = drw_2.ptr[o];
-
-                /* size is 1, unless it's a tab */
-                n = c == L'\t' ? drw_wcwidth(m, c) : 1;
-
-                /* fill the string */
-                for (; n > 0; n--)
-                    tmp[i++] = drw_char(c);
-
-                o++;
-                m++;
-            }
-
-            l = drw_push_pair(l, i, a, tmp);
-            a = drw_2.attrs[o];
-        }
-
-        mpdm_push(r, l);
-
-        if (c == L'\0')
-            break;
-    }
-
-    return mpdm_unrefnd(r);
 }
 
 
@@ -992,10 +984,14 @@ static mpdm_t drw_draw(mpdm_t doc, int optimize)
     drw_matching_paren();
 
     /* convert to an array of string / atribute pairs */
-    if (drw_1.vwrap) {
+    if (drw_1.vwrap == 1) {
         drw_remap_basic_vwrap();
         r = drw_remap_to_array();
-//        r = drw_vwrap();
+    }
+    else
+    if (drw_1.vwrap == 2) {
+        drw_remap_truncate();
+        r = drw_remap_to_array();
     }
     else
         r = drw_as_array();
