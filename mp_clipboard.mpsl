@@ -176,6 +176,12 @@ sub mp_doc.mark(doc)
         txt.mark.incomplete = 0;
     }
 
+    /* if the block has zero size, unmark it */
+    if (txt.mark.incomplete == 0 &&
+        txt.mark.bx == txt.mark.ex &&
+        txt.mark.by == txt.mark.ey)
+        txt.mark = NULL;
+
     return doc;
 }
 

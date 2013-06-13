@@ -9,6 +9,7 @@ Minimum Profit Release Notes
      starting with @@).
  - Fixed bugs:
    - Fixed hexdump search.
+   - Avoid having zero-size marks.
 
 5.2.6
 -----
