@@ -1231,7 +1231,7 @@ mpdm_t mp_c_search_hex(mpdm_t args, mpdm_t ctxt)
     FILE *f = mpdm_get_filehandle(fd);
     wchar_t *s = mpdm_string(str);
     int n = 0;
-    char *ptr;
+    unsigned char *ptr;
     off_t o;
     int found = 0;
 
@@ -1245,7 +1245,7 @@ mpdm_t mp_c_search_hex(mpdm_t args, mpdm_t ctxt)
         tmp[1] = (char)s[1];
         sscanf(tmp, "%02x", &c);
 
-        ptr[n++] = (char) c;
+        ptr[n++] = (unsigned char) c;
         s += 2;
     }
     ptr[n] = 0;
