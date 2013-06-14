@@ -824,82 +824,6 @@ static mpdm_t drw_remap_to_array(void)
 }
 
 
-static mpdm_t drw_line(int line)
-/* creates a list of attribute / string pairs for the current line */
-{
-    mpdm_t l = NULL;
-    int m, i, t, n;
-    int o = drw_2.offsets[line + drw_1.p_lines];
-    int a = drw_2.attrs[o];
-    wchar_t tmp[BUF_LINE];
-    wchar_t c;
-
-    /* loop while not beyond the right margin */
-    for (m = i = 0; m < drw_1.vx + drw_1.tx; m += t, o++) {
-        /* take char and size */
-        c = drw_2.ptr[o];
-        t = drw_wcwidth(m, c);
-
-        /* further the left margin? */
-        if (m >= drw_1.vx) {
-            /* if the attribute is different or we're out of
-               temporary space, push and go on */
-            if (drw_2.attrs[o] != a || i >= BUF_LINE - t - 1) {
-                l = drw_push_pair(l, i, a, tmp);
-                i = 0;
-            }
-
-            /* size is 1, unless it's a tab */
-            n = c == L'\t' ? t : 1;
-
-            c = drw_char(c);
-
-            /* if next char will not fit, use a space */
-            if (m + t > drw_1.vx + drw_1.tx)
-                c = L' ';
-        }
-        else {
-            /* left filler */
-            n = m + t - drw_1.vx;
-            c = L' ';
-        }
-
-        /* fill the string */
-        for (; n > 0; n--)
-            tmp[i++] = c;
-
-        a = drw_2.attrs[o];
-
-        /* end of line? */
-        if (drw_2.ptr[o] == L'\0' || drw_2.ptr[o] == L'\n')
-            break;
-    }
-
-    return drw_push_pair(l, i, a, tmp);
-}
-
-
-static mpdm_t drw_as_array(void)
-/* returns an mpdm array of ty elements, which are also arrays of
-   attribute - string pairs */
-{
-    mpdm_t a;
-    int n;
-
-    /* the array of lines */
-    a = MPDM_A(drw_1.ty);
-    mpdm_ref(a);
-
-    /* push each line */
-    for (n = 0; n < drw_1.ty; n++)
-        mpdm_aset(a, drw_line(n), n);
-
-    mpdm_unrefnd(a);
-
-    return a;
-}
-
-
 static mpdm_t drw_optimize_array(mpdm_t a, int optimize)
 /* optimizes the array, NULLifying all lines that are the same as the last time */
 {
@@ -984,17 +908,12 @@ static mpdm_t drw_draw(mpdm_t doc, int optimize)
     drw_matching_paren();
 
     /* convert to an array of string / atribute pairs */
-    if (drw_1.vwrap == 1) {
+    if (drw_1.vwrap == 1)
         drw_remap_basic_vwrap();
-        r = drw_remap_to_array();
-    }
     else
-    if (drw_1.vwrap == 2) {
         drw_remap_truncate();
-        r = drw_remap_to_array();
-    }
-    else
-        r = drw_as_array();
+
+    r = drw_remap_to_array();
 
     /* optimize */
     r = drw_optimize_array(r, optimize);
