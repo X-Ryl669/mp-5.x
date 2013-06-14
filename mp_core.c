@@ -691,10 +691,24 @@ static void drw_map_1(int mx, int my, wchar_t c, int a, int x, int y)
 
 static void vpos2pos(int mx, int my, int *x, int *y)
 {
-    int o = mx + my * (drw_1.tx + 1);
+    if (my < 0) {
+        /* above top margin: pick previous line */
+        *x = mx;
+        *y = drw_1.vy - 2;
+    }
+    else
+    if (my > drw_1.ty - 1) {
+        /* below bottom margin: pick next line */
+        *x = mx;
+        *y = drw_1.vy + drw_1.ty;
+    }
+    else {
+        /* in range: pick from the map */
+        int o = mx + my * (drw_1.tx + 1);
 
-    *x = drw_2.vx2x[o];
-    *y = drw_2.vy2y[o];
+        *x = drw_2.vx2x[o];
+        *y = drw_2.vy2y[o];
+    }
 }
 
 
