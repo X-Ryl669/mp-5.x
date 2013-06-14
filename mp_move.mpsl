@@ -417,15 +417,10 @@ sub mp_doc.move_word_right(doc)
 sub mp_doc.move_to_coords_xy(doc, x, y)
 /* move the cursor to the character on the visual coords x and y */
 {
-    /* set y */
-    doc->set_y(doc.txt.vy + y);
+    local c = mp_c.vpos2pos(x, y);
 
-    /* calculate the real position in that line
-       where the mouse click seem to be */
-    x = mp_c.vx2x(doc.txt.lines[doc.txt.y], doc.txt.vx + x);
-
-    /* move there */
-    doc->set_x(x);
+    doc->set_y(c[1]);
+    doc->set_x(c[0]);
 }
 
 
