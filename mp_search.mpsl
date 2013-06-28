@@ -26,7 +26,7 @@
 */
 
 /* successful searches will always be shown in this line */
-mp.config.move_seek_to_line = 5;
+mp.config.move_seek_to_line = NULL;
 
 /* grep recursivity */
 mp.config.recursive_grep = 0;
@@ -197,7 +197,7 @@ mp.actdesc['grep']              = LL("Grep (find inside) files...");
  */
 sub mp_doc.search_set_y(doc, y)
 {
-    doc->set_y(y);
+    doc->set_y_keep_vy(y);
 
     /* set always to the same line */
     if (mp.config.move_seek_to_line != NULL &&
