@@ -26,7 +26,7 @@
 */
 
 /* successful searches will always be shown in this line */
-mp.config.move_seek_to_line = NULL;
+mp.config.move_seek_to_line = 5;
 
 /* grep recursivity */
 mp.config.recursive_grep = 0;
