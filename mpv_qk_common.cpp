@@ -882,9 +882,6 @@ void MPArea::mouseReleaseEvent(QMouseEvent * event)
 
 void MPArea::mouseMoveEvent(QMouseEvent * event)
 {
-    static int ox = 0;
-    static int oy = 0;
-
     if (mouse_down) {
         int x, y;
 
@@ -894,14 +891,12 @@ void MPArea::mouseMoveEvent(QMouseEvent * event)
         x = pos.x() / font_width;
         y = pos.y() / font_height;
 
-        if (ox != x && oy != y) {
-            mpdm_hset_s(MP, L"mouse_to_x", MPDM_I(x));
-            mpdm_hset_s(MP, L"mouse_to_y", MPDM_I(y));
+        mpdm_hset_s(MP, L"mouse_to_x", MPDM_I(x));
+        mpdm_hset_s(MP, L"mouse_to_y", MPDM_I(y));
 
-            mp_process_event(MPDM_LS(L"mouse-drag"));
+        mp_process_event(MPDM_LS(L"mouse-drag"));
 
-            area->update();
-        }
+        area->update();
     }
 }
 
