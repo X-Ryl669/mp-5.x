@@ -251,6 +251,22 @@ sub mp_doc.set_y(doc, y)
 }
 
 
+sub mp_doc.set_y_keep_vy(doc, y)
+{
+    local dy = doc.txt.y - doc.txt.vy;
+
+    doc->set_y(y);
+
+    doc.txt.vy = doc.txt.y - dy;
+    if (doc.txt.vy < 0)
+        doc.txt.vy = 0;
+    if (doc.txt.vy + mp.window.ty > size(doc.txt.lines))
+        doc.txt.vy = size(doc.txt.lines) - mp.window.ty;
+
+    return doc;
+}
+
+
 sub mp_doc.move_up(doc)
 /* moves one line up */
 {
@@ -268,14 +284,14 @@ sub mp_doc.move_down(doc)
 sub mp_doc.move_pgup(doc)
 /* moves one page up */
 {
-    doc->set_y(doc.txt.y - mp.window.ty);
+    doc->set_y_keep_vy(doc.txt.y - mp.window.ty);
 }
 
 
 sub mp_doc.move_pgdn(doc)
 /* moves one page down */
 {
-    doc->set_y(doc.txt.y + mp.window.ty);
+    doc->set_y_keep_vy(doc.txt.y + mp.window.ty);
 }
 
 
