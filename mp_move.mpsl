@@ -284,14 +284,14 @@ sub mp_doc.move_down(doc)
 sub mp_doc.move_pgup(doc)
 /* moves one page up */
 {
-    doc->set_y_keep_vy(doc.txt.y - (mp.window.ty - 2));
+    doc->set_y(doc.txt.y - mp.window.ty);
 }
 
 
 sub mp_doc.move_pgdn(doc)
 /* moves one page down */
 {
-    doc->set_y_keep_vy(doc.txt.y + (mp.window.ty - 2));
+    doc->set_y(doc.txt.y + mp.window.ty);
 }
 
 
