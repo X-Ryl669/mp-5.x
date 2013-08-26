@@ -322,6 +322,8 @@ static int drw_prepare(mpdm_t doc)
     drw_2.vx2x  = realloc(drw_2.vx2x, n * sizeof(int));
     drw_2.vy2y  = realloc(drw_2.vy2y, n * sizeof(int));
 
+    drw_2.mx = drw_2.my = -1;
+
     return 1;
 }
 
