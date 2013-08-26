@@ -89,6 +89,8 @@ static struct {
     int *amap;
     int *vx2x;
     int *vy2y;
+    int mx;
+    int my;
 } drw_2;
 
 /** code **/
@@ -686,6 +688,11 @@ static void drw_map_1(int mx, int my, wchar_t c, int a, int x, int y)
     drw_2.amap[o] = a;
     drw_2.vx2x[o] = x;
     drw_2.vy2y[o] = y;
+
+    if (a == drw_1.cursor_attr) {
+        drw_2.mx = mx;
+        drw_2.my = my;
+    }
 }
 
 
