@@ -281,6 +281,18 @@ sub mp_doc.move_down(doc)
 }
 
 
+sub mp_doc.move_below(doc)
+/* moves to the character below the cursor */
+{
+    local txt = doc.txt;
+    local mx, my;
+    my = txt.y - txt.vy;
+    mx = mp_c.x2vx(txt.lines[txt.y], txt.x);
+
+    doc->move_to_coords_xy(mx, my + 1);
+}
+
+
 sub mp_doc.move_pgup(doc)
 /* moves one page up */
 {

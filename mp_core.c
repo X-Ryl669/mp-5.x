@@ -906,7 +906,7 @@ static mpdm_t drw_draw(mpdm_t doc, int optimize)
 /* main document drawing function: takes a document and returns an array of
    arrays of attribute / string pairs */
 {
-    mpdm_t r = NULL;
+    mpdm_t r = NULL, w;
 
     if (drw_prepare(doc)) {
         /* colorize separate words */
@@ -941,6 +941,10 @@ static mpdm_t drw_draw(mpdm_t doc, int optimize)
 
     /* restore the patched attrs */
     drw_restore_attrs();
+
+    w = mpdm_hget_s(MP, L"window");
+    mpdm_hset_s(w, L"mx", MPDM_I(drw_2.mx));
+    mpdm_hset_s(w, L"my", MPDM_I(drw_2.my));
 
     return r;
 }
