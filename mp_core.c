@@ -979,6 +979,7 @@ mpdm_t mp_draw(mpdm_t doc, int optimize)
 int mp_keypress_throttle(int keydown)
 /* processes key acceleration and throttle */
 {
+#ifdef USE_THROTTLE
     static int keydowns = 0;
     static int seq = 0;
     int redraw = 0;
@@ -1002,6 +1003,10 @@ int mp_keypress_throttle(int keydown)
     }
 
     return redraw;
+
+#else /* USE_THROTTLE */
+    return 1;
+#endif /* USE_THROTTLE */
 }
 
 
