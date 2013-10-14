@@ -96,6 +96,12 @@ Set to 1 to store session information in the currently working directory
 instead of in the home directory (default: 0, save sessions in the
 home directory).
 
+mp.config.make_opts
+-------------------
+
+Additional flags for the `make' program (if you have a 4-core CPU, it's
+useful to set it as `-j 4') (default: '').
+
 mp.config.mark_eol
 ------------------
 
@@ -197,6 +203,11 @@ mp.config.tab_size
 ------------------
 
 Tab size in column spaces (default: 8).
+
+mp.config.time_stamp_format
+---------------------------
+
+To be written.
 
 mp.config.undo_levels
 ---------------------

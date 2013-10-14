@@ -25,6 +25,8 @@
 
 */
 
+mp.config.make_opts = '';
+
 /** editor actions **/
 
 mp.actions['build']	= sub {
@@ -105,7 +107,7 @@ sub mp.build_execute(target)
 
     /* pipe through make */
     local p;
-    if ((p = popen('make ' ~ target, 'r')) != NULL) {
+    if ((p = popen('make ' ~ mp.config.make_opts ~ ' ' ~ target, 'r')) != NULL) {
         local l;
 
         while (l = read(p))
