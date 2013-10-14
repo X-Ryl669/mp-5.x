@@ -308,6 +308,14 @@ _Insert template..._
 Shows a list dialog with the names of the templates for the user to
 select one, that will be inserted in the cursor position.
 
+insert_time_stamp
+-----------------
+
+_Insert time stamp_
+
+Inserts a time stamp in the cursor position. The format is the one given
+in the `mp.config.time_stamp_format' configuration directive.
+
 join_paragraph
 --------------
 
@@ -530,6 +538,13 @@ open_dropped_files
 _Open dropped files_ (`dropped-files')
 
 Opens all files dropped by the user from an external file manager.
+
+open_folder
+-----------
+
+_Open folder..._
+
+Opens a folder with the directory editor.
 
 open_templates_file
 -------------------

@@ -207,7 +207,7 @@ Tab size in column spaces (default: 8).
 mp.config.time_stamp_format
 ---------------------------
 
-To be written.
+The format for the time stamp (default: "%a, %d %b %Y %H:%M:%S %z").
 
 mp.config.undo_levels
 ---------------------
