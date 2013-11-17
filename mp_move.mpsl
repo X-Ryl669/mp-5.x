@@ -29,8 +29,8 @@
 
 mp_doc.actions['move_left']         = sub (d) { d->move(d.move_left); };
 mp_doc.actions['move_right']        = sub (d) { d->move(d.move_right); };
-mp_doc.actions['move_up']           = sub (d) { d->move(d.move_above); };
-mp_doc.actions['move_down']         = sub (d) { d->move(d.move_below); };
+mp_doc.actions['move_up']           = sub (d) { d->move(d.move_up); };
+mp_doc.actions['move_down']         = sub (d) { d->move(d.move_down); };
 mp_doc.actions['move_pgup']         = sub (d) { d->move(d.move_pgup); };
 mp_doc.actions['move_pgdn']         = sub (d) { d->move(d.move_pgdn); };
 mp_doc.actions['move_bol']          = sub (d) { d->move(d.move_bol); };
