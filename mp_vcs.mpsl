@@ -43,7 +43,7 @@ global mp_doc_vcs = new(mp_doc, { name: '.COMMIT_MESSAGE' });
 mp.vcs = {
     git: {
         id:     'Git',
-        check:  [ '.git', '../.git', '../../.git' ],
+        check:  [ '.git', '../.git', '../../.git', '../../../.git' ],
         opts:   {
             "git add '%s'"      => NULL,
             'git log'           => { unique_log: 1 },
@@ -62,7 +62,7 @@ mp.vcs = {
     },
     svn: {
         id:     'SVN',
-        check:  [ '.svn' ],
+        check:  [ '.svn', '../.svn', '../../.svn', '../../../.svn' ],
         opts:   {
             'svn diff'          => { unique_log: 1 },
             'svn status'        => NULL,
