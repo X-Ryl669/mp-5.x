@@ -230,7 +230,7 @@ mp.syntax.c = {
 
 mp.syntax.mpsl = {
     id:         'mpsl',
-    name:       'MPSL2',
+    name:       'MPSL',
     filenames:  [ '/\.mpsl?$/i' ],
     defs:       [
         'word1', [
