@@ -167,6 +167,10 @@ sub mp_doc.get_status(doc)
             '%n'    =>  sub { mp.active.title || mp.active.name; },
             '%w'    =>  sub { mp.active()->word_count(); },
             '%e'    =>  sub { mp.active.encoding || ''; },
+            '%u'    =>  sub { sprintf("%04X",
+                            mp.active.txt.lines[mp.active.txt.y]->
+                                slice(mp.active.txt.x, 1)->ord());
+                        },
             '%%'    =>  '%'
         }
     );

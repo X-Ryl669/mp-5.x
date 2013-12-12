@@ -12,6 +12,8 @@ Minimum Profit Release Notes
    - New configuration directive `make_opts', for command line
      options to be added to `make'.
    - Search and replace accepts Unicode chars in \x{HHHH} format.
+   - The status line format string can also include the %u token
+     to show the Unicode codepoint of the character under the cursor.
  - Fixed bugs:
    - Fixed hexdump search.
    - Avoid having zero-size marks.

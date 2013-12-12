@@ -191,6 +191,8 @@ The status format string to be shown in the status line. By default it's
  | %w | Number of words in the current document (or in the        |
  |    | current selection, if any). May be slow.                  |
  +----+-----------------------------------------------------------+
+ | %u | Unicode codepoint of the character under the cursor       |
+ +----+-----------------------------------------------------------+
  | %% | A percent sign                                            |
  +----+-----------------------------------------------------------+
 
