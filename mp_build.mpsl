@@ -5,7 +5,7 @@
 
     A simple IDE-like build system.
 
-    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2013 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -33,14 +33,14 @@ mp.actions['build']	= sub {
     local t, target;
 
     if ((t = mp.build_get_targets()) == NULL)
-        mp.alert(L("No Makefile targets found."));
+        mp.alert(L("No build targets found."));
     else {
         /* more than one target? ask user to pick one */
         if (size(t) > 1) {
             local r = mp.form(
                 [
                     {
-                        label:  L("Makefile target") ~ ':',
+                        label:  L("Build target") ~ ':',
                         type:   'list',
                         list:   t,
                         value:  mp.makefile_target
@@ -50,11 +50,7 @@ mp.actions['build']	= sub {
 
             if (r != NULL) {
                 mp.makefile_target = r[0];
-
-                if (mp.makefile_target == 0)
-                    target = '';
-                else
-                    target = t[mp.makefile_target];
+                target = t[mp.makefile_target];
             }
         }
 
@@ -78,17 +74,21 @@ mp.actdesc['build']             = LL("Build project...");
 sub mp.build_get_targets()
 {
     local r, f;
+    local m = 'make';
+
+    if (mp.config.make_opts)
+        m ~= ' ' ~ mp.config.make_opts;
 
     if ((f = open('Makefile', 'r')) != NULL) {
         local l;
 
-        r = [ '<default>' ];
+        r = [ m ];
 
         while (l = read(f)) {
             local t;
 
             if (t = regex(l, '/^[A-Za-z0-9_\.-]+:/'))
-                push(r, sregex(t, '/:/', ''));
+                push(r, m ~ ' ' ~ sregex(t, '/:/', ''));
         }
 
         close(f);
@@ -100,14 +100,14 @@ sub mp.build_get_targets()
 
 sub mp.build_execute(target)
 {
-    local log = mp.open('<make output>');
+    local log = mp.open('<build output>');
 
     log.txt.lines = [];
     log.txt.y = 0;
 
     /* pipe through make */
     local p;
-    if ((p = popen('make ' ~ mp.config.make_opts ~ ' ' ~ target, 'r')) != NULL) {
+    if ((p = popen(target, 'r')) != NULL) {
         local l;
 
         while (l = read(p))
@@ -128,4 +128,6 @@ sub mp.build_execute(target)
 
         mp.redraw();
     }
+    else
+        mp.alert(sprintf(L("Error executing '%s'"), target));
 }
