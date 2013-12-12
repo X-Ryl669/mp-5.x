@@ -279,10 +279,10 @@ mp.syntax.mpsl = {
     section:    [ '/(^[A-Za-z_]|^\/\*\*.*\*\*\/$)/' ]
 };
 
-mp.syntax.mpsl3 = {
-    id:         'mpsl3',
-    name:       'MPSL3',
-    filenames:  [ '/\.mpsl?$/i' ],
+mp.syntax.nh3 = {
+    id:         'nh3',
+    name:       'nh3',
+    filenames:  [ '/\.nh3?$/i' ],
     defs:       [
         'word1', [
             mp.syn_token_list(
@@ -325,7 +325,7 @@ mp.syntax.mpsl3 = {
         /* take the first line */
         local f = d.txt.lines[0];
 
-        return regex(f, '|^#!.*mpsl3|');
+        return regex(f, '|^#!.*nh3|');
     },
     section:    [ '/(^[A-Za-z_]|^\/\*\*.*\*\*\/$)/' ]
 };
