@@ -474,8 +474,23 @@ sub mp.backslash_codes(s, d)
 /* encodes (d == 0) or decodes (d == 1) backslash codes
    (like \n, \r, etc.) */
 {
-	d && sregex(s, "/[\r\n\t]/g", { "\r" => '\r', "\n" => '\n', "\t" => '\t'}) ||
-		 sregex(s, "/\\\\[rnt]/g", { '\r' => "\r", '\n' => "\n", '\t' => "\t"});
+    local r;
+
+    if (d) {
+        r = s->sregex("/[\r\n\t]/g", { "\r" => '\r', "\n" => '\n', "\t" => '\t'});
+    }
+    else {
+        r = s->
+            sregex("/\\\\[rnt]/g", { '\r' => "\r", '\n' => "\n", '\t' => "\t"})->
+            sregex("/\\\\x\\{[0-9A-Za-z]{4}\\}/g", sub (e) {
+                    /* expand \x{HHHH} to character */
+                    e = ("0x" ~ e->regex("/[0-9A-Za-z]{4}/")) + 0;
+                    chr(e);
+                }
+            );
+    }
+
+    return r;
 }
 
 

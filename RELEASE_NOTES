@@ -11,6 +11,7 @@ Minimum Profit Release Notes
      starting with @@).
    - New configuration directive `make_opts', for command line
      options to be added to `make'.
+   - Search and replace accepts Unicode chars in \x{HHHH} format.
  - Fixed bugs:
    - Fixed hexdump search.
    - Avoid having zero-size marks.
