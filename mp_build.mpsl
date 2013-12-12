@@ -93,6 +93,10 @@ sub mp.build_get_targets()
 
         close(f);
     }
+    else
+    if ((f = mp.active.syntax.build_targets) != NULL) {
+        r = f->map(sub (e) { sprintf(e, mp.active.name); });
+    }
 
     return r;
 }

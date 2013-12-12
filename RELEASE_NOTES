@@ -5,6 +5,8 @@ Minimum Profit Release Notes
 -----
 
  - New features:
+   - File format dependent build targets (to be used if a Makefile
+     is not found in the current directory).
    - `open_under_cursor' also works over diff file marks (those
      starting with @@).
    - New configuration directive `make_opts', for command line

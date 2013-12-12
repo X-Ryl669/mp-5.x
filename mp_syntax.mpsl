@@ -225,7 +225,10 @@ mp.syntax.c = {
             '/^/\*\*.*\*\*/$/m'                         /* section mark */
         ]
     ],
-    section:    [ '/(^\/\*\*.*\*\*\/$|^#pragma mark|^[A-Za-z_])/' ]
+    section:    [ '/(^\/\*\*.*\*\*\/$|^#pragma mark|^[A-Za-z_])/' ],
+    build_targets: [
+        "cc -c %s"
+    ]
 };
 
 mp.syntax.mpsl = {
@@ -327,7 +330,11 @@ mp.syntax.nh3 = {
 
         return regex(f, '|^#!.*nh3|');
     },
-    section:    [ '/(^[A-Za-z_]|^\/\*\*.*\*\*\/$)/' ]
+    section:    [ '/(^[A-Za-z_]|^\/\*\*.*\*\*\/$)/' ],
+    build_targets: [
+        "nh3 %s",
+        "nh3 -t %s"
+    ]
 };
 
 mp.syntax.rc = {
@@ -415,7 +422,11 @@ mp.syntax.perl = {
 		/* is it a 'she-bang' for Perl? */
 		return regex(f, '/^#!\s*/usr/bin/(env )?perl/');
 	},
-	'section'	=>	[ '/(^sub \w+|^package|^## )/' ]
+	'section'	=>	[ '/(^sub \w+|^package|^## )/' ],
+    'build_targets' => [
+        'perl %s',
+        'perl -cw %s'
+    ]
 };
 
 
@@ -465,7 +476,12 @@ mp.syntax.sh = {
 		return regex(f, '/^#!\s*/bin/(sh|bash|csh|dash|ksh)/') ||
 		       regex(f, '/^#!\s*/usr/bin/make -f/');
 	},
-	'section'	=>	[ '/(^\w+\(\))/', '/^[A-Za-z0-9_\.-]+:/' ]
+	'section'	=>	[ '/(^\w+\(\))/', '/^[A-Za-z0-9_\.-]+:/' ],
+    'build_targets' => [
+        'sh %s',
+        'bash %s',
+        'bash -n %s && echo "Syntax OK"'
+    ]
 };
 
 

@@ -139,6 +139,10 @@ The keys in the definition hash are:
    a document. A section is a special area in the document, as a function
    definition, for example. Lines matching this regexes will be shown
    in the `section_list' action form.
+ * build_targets: An array of sprintf() format strings to be used as
+   build targets if a Makefile is not found in the current directory. They
+   should contain a %s format that will be expanded to the current document
+   file name.
 
 The syntax highlight definitions is a list containing color names (keys to
 the `mp.colors' hash) and an array. The array can contain single strings
