@@ -5,6 +5,7 @@
 DRIVERS=""
 DRV_OBJS=""
 APPNAME="mp-5"
+TARGET=""
 
 # gets program version
 VERSION=`cut -f2 -d\" VERSION`
@@ -223,7 +224,7 @@ else
         WITHOUT_GTK=1
         WITHOUT_CURSES=1
         WITHOUT_QT4=1
-        APPNAME=mp-5.exe
+        TARGET=mp-5.exe
     else
         echo "No"
     fi
@@ -430,11 +431,16 @@ fi
 
 echo >> config.h
 
+if [ "$TARGET" = "" ] ; then
+    TARGET="$APPNAME"
+fi
+
 grep DOCS $MPDM/makefile.opts >> makefile.opts
 echo "VERSION=$VERSION" >> makefile.opts
 echo "WINDRES=$WINDRES" >> makefile.opts
 echo "PREFIX=\$(DESTDIR)$PREFIX" >> makefile.opts
 echo "APPNAME=$APPNAME" >> makefile.opts
+echo "TARGET=$TARGET" >> makefile.opts
 echo "DRV_OBJS=$DRV_OBJS" >> makefile.opts
 echo "CCLINK=$CCLINK" >> makefile.opts
 echo >> makefile.opts
