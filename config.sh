@@ -218,13 +218,13 @@ else
         echo "#define CONFOPT_WIN32 1" >> config.h
         echo "OK"
         DRIVERS="win32 $DRIVERS"
-        DRV_OBJS="mpv_win32.o $DRV_OBJS"
+        DRV_OBJS="mpv_win32.o mpv_win32c.o $DRV_OBJS"
         WITHOUT_UNIX_GLOB=1
         WITHOUT_KDE4=1
         WITHOUT_GTK=1
         WITHOUT_CURSES=1
         WITHOUT_QT4=1
-        TARGET=mp-5.exe
+        TARGET="mp-5.exe mp-5c.exe"
     else
         echo "No"
     fi
