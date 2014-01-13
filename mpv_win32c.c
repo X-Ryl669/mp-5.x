@@ -45,6 +45,8 @@ int by;
 int tx;
 int ty;
 
+WORD *win32c_attrs = NULL;
+int normal_attr = 0;
 
 /** code **/
 
@@ -63,6 +65,80 @@ static void update_window_size(void)
     v = mpdm_hget_s(MP, L"window");
     mpdm_hset_s(v, L"tx", MPDM_I(tx));
     mpdm_hset_s(v, L"ty", MPDM_I(ty));
+}
+
+/* 1: red, 2: green, 4: blue */
+static int rgbi[] = { -1, 0, 1, 2, 3, 4, 5, 6, 7 };
+static int rgbp[] = { -1, 0, 1, 2, 3, 4, 5, 6, 7 };
+
+#ifndef COMMON_LVB_REVERSE_VIDEO
+#define COMMON_LVB_REVERSE_VIDEO   0x4000
+#define COMMON_LVB_UNDERSCORE      0x8000
+#endif
+
+static void build_colors(void)
+/* builds the colors */
+{
+    mpdm_t colors;
+    mpdm_t color_names;
+    mpdm_t l;
+    mpdm_t c;
+    int n, s;
+
+    /* gets the color definitions and attribute names */
+    colors      = mpdm_hget_s(MP, L"colors");
+    color_names = mpdm_hget_s(MP, L"color_names");
+
+    l = mpdm_ref(mpdm_keys(colors));
+    s = mpdm_size(l);
+
+    /* redim the structures */
+    win32c_attrs = realloc(win32c_attrs, sizeof(WORD) * s);
+
+    /* loop the colors */
+    for (n = 0; n < s && (c = mpdm_aget(l, n)) != NULL; n++) {
+        mpdm_t d = mpdm_hget(colors, c);
+        mpdm_t v = mpdm_hget_s(d, L"text");
+        int c0, c1;
+    	WORD cp = 0;
+
+        /* store the 'normal' attribute */
+        if (wcscmp(mpdm_string(c), L"normal") == 0)
+            normal_attr = n;
+
+        /* store the attr */
+        mpdm_hset_s(d, L"attr", MPDM_I(n));
+
+        /* get color indexes */
+        if ((c0 = mpdm_seek(color_names, mpdm_aget(v, 0), 1)) == -1 ||
+            (c1 = mpdm_seek(color_names, mpdm_aget(v, 1), 1)) == -1)
+            continue;
+
+        if (c0 == 0) c0 = 8;
+        if (c1 == 0) c1 = 1;
+
+        /* flags */
+        v = mpdm_hget_s(d, L"flags");
+
+        if (mpdm_seek_s(v, L"reverse", 1) != -1) {
+            int t = c0;
+            c0 = c1;
+            c1 = t;
+        }
+        if (mpdm_seek_s(v, L"bright", 1) != -1)
+            cp |= FOREGROUND_INTENSITY;
+
+        if ((rgbi[c0] & 1)) cp |= FOREGROUND_RED;
+        if ((rgbp[c1] & 1)) cp |= BACKGROUND_RED;
+        if ((rgbi[c0] & 2)) cp |= FOREGROUND_GREEN;
+        if ((rgbp[c1] & 2)) cp |= BACKGROUND_GREEN;
+        if ((rgbi[c0] & 4)) cp |= FOREGROUND_BLUE;
+        if ((rgbp[c1] & 4)) cp |= BACKGROUND_BLUE;
+
+        win32c_attrs[n] = cp;
+    }
+
+    mpdm_unref(l);
 }
 
 
@@ -347,10 +423,9 @@ static mpdm_t tui_move(mpdm_t a, mpdm_t ctxt)
 static mpdm_t tui_attr(mpdm_t a, mpdm_t ctxt)
 /* TUI: set attribute for next string */
 {
-//    last_attr = mpdm_ival(mpdm_aget(a, 0));
+    int attr = mpdm_ival(mpdm_aget(a, 0));
 
-//    set_attr();
-
+    SetConsoleTextAttribute(s_out, win32c_attrs[attr]);
     return NULL;
 }
 
@@ -415,7 +490,8 @@ static mpdm_t win32c_doc_draw(mpdm_t args, mpdm_t ctxt)
         bs.Y = by + n;
         SetConsoleCursorPosition(s_out, bs);
 
-        for (c = m = 0; m < mpdm_size(l); m++) {
+        c = 0;
+        for (m = 0; m < mpdm_size(l); m++) {
             int attr;
             mpdm_t s;
 
@@ -423,12 +499,13 @@ static mpdm_t win32c_doc_draw(mpdm_t args, mpdm_t ctxt)
             attr = mpdm_ival(mpdm_aget(l, m++));
             s = mpdm_aget(l, m);
 
-//            wattrset(cw, nc_attrs[attr]);
+            SetConsoleTextAttribute(s_out, win32c_attrs[attr]);
             win32c_addwstr(s);
             c += mpdm_size(s);
         }
 
         DWORD oc;
+        SetConsoleTextAttribute(s_out, win32c_attrs[normal_attr]);
         for (m = c; m < tx; m++)
             WriteConsoleW(s_out, L" ", 1, &oc, 0);
     }
@@ -492,7 +569,7 @@ static mpdm_t win32c_drv_startup(mpdm_t a, mpdm_t ctxt)
     SetConsoleMode(s_out, ENABLE_PROCESSED_OUTPUT);
 
     register_functions();
-
+    build_colors();
     update_window_size();
 
     return NULL;
