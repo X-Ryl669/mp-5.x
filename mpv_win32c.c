@@ -184,7 +184,7 @@ static mpdm_t win32c_getkey(mpdm_t args, mpdm_t ctxt)
                             f = L"backspace";
                             break;
                         case ctrl('i'):
-                            f = L"tab";
+                            f = (ev.Event.KeyEvent.dwControlKeyState & SHIFT_PRESSED) ? L"shift-tab" : L"tab";
                             break;
                         case ctrl('m'):
                             f = L"enter";
@@ -439,7 +439,7 @@ static mpdm_t win32c_doc_draw(mpdm_t args, mpdm_t ctxt)
         SetConsoleCursorPosition(s_out, bs);
 
         c = 0;
-        for (m = 0; m < mpdm_size(l); m++) {
+        for (m = 0; m < mpdm_size(l) - 1; m++) {
             int attr;
             mpdm_t s;
 
