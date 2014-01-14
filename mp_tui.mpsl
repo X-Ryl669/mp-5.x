@@ -563,17 +563,16 @@ sub mp_drv.menu()
 
 		/* if the panel will surpass the right margin,
 		   move to the left */
-		if (pos[0] + pos[2] > mp.window.tx - 2)
-			pos[0] = mp.window.tx - pos[2] - 2;
+		if (pos[0] + pos[2] > mp.window.tx)
+			pos[0] = mp.window.tx - pos[2];
 
 		local pty = size(mo);
 
-		if (pty > mp.window.ty - 3)
-			pty = mp.window.ty - 3;
+		if (pty > mp.window.ty - 2)
+			pty = mp.window.ty - 2;
 
 		mp.tui.refresh();
 		mp.tui.attr(mp.colors.menu.attr);
-		mp.tui.openpanel(pos[0], 1, pos[2] + 2, pty + 2);
 
 		my = 0;
 		vy = 0;
@@ -594,7 +593,7 @@ sub mp_drv.menu()
 				else
 					mp.tui.attr(mp.colors.menu.attr);
 
-				mp.tui.move(1, 1 + n);
+				mp.tui.move(pos[0], 1 + n);
 				mp.tui.addstr(sprintf("%-" ~ pos[2] ~ "s", l || ''));
 
 				n++;
@@ -605,18 +604,18 @@ sub mp_drv.menu()
 				mp.tui.attr(mp.colors.menu.attr);
 
 				if (vy) {
-					mp.tui.move(pos[2], 1);
+					mp.tui.move(pos[0] + pos[2] - 1, 1);
 					mp.tui.addstr('+');
 				}
 
 				if (pty + vy < size(mo)) {
-					mp.tui.move(pos[2], pty);
+					mp.tui.move(pos[0] + pos[2] - 1, pty);
 					mp.tui.addstr('+');
 				}
 			}
 
 			/* move the hw cursor to the selected option */
-			mp.tui.move(1, 1 + my - vy);
+			mp.tui.move(pos[0] , 1 + my - vy);
 
 			mp.tui.refresh();
 
@@ -660,7 +659,8 @@ sub mp_drv.menu()
 			}
 		}
 
-		mp.tui.closepanel();
+        mp.tui.attr(mp.color.normal.attr);
+        mp.tui.draw(mp.active());
 	}
 
 	mp.tui.attr(mp.color.normal.attr);

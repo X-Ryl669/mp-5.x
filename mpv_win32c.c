@@ -476,20 +476,6 @@ static mpdm_t tui_getxy(mpdm_t a, mpdm_t ctxt)
 }
 
 
-static mpdm_t tui_openpanel(mpdm_t a, mpdm_t ctxt)
-/* opens a panel (creates new window) */
-{
-    return NULL;
-}
-
-
-static mpdm_t tui_closepanel(mpdm_t a, mpdm_t ctxt)
-/* closes a panel (deletes last window) */
-{
-    return NULL;
-}
-
-
 static mpdm_t win32c_doc_draw(mpdm_t args, mpdm_t ctxt)
 /* draws the document part */
 {
@@ -558,8 +544,6 @@ static void register_functions(void)
     mpdm_hset_s(tui, L"attr",       MPDM_X(tui_attr));
     mpdm_hset_s(tui, L"refresh",    MPDM_X(tui_refresh));
     mpdm_hset_s(tui, L"getxy",      MPDM_X(tui_getxy));
-    mpdm_hset_s(tui, L"openpanel",  MPDM_X(tui_openpanel));
-    mpdm_hset_s(tui, L"closepanel", MPDM_X(tui_closepanel));
     mpdm_hset_s(tui, L"doc_draw",   MPDM_X(win32c_doc_draw));
 }
 
