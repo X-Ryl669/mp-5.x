@@ -143,19 +143,31 @@ static mpdm_t win32c_getkey(mpdm_t args, mpdm_t ctxt)
 /* reads a key and converts to an action */
 {
     wchar_t *f = NULL;
+    wchar_t *p = L"";
     mpdm_t k = NULL;
     DWORD ne;
     INPUT_RECORD ev;
-    static wchar_t sc[2];
+    wchar_t sc[2];
+    wchar_t action[64];
 
     WaitForSingleObject(s_in, INFINITE);
 
     ReadConsoleInputW(s_in, &ev, 1, &ne);
 
     if (ne) {
+        if (ev.EventType == WINDOW_BUFFER_SIZE_EVENT) {
+            update_window_size();
+        }
+        else
         if (ev.EventType == KEY_EVENT) {
             if (ev.Event.KeyEvent.bKeyDown) {
                 wchar_t c = ev.Event.KeyEvent.uChar.UnicodeChar;
+
+                if (ev.Event.KeyEvent.dwControlKeyState & (LEFT_CTRL_PRESSED|RIGHT_CTRL_PRESSED))
+                    p = L"ctrl-";
+                else
+                if (ev.Event.KeyEvent.dwControlKeyState & (LEFT_ALT_PRESSED|RIGHT_ALT_PRESSED))
+                    p = L"alt-";
 
                 if (c) {
                     if (c > 32) {
@@ -166,91 +178,27 @@ static mpdm_t win32c_getkey(mpdm_t args, mpdm_t ctxt)
                     else {
                         switch (c) {
                         case ctrl(' '):
-                            f = L"ctrl-space";
+                            f = L"space";
                             break;
-                        case ctrl('a'):
-                            f = L"ctrl-a";
-                            break;
-                        case ctrl('b'):
-                            f = L"ctrl-b";
-                            break;
-                        case ctrl('c'):
-                            f = L"ctrl-c";
-                            break;
-                        case ctrl('d'):
-                            f = L"ctrl-d";
-                            break;
-                        case ctrl('e'):
-                            f = L"ctrl-e";
-                            break;
-                        case ctrl('f'):
-                            f = L"ctrl-f";
-                            break;
-                        case ctrl('g'):
-                            f = L"ctrl-g";
-                            break;
-                        case ctrl('h'):         /* same as backspace */
+                        case ctrl('h'):
                             f = L"backspace";
                             break;
-                        case ctrl('i'):         /* same as tab */
+                        case ctrl('i'):
                             f = L"tab";
                             break;
-                        case ctrl('j'):
-                            f = L"ctrl-j";
-                            break;
-                        case ctrl('k'):
-                            f = L"ctrl-k";
-                            break;
-                        case ctrl('l'):
-                            f = L"ctrl-l";
-                            break;
-                        case ctrl('m'):            /* same as ENTER */
+                        case ctrl('m'):
                             f = L"enter";
-                            break;
-                        case ctrl('n'):
-                            f = L"ctrl-n";
-                            break;
-                        case ctrl('o'):
-                            f = L"ctrl-o";
-                            break;
-                        case ctrl('p'):
-                            f = L"ctrl-p";
-                            break;
-                        case ctrl('q'):
-                            f = L"ctrl-q";
-                            break;
-                        case ctrl('r'):
-                            f = L"ctrl-r";
-                            break;
-                        case ctrl('s'):
-                            f = L"ctrl-s";
-                            break;
-                        case ctrl('t'):
-                            f = L"ctrl-t";
-                            break;
-                        case ctrl('u'):
-                            f = L"ctrl-u";
-                            break;
-                        case ctrl('v'):
-                            f = L"ctrl-v";
-                            break;
-                        case ctrl('w'):
-                            f = L"ctrl-w";
-                            break;
-                        case ctrl('x'):
-                            f = L"ctrl-x";
-                            break;
-                        case ctrl('y'):
-                            f = L"ctrl-y";
-                            break;
-                        case ctrl('z'):
-                            f = L"ctrl-z";
                             break;
                         case ' ':
                             f = L"space";
                             break;
                         case 27:
                             f = L"escape";
+                            break;
+                        default:
+                            sc[0] = c + 96;
+                            sc[1] = L'\0';
+                            f = sc;
                             break;
                         }
                     }
@@ -347,8 +295,13 @@ static mpdm_t win32c_getkey(mpdm_t args, mpdm_t ctxt)
         }
     }
 
-    if (f != NULL)
-        k = MPDM_S(f);
+    if (f != NULL) {
+        action[0] = '\0';
+        wcscat(action, p);
+        wcscat(action, f);
+
+        k = MPDM_S(action);
+    }
 
     return k;
 }
