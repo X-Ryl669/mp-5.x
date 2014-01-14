@@ -98,6 +98,8 @@ sub mp.tui.readline(prompt, history, default, flags)
 		mp.tui.addstr(s);
 		mp.tui.move(c[0] + x - v, c[1]);
 
+        mp.tui.refresh();
+
 		local k = mp.tui.getkey();
 
 		if (k eq 'space')
@@ -268,6 +270,8 @@ sub mp.tui.list(prompt, data, pos)
 			mp.tui.move(0, n + 1, 1);
 			n++;
 		}
+
+        mp.tui.refresh();
 
 		k = mp.tui.getkey();
 
