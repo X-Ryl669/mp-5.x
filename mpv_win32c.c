@@ -67,10 +67,6 @@ static void update_window_size(void)
     mpdm_hset_s(v, L"ty", MPDM_I(ty));
 }
 
-/* 1: red, 2: green, 4: blue */
-static int rgbi[] = { -1, 0, 1, 2, 3, 4, 5, 6, 7 };
-static int rgbp[] = { -1, 0, 1, 2, 3, 4, 5, 6, 7 };
-
 #ifndef COMMON_LVB_REVERSE_VIDEO
 #define COMMON_LVB_REVERSE_VIDEO   0x4000
 #define COMMON_LVB_UNDERSCORE      0x8000
@@ -114,8 +110,12 @@ static void build_colors(void)
             (c1 = mpdm_seek(color_names, mpdm_aget(v, 1), 1)) == -1)
             continue;
 
+        /* color names match the color bits; 0 is 'default' */
         if (c0 == 0) c0 = 8;
         if (c1 == 0) c1 = 1;
+
+        c0--;
+        c1--;
 
         /* flags */
         v = mpdm_hget_s(d, L"flags");
@@ -128,12 +128,12 @@ static void build_colors(void)
         if (mpdm_seek_s(v, L"bright", 1) != -1)
             cp |= FOREGROUND_INTENSITY;
 
-        if ((rgbi[c0] & 1)) cp |= FOREGROUND_RED;
-        if ((rgbp[c1] & 1)) cp |= BACKGROUND_RED;
-        if ((rgbi[c0] & 2)) cp |= FOREGROUND_GREEN;
-        if ((rgbp[c1] & 2)) cp |= BACKGROUND_GREEN;
-        if ((rgbi[c0] & 4)) cp |= FOREGROUND_BLUE;
-        if ((rgbp[c1] & 4)) cp |= BACKGROUND_BLUE;
+        if ((c0 & 1)) cp |= FOREGROUND_RED;
+        if ((c1 & 1)) cp |= BACKGROUND_RED;
+        if ((c0 & 2)) cp |= FOREGROUND_GREEN;
+        if ((c1 & 2)) cp |= BACKGROUND_GREEN;
+        if ((c0 & 4)) cp |= FOREGROUND_BLUE;
+        if ((c1 & 4)) cp |= BACKGROUND_BLUE;
 
         win32c_attrs[n] = cp;
     }
