@@ -67,11 +67,6 @@ static void update_window_size(void)
     mpdm_hset_s(v, L"ty", MPDM_I(ty));
 }
 
-#ifndef COMMON_LVB_REVERSE_VIDEO
-#define COMMON_LVB_REVERSE_VIDEO   0x4000
-#define COMMON_LVB_UNDERSCORE      0x8000
-#endif
-
 static void build_colors(void)
 /* builds the colors */
 {
