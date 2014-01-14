@@ -147,6 +147,8 @@ static void build_colors(void)
 
 #define ctrl(c) ((c) & 31)
 
+int mouse_down = 0;
+
 static mpdm_t win32c_getkey(mpdm_t args, mpdm_t ctxt)
 /* reads a key and converts to an action */
 {
@@ -167,14 +169,55 @@ static mpdm_t win32c_getkey(mpdm_t args, mpdm_t ctxt)
             update_window_size();
         }
         else
-        if (ev.EventType == KEY_EVENT) {
-            if (ev.Event.KeyEvent.bKeyDown) {
-                wchar_t c = ev.Event.KeyEvent.uChar.UnicodeChar;
+        if (ev.EventType == MOUSE_EVENT) {
+            MOUSE_EVENT_RECORD *e = &ev.Event.MouseEvent;
 
-                if (ev.Event.KeyEvent.dwControlKeyState & (LEFT_CTRL_PRESSED|RIGHT_CTRL_PRESSED))
+            switch (e->dwEventFlags) {
+            case 0:
+
+                mpdm_hset_s(MP, L"mouse_x", MPDM_I(e->dwMousePosition.X));
+                mpdm_hset_s(MP, L"mouse_y", MPDM_I(e->dwMousePosition.Y - by));
+
+                mouse_down = 0;
+                if (e->dwButtonState & FROM_LEFT_1ST_BUTTON_PRESSED) {
+                    f = L"mouse-left-button";
+                    mouse_down = 1;
+                }
+                else
+                if (e->dwButtonState & FROM_LEFT_2ND_BUTTON_PRESSED)
+                    f = L"mouse-middle-button";
+                else
+                if (e->dwButtonState & RIGHTMOST_BUTTON_PRESSED)
+                    f = L"mouse-right-button";
+
+                break;
+
+            case MOUSE_MOVED:
+                if (mouse_down) {
+                    mpdm_hset_s(MP, L"mouse_to_x", MPDM_I(e->dwMousePosition.X));
+                    mpdm_hset_s(MP, L"mouse_to_y", MPDM_I(e->dwMousePosition.Y - by));
+
+                    f = L"mouse-drag";
+                }
+
+                break;
+
+            case MOUSE_WHEELED:
+                f = (HIWORD(e->dwButtonState) > 0) ? L"mouse-wheel-up" : L"mouse-wheel-down";
+                break;
+            }
+        }
+        else
+        if (ev.EventType == KEY_EVENT) {
+            KEY_EVENT_RECORD *e = &ev.Event.KeyEvent;
+
+            if (e->bKeyDown) {
+                wchar_t c = e->uChar.UnicodeChar;
+
+                if (e->dwControlKeyState & (LEFT_CTRL_PRESSED|RIGHT_CTRL_PRESSED))
                     p = L"ctrl-";
                 else
-                if (ev.Event.KeyEvent.dwControlKeyState & (LEFT_ALT_PRESSED|RIGHT_ALT_PRESSED))
+                if (e->dwControlKeyState & (LEFT_ALT_PRESSED|RIGHT_ALT_PRESSED))
                     p = L"alt-";
 
                 if (c) {
@@ -192,7 +235,7 @@ static mpdm_t win32c_getkey(mpdm_t args, mpdm_t ctxt)
                             f = L"backspace";
                             break;
                         case ctrl('i'):
-                            f = (ev.Event.KeyEvent.dwControlKeyState & SHIFT_PRESSED) ? L"shift-tab" : L"tab";
+                            f = (e->dwControlKeyState & SHIFT_PRESSED) ? L"shift-tab" : L"tab";
                             break;
                         case ctrl('m'):
                             f = L"enter";
@@ -212,7 +255,7 @@ static mpdm_t win32c_getkey(mpdm_t args, mpdm_t ctxt)
                     }
                 }
                 else {
-                    switch (ev.Event.KeyEvent.wVirtualKeyCode) {
+                    switch (e->wVirtualKeyCode) {
                     case VK_UP:
                         f = L"cursor-up";
                         break;
@@ -531,7 +574,7 @@ static mpdm_t win32c_drv_startup(mpdm_t a, mpdm_t ctxt)
 
     SetConsoleTitleW(L"mp " VERSION);
 
-    SetConsoleMode(s_in, ENABLE_WINDOW_INPUT);
+    SetConsoleMode(s_in, ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT);
     SetConsoleMode(s_out, ENABLE_PROCESSED_OUTPUT);
 
     register_functions();
