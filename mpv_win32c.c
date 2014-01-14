@@ -368,7 +368,7 @@ static void win32c_move(int x, int y, int clr)
 
         o = cy * tx;
         for (n = cx; n < tx; n++) {
-            buf[n + o].Attributes = win32c_attrs[normal_attr];
+            buf[n + o].Attributes = win32c_attrs[last_attr];
             buf[n + o].Char.UnicodeChar = L' ';
         }
     }
