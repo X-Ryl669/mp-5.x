@@ -42,11 +42,17 @@ HANDLE s_out;
 
 int bx;
 int by;
+int cx;
+int cy;
 int tx;
 int ty;
 
 WORD *win32c_attrs = NULL;
 int normal_attr = 0;
+int last_attr;
+
+CHAR_INFO *buf = NULL;
+
 
 /** code **/
 
@@ -65,6 +71,8 @@ static void update_window_size(void)
     v = mpdm_hget_s(MP, L"window");
     mpdm_hset_s(v, L"tx", MPDM_I(tx));
     mpdm_hset_s(v, L"ty", MPDM_I(ty));
+
+    buf = realloc(buf, tx * ty * sizeof(CHAR_INFO));
 }
 
 static void build_colors(void)
@@ -307,27 +315,65 @@ static mpdm_t win32c_getkey(mpdm_t args, mpdm_t ctxt)
 }
 
 
-static void win32c_addwstr(mpdm_t s)
+static void win32c_move(int x, int y, int clr)
+{
+    cx = x;
+    cy = y;
+
+    if (clr) {
+        int n, o;
+
+        o = cy * tx;
+        for (n = cx; n < tx; n++) {
+            buf[n + o].Attributes = win32c_attrs[normal_attr];
+            buf[n + o].Char.UnicodeChar = L' ';
+        }
+    }
+
+    COORD bs = { bx + cx, by + cy };
+    SetConsoleCursorPosition(s_out, bs);
+}
+
+
+static void win32c_clrscr(void)
+{
+    int n;
+
+    for (n = 0; n < tx * ty; n++) {
+        buf[n].Attributes = win32c_attrs[normal_attr];
+        buf[n].Char.UnicodeChar = L' ';
+    }
+}
+
+
+static void win32c_dump(void)
+{
+    COORD sz = { tx, ty };
+    COORD pos = { 0, 0 };
+    SMALL_RECT r = { 0, by, tx - 1, by + ty - 1 };
+
+    WriteConsoleOutputW(s_out, buf, sz,  pos, &r);
+}
+
+
+static void win32c_addstr(mpdm_t s)
 {
     wchar_t *str = mpdm_string(s);
-    int c = mpdm_size(s);
-    DWORD oc;
+    int o = cx + cy * tx;
 
-    if (!WriteConsoleW(s_out, str, c, &oc, 0)) {
-        int n;
-
-        /* error writing: strip non-ASCII characters */
-        str = wcsdup(str);
-
-        for (n = 0; str[n]; n++) {
-            if (str[n] >= 127)
-                str[n] = L'?';
-        }
-
-        WriteConsoleW(s_out, str, c, &oc, 0);
-
-        free(str);
+    while (*str && cx < tx) {
+        buf[o].Attributes = win32c_attrs[last_attr];
+        buf[o].Char.UnicodeChar = *str;
+        str++;
+        o++;
+        cx++;
     }
+}
+
+
+static void win32c_attr(int attr)
+{
+    last_attr = attr;
 }
 
 
@@ -336,7 +382,7 @@ static void win32c_addwstr(mpdm_t s)
 static mpdm_t tui_addstr(mpdm_t a, mpdm_t ctxt)
 /* TUI: add a string */
 {
-    win32c_addwstr(mpdm_aget(a, 0));
+    win32c_addstr(mpdm_aget(a, 0));
     return NULL;
 }
 
@@ -346,23 +392,9 @@ static mpdm_t tui_move(mpdm_t a, mpdm_t ctxt)
 {
     int cx = mpdm_ival(mpdm_aget(a, 0));
     int cy = mpdm_ival(mpdm_aget(a, 1));
+    int dl = mpdm_aget(a, 2) != NULL;
 
-    COORD bs;
-
-    bs.X = bx + cx;
-    bs.Y = by + cy;
-    SetConsoleCursorPosition(s_out, bs);
-
-    /* if third argument is not NULL, clear line */
-    if (mpdm_aget(a, 2) != NULL) {
-        int n;
-        DWORD oc;
-
-        for (n = 0; n < tx - cx; n++)
-            WriteConsoleW(s_out, L" ", 1, &oc, 0);
-
-        SetConsoleCursorPosition(s_out, bs);
-    }
+    win32c_move(cx, cy, dl);
 
     return NULL;
 }
@@ -371,9 +403,7 @@ static mpdm_t tui_move(mpdm_t a, mpdm_t ctxt)
 static mpdm_t tui_attr(mpdm_t a, mpdm_t ctxt)
 /* TUI: set attribute for next string */
 {
-    int attr = mpdm_ival(mpdm_aget(a, 0));
-
-    SetConsoleTextAttribute(s_out, win32c_attrs[attr]);
+    win32c_attr(mpdm_ival(mpdm_aget(a, 0)));
     return NULL;
 }
 
@@ -381,6 +411,7 @@ static mpdm_t tui_attr(mpdm_t a, mpdm_t ctxt)
 static mpdm_t tui_refresh(mpdm_t a, mpdm_t ctxt)
 /* TUI: refresh the screen */
 {
+    win32c_dump();
     return NULL;
 }
 
@@ -390,15 +421,11 @@ static mpdm_t tui_getxy(mpdm_t a, mpdm_t ctxt)
 {
     mpdm_t v;
 
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-
-    GetConsoleScreenBufferInfo(s_out, &csbi);
-
     v = MPDM_A(2);
     mpdm_ref(v);
 
-    mpdm_aset(v, MPDM_I(csbi.dwCursorPosition.X - bx), 0);
-    mpdm_aset(v, MPDM_I(csbi.dwCursorPosition.Y - by), 1);
+    mpdm_aset(v, MPDM_I(cx), 0);
+    mpdm_aset(v, MPDM_I(cy), 1);
 
     mpdm_unrefnd(v);
 
@@ -424,7 +451,9 @@ static mpdm_t win32c_doc_draw(mpdm_t args, mpdm_t ctxt)
 /* draws the document part */
 {
     mpdm_t d;
-    int n, m, c;
+    int n, m;
+
+    win32c_clrscr();
 
     d = mpdm_aget(args, 0);
     d = mpdm_ref(mp_draw(d, 0));
@@ -432,13 +461,8 @@ static mpdm_t win32c_doc_draw(mpdm_t args, mpdm_t ctxt)
     for (n = 0; n < mpdm_size(d); n++) {
         mpdm_t l = mpdm_aget(d, n);
 
-        COORD bs;
+        win32c_move(0, n, 0);
 
-        bs.X = bx;
-        bs.Y = by + n;
-        SetConsoleCursorPosition(s_out, bs);
-
-        c = 0;
         for (m = 0; m < mpdm_size(l) - 1; m++) {
             int attr;
             mpdm_t s;
@@ -447,15 +471,9 @@ static mpdm_t win32c_doc_draw(mpdm_t args, mpdm_t ctxt)
             attr = mpdm_ival(mpdm_aget(l, m++));
             s = mpdm_aget(l, m);
 
-            SetConsoleTextAttribute(s_out, win32c_attrs[attr]);
-            win32c_addwstr(s);
-            c += mpdm_size(s);
+            win32c_attr(attr);
+            win32c_addstr(s);
         }
-
-        DWORD oc;
-        SetConsoleTextAttribute(s_out, win32c_attrs[normal_attr]);
-        for (m = c; m < tx; m++)
-            WriteConsoleW(s_out, L" ", 1, &oc, 0);
     }
 
     mpdm_unref(d);
