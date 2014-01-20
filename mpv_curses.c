@@ -507,6 +507,9 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
                 mpdm_hset_s(MP, L"mouse_x", MPDM_I(m.x));
                 mpdm_hset_s(MP, L"mouse_y", MPDM_I(m.y));
 
+                if (m.y == LINES - 1)
+                    f = L"mouse-menu";
+                else
                 if (m.bstate & BUTTON1_PRESSED)
                     f = L"mouse-left-button";
                 else
@@ -517,8 +520,16 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
                     f = L"mouse-right-button";
                 else
                 if (m.bstate & BUTTON4_PRESSED)
+                    f = L"mouse-wheel-up";
+#ifdef BUTTON5_PRESSED
+                else
+                if (m.bstate & BUTTON5_PRESSED)
                     f = L"mouse-wheel-down";
+#endif
+                else
+                    f = NULL;
             }
+            break;
         }
     }
 
@@ -777,8 +788,15 @@ static mpdm_t ncursesw_drv_startup(mpdm_t a)
     initscr();
     start_color();
 
-    mousemask(BUTTON1_PRESSED|BUTTON2_PRESSED|
-        BUTTON3_PRESSED|BUTTON4_PRESSED,
+    mousemask(
+        BUTTON1_PRESSED|
+        BUTTON2_PRESSED|
+        BUTTON3_PRESSED|
+        BUTTON4_PRESSED|
+#ifdef BUTTON5_PRESSED
+        BUTTON5_PRESSED|
+#endif
+        REPORT_MOUSE_POSITION,
         NULL);
 
     keypad(stdscr, TRUE);
