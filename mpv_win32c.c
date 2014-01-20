@@ -190,6 +190,9 @@ static mpdm_t win32c_getkey(mpdm_t args, mpdm_t ctxt)
                 if (e->dwButtonState & RIGHTMOST_BUTTON_PRESSED)
                     f = L"mouse-right-button";
 
+                if (e->dwMousePosition.Y - by == ty - 1)
+                    f = L"mouse-menu";
+
                 break;
 
             case MOUSE_MOVED:

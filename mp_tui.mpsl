@@ -513,6 +513,7 @@ sub mp_drv.menu()
 	local mx = 0;
 	local action = NULL;
 	local key = NULL;
+    local mouse_x = [];
 
 	while (action == NULL && key ne 'escape') {
 		local pos, mo, my, vy;
@@ -544,6 +545,9 @@ sub mp_drv.menu()
 			}
 
 			mp.tui.addstr(l);
+
+            local p = mp.tui.getxy();
+            push(mouse_x, p[0]);
 
 			n++;
 		}
@@ -657,6 +661,26 @@ sub mp_drv.menu()
 				action = mo[my];
 				break;
 			}
+            else
+            if (key eq 'mouse-left-button') {
+                if (mp.mouse_y == 0) {
+                    mx = 0;
+                    foreach (x, mouse_x) {
+                        if (x > mp.mouse_x)
+                            break;
+                        mx++;
+                    }
+                }
+                else {
+                    if (mp.mouse_x < pos[0] ||
+                        mp.mouse_x > pos[0] + pos[2] - 1 ||
+                        mp.mouse_y > size(mo)) {
+                        key = 'escape';
+                    }
+                }
+
+                break;
+            }
 		}
 
         mp.tui.attr(mp.color.normal.attr);
