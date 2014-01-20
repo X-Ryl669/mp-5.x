@@ -498,6 +498,8 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
             shift = 1;
             f = NULL;
             break;
+
+#ifdef NCURSES_MOUSE_VERSION
         case KEY_MOUSE:
             {
                 MEVENT m;
@@ -521,15 +523,11 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
                 else
                 if (m.bstate & BUTTON4_PRESSED)
                     f = L"mouse-wheel-up";
-#ifdef BUTTON5_PRESSED
-                else
-                if (m.bstate & BUTTON5_PRESSED)
-                    f = L"mouse-wheel-down";
-#endif
                 else
                     f = NULL;
             }
             break;
+#endif /* NCURSES_MOUSE_VERSION */
         }
     }
 
@@ -788,16 +786,15 @@ static mpdm_t ncursesw_drv_startup(mpdm_t a)
     initscr();
     start_color();
 
+#ifdef NCURSES_MOUSE_VERSION
     mousemask(
         BUTTON1_PRESSED|
         BUTTON2_PRESSED|
         BUTTON3_PRESSED|
         BUTTON4_PRESSED|
-#ifdef BUTTON5_PRESSED
-        BUTTON5_PRESSED|
-#endif
         REPORT_MOUSE_POSITION,
         NULL);
+#endif
 
     keypad(stdscr, TRUE);
     nonl();
