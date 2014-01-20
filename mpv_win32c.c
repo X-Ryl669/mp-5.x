@@ -220,6 +220,8 @@ static mpdm_t win32c_getkey(mpdm_t args, mpdm_t ctxt)
                 if (e->dwControlKeyState & (LEFT_ALT_PRESSED|RIGHT_ALT_PRESSED))
                     p = L"alt-";
 
+                mpdm_hset_s(MP, L"shift_pressed", MPDM_I(e->dwControlKeyState & SHIFT_PRESSED));
+
                 if (c) {
                     if (c > 32) {
                         sc[0] = c;
