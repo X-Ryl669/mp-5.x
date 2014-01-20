@@ -671,12 +671,16 @@ sub mp_drv.menu()
                         mx++;
                     }
                 }
+                else
+                if (mp.mouse_x < pos[0] ||
+                    mp.mouse_x > pos[0] + pos[2] - 1 ||
+                    mp.mouse_y > size(mo)) {
+                    key = 'escape';
+                }
                 else {
-                    if (mp.mouse_x < pos[0] ||
-                        mp.mouse_x > pos[0] + pos[2] - 1 ||
-                        mp.mouse_y > size(mo)) {
-                        key = 'escape';
-                    }
+                    local a = mo[mp.mouse_y - 1];
+                    if (a ne '-')
+                        action = a;
                 }
 
                 break;
