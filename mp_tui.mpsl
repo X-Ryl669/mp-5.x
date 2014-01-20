@@ -301,6 +301,11 @@ sub mp.tui.list(prompt, data, pos)
 			break;
 		}
         else
+        if (k eq 'mouse-left-button') {
+            pos = vy + mp.mouse_y - 1;
+            break;
+        }
+        else
         if ((ord(k) >= ord('a') && ord(k) <= ord('z')) ||
             (ord(k) >= ord('A') && ord(k) <= ord('Z'))) {
             /* search the first item >= k */
