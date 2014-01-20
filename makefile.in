@@ -53,10 +53,10 @@ mpv_qt4.moc: mpv_qt4.cpp
 mp_res.o: mp_res.rc
 	$(WINDRES) mp_res.rc mp_res.o
 
-mp-5.exe: $(OBJS) mp_res.o $(MPDM)/libmpdm.a $(MPSL)/libmpsl.a
+mp-5.exe: mp_core.o mpv_win32.o mp_res.o $(MPDM)/libmpdm.a $(MPSL)/libmpsl.a
 	$(CC) $(CFLAGS) mp_core.o mpv_win32.o mp_res.o `cat config.ldflags` -o $@
 
-mp-5c.exe: $(OBJS) mp_res.o $(MPDM)/libmpdm.a $(MPSL)/libmpsl.a
+mp-5c.exe: mp_core.o mpv_win32c.o mp_res.o $(MPDM)/libmpdm.a $(MPSL)/libmpsl.a
 	$(CC) $(CFLAGS) mp_core.o mpv_win32c.o mp_res.o `grep -v mwindows config.ldflags` -o $@
 
 clean:
