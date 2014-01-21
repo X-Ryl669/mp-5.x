@@ -4,7 +4,7 @@ Minimum Profit 5 TODO / Bug List
 Release Critical Bugs
 ---------------------
 
-None!
+ * 1308: Document mp_doc.keycodes in mp_data_model.
 
 Open Bugs
 ---------
