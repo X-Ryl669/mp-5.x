@@ -594,6 +594,7 @@ sub mp_drv.menu()
 			n = 0;
 
             local empty = [1 .. pos[2]]->map(sub { ' '; })->join();
+            local sep = [1 .. pos[2]]->map(sub { '-'; })->join();
 
 			while (n < pty) {
 				local l = mp.menu_label(mo[n + vy]);
@@ -605,9 +606,14 @@ sub mp_drv.menu()
 					mp.tui.attr(mp.colors.menu.attr);
 
 				mp.tui.move(pos[0], 1 + n);
-                mp.tui.addstr(empty);
-				mp.tui.move(pos[0], 1 + n);
-				mp.tui.addstr(l || '');
+
+                if (l) {
+                    mp.tui.addstr(empty);
+				    mp.tui.move(pos[0], 1 + n);
+				    mp.tui.addstr(l);
+                }
+                else
+                    mp.tui.addstr(sep);
 
 				n++;
 			}
