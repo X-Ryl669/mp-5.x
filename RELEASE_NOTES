@@ -9,6 +9,7 @@ Minimum Profit Release Notes
    - Support for the MS Windows console. Two win32 binaries are
      now deployed: the classic, windowed mp-5.exe and the new,
      console-based, mp-5c.exe.
+   - Added column to action `grep'.
 
 5.2.7
 -----
