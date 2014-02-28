@@ -154,7 +154,7 @@ mp.actions['grep']	= sub {
             l->move_bof();
 
             foreach (e, r)
-                l->insert(sprintf("%s:%d: %s\n", e[0], e[1] + 1, e[2]));
+                l->insert(sprintf("%s:%d:%d: %s\n", e[0], e[1] + 1, e[2] + 1, e[3]));
 
             l->move_bof();
 
@@ -396,8 +396,8 @@ sub mp_doc.seek_prev_or_next_char(doc, func)
 sub mp.grep(rx, spec, base, rec, r)
 /* Greps str in the files in spec. Returns NULL if no file matched the glob()
    (or glob() is unsupported), an empty list if the string was not found or
-   an array with the matches, that are three-element arrays with the file name,
-   the line number and the line that matched */
+   an array with the matches, that are four-element arrays with the file name,
+   the line number, the column number and the line that matched */
 {
     local all;
 
@@ -428,8 +428,9 @@ sub mp.grep(rx, spec, base, rec, r)
                 l = mp.chomp(l);
 
                 if (regex(l, rx)) {
+                    local t = regex();
                     /* found; store line, filename and linenum */
-                    push(r, [ fn, n, l ]);
+                    push(r, [ fn, n, t[0], l ]);
                 }
 
                 n++;
