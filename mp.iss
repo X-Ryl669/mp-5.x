@@ -35,4 +35,5 @@ Root: HKCR; Subkey: "*\shell\Hex view with MP"; ValueType: string;
 Root: HKCR; Subkey: "*\shell\Hex view with MP\command"; ValueType: string; ValueData: "{app}\mp-5.exe -x %1"
 Root: HKCR; Subkey: "Directory\shell\minimum_profit"; ValueType: string; ValueData: "Open MP Here"
 Root: HKCR; Subkey: "Directory\shell\minimum_profit\command"; ValueType: string; ValueData: "{app}\mp-5.exe -d %1"
-
+Root: HKLM; Subkey: "Software\Minimum Profit"; ValueType: string;
+Root: HKLM; Subkey: "Software\Minimum Profit\appdir"; ValueType: string; ValueData: "{app}"
