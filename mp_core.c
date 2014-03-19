@@ -1238,6 +1238,9 @@ void mp_startup(int argc, char *argv[])
     char *ptr;
     mpdm_t mp_c;
 
+    mpdm_startup();
+    mpdm_hset_s(mpdm_root(), L"APPID", MPDM_LS(L"Minimum Profit"));
+
     mpsl_startup();
 
     /* reset the structures */
