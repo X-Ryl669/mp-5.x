@@ -2,7 +2,7 @@
 
     Minimum Profit - Programmer Text Editor
 
-    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2014 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -1239,7 +1239,7 @@ void mp_startup(int argc, char *argv[])
     mpdm_t mp_c;
 
     mpdm_startup();
-    mpdm_hset_s(mpdm_root(), L"APPID", MPDM_LS(L"Minimum Profit"));
+    mpdm_hset_s(mpdm_root(), L"APPID", MPDM_MBS(CONFOPT_APPNAME));
 
     mpsl_startup();
 
@@ -1270,9 +1270,7 @@ void mp_startup(int argc, char *argv[])
         mpdm_push(INC, MPDM_MBS(ptr));
 
     /* add installed library path */
-    mpdm_push(INC, mpdm_strcat(mpdm_hget_s(mpdm_root(), L"APPDIR"),
-                               MPDM_MBS(CONFOPT_APPNAME))
-        );
+    mpdm_push(INC, mpdm_hget_s(mpdm_root(), L"APPDIR"));
 
     if (!TRY_DRIVERS()) {
         printf("No usable driver found; exiting.\n");
