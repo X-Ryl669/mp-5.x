@@ -5,7 +5,7 @@
 
     Text User Interface.
 
-    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2014 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -428,9 +428,11 @@ sub mp.tui.draw(doc)
 
 sub mp_drv.alert(msg)
 {
+    local k;
+
 	mp.tui.prompt(msg ~ L(" [ENTER]"));
 
-	while (mp.tui.getkey() ne 'enter');
+	while ((k = mp.tui.getkey()) ne 'enter' && k ne 'mouse-left-button');
 }
 
 
