@@ -130,7 +130,7 @@ win32dist: mp-5.exe
 	mv win32/installer.exe mp-$(VERSION).exe
 	rm -rf win32
 
-innosetup: mp-5.exe
+innosetup: mp-5.exe mp-5c.exe
 	(DIR=`pwd` ; cd $(MPDM) ; make installdoc DOCDIR=$$DIR/doc)
 	(DIR=`pwd` ; cd $(MPSL) ; make installdoc DOCDIR=$$DIR/doc)
 	iscc /O. /Fmp-$(VERSION) mp.iss
