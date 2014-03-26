@@ -154,7 +154,7 @@ mp.actions['about'] = sub {
     local msg = L(
     "Minimum Profit %s (%s) - Programmer Text Editor\n\n"\
     "Components: MPDM %s, MPSL %s\n\n"\
-    "Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com> and others\n"\
+    "Copyright (C) 1991-2014 Angel Ortega <angel@triptico.com> and others\n"\
     "\n"\
     "This program is free software; you can redistribute it and/or\n"\
     "modify it under the terms of the GNU General Public License\n"\

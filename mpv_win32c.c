@@ -190,6 +190,9 @@ static mpdm_t win32c_getkey(mpdm_t args, mpdm_t ctxt)
                 if (e->dwButtonState & RIGHTMOST_BUTTON_PRESSED)
                     f = L"mouse-right-button";
 
+                if (e->dwMousePosition.Y - by == ty - 1)
+                    f = L"mouse-menu";
+
                 break;
 
             case MOUSE_MOVED:
@@ -219,6 +222,8 @@ static mpdm_t win32c_getkey(mpdm_t args, mpdm_t ctxt)
                 else
                 if (e->dwControlKeyState & (LEFT_ALT_PRESSED|RIGHT_ALT_PRESSED))
                     p = L"alt-";
+
+                mpdm_hset_s(MP, L"shift_pressed", MPDM_I(e->dwControlKeyState & SHIFT_PRESSED));
 
                 if (c) {
                     if (c > 32) {
@@ -550,16 +555,10 @@ static void register_functions(void)
 
 static mpdm_t win32c_drv_startup(mpdm_t a, mpdm_t ctxt)
 {
-    s_in    = GetStdHandle(STD_INPUT_HANDLE);
-    s_out   = GetStdHandle(STD_OUTPUT_HANDLE);
-
     SetConsoleCP(CP_UTF8);
     SetConsoleOutputCP(CP_UTF8);
 
     SetConsoleTitleW(L"mp " VERSION);
-
-    SetConsoleMode(s_in, ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT);
-    SetConsoleMode(s_out, ENABLE_PROCESSED_OUTPUT);
 
     register_functions();
     build_colors();
@@ -571,20 +570,28 @@ static mpdm_t win32c_drv_startup(mpdm_t a, mpdm_t ctxt)
 
 int win32_drv_detect(int *argc, char ***argv)
 {
-    mpdm_t drv;
-    int n;
+    int n, ret = 0;
 
     for (n = 0; n < *argc; n++) {
         if (strcmp(argv[0][n], "-h") == 0)
             return 0;
     }
 
-    drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
+    s_in  = GetStdHandle(STD_INPUT_HANDLE);
+    s_out = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    mpdm_hset_s(drv, L"id",         MPDM_LS(L"win32c"));
-    mpdm_hset_s(drv, L"startup",    MPDM_X(win32c_drv_startup));
+    if (SetConsoleMode(s_in, ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT) &&
+        SetConsoleMode(s_out, ENABLE_PROCESSED_OUTPUT)) {
 
-    return 1;
+        mpdm_t drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
+
+        mpdm_hset_s(drv, L"id",         MPDM_LS(L"win32c"));
+        mpdm_hset_s(drv, L"startup",    MPDM_X(win32c_drv_startup));
+
+        ret = 1;
+    }
+
+    return ret;
 }
 
 #endif                          /* CONFOPT_WIN32 */

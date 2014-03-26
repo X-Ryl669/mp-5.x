@@ -5,7 +5,7 @@
 
     Text User Interface.
 
-    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2014 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -301,6 +301,11 @@ sub mp.tui.list(prompt, data, pos)
 			break;
 		}
         else
+        if (k eq 'mouse-left-button') {
+            pos = vy + mp.mouse_y - 1;
+            break;
+        }
+        else
         if ((ord(k) >= ord('a') && ord(k) <= ord('z')) ||
             (ord(k) >= ord('A') && ord(k) <= ord('Z'))) {
             /* search the first item >= k */
@@ -423,9 +428,11 @@ sub mp.tui.draw(doc)
 
 sub mp_drv.alert(msg)
 {
+    local k;
+
 	mp.tui.prompt(msg ~ L(" [ENTER]"));
 
-	while (mp.tui.getkey() ne 'enter');
+	while ((k = mp.tui.getkey()) ne 'enter' && k ne 'mouse-left-button');
 }
 
 
@@ -513,6 +520,7 @@ sub mp_drv.menu()
 	local mx = 0;
 	local action = NULL;
 	local key = NULL;
+    local mouse_x = [];
 
 	while (action == NULL && key ne 'escape') {
 		local pos, mo, my, vy;
@@ -544,6 +552,9 @@ sub mp_drv.menu()
 			}
 
 			mp.tui.addstr(l);
+
+            local p = mp.tui.getxy();
+            push(mouse_x, p[0]);
 
 			n++;
 		}
@@ -584,6 +595,9 @@ sub mp_drv.menu()
 
 			n = 0;
 
+            local empty = [1 .. pos[2]]->map(sub { ' '; })->join();
+            local sep = [1 .. pos[2]]->map(sub { '-'; })->join();
+
 			while (n < pty) {
 				local l = mp.menu_label(mo[n + vy]);
 
@@ -594,7 +608,14 @@ sub mp_drv.menu()
 					mp.tui.attr(mp.colors.menu.attr);
 
 				mp.tui.move(pos[0], 1 + n);
-				mp.tui.addstr(sprintf("%-" ~ pos[2] ~ "s", l || ''));
+
+                if (l) {
+                    mp.tui.addstr(empty);
+				    mp.tui.move(pos[0], 1 + n);
+				    mp.tui.addstr(l);
+                }
+                else
+                    mp.tui.addstr(sep);
 
 				n++;
 			}
@@ -657,6 +678,30 @@ sub mp_drv.menu()
 				action = mo[my];
 				break;
 			}
+            else
+            if (key eq 'mouse-left-button') {
+                if (mp.mouse_y == 0) {
+                    mx = 0;
+                    foreach (x, mouse_x) {
+                        if (x > mp.mouse_x)
+                            break;
+                        mx++;
+                    }
+                }
+                else
+                if (mp.mouse_x < pos[0] ||
+                    mp.mouse_x > pos[0] + pos[2] - 1 ||
+                    mp.mouse_y > size(mo)) {
+                    key = 'escape';
+                }
+                else {
+                    local a = mo[mp.mouse_y - 1];
+                    if (a ne '-')
+                        action = a;
+                }
+
+                break;
+            }
 		}
 
         mp.tui.attr(mp.color.normal.attr);

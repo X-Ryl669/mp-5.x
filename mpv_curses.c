@@ -498,6 +498,36 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
             shift = 1;
             f = NULL;
             break;
+
+#ifdef NCURSES_MOUSE_VERSION
+        case KEY_MOUSE:
+            {
+                MEVENT m;
+
+                getmouse(&m);
+
+                mpdm_hset_s(MP, L"mouse_x", MPDM_I(m.x));
+                mpdm_hset_s(MP, L"mouse_y", MPDM_I(m.y));
+
+                if (m.y == LINES - 1)
+                    f = L"mouse-menu";
+                else
+                if (m.bstate & BUTTON1_PRESSED)
+                    f = L"mouse-left-button";
+                else
+                if (m.bstate & BUTTON2_PRESSED)
+                    f = L"mouse-middle-button";
+                else
+                if (m.bstate & BUTTON3_PRESSED)
+                    f = L"mouse-right-button";
+                else
+                if (m.bstate & BUTTON4_PRESSED)
+                    f = L"mouse-wheel-up";
+                else
+                    f = NULL;
+            }
+            break;
+#endif /* NCURSES_MOUSE_VERSION */
         }
     }
 
@@ -755,6 +785,17 @@ static mpdm_t ncursesw_drv_startup(mpdm_t a)
 
     initscr();
     start_color();
+
+#ifdef NCURSES_MOUSE_VERSION
+    mousemask(
+        BUTTON1_PRESSED|
+        BUTTON2_PRESSED|
+        BUTTON3_PRESSED|
+        BUTTON4_PRESSED|
+        REPORT_MOUSE_POSITION,
+        NULL);
+#endif
+
     keypad(stdscr, TRUE);
     nonl();
     raw();
