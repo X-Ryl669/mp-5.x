@@ -2576,7 +2576,11 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
     gtk_box_pack_start(GTK_BOX(hbox), area, TRUE, TRUE, 0);
     gtk_widget_set_events(GTK_WIDGET(area), GDK_BUTTON_PRESS_MASK |
                           GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK
-                          | GDK_LEAVE_NOTIFY_MASK);
+                          | GDK_LEAVE_NOTIFY_MASK
+#if CONFOPT_GTK == 3
+                          | GDK_SMOOTH_SCROLL_MASK
+#endif
+    );
 
     gtk_widget_set_double_buffered(area, FALSE);
 
