@@ -625,7 +625,11 @@ mp.syntax.python = {
 		/* is it a 'she-bang'? */
 		return regex(f, '/^#!\s*/usr/bin/(env )?python/');
 	},
-	'section'	=>	[ '/^[ \t]*def/' ]
+	'section'	=>	[ '/^[ \t]*def/' ],
+    'build_targets' => [
+        'python %s',
+        'python -m py_compile %s && echo "Syntax OK"'
+    ]
 };
 
 mp.syntax.ruby = {
