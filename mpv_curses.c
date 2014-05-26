@@ -4,7 +4,7 @@
 
     Curses driver.
 
-    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2014 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -787,13 +787,18 @@ static mpdm_t ncursesw_drv_startup(mpdm_t a)
     start_color();
 
 #ifdef NCURSES_MOUSE_VERSION
-    mousemask(
-        BUTTON1_PRESSED|
-        BUTTON2_PRESSED|
-        BUTTON3_PRESSED|
-        BUTTON4_PRESSED|
-        REPORT_MOUSE_POSITION,
-        NULL);
+    mpdm_t v = mpdm_hget_s(MP, L"config");
+    mpdm_hset_s(v, L"tx", MPDM_I(COLS));
+
+    if (mpdm_ival(mpdm_hget_s(v, L"no_text_mouse")) == 0) {
+        mousemask(
+            BUTTON1_PRESSED|
+            BUTTON2_PRESSED|
+            BUTTON3_PRESSED|
+            BUTTON4_PRESSED|
+            REPORT_MOUSE_POSITION,
+            NULL);
+    }
 #endif
 
     keypad(stdscr, TRUE);
