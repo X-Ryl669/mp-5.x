@@ -722,7 +722,7 @@ sub mp.test_versions()
 {
     local mpdm = MPDM();
 
-    mp.assert_version(mpdm.version, '2.1.1', 'MPDM');
+    mp.assert_version(mpdm.version, '2.1.4', 'MPDM');
     mp.assert_version(MPSL.VERSION, '2.2.2', 'MPSL');
 }
 
