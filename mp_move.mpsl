@@ -274,6 +274,10 @@ sub mp_doc.set_y_keep_vy(doc, y)
 sub mp_doc.move_up(doc)
 /* moves one line up */
 {
+    if (mp.config.emacs_movement && doc.txt.y == doc.txt.vy) {
+        doc.txt.vy -= (mp.window.ty >> 1);
+    }
+
     doc->set_y(doc.txt.y - 1);
 }
 
@@ -291,6 +295,10 @@ sub mp_doc.move_above(doc)
 sub mp_doc.move_down(doc)
 /* moves one line down */
 {
+    if (mp.config.emacs_movement && doc.txt.y >= doc.txt.vy + (mp.window.ty - 2)) {
+        doc.txt.vy += (mp.window.ty >> 1);
+    }
+
     doc->set_y(doc.txt.y + 1);
 }
 

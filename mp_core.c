@@ -159,6 +159,9 @@ static int drw_adjust_y(int y, int *vy, int ty)
 {
     int t = *vy;
 
+    if (*vy < 0)
+        *vy = 0;
+
     /* is y above the first visible line? */
     if (y < *vy)
         *vy = y;
