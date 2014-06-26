@@ -295,11 +295,11 @@ if [ "$WITHOUT_KDE4" = "1" ] ; then
 else
     if which kde4-config > /dev/null 2>&1
     then
-        TMP_CFLAGS=$(pkg-config --cflags QtCore)
+        TMP_CFLAGS=$(pkg-config --cflags QtGui)
         TMP_CFLAGS="$TMP_CFLAGS -I`kde4-config --install include` -I`kde4-config --install include`KDE"
 
-        TMP_LDFLAGS=$(pkg-config --libs QtCore)
-        TMP_LDFLAGS="$TMP_LDFLAGS -L`kde4-config --install lib` -lkfile -lkdeui -lkdecore"
+        TMP_LDFLAGS="$(pkg-config --libs QtGui) -lX11"
+        TMP_LDFLAGS="$TMP_LDFLAGS -L`kde4-config --install lib` -L`kde4-config --install lib`/kde4/devel -lkio -lkfile -lkdeui -lkdecore"
 
         echo "#include <KApplication>" > .tmp.cpp
         echo "int main(void) { new KApplication() ; return 0; } " >> .tmp.cpp

@@ -37,17 +37,7 @@ extern "C" int kde4_drv_detect(int *argc, char ***argv);
 #include "mp.h"
 #include "mp.xpm"
 
-#include <QtGui/QKeyEvent>
-#include <QtGui/QPainter>
-#include <QtGui/QMenu>
-
-#include <QtGui/QLabel>
-#include <QtGui/QComboBox>
-#include <QtGui/QLineEdit>
-#include <QtGui/QCheckBox>
-#include <QtGui/QListWidget>
-#include <QtGui/QScrollBar>
-#include <QtGui/QClipboard>
+#include <QtGui>
 
 #include <KApplication>
 #include <KAboutData>
@@ -189,7 +179,7 @@ bool MPWindow::event(QEvent * event)
 
 static mpdm_t kde4_drv_update_ui(mpdm_t a, mpdm_t ctxt)
 {
-    return qt4_drv_update_ui(a);
+    return qt4_drv_update_ui(a, ctxt);
 }
 
 
@@ -414,37 +404,37 @@ static mpdm_t kde4_drv_form(mpdm_t a, mpdm_t ctxt)
 
 static mpdm_t kde4_drv_busy(mpdm_t a, mpdm_t ctxt)
 {
-    return qt4_drv_busy(a);
+    return qt4_drv_busy(a, ctxt);
 }
 
 
 static mpdm_t kde4_drv_main_loop(mpdm_t a, mpdm_t ctxt)
 {
-    return qt4_drv_main_loop(a);
+    return qt4_drv_main_loop(a, ctxt);
 }
 
 
 static mpdm_t kde4_drv_shutdown(mpdm_t a, mpdm_t ctxt)
 {
-    return qt4_drv_shutdown(a);
+    return qt4_drv_shutdown(a, ctxt);
 }
 
 
 static mpdm_t kde4_drv_clip_to_sys(mpdm_t a, mpdm_t ctxt)
 {
-    return qt4_drv_clip_to_sys(a);
+    return qt4_drv_clip_to_sys(a, ctxt);
 }
 
 
 static mpdm_t kde4_drv_sys_to_clip(mpdm_t a, mpdm_t ctxt)
 {
-    return qt4_drv_sys_to_clip(a);
+    return qt4_drv_sys_to_clip(a, ctxt);
 }
 
 
 static mpdm_t kde4_drv_timer(mpdm_t a, mpdm_t ctxt)
 {
-    return qt4_drv_timer(a);
+    return qt4_drv_timer(a, ctxt);
 }
 
 static void register_functions(void)
