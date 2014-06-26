@@ -1,6 +1,14 @@
 Minimum Profit Release Notes
 ============================
 
+5.2.9
+-----
+
+ - New features:
+   - New configuration directive mp.config.emacs_scrolling, to
+     enable/disable emacs-like scrolling (half screen jumps
+     instead of line-by-line).
+
 5.2.8
 -----
 

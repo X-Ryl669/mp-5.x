@@ -25,6 +25,8 @@
 
 */
 
+mp.config.emacs_scrolling = 1;
+
 /** editor actions **/
 
 mp_doc.actions['move_left']         = sub (d) { d->move(d.move_left); };
@@ -274,7 +276,7 @@ sub mp_doc.set_y_keep_vy(doc, y)
 sub mp_doc.move_up(doc)
 /* moves one line up */
 {
-    if (mp.config.emacs_movement && doc.txt.y == doc.txt.vy) {
+    if (mp.config.emacs_scrolling && doc.txt.y == doc.txt.vy) {
         doc.txt.vy -= (mp.window.ty >> 1);
     }
 
@@ -295,7 +297,7 @@ sub mp_doc.move_above(doc)
 sub mp_doc.move_down(doc)
 /* moves one line down */
 {
-    if (mp.config.emacs_movement && doc.txt.y >= doc.txt.vy + (mp.window.ty - 2)) {
+    if (mp.config.emacs_scrolling && doc.txt.y >= doc.txt.vy + (mp.window.ty - 2)) {
         doc.txt.vy += (mp.window.ty >> 1);
     }
 
