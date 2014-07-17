@@ -408,7 +408,7 @@ void MPArea::paintEvent(QPaintEvent *)
     mpdm_hset_s(w, L"tx", MPDM_I(this->width() / font_width));
     mpdm_hset_s(w, L"ty", MPDM_I(this->height() / font_height));
 
-    w = mp_draw(mp_active(), 1);
+    w = mp_draw(mp_active(), !is_new);
     yb = painter.fontMetrics().ascent() + 1;
     y = 0;
 
