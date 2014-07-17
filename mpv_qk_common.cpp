@@ -446,8 +446,8 @@ void MPArea::keyReleaseEvent(QKeyEvent * event)
     if (!event->isAutoRepeat()) {
         key_down = 0;
 
-        if (mp_keypress_throttle(0))
-            area->update();
+//        if (mp_keypress_throttle(0))
+//            area->update();
     }
 }
 
