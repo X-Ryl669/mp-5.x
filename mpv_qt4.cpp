@@ -77,7 +77,8 @@ public:
 protected:
     void paintEvent(QPaintEvent * event);
 
-    public slots: void from_scrollbar(int);
+public slots:
+    void from_scrollbar(int);
     void from_filetabs(int);
     void from_menu(QAction *);
     void from_timer(void);
