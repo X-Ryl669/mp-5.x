@@ -305,6 +305,9 @@ MPArea::MPArea(QWidget * parent):QWidget(parent)
 
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), this, SLOT(from_timer()));
+
+    ls_width    = -1;
+    ls_height   = -1;
 }
 
 
@@ -334,11 +337,30 @@ bool MPArea::event(QEvent * event)
 void MPArea::paintEvent(QPaintEvent *)
 {
     mpdm_t w;
-    int n, m, y;
+    int n, m, y, yb;
     QFont font;
     bool underline = false;
+    QPen *epen;
+    int is_new = 0;
 
-    QPainter painter(this);
+    if (this->width() != ls_width && this->height() != ls_height) {
+        ls_width    = this->width();
+        ls_height   = this->height();
+
+        pixmap      = new QPixmap(ls_width, ls_height);
+        is_new = 1;
+    }
+
+    epen = new QPen(inks[normal_attr]);
+    epen->setStyle(Qt::NoPen);
+
+    QPainter painter(pixmap);
+
+    if (is_new) {
+        painter.setPen(*epen);
+        painter.setBrush(papers[normal_attr]);
+        painter.drawRect(0, 0, ls_width, ls_height);
+    }
 
     font = build_font(0);
     font.setUnderline(false);
@@ -352,13 +374,11 @@ void MPArea::paintEvent(QPaintEvent *)
     mpdm_hset_s(w, L"tx", MPDM_I(this->width() / font_width));
     mpdm_hset_s(w, L"ty", MPDM_I(this->height() / font_height));
 
-    w = mp_draw(mp_active(), 0);
-    y = painter.fontMetrics().ascent() + 1;
+    w = mp_draw(mp_active(), 1);
+    yb = painter.fontMetrics().ascent() + 1;
+    y = 0;
 
     painter.setBackgroundMode(Qt::OpaqueMode);
-
-    painter.setBrush(papers[normal_attr]);
-    painter.drawRect(0, 0, this->width(), this->height());
 
     mpdm_ref(w);
 
@@ -366,37 +386,43 @@ void MPArea::paintEvent(QPaintEvent *)
         mpdm_t l = mpdm_aget(w, n);
         int x = 0;
 
-        if (l == NULL)
-            continue;
+        if (l != NULL) {
+            for (m = 0; m < mpdm_size(l); m++) {
+                int attr;
+                mpdm_t s;
 
-        for (m = 0; m < mpdm_size(l); m++) {
-            int attr;
-            mpdm_t s;
+                /* get the attribute and the string */
+                attr = mpdm_ival(mpdm_aget(l, m++));
+                s = mpdm_aget(l, m);
 
-            /* get the attribute and the string */
-            attr = mpdm_ival(mpdm_aget(l, m++));
-            s = mpdm_aget(l, m);
+                painter.setPen(inks[attr]);
+                painter.setBackground(papers[attr]);
 
-            painter.setPen(inks[attr]);
-            painter.setBackground(papers[attr]);
+                QString qs = str_to_qstring(s);
 
-            QString qs = str_to_qstring(s);
+                if (underline != underlines[attr]) {
+                    underline = underlines[attr];
+                    font.setUnderline(underline);
+                    painter.setFont(font);
+                }
 
-            if (underline != underlines[attr]) {
-                underline = underlines[attr];
-                font.setUnderline(underline);
-                painter.setFont(font);
+                painter.drawText(x, y + yb, qs);
+
+                x += painter.fontMetrics().width(qs);
             }
 
-            painter.drawText(x, y, qs);
-
-            x += painter.fontMetrics().width(qs);
+            painter.setPen(*epen);
+            painter.setBrush(papers[normal_attr]);
+            painter.drawRect(x, y + 1, ls_width - x, font_height);
         }
 
         y += font_height;
     }
 
     mpdm_unref(w);
+
+    QPainter painter2(this);
+    painter2.drawPixmap(0, 0, ls_width, ls_height, *pixmap);
 
     draw_filetabs();
     draw_scrollbar();

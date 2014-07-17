@@ -86,6 +86,10 @@ public:
 
     QTimer *timer;
 
+    QPixmap *pixmap;
+    int ls_width;
+    int ls_height;
+
 protected:
     void paintEvent(QPaintEvent * event);
 
