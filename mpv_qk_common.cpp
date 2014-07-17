@@ -24,6 +24,40 @@
 
 */
 
+class MPArea : public QWidget
+{
+    Q_OBJECT
+
+public:
+    MPArea(QWidget * parent = 0);
+    void inputMethodEvent(QInputMethodEvent * event);
+    void keyPressEvent(QKeyEvent * event);
+    void keyReleaseEvent(QKeyEvent * event);
+    void mousePressEvent(QMouseEvent * event);
+    void mouseReleaseEvent(QMouseEvent * event);
+    void mouseMoveEvent(QMouseEvent * event);
+    void wheelEvent(QWheelEvent * event);
+    void dragEnterEvent(QDragEnterEvent * event);
+    void dropEvent(QDropEvent * event);
+    bool event(QEvent * event);
+
+    QTimer *timer;
+
+    QPixmap *pixmap;
+    int ls_width;
+    int ls_height;
+
+protected:
+    void paintEvent(QPaintEvent * event);
+
+public slots:
+    void from_scrollbar(int);
+    void from_filetabs(int);
+    void from_menu(QAction *);
+    void from_timer(void);
+};
+
+
 MPArea *area;
 QScrollBar *scrollbar;
 static int font_width = -1;
@@ -1112,3 +1146,5 @@ static mpdm_t qt4_drv_timer(mpdm_t a, mpdm_t ctxt)
 
     return NULL;
 }
+
+#include "mpv_qk_common.moc"
