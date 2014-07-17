@@ -9,6 +9,8 @@ Minimum Profit Release Notes
      enable/disable emacs-like scrolling (half screen jumps
      instead of line-by-line). To revert to the old style,
      set it to 0.
+   - New actions `scroll_up' and `scroll_down', bound by
+     default to `alt-cursor-up' and `alt-cursor-down'.
 
 5.2.8
 -----

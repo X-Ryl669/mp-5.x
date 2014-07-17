@@ -41,6 +41,8 @@ mp_doc.actions['move_bof']          = sub (d) { d->move(d.move_bof); };
 mp_doc.actions['move_eof']          = sub (d) { d->move(d.move_eof); };
 mp_doc.actions['move_word_left']    = sub (d) { d->move(d.move_word_left); };
 mp_doc.actions['move_word_right']   = sub (d) { d->move(d.move_word_right); };
+mp_doc.actions['scroll_up']         = sub (d) { d->scroll_up(); };
+mp_doc.actions['scroll_down']       = sub (d) { d->scroll_down(); };
 
 mp_doc.actions['goto'] = sub (d, line) {
     if (line == NULL) {
@@ -84,6 +86,7 @@ mp_doc.actions['move_mouse_wheel_down'] = sub (d) {
     d->move(sub (d) { d->move_down()->move_down()->move_down()->move_down();});
 };
 
+
 mp.actions['document_list'] = sub {
     local r = mp.form(
         [
@@ -124,6 +127,8 @@ mp_doc.keycodes['mouse-right-button']   = "move_to_mouse_position";
 mp_doc.keycodes['mouse-middle-button']  = "move_to_mouse_position";
 mp_doc.keycodes['mouse-wheel-up']       = "move_mouse_wheel_up";
 mp_doc.keycodes['mouse-wheel-down']     = "move_mouse_wheel_down";
+mp_doc.keycodes['alt-cursor-up']        = "scroll_up";
+mp_doc.keycodes['alt-cursor-down']      = "scroll_down";
 
 /** action descriptions **/
 
@@ -281,6 +286,20 @@ sub mp_doc.move_up(doc)
     }
 
     doc->set_y(doc.txt.y - 1);
+}
+
+
+sub mp_doc.scroll_up(doc)
+{
+    if (doc.txt.vy < size(doc.txt.lines) - 1)
+        doc.txt.vy++;
+}
+
+
+sub mp_doc.scroll_down(doc)
+{
+    if (doc.txt.vy > 0)
+        doc.txt.vy--;
 }
 
 

@@ -139,8 +139,6 @@ mp_doc.keycodes['f1']               = "help";
 mp_doc.keycodes['ctrl-d']           = "section_list";
 mp_doc.keycodes['ctrl-cursor-up']   = "move_section_up";
 mp_doc.keycodes['ctrl-cursor-down'] = "move_section_down";
-mp_doc.keycodes['alt-cursor-up']    = "ctrl-cursor-up";
-mp_doc.keycodes['alt-cursor-down']  = "ctrl-cursor-down";
 
 /** action descriptions **/
 
