@@ -1066,6 +1066,9 @@ static mpdm_t qt4_drv_update_ui(mpdm_t a, mpdm_t ctxt)
     build_colors();
     build_menu();
 
+    area->ls_width = area->ls_height = -1;
+    area->update();
+
     return NULL;
 }
 
