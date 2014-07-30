@@ -604,7 +604,17 @@ mp.syntax.python = {
 				]
 			)
 		],
-		'word2',	[ '/global/', '/\$\w+/', '/[-=<>:\?\+\*\!\%&\|{}]+/' ],
+		'word2',  [
+            '/global/', '/\$\w+/',
+            mp.syn_token_list([
+                "True", "False", "None", "self",
+                "dict", "list", "set", "bool"
+                ]
+            )
+        ],
+        'word3', [
+             '/[-=<>:\?\+\*\!\%&\|{}]+/'
+        ],
 		'quotes',	[
 			"/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/",	/* double-quoted strings */
 			"/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",		/* single-quoted strings */
