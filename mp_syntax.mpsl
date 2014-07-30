@@ -622,8 +622,7 @@ mp.syntax.python = {
 			"/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",		/* single-quoted strings */
 			"/\b-?[0-9]+\b/",			/* numbers */
 			"/\b0x[0-9a-f]+\b/i",			/* hex numbers */
-			"/\b[0-9[:upper:]_]+\b/",		/* all-caps words */
-			[ "/`/", "/`/" ]			/* backticks */
+			"/\b[0-9[:upper:]_]+\b/"		/* all-caps words */
 		],
 		'comments',		[ "/#.*$/m" ],
 		'documentation',	[ [ '/"""/m', '/"""$/m' ] ]
@@ -635,7 +634,7 @@ mp.syntax.python = {
 		/* is it a 'she-bang'? */
 		return regex(f, '/^#!\s*/usr/bin/(env )?python/');
 	},
-	'section'	=>	[ '/^[ \t]*def/' ],
+	'section'	=>	[ '/^[ \t]*(def|class) /' ],
     'build_targets' => [
         'python %s',
         'python -m py_compile %s && echo "Syntax OK"'
