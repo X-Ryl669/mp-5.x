@@ -608,12 +608,14 @@ mp.syntax.python = {
             '/global/', '/\$\w+/',
             mp.syn_token_list([
                 "True", "False", "None", "self",
-                "dict", "list", "set", "bool"
+                "dict", "list", "set", "bool",
+                "int", "float", "str", "repr"
                 ]
             )
         ],
         'word3', [
-             '/[-=<>:\?\+\*\!\%&\|{}]+/'
+            '/]/',
+            '/[-=<>:\.\?\+\*\!\%&\|{}\[\/]+/'
         ],
 		'quotes',	[
 			"/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/",	/* double-quoted strings */
@@ -624,7 +626,7 @@ mp.syntax.python = {
 			[ "/`/", "/`/" ]			/* backticks */
 		],
 		'comments',		[ "/#.*$/m" ],
-		'documentation',	[ [ '/""".+[^"]$/m', '/"""$/m' ] ]
+		'documentation',	[ [ '/"""/m', '/"""$/m' ] ]
 	],
 	'detect'	=>	sub (d) {
 		/* take the first line */
