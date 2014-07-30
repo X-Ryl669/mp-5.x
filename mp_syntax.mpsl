@@ -605,7 +605,7 @@ mp.syntax.python = {
 			)
 		],
 		'word2',  [
-            '/global/', '/\$\w+/',
+            '/global/', '/\$\w+/', '/__[a-z]+__/',
             mp.syn_token_list([
                 "True", "False", "None", "self",
                 "dict", "list", "set", "bool",
