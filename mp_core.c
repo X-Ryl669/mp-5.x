@@ -961,6 +961,12 @@ mpdm_t mp_draw(mpdm_t doc, int optimize)
 /* main generic drawing function for drivers */
 {
     mpdm_t f, r = NULL;
+    static mpdm_t d = NULL;
+
+    if (doc != d) {
+        optimize = 0;
+        mpdm_set(&d, doc);
+    }
 
     if ((f = mpdm_hget_s(doc, L"render")) != NULL) {
         /* create a context to contain the object itself
