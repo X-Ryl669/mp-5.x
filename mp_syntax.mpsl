@@ -901,6 +901,29 @@ mp.syntax.js = {
 };
 
 
+mp.syntax.json = {
+    id:         'json',
+    name:       'JSON',
+    filenames:  [
+        '/\.json$/i'
+    ],
+    defs:       [
+        'word1', [
+            "/\b-?[0-9]+\b/"
+        ],
+        'quotes', [
+            "/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/"
+        ],
+        'word2', [
+            "/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"\s*:/"
+        ],
+        'word3', [
+            "/\b(true|false|null)\b/"
+        ]
+    ]
+};
+
+
 /** code **/
 
 sub mp_doc.detect_syntax(doc)

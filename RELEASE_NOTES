@@ -11,6 +11,7 @@ Minimum Profit Release Notes
      set it to 0.
    - New actions `scroll_up' and `scroll_down', bound by
      default to `alt-cursor-up' and `alt-cursor-down'.
+   - New syntax highlight for JSON files.
 
 5.2.8
 -----
