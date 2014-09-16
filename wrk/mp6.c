@@ -74,6 +74,36 @@ struct mp6_blk *mp6_set_c(struct mp6_blk *b, int d)
 }
 
 
+void mp6_delete(struct mp6_blk *b, size_t z)
+{
+    if (b && z > 0) {
+        off_t d = b->l - (b->c + z);
+
+        if (d > 0) {
+            wchar_t *p = mp6_blk_p(b) + b->c;
+            memcpy(p, p + z, (b->l - z) * sizeof(wchar_t));
+            b->l = b->c + d;
+        }
+        else {
+            mp6_delete(mp6_set_c(b->n, 0), z - (b->l - b->c));
+            b->l = b->c;
+        }
+    }
+}
+
+
+struct mp6_blk *mp6_bof(struct mp6_blk *b)
+{
+    return b->p ? mp6_bof(b->p) : mp6_set_c(b, 0);
+}
+
+
+struct mp6_blk *mp6_eof(struct mp6_blk *b)
+{
+    return b->n ? mp6_eof(b->n) : mp6_set_c(b, -1);
+}
+
+
 struct mp6_blk *mp6_fwd(struct mp6_blk *b, off_t c)
 {
     off_t d = b->l - b->c;
@@ -119,16 +149,24 @@ int main(int argc, char *argv[])
 
     b = mp6_blk_new(NULL, 0, 0, 0, NULL, NULL);
 
-    p = L"this is an incredible test";
-
+    p = L"1234567890";
     b = mp6_insert(b, p, wcslen(p));
+    p = L"abcdefghij";
     b = mp6_insert(b, p, wcslen(p));
     b->c = 0;
+    p = L"ABCDEFGHIJ";
     b = mp6_insert(b, p, wcslen(p));
 
     b->c = 0;
     z = mp6_get(b, tmp, 5);
     z = mp6_get(b, tmp, 2048);
+
+    b = mp6_bof(b);
+    mp6_delete(b, 20);
+
+    b = mp6_bof(b);
+    z = mp6_get(b, tmp, 2048);
+    tmp[z] = L'\0';
 
     return 0;
 }
