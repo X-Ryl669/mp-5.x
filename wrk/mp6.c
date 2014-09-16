@@ -81,7 +81,7 @@ void mp6_delete(struct mp6_blk *b, size_t z)
 
         if (d > 0) {
             wchar_t *p = mp6_blk_p(b);
-            memcpy(p, p + z, (b->l - z) * sizeof(wchar_t));
+            memcpy(p, p + z, d * sizeof(wchar_t));
             b->l = b->c + d;
         }
         else {
@@ -104,13 +104,13 @@ struct mp6_blk *mp6_eof(struct mp6_blk *b)
 }
 
 
-struct mp6_blk *mp6_fwd(struct mp6_blk *b, off_t c)
+static struct mp6_blk *_fwd(struct mp6_blk *b, off_t c)
 {
     off_t d = b->l - b->c;
 
     if (c > d) {
         if (b->n)
-            b = mp6_fwd(mp6_set_c(b->n, 0), c - d);
+            b = _fwd(mp6_set_c(b->n, 0), c - d);
         else
             mp6_set_c(b, -1);
     }
@@ -119,6 +119,35 @@ struct mp6_blk *mp6_fwd(struct mp6_blk *b, off_t c)
 
     return b;
 }
+
+
+static struct mp6_blk *_bwd(struct mp6_blk *b, off_t c)
+{
+    off_t d = b->c - c;
+
+    if (d < 0) {
+        if (b->p)
+            b = _bwd(mp6_set_c(b->p, -1), c + d);
+        else
+            mp6_set_c(b, 0);
+    }
+    else
+        b->c -= c;
+
+    return b;
+}
+
+
+struct mp6_blk *mp6_move(struct mp6_blk *b, off_t c)
+{
+    if (c > 0)
+        b = _fwd(b, c);
+    else
+        b = _bwd(b, -c);
+
+    return b;
+}
+
 
 
 size_t mp6_get(struct mp6_blk *b, wchar_t *d, size_t z)
@@ -163,6 +192,14 @@ int main(int argc, char *argv[])
 
     b = mp6_bof(b);
     mp6_delete(b, 20);
+
+    b = mp6_bof(b);
+    z = mp6_get(b, tmp, 2048);
+    tmp[z] = L'\0';
+
+    b = mp6_bof(b);
+    b = mp6_move(b, 2);
+    mp6_delete(b, 5);
 
     b = mp6_bof(b);
     z = mp6_get(b, tmp, 2048);
