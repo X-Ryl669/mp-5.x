@@ -16,7 +16,16 @@ struct mp6_blk {
 
 wchar_t *mp6_blk_p(struct mp6_blk *b)
 {
-    return (wchar_t *)(b + 1);
+    return ((wchar_t *)(b + 1)) + b->c;
+}
+
+
+struct mp6_blk *mp6_set_c(struct mp6_blk *b, int d)
+{
+    if (b)
+        b->c = d == -1 ? b->l : 0;
+
+    return b;
 }
 
 
@@ -48,27 +57,18 @@ struct mp6_blk *mp6_insert(struct mp6_blk *b, const wchar_t *d, size_t z)
         if (b->z - b->l < z)
             b = mp6_blk_new(b, b->z + z, b->l, b->c, b->p, b->n);
 
-        memcpy(mp6_blk_p(b) + b->c, d, z * sizeof(wchar_t));
+        memcpy(mp6_blk_p(b), d, z * sizeof(wchar_t));
 
         b->c += z;
         b->l += z;
     }
     else {
         mp6_insert(mp6_blk_new(NULL, 0, 0, 0, b, b->n),
-                        mp6_blk_p(b) + b->c, b->l - b->c);
+                        mp6_blk_p(b), b->l - b->c);
 
         b->l = b->c;
         b = mp6_insert(b, d, z);
     }
-
-    return b;
-}
-
-
-struct mp6_blk *mp6_set_c(struct mp6_blk *b, int d)
-{
-    if (b)
-        b->c = d == -1 ? b->l : 0;
 
     return b;
 }
@@ -80,7 +80,7 @@ void mp6_delete(struct mp6_blk *b, size_t z)
         off_t d = b->l - (b->c + z);
 
         if (d > 0) {
-            wchar_t *p = mp6_blk_p(b) + b->c;
+            wchar_t *p = mp6_blk_p(b);
             memcpy(p, p + z, (b->l - z) * sizeof(wchar_t));
             b->l = b->c + d;
         }
@@ -131,7 +131,7 @@ size_t mp6_get(struct mp6_blk *b, wchar_t *d, size_t z)
         if (c > z)
             c = z;
 
-        memcpy(d, mp6_blk_p(b) + b->c, c * sizeof(wchar_t));
+        memcpy(d, mp6_blk_p(b), c * sizeof(wchar_t));
 
         c += mp6_get(mp6_set_c(b->n, 0), d + c, z - c);
     }
