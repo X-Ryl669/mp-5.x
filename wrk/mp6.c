@@ -89,16 +89,16 @@ struct mp6_blk *mp6_insert(struct mp6_blk *b, const wchar_t *d, size_t z)
 void mp6_delete(struct mp6_blk *b, size_t z)
 {
     if (b && z > 0) {
-        off_t d = b->l - (b->c + z);
+        off_t r = b->l - b->c;
 
-        if (d > 0) {
+        if (r > z) {
             wchar_t *p = mp6_blk_p(b);
-            memcpy(p, p + z, d * sizeof(wchar_t));
-            b->l = b->c + d;
+            memcpy(p, p + z, (r - z) * sizeof(wchar_t));
+            b->l = b->c + r - z;
         }
         else {
-            mp6_delete(mp6_set_c(b->n, 0), z - (b->l - b->c));
             b->l = b->c;
+            mp6_delete(mp6_set_c(b->n, 0), z - r);
         }
     }
 }
