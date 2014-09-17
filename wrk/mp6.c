@@ -51,9 +51,22 @@ struct mp6_blk *mp6_blk_new(struct mp6_blk *b, size_t z, off_t l, off_t c,
 }
 
 
+off_t mp6_get_o(struct mp6_blk *b)
+{
+    off_t o = 0;
+
+    if (b)
+        o = b->c + mp6_get_o(mp6_set_c(b->p, -1));
+
+    return o;
+}
+
+
 struct mp6_blk *mp6_insert(struct mp6_blk *b, const wchar_t *d, size_t z)
 {
-    if (b->c == b->l) {
+    off_t r = b->l - b->c;
+
+    if (r == 0) {
         if (b->z - b->l < z)
             b = mp6_blk_new(b, b->z + z, b->l, b->c, b->p, b->n);
 
@@ -63,8 +76,7 @@ struct mp6_blk *mp6_insert(struct mp6_blk *b, const wchar_t *d, size_t z)
         b->l += z;
     }
     else {
-        mp6_insert(mp6_blk_new(NULL, 0, 0, 0, b, b->n),
-                        mp6_blk_p(b), b->l - b->c);
+        mp6_insert(mp6_blk_new(NULL, r, 0, 0, b, b->n), mp6_blk_p(b), r);
 
         b->l = b->c;
         b = mp6_insert(b, d, z);
