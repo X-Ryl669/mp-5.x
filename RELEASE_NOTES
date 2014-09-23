@@ -7,8 +7,7 @@ Minimum Profit Release Notes
  - New features:
    - New configuration directive mp.config.emacs_scrolling, to
      enable/disable emacs-like scrolling (half screen jumps
-     instead of line-by-line). To revert to the old style,
-     set it to 0.
+     instead of line-by-line).
    - New actions `scroll_up' and `scroll_down', bound by
      default to `alt-cursor-up' and `alt-cursor-down'.
    - New syntax highlight for JSON files.
