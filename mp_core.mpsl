@@ -585,7 +585,7 @@ sub mp.usage()
 sub mp.process_cmdline()
 /* process the command line arguments (ARGV) */
 {
-    local o;
+    local o, nl;
 
     mp.load_tags();
 
@@ -646,11 +646,16 @@ sub mp.process_cmdline()
             mp.config.text_mode = 1;
         else
         if (regex(o, '/^\+[0-9]+$/')) {
-            if (size(mp.active_pending))
-                mp.active_pending[-1] = mp.active_pending[-1] ~ ':' ~ (o + 0) ~ ':';
+            nl = o + 0;
         }
-        else
-            push(mp.active_pending, o);
+        else {
+            if (nl) {
+                push(mp.active_pending, o ~ ':' ~ nl ~ ':');
+                nl = NULL;
+            }
+            else
+                push(mp.active_pending, o);
+        }
     }
 
     if (ERROR) {
