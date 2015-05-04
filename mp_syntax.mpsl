@@ -593,6 +593,10 @@ mp.syntax.python = {
 	'id'		=>	'python',
 	'name'		=>	'Python',
 	'filenames'	=>	[ '/\.py$/i' ],
+	'help'		=>	[
+                        "python -c 'help(%s)'",
+                        "python -c 'import %s as m; help(m)'"
+                    ],
 	'defs'		=>	[
 		'word1',	[
 			mp.syn_token_list( [
