@@ -1817,6 +1817,8 @@ static mpdm_t win32_drv_startup(mpdm_t a, mpdm_t ctxt)
 
     InitCommonControls();
 
+    hinst = GetModuleHandle(NULL);
+
     /* register the window */
     wc.style = CS_HREDRAW | CS_VREDRAW;
     wc.lpfnWndProc = WndProc;
