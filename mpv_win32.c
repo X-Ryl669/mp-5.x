@@ -4,7 +4,7 @@
 
     Win32 driver.
 
-    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2014 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -252,7 +252,6 @@ static void build_menu(void)
     menu = CreateMenu();
 
     for (n = 0; n < mpdm_size(m); n++) {
-        char *ptr;
         mpdm_t mi, v, l;
         int i;
         HMENU submenu = CreatePopupMenu();
@@ -275,9 +274,7 @@ static void build_menu(void)
                 mpdm_t d = mpdm_ref(mp_menu_label(v));
 
                 /* set the string */
-                ptr = mpdm_wcstombs(mpdm_string(d), NULL);
-                AppendMenu(submenu, MF_STRING, win32_menu_id, ptr);
-                free(ptr);
+                AppendMenuW(submenu, MF_STRING, win32_menu_id, mpdm_string(d));
 
                 mpdm_unref(d);
 
@@ -294,9 +291,7 @@ static void build_menu(void)
         }
 
         /* now store the popup inside the menu */
-        ptr = mpdm_wcstombs(mpdm_string(v), NULL);
-        AppendMenu(menu, MF_STRING | MF_POPUP, (UINT) submenu, ptr);
-        free(ptr);
+        AppendMenuW(menu, MF_STRING | MF_POPUP, (UINT) submenu, mpdm_string(v));
     }
 
     SetMenu(hwnd, menu);
