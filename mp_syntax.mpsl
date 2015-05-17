@@ -153,7 +153,7 @@ mp.syntax = {};
 
 /** syntax definitions **/
 
-sub mp.syn_token_list(l) { '/\b(' ~ join(l, "|") ~ ')\b/'; }
+sub mp.syn_token_list(l) { '/\<(' ~ join(l, "|") ~ ')\>/'; }
 
 mp.syntax.c = {
     id:         'c',
@@ -205,12 +205,12 @@ mp.syntax.c = {
             /* from http://ad.hominem.org/log/2005/05/quoted_strings.php */
             "/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/", /* double-quoted strings */
             "/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",     /* single-quoted strings */
-            "/\b-?[0-9]+\b/",                           /* numbers */
-            "/\b[0-9]+e[0-9]+\b/",                      /* numbers in exp format */
-            "/\b0[0-7]+\b/",                            /* octal numbers */
-            "/\b0x[0-9a-f]+\b/i",                       /* hex numbers */
-            "/\b__(DATE|FILE|LINE|STDC|TIME|STDC_HOSTED|STDC_VERSION|func)__\b/", /* ISO macros */
-            "/\b(true|false|NULL)\b/"                   /* symbolic constant names */
+            "/\<-?[0-9]+\>/",                           /* numbers */
+            "/\<[0-9]+e[0-9]+\>/",                      /* numbers in exp format */
+            "/\<0[0-7]+\>/",                            /* octal numbers */
+            "/\<0x[0-9a-f]+\>/i",                       /* hex numbers */
+            "/\<__(DATE|FILE|LINE|STDC|TIME|STDC_HOSTED|STDC_VERSION|func)__\>/", /* ISO macros */
+            "/\<(true|false|NULL)\>/"                   /* symbolic constant names */
         ],
         'comments', [
             [ '|/\*|', '|\*/|' ],                       /* C-like */
@@ -254,11 +254,11 @@ mp.syntax.mpsl = {
             /* from http://ad.hominem.org/log/2005/05/quoted_strings.php */
             "/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/", /* double-quoted strings */
             "/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",     /* single-quoted strings */
-            "/\b-?[0-9]+\b/",                           /* numbers */
-            "/\b0x[0-9a-f]+\b/i",                       /* hex numbers */
-            "/\b0b[0-1]+\b/i",                          /* binary numbers */
+            "/\<-?[0-9]+\>/",                           /* numbers */
+            "/\<0x[0-9a-f]+\>/i",                       /* hex numbers */
+            "/\<0b[0-1]+\>/i",                          /* binary numbers */
             '/\w+\s*:/',                                /* JS-type hashes */
-            "/\b[0-9[:upper:]_]+\b/"                    /* all-caps words */
+            "/\<[0-9[:upper:]_]+\>/"                    /* all-caps words */
         ],
         'word3',    [
             '/:/'
@@ -304,11 +304,11 @@ mp.syntax.nh3 = {
             /* from http://ad.hominem.org/log/2005/05/quoted_strings.php */
             "/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/", /* double-quoted strings */
             "/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",     /* single-quoted strings */
-            "/\b-?[0-9]+\b/",                           /* numbers */
-            "/\b0x[0-9a-f]+\b/i",                       /* hex numbers */
-            "/\b0b[0-1]+\b/i",                          /* binary numbers */
+            "/\<-?[0-9]+\>/",                           /* numbers */
+            "/\<0x[0-9a-f]+\>/i",                       /* hex numbers */
+            "/\<0b[0-1]+\>/i",                          /* binary numbers */
             '/\w+\s*:/',                                /* JS-type hashes */
-            "/\b[0-9[:upper:]_]+\b/"                    /* all-caps words */
+            "/\<[0-9[:upper:]_]+\>/"                    /* all-caps words */
         ],
         'word3',    [
             '/:/'
@@ -346,9 +346,9 @@ mp.syntax.rc = {
 			/* from http://ad.hominem.org/log/2005/05/quoted_strings.php */
 			"/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/",	/* double-quoted strings */
 			"/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",		/* single-quoted strings */
-			"/\b-?[0-9]+\b/",			/* numbers */
-			"/\b0x[0-9a-f]+\b/i",			/* hex numbers */
-			"/\b[0-9[:upper:]_]+\b/"		/* all-caps words */
+			"/\<-?[0-9]+\>/",			/* numbers */
+			"/\<0x[0-9a-f]+\>/i",			/* hex numbers */
+			"/\<[0-9[:upper:]_]+\>/"		/* all-caps words */
 		],
 		'comments',	[
 			[ '|/\*|', '|\*/|' ],			/* C-like */
@@ -389,9 +389,9 @@ mp.syntax.perl = {
 			/* from http://ad.hominem.org/log/2005/05/quoted_strings.php */
 			"/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/",	/* double-quoted strings */
 			"/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",		/* single-quoted strings */
-			"/\b-?[0-9]+\b/",			/* numbers */
-			"/\b0x[0-9a-f]+\b/i",			/* hex numbers */
-			"/\b[0-9[:upper:]_]+\b/",		/* all-caps words */
+			"/\<-?[0-9]+\>/",			/* numbers */
+			"/\<0x[0-9a-f]+\>/i",			/* hex numbers */
+			"/\<[0-9[:upper:]_]+\>/",		/* all-caps words */
 			[ "/q\(/", "/\)/" ],			/* quote */
 			[ "/qw\(/", "/\)/" ],			/* quote word */
 			'/\w+\s*=>/',				/* barewords as hash keys 1 */
@@ -449,17 +449,17 @@ mp.syntax.sh = {
 
 		],
 		'word2',	[
-				'/\b(local|let|set)\b/',
+				'/\<(local|let|set)\>/',
 				'/[-=<>:\?\+\*\!\%&\|]+/',
 				'/\$\w+/',
 				'/\$\{\w+\}/',
-				"/\b[0-9[:upper:]_]+\b/"	/* all-caps words */
+				"/\<[0-9[:upper:]_]+\>/"	/* all-caps words */
 		],
 		'quotes',	[
 			"/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/",	/* double-quoted strings */
 			"/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",		/* single-quoted strings */
-			"/\b-?[0-9]+\b/",			/* numbers */
-			"/\b0x[0-9a-f]+\b/i",			/* hex numbers */
+			"/\<-?[0-9]+\>/",			/* numbers */
+			"/\<0x[0-9a-f]+\>/i",			/* hex numbers */
 			"/\([A-Za-z0-9_]+\)/",			/* parens */
 			[ "/`/", "/`/" ],			/* backticks */
 			[ "/<<[\"']?EOF[\"']?;$/m", "/^EOF$/m" ]	/* 'document here' */
@@ -542,8 +542,8 @@ mp.syntax.conf = {
 		'quotes',	[
 			"/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/",	/* double-quoted strings */
 			"/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",		/* single-quoted strings */
-			"/\b-?[0-9]+\b/",			/* numbers */
-			"/\b0x[0-9a-f]+\b/i"			/* hex numbers */
+			"/\<-?[0-9]+\>/",			/* numbers */
+			"/\<0x[0-9a-f]+\>/i"			/* hex numbers */
 		],
 		'comments',	[ "/#.*$/m" ]
 	]
@@ -577,9 +577,9 @@ mp.syntax.php = {
 		'quotes',	[
 			"/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/",	/* double-quoted strings */
 			"/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",		/* single-quoted strings */
-			"/\b-?[0-9]+\b/",			/* numbers */
-			"/\b0x[0-9a-f]+\b/i",			/* hex numbers */
-			"/\b[0-9[:upper:]_]+\b/",		/* all-caps words */
+			"/\<-?[0-9]+\>/",			/* numbers */
+			"/\<0x[0-9a-f]+\>/i",			/* hex numbers */
+			"/\<[0-9[:upper:]_]+\>/",		/* all-caps words */
 			[ "/`/", "/`/" ]			/* backticks */
 		],
 		'comments',	[
@@ -624,9 +624,9 @@ mp.syntax.python = {
 		'quotes',	[
 			"/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/",	/* double-quoted strings */
 			"/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",		/* single-quoted strings */
-			"/\b-?[0-9]+\b/",			/* numbers */
-			"/\b0x[0-9a-f]+\b/i",			/* hex numbers */
-			"/\b[0-9[:upper:]_]+\b/"		/* all-caps words */
+			"/\<-?[0-9]+\>/",			/* numbers */
+			"/\<0x[0-9a-f]+\>/i",			/* hex numbers */
+			"/\<[0-9[:upper:]_]+\>/"		/* all-caps words */
 		],
 		'comments',		[ "/#.*$/m" ],
 		'documentation',	[ [ '/"""/m', '/"""$/m' ] ]
@@ -666,9 +666,9 @@ mp.syntax.ruby = {
 		'quotes',	[
 			"/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/",	/* double-quoted strings */
 			"/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",		/* single-quoted strings */
-			"/\b-?[0-9]+\b/",			/* numbers */
-			"/\b0x[0-9a-f]+\b/i",			/* hex numbers */
-			"/\b[0-9[:upper:]_]+\b/",		/* all-caps words */
+			"/\<-?[0-9]+\>/",			/* numbers */
+			"/\<0x[0-9a-f]+\>/i",			/* hex numbers */
+			"/\<[0-9[:upper:]_]+\>/",		/* all-caps words */
 			[ "/`/", "/`/" ]			/* backticks */
 		],
 		'comments',	[ "/#.*$/m" ]
@@ -794,9 +794,9 @@ mp.syntax.euphoria = {
 		'quotes',	[
 			"/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/",    /* double-quoted strings */
 			"/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",        /* single-quoted strings */
-			"/\b-?#[0-9A-F]+\b/",                /* hex numbers */
-			"/\b-?[0-9]+\b/",                /* numbers */
-			"/\b[0-9[:upper:]_]+\b/"            /* all-caps words */
+			"/\<-?#[0-9A-F]+\>/",                /* hex numbers */
+			"/\<-?[0-9]+\>/",                /* numbers */
+			"/\<[0-9[:upper:]_]+\>/"            /* all-caps words */
 		],
 		'comments',		[ "/--.*$/m" ]
 	],
@@ -830,7 +830,7 @@ mp.syntax.grutatxt = {
 	'name'		=> 'Grutatxt',
 	'defs'		=> [
 		'word1',	[ "/[^\n]+\n[-=~]+\n/", "/ \* [^.\n:]+:/" ],
-		'comments',	[ "/\b_[^ \t\n][^_\n]*[^ \t\n]_\b/" ],
+		'comments',	[ "/\<_[^ \t\n][^_\n]*[^ \t\n]_\>/" ],
 		'word2',	[ "/\*[^ \t\n][^\*\n]*[^ \t\n]\*/" ],
 		'quotes',	[ "/`[^ \t\n][^'\n]*[^ \t\n]'/" ]
 	],
@@ -886,11 +886,11 @@ mp.syntax.js = {
             /* from http://ad.hominem.org/log/2005/05/quoted_strings.php */
             "/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/", /* double-quoted strings */
             "/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",     /* single-quoted strings */
-            "/\b-?[0-9]+\b/",                           /* numbers */
-            "/\b[0-9]+e[0-9]+\b/",                      /* numbers in exp format */
-            "/\b0[0-7]+\b/",                            /* octal numbers */
-            "/\b0x[0-9a-f]+\b/i",                       /* hex numbers */
-            "/\b(true|false|null)\b/"                   /* symbolic constant names */
+            "/\<-?[0-9]+\>/",                           /* numbers */
+            "/\<[0-9]+e[0-9]+\>/",                      /* numbers in exp format */
+            "/\<0[0-7]+\>/",                            /* octal numbers */
+            "/\<0x[0-9a-f]+\>/i",                       /* hex numbers */
+            "/\<(true|false|null)\>/"                   /* symbolic constant names */
         ],
         'comments', [
             [ '|/\*|', '|\*/|' ],                       /* C-like */
@@ -913,7 +913,7 @@ mp.syntax.json = {
     ],
     defs:       [
         'word1', [
-            "/\b-?[0-9]+\b/"
+            "/\<-?[0-9]+\>/"
         ],
         'quotes', [
             "/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/"
@@ -922,7 +922,7 @@ mp.syntax.json = {
             "/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"\s*:/"
         ],
         'word3', [
-            "/\b(true|false|null)\b/"
+            "/\<(true|false|null)\>/"
         ]
     ]
 };
