@@ -1314,13 +1314,10 @@ BOOL CALLBACK formDlgProc(HWND hwnd, UINT msg, WPARAM wparam,
             char *ptr;
 
             if ((t = mpdm_hget_s(w, L"label")) != NULL) {
-                if ((ptr = mpdm_wcstombs(mpdm_string(t), NULL)) != NULL) {
-                    SetDlgItemText(hwnd, LABEL_ID + n, ptr);
-                    free(ptr);
+                SetDlgItemTextW(hwnd, LABEL_ID + n, mpdm_string(t));
 
-                    SendDlgItemMessage(hwnd, LABEL_ID + n, WM_SETFONT,
-                                       (WPARAM) hf, MAKELPARAM(FALSE, 0));
-                }
+                SendDlgItemMessage(hwnd, LABEL_ID + n, WM_SETFONT,
+                                   (WPARAM) hf, MAKELPARAM(FALSE, 0));
             }
 
             SendDlgItemMessage(hwnd, ctrl, WM_SETFONT,
@@ -1329,10 +1326,8 @@ BOOL CALLBACK formDlgProc(HWND hwnd, UINT msg, WPARAM wparam,
             type = mpdm_string(mpdm_hget_s(w, L"type"));
 
             if (wcscmp(type, L"text") == 0) {
-                if ((t = mpdm_hget_s(w, L"value")) != NULL &&
-                    (ptr = mpdm_wcstombs(mpdm_string(t), NULL)) != NULL) {
-                    SetDlgItemText(hwnd, ctrl, ptr);
-                    free(ptr);
+                if ((t = mpdm_hget_s(w, L"value")) != NULL) {
+                    SetDlgItemTextW(hwnd, ctrl, mpdm_string(t));
                 }
 
                 /* store the history into combo_items */
