@@ -962,7 +962,7 @@ static void dropped_files(HDROP hDrop)
 #define WM_MOUSEWHEEL			0x020A
 #endif
 
-long STDCALL WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
+long CALLBACK WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
 /* main window Proc */
 {
     int x, y;
