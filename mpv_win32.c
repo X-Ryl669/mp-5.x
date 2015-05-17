@@ -1236,11 +1236,8 @@ static mpdm_t win32_drv_shutdown(mpdm_t a, mpdm_t ctxt)
 
     SendMessage(hwnd, WM_CLOSE, 0, 0);
 
-    if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL) {
-        char *ptr = mpdm_wcstombs(mpdm_string(v), NULL);
-        MessageBox(NULL, ptr, "mp " VERSION, MB_ICONWARNING | MB_OK);
-        free(ptr);
-    }
+    if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL)
+        MessageBoxW(NULL, mpdm_string(v), L"mp " VERSION, MB_ICONWARNING | MB_OK);
 
     return NULL;
 }
@@ -1249,16 +1246,8 @@ static mpdm_t win32_drv_shutdown(mpdm_t a, mpdm_t ctxt)
 static mpdm_t win32_drv_alert(mpdm_t a, mpdm_t ctxt)
 /* alert driver function */
 {
-    wchar_t *wptr;
-    char *ptr;
-
     /* 1# arg: prompt */
-    wptr = mpdm_string(mpdm_aget(a, 0));
-
-    if ((ptr = mpdm_wcstombs(wptr, NULL)) != NULL) {
-        MessageBox(hwnd, ptr, "mp " VERSION, MB_ICONWARNING | MB_OK);
-        free(ptr);
-    }
+    MessageBoxW(hwnd, mpdm_string(mpdm_aget(a, 0)), L"mp " VERSION, MB_ICONWARNING | MB_OK);
 
     return NULL;
 }
@@ -1267,27 +1256,19 @@ static mpdm_t win32_drv_alert(mpdm_t a, mpdm_t ctxt)
 static mpdm_t win32_drv_confirm(mpdm_t a, mpdm_t ctxt)
 /* confirm driver function */
 {
-    wchar_t *wptr;
-    char *ptr;
     int ret = 0;
 
     /* 1# arg: prompt */
-    wptr = mpdm_string(mpdm_aget(a, 0));
-
-    if ((ptr = mpdm_wcstombs(wptr, NULL)) != NULL) {
-        ret =
-            MessageBox(hwnd, ptr, "mp " VERSION,
+    ret = MessageBoxW(hwnd, mpdm_string(mpdm_aget(a, 0)), L"mp " VERSION,
                        MB_ICONQUESTION | MB_YESNOCANCEL);
-        free(ptr);
 
-        if (ret == IDYES)
-            ret = 1;
-        else
-        if (ret == IDNO)
-            ret = 2;
-        else
-            ret = 0;
-    }
+    if (ret == IDYES)
+        ret = 1;
+    else
+    if (ret == IDNO)
+        ret = 2;
+    else
+        ret = 0;
 
     return MPDM_I(ret);
 }
