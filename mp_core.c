@@ -276,13 +276,13 @@ static int drw_prepare(mpdm_t doc)
 
     if (n) {
         char tmp[32];
-        sprintf(tmp, "%d", mpdm_size(lines));
+        sprintf(tmp, " %d ", mpdm_size(lines));
         drw_1.lncols = strlen(tmp);
     }
     else
         drw_1.lncols = 0;
 
-    mpdm_hset_s(MP, L"xoffset", MPDM_I(drw_1.lncols ? drw_1.lncols + 2 : 0));
+    mpdm_hset_s(MP, L"xoffset", MPDM_I(drw_1.lncols));
 
     /* compare drw_1 with drw_1_o; if they are the same,
        no more expensive calculations on drw_2 are needed */
@@ -840,7 +840,7 @@ static mpdm_t drw_remap_to_array(void)
     mpdm_t fmt = NULL;
 
     if (drw_1.lncols) {
-        fmt = mpdm_ref(mpdm_strcat(MPDM_LS(L" %"), mpdm_strcat_s(MPDM_I(drw_1.lncols), L"d ")));
+        fmt = mpdm_ref(mpdm_strcat(MPDM_LS(L" %"), mpdm_strcat_s(MPDM_I(drw_1.lncols - 2), L"d ")));
     }
 
     for (my = 0; my < drw_1.ty; my++) {
