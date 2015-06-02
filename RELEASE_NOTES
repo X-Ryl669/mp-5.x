@@ -1,6 +1,13 @@
 Minimum Profit Release Notes
 ============================
 
+5.2.10
+------
+
+ - New features:
+   - New configuration directive mp.config.show_line_numbers,
+     to show line numbers to the left of each line.
+
 5.2.9
 -----
 
