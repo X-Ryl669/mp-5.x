@@ -848,7 +848,7 @@ static mpdm_t drw_remap_to_array(void)
         int o = my * (drw_1.tx + 1);
         int mx = 0;
 
-        if (drw_1.xoffset) {
+        if (drw_1.xoffset && drw_1.vy + my < drw_1.t_lines) {
             mpdm_ref(l);
             mpdm_push(l, MPDM_I(drw_1.normal_attr));
             mpdm_push(l, mpdm_fmt(fmt, MPDM_I(drw_1.vy + 1 + my)));
