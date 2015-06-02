@@ -7,6 +7,10 @@ Minimum Profit Release Notes
  - New features:
    - New configuration directive mp.config.show_line_numbers,
      to show line numbers to the left of each line.
+ - Other:
+   - Minimum Profit for Win32 is now built using cygwin
+     instead of mingw. This fixes some bugs like #1306, but
+     may rise other unexpected issues.
 
 5.2.9
 -----
