@@ -206,6 +206,11 @@ mp.actions['line_options']	= sub {
                 label:      L("'Smart' move to beginning of line:"),
                 value:      mp.config.smart_bol,
                 type:       'checkbox'
+            },
+            {
+                label:      L("Show line numbers:"),
+                value:      mp.config.show_line_numbers,
+                type:       'checkbox'
             }
         ]
     );
@@ -217,6 +222,7 @@ mp.actions['line_options']	= sub {
         mp.config.keep_eol      = t[3];
         mp.config.mark_eol      = t[4];
         mp.config.smart_bol     = t[5];
+        mp.config.show_line_numbers = t[6];
     }
 };
 
