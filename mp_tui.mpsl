@@ -163,6 +163,10 @@ sub mp.tui.readline(prompt, history, default, flags)
 		}
 		else
 		if (k eq 'tab' && flags.file) {
+            if (regex(r, '/^~/') && ENV['HOME']) {
+                r = sregex(r, '/^~/', ENV['HOME']);
+            }
+
 			local done = 0;
 
 			while (!done) {
