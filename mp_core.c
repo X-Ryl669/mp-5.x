@@ -282,6 +282,8 @@ static int drw_prepare(mpdm_t doc)
     else
         drw_1.lncols = 0;
 
+    mpdm_hset_s(MP, L"xoffset", MPDM_I(drw_1.lncols ? drw_1.lncols + 2 : 0));
+
     /* compare drw_1 with drw_1_o; if they are the same,
        no more expensive calculations on drw_2 are needed */
     if (memcmp(&drw_1, &drw_1_o, sizeof(drw_1)) == 0)

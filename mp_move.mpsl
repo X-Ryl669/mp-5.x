@@ -70,7 +70,7 @@ mp_doc.actions['goto'] = sub (d, line) {
 
 mp_doc.actions['move_to_mouse_position'] = sub (d) {
     /* move the cursor there */
-    d->move_to_coords_xy(mp.mouse_x, mp.mouse_y);
+    d->move_to_coords_xy(mp.mouse_x - mp.xoffset, mp.mouse_y);
 
     /* mouse click always unmarks */
     d->unmark();

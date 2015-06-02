@@ -42,7 +42,7 @@ mp_doc.actions ~= {
             d->mark();
 
         /* move to drag position */
-        d->move_to_coords_xy(mp.mouse_to_x, mp.mouse_to_y);
+        d->move_to_coords_xy(mp.mouse_to_x - mp.xoffset, mp.mouse_to_y);
 
         /* and mark */
         d->mark();
