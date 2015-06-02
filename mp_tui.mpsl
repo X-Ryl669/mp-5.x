@@ -600,7 +600,7 @@ sub mp_drv.menu()
 			n = 0;
 
             local empty = [1 .. pos[2]]->map(sub { ' '; })->join();
-            local sep = [1 .. pos[2]]->map(sub { '-'; })->join();
+            local sep = [1 .. pos[2]]->map(sub { "\x{2500}"; })->join();
 
 			while (n < pty) {
 				local l = mp.menu_label(mo[n + vy]);
