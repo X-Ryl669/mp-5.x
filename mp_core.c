@@ -62,7 +62,7 @@ struct drw_1_info {
     int mark_eol;               /* mark end of lines */
     int redraw;                 /* redraw trigger */
     int vwrap;                  /* visual wrap value */
-    int lncols;                 /* # of columns reserved for line numbers */
+    int xoffset;                /* # of columns reserved for line numbers */
 };
 
 struct drw_1_info drw_1;
@@ -277,12 +277,12 @@ static int drw_prepare(mpdm_t doc)
     if (n) {
         char tmp[32];
         sprintf(tmp, " %d ", mpdm_size(lines));
-        drw_1.lncols = strlen(tmp);
+        drw_1.xoffset = strlen(tmp);
     }
     else
-        drw_1.lncols = 0;
+        drw_1.xoffset = 0;
 
-    mpdm_hset_s(MP, L"xoffset", MPDM_I(drw_1.lncols));
+    mpdm_hset_s(MP, L"xoffset", MPDM_I(drw_1.xoffset));
 
     /* compare drw_1 with drw_1_o; if they are the same,
        no more expensive calculations on drw_2 are needed */
@@ -839,8 +839,8 @@ static mpdm_t drw_remap_to_array(void)
     int my;
     mpdm_t fmt = NULL;
 
-    if (drw_1.lncols) {
-        fmt = mpdm_ref(mpdm_strcat(MPDM_LS(L" %"), mpdm_strcat_s(MPDM_I(drw_1.lncols - 2), L"d ")));
+    if (drw_1.xoffset) {
+        fmt = mpdm_ref(mpdm_strcat(MPDM_LS(L" %"), mpdm_strcat_s(MPDM_I(drw_1.xoffset - 2), L"d ")));
     }
 
     for (my = 0; my < drw_1.ty; my++) {
@@ -848,7 +848,7 @@ static mpdm_t drw_remap_to_array(void)
         int o = my * (drw_1.tx + 1);
         int mx = 0;
 
-        if (drw_1.lncols) {
+        if (drw_1.xoffset) {
             mpdm_ref(l);
             mpdm_push(l, MPDM_I(drw_1.normal_attr));
             mpdm_push(l, mpdm_fmt(fmt, MPDM_I(drw_1.vy + 1 + my)));
