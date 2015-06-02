@@ -209,5 +209,11 @@ __I18N__ = {
 	"# error deleting '%s' (%s)" => "# error al borrar '%s' (%s)",
 	"# deleted '%s'" => "# borrado '%s'",
 	"Insert time stamp" => "Insertar marca de tiempo",
+	"No build targets found." => "No se han encontrado objetivos de construcci\x{00f3}n",
+	"Build target" => "Objetivo de construcci\x{00f3}n",
+	"Error executing '%s'" => "Error ejecutando '%s'",
+	"Show line numbers:" => "Mostrar n\x{00fa}meros de l\x{00ed}nea",
+	"Not found." => "No encontrado.",
+	"Hex string to seek:" => "Cadena hexadecimal a buscar:",
 	"-" => "-"
 };
