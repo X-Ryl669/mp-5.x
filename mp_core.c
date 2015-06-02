@@ -62,6 +62,7 @@ struct drw_1_info {
     int mark_eol;               /* mark end of lines */
     int redraw;                 /* redraw trigger */
     int vwrap;                  /* visual wrap value */
+    int lncols;                 /* # of columns reserved for line numbers */
 };
 
 struct drw_1_info drw_1;
@@ -269,6 +270,17 @@ static int drw_prepare(mpdm_t doc)
 
     /* visual wrap */
     drw_1.vwrap = mpdm_ival(mpdm_hget_s(config, L"visual_wrap"));
+
+    /* calculate number of lines reserved for line numbers */
+    n = mpdm_ival(mpdm_hget_s(config, L"show_line_numbers"));
+
+    if (n) {
+        char tmp[32];
+        sprintf(tmp, "%d", mpdm_size(lines));
+        drw_1.lncols = strlen(tmp);
+    }
+    else
+        drw_1.lncols = 0;
 
     /* compare drw_1 with drw_1_o; if they are the same,
        no more expensive calculations on drw_2 are needed */
@@ -823,11 +835,23 @@ static mpdm_t drw_remap_to_array(void)
     mpdm_t r = mpdm_ref(MPDM_A(0));
     wchar_t *line = malloc((drw_1.tx + 1) * sizeof(wchar_t));
     int my;
+    mpdm_t fmt = NULL;
+
+    if (drw_1.lncols) {
+        fmt = mpdm_ref(mpdm_strcat(MPDM_LS(L" %"), mpdm_strcat_s(MPDM_I(drw_1.lncols), L"d ")));
+    }
 
     for (my = 0; my < drw_1.ty; my++) {
         mpdm_t l = MPDM_A(0);
         int o = my * (drw_1.tx + 1);
         int mx = 0;
+
+        if (drw_1.lncols) {
+            mpdm_ref(l);
+            mpdm_push(l, MPDM_I(drw_1.normal_attr));
+            mpdm_push(l, mpdm_fmt(fmt, MPDM_I(drw_1.vy + 1 + my)));
+            mpdm_unrefnd(l);
+        }
 
         while (mx < drw_1.tx && drw_2.amap[o] != -1) {
             int i = 0;
@@ -845,6 +869,8 @@ static mpdm_t drw_remap_to_array(void)
     }
 
     free(line);
+
+    mpdm_unref(fmt);
 
     return mpdm_unrefnd(r);
 }
