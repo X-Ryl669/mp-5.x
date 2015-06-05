@@ -77,6 +77,9 @@ global mp = {
         maximize:               0,
         keep_eol:               1,
         smart_bol:              1,
+        emacs_scrolling:        0,
+        no_text_mouse:          0,
+        show_line_numbers:      0,
         eol:                    (mp_drv.id eq 'win32' && "\r\n" || "\n"),
         status_format:          "%m%n %x,%y [%l] %R%O %s %e %t",
         time_stamp_format:      "%a, %d %b %Y %H:%M:%S %z"
