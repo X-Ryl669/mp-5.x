@@ -184,8 +184,8 @@ static QFont build_font(int rebuild)
     if (rebuild) {
         mpdm_t c;
         mpdm_t w = NULL;
-        int font_size       = 12;
-        char *font_face     = (char *) "Mono";
+        int font_size       = 10;
+        char *font_face     = (char *) "Courier";
         double font_weight  = 0.0;
 
         if ((c = mpdm_hget_s(MP, L"config")) != NULL) {
@@ -210,6 +210,7 @@ static QFont build_font(int rebuild)
         }
 
         font = QFont(QString(font_face), font_size);
+        font.setStyleHint(QFont::TypeWriter);
 
         if (font_weight > 0.0)
             font.setWeight((int) font_weight);
