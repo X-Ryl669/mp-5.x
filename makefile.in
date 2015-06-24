@@ -129,7 +129,6 @@ win32dist: mp-5.exe
 
 innosetup: mp-5.exe mp-5c.exe
 	rm -f *.dll
-	cp `ldd ./mp-5.exe|awk '!/indows/ {print $$3}'` .
 	(DIR=`pwd` ; cd $(MPDM) ; make installdoc DOCDIR=$$DIR/doc)
 	(DIR=`pwd` ; cd $(MPSL) ; make installdoc DOCDIR=$$DIR/doc)
 	iscc /O. /Fmp-$(VERSION) mp.iss

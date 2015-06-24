@@ -14,7 +14,6 @@ SolidCompression=yes
 [Files]
 Source: "mp-5.exe"; DestDir: "{app}"
 Source: "mp-5c.exe"; DestDir: "{app}"
-Source: "*.dll"; DestDir: "{app}"
 Source: "mp_*.mpsl"; DestDir: "{app}"
 Source: "lang\*.mpsl"; DestDir: "{app}\lang"
 Source: "doc\*.html"; DestDir: "{app}\doc"
