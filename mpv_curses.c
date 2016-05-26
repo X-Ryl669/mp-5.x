@@ -783,7 +783,7 @@ static mpdm_t ncursesw_drv_startup(mpdm_t a)
 {
     register_functions();
 
-    initscr();
+    cw = initscr();
     start_color();
 
 #ifdef NCURSES_MOUSE_VERSION
@@ -813,8 +813,6 @@ static mpdm_t ncursesw_drv_startup(mpdm_t a)
 #ifndef NCURSES_VERSION
     signal(SIGWINCH, nc_sigwinch);
 #endif
-
-    cw = stdscr;
 
     return NULL;
 }
