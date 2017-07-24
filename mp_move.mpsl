@@ -129,6 +129,7 @@ mp_doc.keycodes['mouse-wheel-up']       = "move_mouse_wheel_up";
 mp_doc.keycodes['mouse-wheel-down']     = "move_mouse_wheel_down";
 mp_doc.keycodes['alt-cursor-up']        = "scroll_up";
 mp_doc.keycodes['alt-cursor-down']      = "scroll_down";
+mp_doc.keycodes['ctrl-e']               = "document_list";
 
 /** action descriptions **/
 

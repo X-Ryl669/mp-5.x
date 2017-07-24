@@ -262,6 +262,7 @@ mp_doc.keycodes['backspace']        = "delete_left";
 mp_doc.keycodes['ctrl-i']           = "tab";
 mp_doc.keycodes['ctrl-m']           = "enter";
 mp_doc.keycodes['ctrl-y']           = "delete_line";
+mp_doc.keycodes['ctrl-k']           = "cut_line";
 mp_doc.keycodes['alt-cursor-right'] = "indent_block";
 mp_doc.keycodes['alt-cursor-left']  = "unindent_block";
 mp_doc.keycodes['ctrl-z']           = "undo";
