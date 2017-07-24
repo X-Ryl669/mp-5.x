@@ -167,6 +167,30 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
         return NULL;
     }
 
+    /* detect shift+left, shift+right, shift+up, shift+down, shift+pageup, shift+pagedown */
+    switch(f[0]) {
+    case 393:
+        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+        return MPDM_S(L"cursor-left");
+    case 402:
+        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+        return MPDM_S(L"cursor-right");
+    case 337:
+        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+        return MPDM_S(L"cursor-up");
+    case 336:
+        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+        return MPDM_S(L"cursor-down");
+    case 398:
+        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+        return MPDM_S(L"page-up");
+    case 396:
+        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+        return MPDM_S(L"page-down");
+    }
+
+
+    /* shift here stands for Alt or escape sequence code */
     if (shift) {
         switch (f[0]) {
         case L'0':
