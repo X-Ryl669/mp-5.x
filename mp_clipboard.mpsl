@@ -70,7 +70,8 @@ mp_doc.actions ~= {
         }
 
         return d;
-    }
+    },
+    cut_line: sub (d) { d->busy(1)->store_undo()->cut_line()->busy(0); }
 };
 
 
@@ -380,6 +381,34 @@ sub mp_doc.cut_lines_with_string(doc, str)
 
     mp.clipboard = r;
     mp_drv.clip_to_sys();
+
+    return doc;
+}
+
+/**
+ * mp_doc.cut_line - Cut current line to clipboard
+ * @doc: the document
+ * 
+ * Cut the current line to the clipboard. 
+ */
+sub mp_doc.cut_line(doc)
+{
+    if (doc.txt.mark) {
+        doc->cut();
+        doc->unmark();
+
+        return doc;
+    }
+
+    doc.txt.x = 0;
+    doc->mark();
+    if (doc.txt.y < size(doc.txt.lines) - 1)
+        doc.txt.y++;
+    else 
+        doc->move_eol();
+    doc->mark();
+    doc->cut();
+    doc->unmark();
 
     return doc;
 }
