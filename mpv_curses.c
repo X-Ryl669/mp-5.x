@@ -167,7 +167,7 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
         return NULL;
     }
 
-    /* detect shift+left, shift+right, shift+up, shift+down, shift+pageup, shift+pagedown */
+    /* detect shift+left, shift+right, shift+up, shift+down, shift+pageup, shift+pagedown, shift+home, shift+end */
     switch(f[0]) {
     case 393:
         mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
@@ -187,6 +187,12 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
     case 396:
         mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
         return MPDM_S(L"page-down");
+    case 360:
+        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+        return MPDM_S(L"end");
+    case 262:
+        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+        return MPDM_S(L"home");
     }
 
 
