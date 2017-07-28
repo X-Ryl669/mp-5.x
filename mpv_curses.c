@@ -187,10 +187,10 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
     case 396:
         mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
         return MPDM_S(L"page-down");
-    case 360:
+    case 386:
         mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
         return MPDM_S(L"end");
-    case 262:
+    case 391:
         mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
         return MPDM_S(L"home");
     }
@@ -536,6 +536,15 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
 
                 getmouse(&m);
 
+                if (m.bstate & BUTTON1_RELEASED)
+                {
+                    mpdm_hset_s(MP, L"mouse_to_x", MPDM_I(m.x));
+                    mpdm_hset_s(MP, L"mouse_to_y", MPDM_I(m.y));
+
+                    f = L"mouse-drag";
+                    break;
+                }
+
                 mpdm_hset_s(MP, L"mouse_x", MPDM_I(m.x));
                 mpdm_hset_s(MP, L"mouse_y", MPDM_I(m.y));
 
@@ -826,6 +835,10 @@ static mpdm_t ncursesw_drv_startup(mpdm_t a)
             BUTTON2_PRESSED|
             BUTTON3_PRESSED|
             BUTTON4_PRESSED|
+            BUTTON1_RELEASED|
+            BUTTON2_RELEASED|
+            BUTTON3_RELEASED|
+            BUTTON4_RELEASED|
             REPORT_MOUSE_POSITION,
             NULL);
     }
