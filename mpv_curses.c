@@ -536,7 +536,7 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
 
                 getmouse(&m);
 
-                if (m.bstate & BUTTON1_RELEASED)
+                if ((m.bstate & BUTTON1_RELEASED) && !(m.bstate & BUTTON1_CLICKED))
                 {
                     mpdm_hset_s(MP, L"mouse_to_x", MPDM_I(m.x));
                     mpdm_hset_s(MP, L"mouse_to_y", MPDM_I(m.y));
@@ -551,7 +551,7 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
                 if (m.y == LINES - 1)
                     f = L"mouse-menu";
                 else
-                if (m.bstate & BUTTON1_PRESSED)
+                if (m.bstate & (BUTTON1_PRESSED | BUTTON1_CLICKED))
                     f = L"mouse-left-button";
                 else
                 if (m.bstate & BUTTON2_PRESSED)
@@ -836,9 +836,8 @@ static mpdm_t ncursesw_drv_startup(mpdm_t a)
             BUTTON3_PRESSED|
             BUTTON4_PRESSED|
             BUTTON1_RELEASED|
-            BUTTON2_RELEASED|
-            BUTTON3_RELEASED|
-            BUTTON4_RELEASED|
+            BUTTON1_CLICKED|
+            BUTTON1_DOUBLE_CLICKED|
             REPORT_MOUSE_POSITION,
             NULL);
     }
