@@ -198,7 +198,7 @@ sub mp_doc.move(doc, func)
             doc->mark();
         }
         else {
-	    doc->unmark();
+            if (doc.txt.selecting_mode == NULL) doc->unmark();
             doc->func();
         }
     }
