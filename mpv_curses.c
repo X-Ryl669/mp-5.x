@@ -169,28 +169,28 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
 
     /* detect shift+left, shift+right, shift+up, shift+down, shift+pageup, shift+pagedown, shift+home, shift+end */
     switch(f[0]) {
-    case 393:
+    case KEY_SLEFT:
         mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
         return MPDM_S(L"cursor-left");
-    case 402:
+    case KEY_SRIGHT:
         mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
         return MPDM_S(L"cursor-right");
-    case 337:
+    case KEY_SR:
         mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
         return MPDM_S(L"cursor-up");
-    case 336:
+    case KEY_SF:
         mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
         return MPDM_S(L"cursor-down");
-    case 398:
+    case KEY_SPREVIOUS:
         mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
         return MPDM_S(L"page-up");
-    case 396:
+    case KEY_SNEXT:
         mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
         return MPDM_S(L"page-down");
-    case 386:
+    case KEY_SEND:
         mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
         return MPDM_S(L"end");
-    case 391:
+    case KEY_SHOME:
         mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
         return MPDM_S(L"home");
     }
