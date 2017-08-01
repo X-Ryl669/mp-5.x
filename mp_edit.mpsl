@@ -39,9 +39,11 @@ mp_doc.actions['insert_line'] = sub (d) {
 
 mp_doc.actions['delete_line']       = sub (d) { d->store_undo()->delete_line(); };
 mp_doc.actions['insert_space']      = sub (d) { d->store_undo()->insert_space(); };
-mp_doc.actions['insert_tab']        = sub (d) { d->store_undo()->insert_tab(); };
-mp_doc.actions['insert_real_tab']   = sub (d) { d->store_undo()->insert("\t"); };
+mp_doc.actions['insert_tab']        = sub (d) { d->store_undo()->indent_block(1); };
+mp_doc.actions['insert_real_tab']   = sub (d) { d->store_undo()->unindent_block(1); };
 mp_doc.actions['delete']            = sub (d) { d->store_undo()->delete_char(); };
+mp_doc.actions['indent_block']      = sub (d) { d->store_undo()->indent_block(0); };
+mp_doc.actions['unindent_block']    = sub (d) { d->store_undo()->unindent_block(0); };
 
 mp_doc.actions['delete_left']	= sub (d) {
     if (d.txt.x + d.txt.y)
@@ -50,70 +52,6 @@ mp_doc.actions['delete_left']	= sub (d) {
     return d;
 };
 
-mp_doc.actions['indent_block'] = sub (d) {
-    d->store_undo();
-
-    if (d.txt.mark == NULL)
-        d->set_x(0)->insert_tab();
-    else {
-        local currentY = d.txt.y;
-        local startY   = d.txt.mark.by;
-        local endY     = d.txt.mark.ey;
-        local times    = endY - startY;
-	
-        d->unmark()->set_y(startY);
-
-        /* use to be while d.txt.y <= endY, but that entered an endless loop when
-            you were indenting a block including the very last line in the file */
-        while (times >= 0) {
-            d->set_x(0)->insert_tab()->move_down();
-		
-            times--;
-        }
-	
-        d->set_y(startY)->set_x(0)->mark();
-	
-        d->set_y(endY)->move_eol()->mark();
-	
-        d->set_y(currentY);
-    }
-
-    return d;
-};
-
-mp_doc.actions['unindent_block'] = sub(d) {
-    d->store_undo();
-
-    if (d.txt.mark == NULL) {
-        d->unindent_line();
-    }
-    else {
-        local currentY = d.txt.y;
-        local startY   = d.txt.mark.by;
-        local endY     = d.txt.mark.ey;
-        local times    = endY - startY;
-
-        d->unmark();
-
-        d->set_y(startY);
-
-        /* use to be while d.txt.y <= endY, but that entered an endless loop when
-            you were unindenting a block including the very last line in the file */
-        while (times >= 0) {
-            d->unindent_line()->move_down();
-		
-            times--;
-        }
-	
-        d->set_y(startY)->set_x(0)->mark();
-	
-        d->set_y(endY)->move_eol()->mark();
-	
-        d->set_y(currentY);
-    }
-
-    return d;
-};
 
 mp_doc.actions['undo'] = sub (d) { d->undo(); };
 mp_doc.actions['redo'] = sub (d) { d->redo(); };
@@ -262,6 +200,7 @@ mp_doc.keycodes['backspace']        = "delete_left";
 mp_doc.keycodes['ctrl-i']           = "tab";
 mp_doc.keycodes['ctrl-m']           = "enter";
 mp_doc.keycodes['ctrl-y']           = "delete_line";
+mp_doc.keycodes['ctrl-k']           = "cut_line";
 mp_doc.keycodes['alt-cursor-right'] = "indent_block";
 mp_doc.keycodes['alt-cursor-left']  = "unindent_block";
 mp_doc.keycodes['ctrl-z']           = "undo";
@@ -288,6 +227,97 @@ mp.actdesc['tab_options']           = LL("Tab options...");
 mp.actdesc['toggle_insert']         = LL("Toggle insert/overwrite mode");
 
 /** code **/
+/**
+ * mp_doc.indent_block - Indent the currently selected block.
+ * @doc: the document
+ * @insert_tab: if set to 1 and there is no selection, it inserts a tab instead
+ *
+ * If a selection exists, this increases indentation for the selected lines.
+ * Else, it inserts a tabulation
+ */
+sub mp_doc.indent_block(doc, insert_tab) 
+{
+    if (doc.txt.mark == NULL) {
+        if (insert_tab)
+            doc->insert_tab();
+        else
+            doc->set_x(0)->insert_tab();
+    }
+    else {
+        local currentY = doc.txt.y;
+        local currentX = doc.txt.x;
+        local startY   = doc.txt.mark.by;
+        /* If the selection ends on a first column, don't indent the last line, it's not the user's intend */ 
+        local endY     = doc.txt.mark.ey - (doc.txt.mark.ex == 0);
+        local times    = endY - startY;
+        
+        doc->unmark()->set_y(startY);
+
+        /* use to be while d.txt.y <= endY, but that entered an endless loop when
+            you were indenting a block including the very last line in the file */
+        while (times >= 0) {
+            doc->set_x(0)->insert_tab()->move_down();
+		
+            times--;
+        }
+	
+        doc->set_y(startY)->set_x(0)->mark();
+	
+        doc->set_y(endY)->move_eol()->mark();
+	
+        doc->set_y(currentY);
+        if (!currentX) doc->set_x(0);
+    }
+
+    return doc;
+};
+
+/**
+ * mp_doc.unindent_block - Unindent the currently selected block.
+ * @doc: the document
+ * @insert_real_tab: if set to 1 and there is no selection, it inserts a real tab instead
+ *
+ * If a selection exists, this decreases indentation for the selected lines.
+ * Else, it inserts a real tabulation
+ */
+sub mp_doc.unindent_block(doc, insert_real_tab) 
+{
+    if (doc.txt.mark == NULL) {
+        if (insert_real_tab) 
+            doc->insert("\t");
+        else 
+            doc->unindent_line();
+    }
+    else {
+        local currentY = doc.txt.y;
+        local currentX = doc.txt.x;
+        local startY   = doc.txt.mark.by;
+        /* If the selection ends on a first column, don't indent the last line, it's not the user's intend */ 
+        local endY     = doc.txt.mark.ey - (doc.txt.mark.ex == 0);
+        local times    = endY - startY;
+
+        doc->unmark();
+
+        doc->set_y(startY);
+
+        /* use to be while d.txt.y <= endY, but that entered an endless loop when
+            you were unindenting a block including the very last line in the file */
+        while (times >= 0) {
+            doc->unindent_line()->move_down();
+		
+            times--;
+        }
+	
+        doc->set_y(startY)->set_x(0)->mark();
+	
+        doc->set_y(endY)->move_eol()->mark();
+	
+        doc->set_y(currentY);
+        if (!currentX) doc->set_x(0);
+    }
+
+    return doc;
+};
 
 /**
  * mp_doc.break_line - Breaks current line in two (inserts a newline).

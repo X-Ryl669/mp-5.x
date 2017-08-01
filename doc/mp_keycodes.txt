@@ -36,6 +36,8 @@ Table with Minimum Profit's keycodes and their default assigned actions.
  +---------------------+------------------------+
  |              ctrl-d |           section_list |
  +---------------------+------------------------+
+ |              ctrl-e |          document_list |
+ +---------------------+------------------------+
  |            ctrl-end |               move_eof |
  +---------------------+------------------------+
  |          ctrl-enter |      open_under_cursor |
@@ -85,6 +87,8 @@ Table with Minimum Profit's keycodes and their default assigned actions.
  |              ctrl-x |               cut_mark |
  +---------------------+------------------------+
  |              ctrl-y |            delete_line |
+ +---------------------+------------------------+
+ |              ctrl-k |               cut_line |
  +---------------------+------------------------+
  |              ctrl-z |                   undo |
  +---------------------+------------------------+
