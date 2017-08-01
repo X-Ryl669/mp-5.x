@@ -239,7 +239,7 @@ else
     echo "#include <ncursesw/ncurses.h>" > .tmp.c
     echo "int main(void) { initscr(); endwin(); return 0; }" >> .tmp.c
 
-    TMP_CFLAGS="-I/usr/local/include -I/usr/include/ncurses"
+    TMP_CFLAGS="-I/usr/local/include -I/usr/include/ncurses -I/usr/include/ncursesw"
     TMP_LDFLAGS="-L/usr/local/lib -lncursesw"
 
     $CC $TMP_CFLAGS .tmp.c $TMP_LDFLAGS -o .tmp.o 2>> .config.log
