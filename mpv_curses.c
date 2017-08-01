@@ -167,6 +167,36 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
         return NULL;
     }
 
+    /* detect shift+left, shift+right, shift+up, shift+down, shift+pageup, shift+pagedown, shift+home, shift+end */
+    switch(f[0]) {
+    case KEY_SLEFT:
+        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+        return MPDM_S(L"cursor-left");
+    case KEY_SRIGHT:
+        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+        return MPDM_S(L"cursor-right");
+    case KEY_SR:
+        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+        return MPDM_S(L"cursor-up");
+    case KEY_SF:
+        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+        return MPDM_S(L"cursor-down");
+    case KEY_SPREVIOUS:
+        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+        return MPDM_S(L"page-up");
+    case KEY_SNEXT:
+        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+        return MPDM_S(L"page-down");
+    case KEY_SEND:
+        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+        return MPDM_S(L"end");
+    case KEY_SHOME:
+        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+        return MPDM_S(L"home");
+    }
+
+
+    /* shift here stands for Alt or escape sequence code */
     if (shift) {
         switch (f[0]) {
         case L'0':
@@ -506,13 +536,22 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
 
                 getmouse(&m);
 
+                if ((m.bstate & BUTTON1_RELEASED) && !(m.bstate & BUTTON1_CLICKED))
+                {
+                    mpdm_hset_s(MP, L"mouse_to_x", MPDM_I(m.x));
+                    mpdm_hset_s(MP, L"mouse_to_y", MPDM_I(m.y));
+
+                    f = L"mouse-drag";
+                    break;
+                }
+
                 mpdm_hset_s(MP, L"mouse_x", MPDM_I(m.x));
                 mpdm_hset_s(MP, L"mouse_y", MPDM_I(m.y));
 
                 if (m.y == LINES - 1)
                     f = L"mouse-menu";
                 else
-                if (m.bstate & BUTTON1_PRESSED)
+                if (m.bstate & (BUTTON1_PRESSED | BUTTON1_CLICKED))
                     f = L"mouse-left-button";
                 else
                 if (m.bstate & BUTTON2_PRESSED)
@@ -796,6 +835,9 @@ static mpdm_t ncursesw_drv_startup(mpdm_t a)
             BUTTON2_PRESSED|
             BUTTON3_PRESSED|
             BUTTON4_PRESSED|
+            BUTTON1_RELEASED|
+            BUTTON1_CLICKED|
+            BUTTON1_DOUBLE_CLICKED|
             REPORT_MOUSE_POSITION,
             NULL);
     }

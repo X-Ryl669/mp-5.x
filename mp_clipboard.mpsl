@@ -29,7 +29,9 @@
 
 mp_doc.actions ~= {
     unmark:             sub (d) { d->unmark(); },
+    mark_tag:           sub (d) { d->start_selection(0); },
     mark:               sub (d) { d->mark(); },
+    mark_tag_vertical:  sub (d) { d->start_selection(1); },
     mark_vertical:      sub (d) { d->mark_vertical(); },
     copy_mark:          sub (d) { d->busy(1)->copy()->unmark()->busy(0); },
     paste_mark:         sub (d) { d->busy(1)->store_undo()->paste()->busy(0); },
@@ -70,7 +72,8 @@ mp_doc.actions ~= {
         }
 
         return d;
-    }
+    },
+    cut_line: sub (d) { d->busy(1)->store_undo()->cut_line()->busy(0); }
 };
 
 
@@ -78,8 +81,8 @@ mp_doc.actions ~= {
 
 mp_doc.keycodes ~= {
     "f8" =>         "unmark",
-    "f9" =>         "mark",
-    "ctrl-b" =>     "mark_vertical",
+    "f9" =>         "mark_tag",
+    "ctrl-b" =>     "mark_tag_vertical",
     "ctrl-c" =>     "copy_mark",
     "ctrl-v" =>     "paste_mark",
     "ctrl-x" =>     "cut_mark",
@@ -90,8 +93,10 @@ mp_doc.keycodes ~= {
 
 mp.actdesc ~= {
     unmark:                   LL("Unmark block"),
-    mark:                     LL("Mark beginning/end of block"),
-    mark_vertical:            LL("Mark vertical block"),
+    mark_tag:                 LL("Mark beginning/end of block"),
+    mark:                     LL("Mark selection block"),
+    mark_tag_vertical:        LL("Mark vertical block"),
+    mark_vertical:            LL("Mark vertical selection block"),
     copy_mark:                LL("Copy block"),
     paste_mark:               LL("Paste block"),
     cut_mark:                 LL("Cut block"),
@@ -109,6 +114,23 @@ sub mp_doc.unmark(doc)
 {
     /* just destroy the mark */
     doc.txt.mark = NULL;
+    doc.txt.selecting_mode = NULL;
+
+    return doc;
+}
+
+sub mp_doc.start_selection(doc, vertical)
+/* start a toggle selection mode */
+{
+    local txt = doc.txt;
+
+    /* If there is no selection yet with keys */
+    if (txt.selecting_mode == NULL) {
+        /* Make one */
+        txt.selecting_mode = { trigger: vertical };
+    }
+    doc->mark();
+    if (vertical == 1) doc.txt.mark.vertical = 1;
 
     return doc;
 }
@@ -380,6 +402,34 @@ sub mp_doc.cut_lines_with_string(doc, str)
 
     mp.clipboard = r;
     mp_drv.clip_to_sys();
+
+    return doc;
+}
+
+/**
+ * mp_doc.cut_line - Cut current line to clipboard
+ * @doc: the document
+ * 
+ * Cut the current line to the clipboard. 
+ */
+sub mp_doc.cut_line(doc)
+{
+    if (doc.txt.mark) {
+        doc->cut();
+        doc->unmark();
+
+        return doc;
+    }
+
+    doc.txt.x = 0;
+    doc->mark();
+    if (doc.txt.y < size(doc.txt.lines) - 1)
+        doc.txt.y++;
+    else 
+        doc->move_eol();
+    doc->mark();
+    doc->cut();
+    doc->unmark();
 
     return doc;
 }
