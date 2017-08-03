@@ -239,13 +239,14 @@ else
     echo "#include <ncursesw/ncurses.h>" > .tmp.c
     echo "int main(void) { initscr(); endwin(); return 0; }" >> .tmp.c
 
-    TMP_CFLAGS="-I/usr/local/include -I/usr/include/ncurses -I/usr/include/ncursesw"
+    TMP_CFLAGS="-I/usr/local/include"
     TMP_LDFLAGS="-L/usr/local/lib -lncursesw"
 
     $CC $TMP_CFLAGS .tmp.c $TMP_LDFLAGS -o .tmp.o 2>> .config.log
     if [ $? = 0 ] ; then
         echo "#define CONFOPT_CURSES 1" >> config.h
         echo $TMP_CFLAGS >> config.cflags
+        echo "-I/usr/include/ncursesw" >> config.cflags
         echo $TMP_LDFLAGS >> config.ldflags
         echo "OK (ncursesw)"
         DRIVERS="ncursesw $DRIVERS"
