@@ -88,6 +88,10 @@ mp.actions['exit']	= sub {
         mp_c.exit();
 };
 
+mp.actions['suspend'] = sub {
+    mp_drv.suspend();
+};
+
 mp.actions['open'] = sub (d, filename) {
     if (filename == NULL)
         filename = mp.openfile(L("File to open:"));
@@ -344,6 +348,7 @@ mp.actions['open_dropped_files'] = sub {
 mp.keycodes['ctrl-n']           = 'next';
 mp.keycodes['ctrl-o']           = 'open';
 mp.keycodes['ctrl-q']           = 'exit';
+mp.keycodes['ctrl-l']           = 'suspend';
 mp.keycodes['ctrl-w']           = 'close';
 mp.keycodes['dropped-files']    = 'open_dropped_files';
 mp.keycodes['close-window']     = 'exit';
@@ -360,6 +365,7 @@ mp.actdesc['next']               = LL("Next");
 mp.actdesc['prev']               = LL("Previous");
 mp.actdesc['open']               = LL("Open...");
 mp.actdesc['exit']               = LL("Exit");
+mp.actdesc['suspend']            = LL("Suspend");
 mp.actdesc['close']              = LL("Close");
 mp.actdesc['revert']             = LL("Revert");
 mp.actdesc['close_all']          = LL("Close all");

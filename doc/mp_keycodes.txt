@@ -70,6 +70,8 @@ Table with Minimum Profit's keycodes and their default assigned actions.
  +---------------------+------------------------+
  |              ctrl-q |                   exit |
  +---------------------+------------------------+
+ |              ctrl-l |                suspend |
+ +---------------------+------------------------+
  |              ctrl-r |                replace |
  +---------------------+------------------------+
  |              ctrl-s |                   save |
