@@ -38,7 +38,7 @@
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 
-#include <ncursesw/ncurses.h>
+#include <ncurses.h>
 
 #include "mpdm.h"
 #include "mpsl.h"

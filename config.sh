@@ -246,8 +246,33 @@ else
     if [ $? = 0 ] ; then
         echo "#define CONFOPT_CURSES 1" >> config.h
         echo $TMP_CFLAGS >> config.cflags
+        echo "-I/usr/include/ncursesw" >> config.cflags
         echo $TMP_LDFLAGS >> config.ldflags
         echo "OK (ncursesw)"
+        DRIVERS="ncursesw $DRIVERS"
+        DRV_OBJS="mpv_curses.o $DRV_OBJS"
+    else
+        echo "No"
+        WITHOUT_CURSESW=1
+    fi
+fi
+
+if [ "$WITHOUT_CURSESW" = "1" ] ; then
+    # test for curses / ncurses library
+    echo -n "Testing for recent ncurses... "
+
+    echo "#include <ncurses.h>" > .tmp.c
+    echo "int main(void) { initscr(); endwin(); return 0; }" >> .tmp.c
+
+    TMP_CFLAGS="-I/usr/local/include"
+    TMP_LDFLAGS="-L/usr/local/lib -lncursesw"
+
+    $CC $TMP_CFLAGS .tmp.c $TMP_LDFLAGS -o .tmp.o 2>> .config.log
+    if [ $? = 0 ] ; then
+        echo "#define CONFOPT_CURSES 1" >> config.h
+        echo $TMP_CFLAGS >> config.cflags
+        echo $TMP_LDFLAGS >> config.ldflags
+        echo "OK (ncurses)"
         DRIVERS="ncursesw $DRIVERS"
         DRV_OBJS="mpv_curses.o $DRV_OBJS"
     else
@@ -256,11 +281,13 @@ else
     fi
 fi
 
+
+
 if [ "$WITHOUT_CURSES" != "1" ] ; then
     # test for transparent colors in curses
     echo -n "Testing for transparency support in curses... "
 
-    echo "#include <ncursesw/ncurses.h>" > .tmp.c
+    echo "#include <ncurses.h>" > .tmp.c
     echo "int main(void) { initscr(); use_default_colors(); endwin(); return 0; }" >> .tmp.c
 
     $CC $TMP_CFLAGS .tmp.c $TMP_LDFLAGS -o .tmp.o 2>> .config.log
@@ -275,7 +302,7 @@ if [ "$WITHOUT_CURSES" != "1" ] ; then
     echo -n "Testing for wget_wch()... "
 
     echo "#include <wchar.h>" > .tmp.c
-    echo "#include <ncursesw/ncurses.h>" >> .tmp.c
+    echo "#include <ncurses.h>" >> .tmp.c
     echo "int main(void) { wchar_t c[2]; initscr(); wget_wch(stdscr, c); endwin(); return 0; }" >> .tmp.c
 
     $CC $TMP_CFLAGS .tmp.c $TMP_LDFLAGS -o .tmp.o 2>> .config.log
