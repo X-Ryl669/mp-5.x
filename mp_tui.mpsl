@@ -130,8 +130,9 @@ sub mp.tui.readline(prompt, history, default, flags)
 		}
 		else
 		if (k eq 'ctrl-v' && size(mp.clipboard)) {
-			r = mp.clipboard[0];
-			x = size(r);
+			r = splice(r, mp.clipboard[0], x, 0);
+			r = r[0];
+			x = x + size(mp.clipboard[0]);
 		}
 		else
 		if (k eq 'ctrl-k') {
