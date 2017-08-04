@@ -129,6 +129,11 @@ sub mp.tui.readline(prompt, history, default, flags)
 			r = '';
 		}
 		else
+		if (k eq 'ctrl-v' && size(mp.clipboard)) {
+			r = mp.clipboard[0];
+			x = size(r);
+		}
+		else
 		if (k eq 'ctrl-k') {
 			r = splice(r, NULL, x, -1);
 			r = r[0];
@@ -406,9 +411,16 @@ sub mp.tui.draw(doc)
     mp.tui.draw_scrollbar(doc);
 
 	/* draw the status line */
-	mp.tui.attr(mp.colors.normal.attr);
-	mp.tui.move(0, mp.window.ty - 1, 1);
-	mp.tui.addstr(mp.build_status_line());
+    if (mp.tui.info_line == NULL) {
+        mp.tui.attr(mp.colors.normal.attr);
+        mp.tui.move(0, mp.window.ty - 1, 1);
+        mp.tui.addstr(mp.build_status_line());
+    } else {
+        mp.tui.attr(mp.colors.menu.attr);
+        mp.tui.move(0, mp.window.ty - 1, 1);
+        mp.tui.addstr(mp.tui.info_line);
+        mp.tui.attr(mp.colors.normal.attr);
+    }
 
 	/* draw the 'menu' hint */
 	local t = "ctrl-a: " ~ L("Menu");
@@ -429,6 +441,11 @@ sub mp.tui.draw(doc)
 
 
 /** interface **/
+
+sub mp_drv.info(msg)
+{
+	mp.tui.info_line = msg;
+}
 
 sub mp_drv.alert(msg)
 {
@@ -732,7 +749,9 @@ sub mp_drv.main_loop()
 	while (!mp_c.exit_requested()) {
 		mp.tui.draw(mp.active());
 
-		mp.process_event(mp.tui.getkey());
+		local key = mp.tui.getkey();
+		mp.tui.info_line = NULL;
+		mp.process_event(key);
 	}
 }
 
