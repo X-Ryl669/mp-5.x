@@ -554,6 +554,9 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
                 if (m.bstate & (BUTTON1_PRESSED | BUTTON1_CLICKED))
                     f = L"mouse-left-button";
                 else
+                if (m.bstate & BUTTON1_DOUBLE_CLICKED)
+                    f = L"mouse-left-dblclick";
+                else
                 if (m.bstate & BUTTON2_PRESSED)
                     f = L"mouse-middle-button";
                 else
