@@ -12,7 +12,8 @@ James Buren - C syntax highlight improvements
 Bradley Conroy - GTK improvements
 Rafał Mużyło - GTK 3.x support
 X-Ryl669    - Selection improvements, cut line function,
-              ncurses improvements, indent/outdent block improvements
+              ncurses improvements, indent/outdent block improvements,
+              ncurses suspend
 
 3.x version
 ===========

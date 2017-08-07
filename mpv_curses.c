@@ -732,6 +732,21 @@ static mpdm_t ncursesw_drv_shutdown(mpdm_t a, mpdm_t ctxt)
     return NULL;
 }
 
+static mpdm_t ncursesw_drv_suspend(mpdm_t a, mpdm_t ctxt)
+{
+    endwin();
+
+    printf("\nType 'fg' to return to Minimum Profit");
+    fflush(stdout);
+
+    /* Trigger suspending this process */
+    kill(getpid(), SIGSTOP);
+
+    /* Ok, we're back, let's refresh the screen */
+    wrefresh(cw);
+    
+    return NULL;
+}
 
 /** TUI **/
 
@@ -804,6 +819,7 @@ static void register_functions(void)
 
     mpdm_hset_s(drv, L"timer",      MPDM_X(ncursesw_drv_timer));
     mpdm_hset_s(drv, L"shutdown",   MPDM_X(ncursesw_drv_shutdown));
+    mpdm_hset_s(drv, L"suspend",    MPDM_X(ncursesw_drv_suspend));
 
     /* execute tui */
     tui = mpsl_eval(MPDM_LS(L"load('mp_tui.mpsl');"), NULL, NULL);
