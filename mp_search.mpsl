@@ -60,13 +60,21 @@ mp_doc.actions['seek'] = sub (d) {
 };
 
 mp_doc.actions['seek_next'] = sub (d) {
-    d->long_op(mp_doc.search, NULL) || mp.alert(L("Text not found."));
+    if (!d->long_op(mp_doc.search, NULL)) {
+        d->move_bof();
+        d->long_op(mp_doc.search, NULL);
+        mp.info(L("Search wrapped."));
+    }
 
     return d;
 };
 
 mp_doc.actions['seek_prev'] = sub (d) {
-    d->long_op(mp_doc.search_back, NULL) || mp.alert(L("Text not found."));
+    if (!d->long_op(mp_doc.search_back, NULL)) { 
+        d->move_eof();
+        d->long_op(mp_doc.search_back, NULL);
+        mp.info(L("Search wrapped."));
+    }
 
     return d;
 };
