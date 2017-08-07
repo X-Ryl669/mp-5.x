@@ -118,6 +118,7 @@ mp_doc.actions['replace'] = sub (d) {
 
 mp_doc.actions['seek_next_char'] = sub (d) { d->seek_prev_or_next_char(mp_doc.search); };
 mp_doc.actions['seek_prev_char'] = sub (d) { d->seek_prev_or_next_char(mp_doc.search_back); };
+mp_doc.actions['seek_matching']  = sub (d) { d->seek_matching(); };
 
 mp.actions['grep']	= sub {
     local r = mp.form(
@@ -182,6 +183,7 @@ mp_doc.keycodes['ctrl-f']           = 'seek';
 mp_doc.keycodes['ctrl-r']           = 'replace';
 mp_doc.keycodes['ctrl-page-down']   = 'seek_next_char';
 mp_doc.keycodes['ctrl-page-up']     = 'seek_prev_char';
+mp_doc.keycodes['ctrl-j']           = 'seek_matching';
 
 /** action descriptions **/
 
@@ -191,6 +193,7 @@ mp.actdesc['seek_prev']         = LL("Search previous");
 mp.actdesc['replace']           = LL("Replace...");
 mp.actdesc['seek_next_char']    = LL("Move to next instance of current char");
 mp.actdesc['seek_prev_char']    = LL("Move to previous instance of current char");
+mp.actdesc['seek_matching']     = LL("Move to the matching bracket");
 mp.actdesc['grep']              = LL("Grep (find inside) files...");
 
 /** code **/
@@ -215,6 +218,69 @@ sub mp_doc.search_set_y(doc, y)
     return doc;
 }
 
+/**
+ * mp_doc.seek_matching - Move to the matching brace char if the cursor if
+ * on a brace.
+ * @doc: the document
+ *
+ * This can not use regex based searching because of the recurrence issue.
+ * This accepts ( { and [ type braces.
+ */
+sub mp_doc.seek_matching(doc)
+{
+    local matching_open  = [ '(', '{', '[' ];
+    local matching_close = [ ')', '}', ']' ];
+    local txt = doc.txt;
+
+    /* get current char, it's the increment char */
+    local inc = splice(txt.lines[txt.y], NULL, txt.x, 1);
+    inc = inc[1];
+    local i = 1; local j = 0;
+    local p = seek(matching_open, inc);
+    if (p != -1)
+    {   
+        /* forward searching */
+        local dec = matching_close[p];
+        txt.x++;
+        while (i > 0 && txt.y < (size(txt.lines) - 1)) {
+            local line = split(txt.lines[txt.y]);
+            for (j = txt.x; i && j < size(line); j++) {
+                if (line[j] eq inc) i++;
+                else if (line[j] eq dec) i--;   
+            }    
+            if (!i) 
+                return doc->set_y(txt.y)->set_x(j-1);
+            txt.y++;
+            txt.x = 0;
+        }
+        return doc;
+    }
+
+    p = seek(matching_close, inc);
+    if (p != -1)
+    {
+        /* backward searching */
+        local dec = matching_open[p];
+        if (txt.x) txt.x--;
+        else {
+            txt.y--;
+            if (txt.y >= 0) txt.x = size(txt.lines[txt.y]) - 1;
+        }
+        while (i > 0 && txt.y >= 0) {
+            local line = split(txt.lines[txt.y]);
+            for (j = txt.x; i && j >= 0; j--) {
+                if (line[j] eq inc) i++;
+                else if (line[j] eq dec) i--;   
+            }    
+            if (!i) 
+                return doc->set_y(txt.y)->set_x(j+1);
+            txt.y--;
+            if (txt.y >= 0) txt.x = size(txt.lines[txt.y]) - 1;
+        }
+    }
+
+    return doc;
+}
 
 sub mp.prefix_regex(str)
 /* set str to be a valid regex */

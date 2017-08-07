@@ -44,6 +44,8 @@ Table with Minimum Profit's keycodes and their default assigned actions.
  +---------------------+------------------------+
  |              ctrl-f |                   seek |
  +---------------------+------------------------+
+ |              ctrl-j |          seek_matching |
+ +---------------------+------------------------+
  |            ctrl-f10 |           record_macro |
  +---------------------+------------------------+
  |             ctrl-f3 |              seek_prev |
