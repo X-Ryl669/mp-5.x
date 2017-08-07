@@ -13,7 +13,7 @@ Bradley Conroy - GTK improvements
 Rafał Mużyło - GTK 3.x support
 X-Ryl669    - Selection improvements, cut line function,
               ncurses improvements, indent/outdent block improvements,
-              ncurses suspend
+              word selection with double click
 
 3.x version
 ===========
