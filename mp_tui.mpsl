@@ -222,7 +222,7 @@ sub mp.tui.readline(prompt, history, default, flags)
 sub mp.tui.list(prompt, data, pos, split_entry)
 /* select from a list */
 {
-	local vy, ty, r;
+	local vy, ty, r, hint, last_time;
 
 	mp.tui.attr(mp.colors.menu.attr);
 	mp.tui.move(0, 0, 1);
@@ -231,6 +231,7 @@ sub mp.tui.list(prompt, data, pos, split_entry)
 
 	vy = 0;
 	ty = mp.window.ty - 1;
+	last_time = 0;
 
 	/* clipping regex */
 	r = '/^.{1,' ~ (mp.window.tx) ~ '}/';
@@ -284,6 +285,12 @@ sub mp.tui.list(prompt, data, pos, split_entry)
         mp.tui.refresh();
 
 		k = mp.tui.getkey();
+		/* set up a 2s timeout when reseting the user's hint */ 
+		local t = time();
+		if ((t - last_time) >= 2) 
+		    hint = '';
+		
+		last_time = t;
 
 		if (k eq 'cursor-up')
 			pos--;
@@ -317,7 +324,11 @@ sub mp.tui.list(prompt, data, pos, split_entry)
         }
         else
         if ((ord(k) >= ord('a') && ord(k) <= ord('z')) ||
-            (ord(k) >= ord('A') && ord(k) <= ord('Z'))) {
+            (ord(k) >= ord('A') && ord(k) <= ord('Z')) ||
+            (ord(k) >= ord('0') && ord(k) <= ord('9')) ||
+            k == '.' || k == '_') {
+            
+            hint ~= lc(k);
             /* search the first item >= k */
             pos = 0;
 
@@ -325,12 +336,13 @@ sub mp.tui.list(prompt, data, pos, split_entry)
                 local entry = data[pos];
                 if (split_entry) {
                     local segment = split(entry, '/');
-                    entry = segment[size(segment) - 1];
+                    if (size(segment) > 0)
+                        entry = segment[size(segment) - 1];
                 }
-                    
-                local c = regex(entry, '/^./');
-
-                if (ord(lc(c)) >= ord(lc(k)))
+                
+                /* no need to compare the complete entry, only the user-hinted size */
+                local c = splice(lc(entry), NULL, size(hint), size(entry) - size(hint));
+                if (cmp(hint, c[0]) <= 0)
                     break;
 
                 pos++;
