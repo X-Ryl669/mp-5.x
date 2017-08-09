@@ -182,7 +182,7 @@ sub mp.tui.readline(prompt, history, default, flags)
 					ins(l, './', 0);
 					ins(l, '../', 1);
 
-					local p = mp.tui.list(prompt, l, 0);
+					local p = mp.tui.list(prompt, l, 2, 1);
 
 					if (p == NULL) {
 						r = NULL;
@@ -219,7 +219,7 @@ sub mp.tui.readline(prompt, history, default, flags)
 }
 
 
-sub mp.tui.list(prompt, data, pos)
+sub mp.tui.list(prompt, data, pos, split_entry)
 /* select from a list */
 {
 	local vy, ty, r;
@@ -322,9 +322,15 @@ sub mp.tui.list(prompt, data, pos)
             pos = 0;
 
             while (pos < size(data) - 1) {
-                local c = regex(data[pos], '/^./');
+                local entry = data[pos];
+                if (split_entry) {
+                    local segment = split(entry, '/');
+                    entry = segment[size(segment) - 1];
+                }
+                    
+                local c = regex(entry, '/^./');
 
-                if (ord(c) >= ord(k))
+                if (ord(lc(c)) >= ord(lc(k)))
                     break;
 
                 pos++;
