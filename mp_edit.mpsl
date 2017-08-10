@@ -573,6 +573,32 @@ sub mp_doc.insert(doc, a)
     return doc;
 }
 
+sub mp_doc.append(doc, a)
+/* appends an array of lines to the document, bypassing indentation rules and current cursor position */
+{
+    local txt = doc.txt;
+    local s;
+
+    doc->delete_mark();
+
+    /* if a is not an array, split it */
+    if (!is_array(a))
+        a = split(a, "\n");
+
+    /* empty array? return */
+    if ((s = size(a)) == 0)
+        return doc;
+    
+    /* append now */
+    local n = 0;
+    while (n < s) 
+        push(txt.lines, a[n++]);
+
+    txt.mod++;
+    return doc;
+}
+
+
 
 sub mp_doc.wrap_words(doc)
 /* do the word wrapping */

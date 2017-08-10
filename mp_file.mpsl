@@ -211,11 +211,17 @@ mp_doc.actions['exec_command'] = sub (d, cmd) {
 
                 d->store_undo();
                 mp.busy(1);
+                
+                /* prevent auto indenting the command output */
+                local previous = mp.config.auto_indent;
+                mp.config.auto_indent = NULL;
 
                 while ((l = read(p)) != NULL) {
                     d->insert(mp.chomp(l));
                     d->insert_newline();
                 }
+                
+                mp.config.auto_indent = previous;
 
                 pclose(p);
                 mp.busy(0);

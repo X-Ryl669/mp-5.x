@@ -115,7 +115,7 @@ sub mp.build_execute(target)
         local l;
 
         while (l = read(p))
-            log->insert(mp.chomp(l) ~ "\n");
+            log->append(mp.chomp(l));
 
         pclose(p);
 
