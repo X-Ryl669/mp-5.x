@@ -51,7 +51,6 @@ sub mp_drv.busy(onoff)          { return NULL; }
 /** driver wrappers **/
 
 sub mp.update_ui()			{ mp_drv.update_ui(); }
-sub mp.info(msg)			{ mp_drv.info(msg); }
 sub mp.alert(msg)			{ mp_drv.alert(msg); }
 sub mp.confirm(msg)			{ mp_drv.confirm(msg); }
 sub mp.openfile(prompt)		{ mp_drv.openfile(prompt); }

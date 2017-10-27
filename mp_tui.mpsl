@@ -412,16 +412,9 @@ sub mp.tui.draw(doc)
     mp.tui.draw_scrollbar(doc);
 
 	/* draw the status line */
-    if (mp.tui.info_line == NULL) {
-        mp.tui.attr(mp.colors.normal.attr);
-        mp.tui.move(0, mp.window.ty - 1, 1);
-        mp.tui.addstr(mp.build_status_line());
-    } else {
-        mp.tui.attr(mp.colors.menu.attr);
-        mp.tui.move(0, mp.window.ty - 1, 1);
-        mp.tui.addstr(mp.tui.info_line);
-        mp.tui.attr(mp.colors.normal.attr);
-    }
+    mp.tui.attr(mp.colors.normal.attr);
+    mp.tui.move(0, mp.window.ty - 1, 1);
+    mp.tui.addstr(mp.build_status_line());
 
 	/* draw the 'menu' hint */
 	local t = "ctrl-a: " ~ L("Menu");
@@ -442,11 +435,6 @@ sub mp.tui.draw(doc)
 
 
 /** interface **/
-
-sub mp_drv.info(msg)
-{
-	mp.tui.info_line = msg;
-}
 
 sub mp_drv.alert(msg)
 {
@@ -751,7 +739,6 @@ sub mp_drv.main_loop()
 		mp.tui.draw(mp.active());
 
 		local key = mp.tui.getkey();
-		mp.tui.info_line = NULL;
 		mp.process_event(key);
 	}
 }
