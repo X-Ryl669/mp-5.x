@@ -63,7 +63,10 @@ mp_doc.actions['seek_next'] = sub (d) {
     if (!d->long_op(mp_doc.search, NULL)) {
         d->move_bof();
         d->long_op(mp_doc.search, NULL);
-        mp.info(L("Search wrapped."));
+        mp.message = {
+            timeout:    time() + 2,
+            string:     L("Search wrapped")
+        };
     }
 
     return d;
@@ -73,7 +76,10 @@ mp_doc.actions['seek_prev'] = sub (d) {
     if (!d->long_op(mp_doc.search_back, NULL)) { 
         d->move_eof();
         d->long_op(mp_doc.search_back, NULL);
-        mp.info(L("Search wrapped."));
+        mp.message = {
+            timeout:    time() + 2,
+            string:     L("Search wrapped")
+        };
     }
 
     return d;
