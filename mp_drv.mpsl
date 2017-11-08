@@ -47,6 +47,7 @@ sub mp_drv.sys_to_clip()        { return NULL; }
 sub mp_drv.update_ui()          { return NULL; }
 sub mp_drv.timer(msecs,func)    { return NULL; }
 sub mp_drv.busy(onoff)          { return NULL; }
+sub mp_drv.suspend()            { return NULL; }
 
 /** driver wrappers **/
 
