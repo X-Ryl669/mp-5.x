@@ -34,6 +34,7 @@ public:
     void keyPressEvent(QKeyEvent * event);
     void keyReleaseEvent(QKeyEvent * event);
     void mousePressEvent(QMouseEvent * event);
+    void mouseDoubleClickEvent(QMouseEvent * event);
     void mouseReleaseEvent(QMouseEvent * event);
     void mouseMoveEvent(QMouseEvent * event);
     void wheelEvent(QWheelEvent * event);
@@ -924,6 +925,31 @@ void MPArea::mousePressEvent(QMouseEvent * event)
     case Qt::RightButton:
         ptr = (wchar_t *) L"mouse-right-button";
         break;
+    default:
+        break;
+    }
+
+    if (ptr != NULL)
+        mp_process_event(MPDM_S(ptr));
+
+    area->update();
+}
+
+
+void MPArea::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    wchar_t *ptr = NULL;
+
+    mouse_down = 1;
+
+    QPoint pos = event->pos();
+
+    mpdm_hset_s(MP, L"mouse_x", MPDM_I(pos.x() / font_width));
+    mpdm_hset_s(MP, L"mouse_y", MPDM_I(pos.y() / font_height));
+
+    switch (event->button()) {
+    case Qt::LeftButton:
+        ptr = (wchar_t *) L"mouse-left-dblclick";
     default:
         break;
     }
