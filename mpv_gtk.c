@@ -1688,7 +1688,10 @@ static gint button_press_event(GtkWidget * widget, GdkEventButton * event,
 
     switch (event->button) {
     case 1:
-        ptr = L"mouse-left-button";
+        if (event->type == GDK_2BUTTON_PRESS)
+            ptr = L"mouse-left-dblclick";
+        else
+            ptr = L"mouse-left-button";
         break;
     case 2:
         ptr = L"mouse-middle-button";
