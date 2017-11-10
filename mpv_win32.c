@@ -1025,6 +1025,7 @@ long CALLBACK WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
         return 0;
 
     case WM_LBUTTONDOWN:
+    case WM_LBUTTONDBLCLK:
 
         mouse_down = 1;
         /* fallthrough */
@@ -1047,6 +1048,9 @@ long CALLBACK WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
             break;
         case WM_MBUTTONDOWN:
             ptr = L"mouse-middle-button";
+            break;
+        case WM_LBUTTONDBLCLK:
+            ptr = L"mouse-left-dblclick";
             break;
         }
 
@@ -1791,7 +1795,7 @@ static mpdm_t win32_drv_startup(mpdm_t a, mpdm_t ctxt)
     hinst = GetModuleHandle(NULL);
 
     /* register the window */
-    wc.style = CS_HREDRAW | CS_VREDRAW;
+    wc.style = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
     wc.lpfnWndProc = WndProc;
     wc.cbClsExtra = 0;
     wc.cbWndExtra = 0;
