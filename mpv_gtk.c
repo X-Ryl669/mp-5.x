@@ -494,6 +494,7 @@ static void draw_status(void)
 static gint scroll_event(GtkWidget * widget, GdkEventScroll * event)
 /* 'scroll_event' handler (mouse wheel) */
 {
+    double dx, dy;
     wchar_t *ptr = NULL;
 
     switch (event->direction) {
@@ -509,6 +510,15 @@ static gint scroll_event(GtkWidget * widget, GdkEventScroll * event)
     case GDK_SCROLL_RIGHT:
         ptr = L"mouse-wheel-right";
         break;
+    case GDK_SCROLL_SMOOTH:
+        gdk_event_get_scroll_deltas(event, &dx, &dy);
+
+        if (dy > 0)
+            ptr = L"mouse-wheel-down";
+        else
+            ptr = L"mouse-wheel-up";
+        break;
+
     default:
         ptr = NULL;
         break;
