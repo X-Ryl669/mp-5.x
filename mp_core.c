@@ -1269,6 +1269,35 @@ mpdm_t mp_c_search_hex(mpdm_t args, mpdm_t ctxt)
 }
 
 
+int *mp_load_save_window_state(char *m, int x, int y, int w, int h)
+{
+    FILE *f;
+    static int state[4];
+    char *ptr = mpdm_wcstombs(
+        mpdm_string(
+            mpdm_strcat(
+                mpdm_hget_s(mpdm_root(), L"HOMEDIR"),
+                MPDM_LS(L".mp_state")
+            )
+        ),
+        NULL
+    );
+
+    state[0] = x; state[1] = y; state[2] = w; state[3] = h;
+
+    if ((f = fopen(ptr, m)) != NULL) {
+        if (*m == 'r')
+            fread(state, sizeof(state), 1, f);
+        else
+            fwrite(state, sizeof(state), 1, f);
+    }
+
+    free(ptr);
+
+    return state;
+}
+
+
 void mp_startup(int argc, char *argv[])
 {
     mpdm_t INC;

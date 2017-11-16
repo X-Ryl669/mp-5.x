@@ -69,35 +69,6 @@ static void draw_status(void)
 }
 
 
-static int *load_save_state(char *m, int x, int y, int w, int h)
-{
-    FILE *f;
-    static int state[4];
-    char *ptr = mpdm_wcstombs(
-        mpdm_string(
-            mpdm_strcat(
-                mpdm_hget_s(mpdm_root(), L"HOMEDIR"),
-                MPDM_LS(L".mp_state")
-            )
-        ),
-        NULL
-    );
-
-    state[0] = x; state[1] = y; state[2] = w; state[3] = h;
-
-    if ((f = fopen(ptr, m)) != NULL) {
-        if (*m == 'r')
-            fread(state, sizeof(state), 1, f);
-        else
-            fwrite(state, sizeof(state), 1, f);
-    }
-
-    free(ptr);
-
-    return state;
-}
-
-
 /** MPWindow methods **/
 
 MPWindow::MPWindow(QWidget * parent):QMainWindow(parent)
@@ -165,7 +136,7 @@ MPWindow::MPWindow(QWidget * parent):QMainWindow(parent)
 
     this->setWindowIcon(QIcon(QPixmap(mp_xpm)));
 
-    int *state = load_save_state("r", 20, 20, 600, 400);
+    int *state = mp_load_save_window_state("r", 20, 20, 600, 400);
 
     move(QPoint(state[0], state[1]));
     resize(QSize(state[2], state[3]));
@@ -174,7 +145,7 @@ MPWindow::MPWindow(QWidget * parent):QMainWindow(parent)
 
 static void save_settings(MPWindow * w)
 {
-    load_save_state("w",
+    mp_load_save_window_state("w",
         w->pos().x(),
         w->pos().y(),
         w->size().width(),
