@@ -69,6 +69,35 @@ static void draw_status(void)
 }
 
 
+static int *load_save_state(char *m, int x, int y, int w, int h)
+{
+    FILE *f;
+    static int state[4];
+    char *ptr = mpdm_wcstombs(
+        mpdm_string(
+            mpdm_strcat(
+                mpdm_hget_s(mpdm_root(), L"HOMEDIR"),
+                MPDM_LS(L".mp_state")
+            )
+        ),
+        NULL
+    );
+
+    state[0] = x; state[1] = y; state[2] = w; state[3] = h;
+
+    if ((f = fopen(ptr, m)) != NULL) {
+        if (*m == 'r')
+            fread(state, sizeof(state), 1, f);
+        else
+            fwrite(state, sizeof(state), 1, f);
+    }
+
+    free(ptr);
+
+    return state;
+}
+
+
 /** MPWindow methods **/
 
 MPWindow::MPWindow(QWidget * parent):QMainWindow(parent)
@@ -136,21 +165,21 @@ MPWindow::MPWindow(QWidget * parent):QMainWindow(parent)
 
     this->setWindowIcon(QIcon(QPixmap(mp_xpm)));
 
-    settings = new QSettings("triptico.com", "MinimumProfit");
+    int *state = load_save_state("r", 20, 20, 600, 400);
 
-    QPoint pos = settings->value("pos", QPoint(20, 20)).toPoint();
-    QSize size = settings->value("size", QSize(600, 400)).toSize();
-
-    move(pos);
-    resize(size);
+    move(QPoint(state[0], state[1]));
+    resize(QSize(state[2], state[3]));
 }
 
 
 static void save_settings(MPWindow * w)
 {
-    w->settings->setValue("pos", w->pos());
-    w->settings->setValue("size", w->size());
-    w->settings->sync();
+    load_save_state("w",
+        w->pos().x(),
+        w->pos().y(),
+        w->size().width(),
+        w->size().height()
+    );
 }
 
 
