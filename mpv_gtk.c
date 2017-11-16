@@ -2452,6 +2452,12 @@ static mpdm_t gtk_drv_shutdown(mpdm_t a, mpdm_t ctxt)
 /* shutdown */
 {
     mpdm_t v;
+    int x, y, w, h;
+
+    gtk_window_get_position(GTK_WINDOW(window), &x, &y);
+    gtk_window_get_size(GTK_WINDOW(window), &w, &h);
+
+    mp_load_save_window_state("w", x, y, w, h);
 
     if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL) {
         mpdm_write_wcs(stdout, mpdm_string(v));
@@ -2523,7 +2529,10 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
     	h = (gdk_screen_get_height(screen) * 2) / 3;
     }
 
-    gtk_window_set_default_size(GTK_WINDOW(window), w, h);
+    int *state = mp_load_save_window_state("r", 0, 0, w, h);
+
+    gtk_window_move(GTK_WINDOW(window), state[0], state[1]);
+    gtk_window_set_default_size(GTK_WINDOW(window), state[2], state[3]);
 
     g_signal_connect(G_OBJECT(window), "delete_event",
                      G_CALLBACK(delete_event), NULL);
