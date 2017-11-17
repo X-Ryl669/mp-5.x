@@ -1107,6 +1107,13 @@ long CALLBACK WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
 
     case WM_CLOSE:
 
+        {
+        RECT r;
+
+        GetWindowRect(hwnd, &r);
+        mp_load_save_window_state("w", r.left, r.top, r.right, r.bottom);
+        }
+
         if (!mp_exit_requested)
             mp_process_event(MPDM_LS(L"close-window"));
 
@@ -1808,11 +1815,13 @@ static mpdm_t win32_drv_startup(mpdm_t a, mpdm_t ctxt)
 
     RegisterClassW(&wc);
 
+    int *state = mp_load_save_window_state("r", 10, 10, 600, 400);
+
     /* create the window */
     hwnd = CreateWindowW(L"minimumprofit5.x", L"mp " VERSION,
                          WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN |
-                         WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT,
-                         CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, hinst,
+                         WS_VSCROLL, state[0], state[1],
+                         state[2], state[3], NULL, NULL, hinst,
                          NULL);
 
     ShowWindow(hwnd, SW_SHOW);
