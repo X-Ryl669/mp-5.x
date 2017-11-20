@@ -731,6 +731,8 @@ static void gtk_drv_render(mpdm_t doc, int optimize)
     draw_filetabs();
     draw_scrollbar();
     draw_status();
+
+    gtk_window_get_position(GTK_WINDOW(window), &ls_x, &ls_y);
 }
 
 
@@ -1819,7 +1821,6 @@ static gint configure_event(GtkWidget * widget, GdkEventConfigure * event)
     update_window_size();
     redraw();
 
-    gtk_window_get_position(GTK_WINDOW(window), &ls_x, &ls_y);
     gtk_window_get_size(GTK_WINDOW(window), &ls_w, &ls_h);
 
     return TRUE;
