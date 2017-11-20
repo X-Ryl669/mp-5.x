@@ -95,6 +95,10 @@ static mpdm_t timer_func = NULL;
 /* maximize wanted? */
 static int maximize = 0;
 
+/* window state variables */
+int ls_x, ls_y, ls_w, ls_h;
+
+
 /** code **/
 
 /** support functions **/
@@ -1815,6 +1819,9 @@ static gint configure_event(GtkWidget * widget, GdkEventConfigure * event)
     update_window_size();
     redraw();
 
+    gtk_window_get_position(GTK_WINDOW(window), &ls_x, &ls_y);
+    gtk_window_get_size(GTK_WINDOW(window), &ls_w, &ls_h);
+
     return TRUE;
 }
 
@@ -2462,12 +2469,8 @@ static mpdm_t gtk_drv_shutdown(mpdm_t a, mpdm_t ctxt)
 /* shutdown */
 {
     mpdm_t v;
-    int x, y, w, h;
 
-    gtk_window_get_position(GTK_WINDOW(window), &x, &y);
-    gtk_window_get_size(GTK_WINDOW(window), &w, &h);
-
-    mp_load_save_window_state("w", x, y, w, h);
+    mp_load_save_window_state("w", ls_x, ls_y, ls_w, ls_h);
 
     if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL) {
         mpdm_write_wcs(stdout, mpdm_string(v));
