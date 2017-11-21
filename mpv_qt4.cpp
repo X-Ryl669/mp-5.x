@@ -46,6 +46,7 @@ class MPWindow : public QMainWindow
 public:
     MPWindow(QWidget * parent = 0);
     bool queryExit(void);
+    void closeEvent(QCloseEvent *event);
     bool event(QEvent * event);
 
     QSettings *settings;
@@ -161,6 +162,15 @@ bool MPWindow::queryExit(void)
     save_settings(this);
 
     return mp_exit_requested ? true : false;
+}
+
+
+void MPWindow::closeEvent(QCloseEvent *event)
+{
+    mp_process_event(MPDM_LS(L"close-window"));
+
+    if (!mp_exit_requested)
+        event->ignore();
 }
 
 
