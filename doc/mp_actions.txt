@@ -29,7 +29,7 @@ check_for_updates
 
 _Check for updates..._
 
-Checks if there is a new version.
+Checks if there is a new version in http://triptico.com (Minimum Profit Home).
 
 close
 -----
@@ -342,9 +342,9 @@ Loads a session, previously saved by `save_session'.
 mark
 ----
 
-_Mark beginning/end of block_ (`f9')
+_Mark selection block_
 
-Marks the beginning or the end of the block.
+Marks a selection block.
 
 mark_all
 --------
@@ -358,22 +358,22 @@ mark_tag
 
 _Mark beginning/end of block_ (`f9')
 
-To be written.
+Marks the beginning or the end of the block.
 
 mark_tag_vertical
 -----------------
 
 _Mark vertical block_ (`ctrl-b')
 
-To be written.
+Marks the beginning or the end of a vertical (also known as
+rectangular) block.
 
 mark_vertical
 -------------
 
-_Mark vertical block_ (`ctrl-b')
+_Mark vertical selection block_
 
-Marks the beginning or the end of a vertical (also known as
-rectangular) block.
+Marks a vertical block.
 
 menu
 ----
@@ -687,7 +687,7 @@ seek_matching
 
 _Move to the matching bracket_ (`ctrl-j')
 
-To be written.
+Jump to the bracket matching the character under the cursor.
 
 seek_misspelled
 ---------------
@@ -747,7 +747,7 @@ select_word_under_cursor
 
 _Select word under cursor_ (`mouse-left-dblclick')
 
-To be written.
+Creates a selection block containing the work under the cursor.
 
 set_password
 ------------
@@ -765,7 +765,7 @@ suspend
 
 _Suspend_ (`ctrl-l')
 
-To be written.
+Suspends the editor. Get back by typing `fg' in the shell.
 
 sync
 ----
