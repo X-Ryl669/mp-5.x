@@ -138,11 +138,6 @@ The number of lines to read above the first visible line to calculate
 syntax highlight in blocks (default: 60 lines). There is probably no
 need to change this, unless using very big comment blocks or the like.
 
-mp.config.show_line_numbers
----------------------------
-
-Set to 1 to show line numbers to the left of the document (default: 0).
-
 mp.config.recursive_grep
 ------------------------
 
@@ -162,6 +157,11 @@ Used by the `seek_repeated_word' action as the number of characters
 (from the start or the end) two words must match to be considered
 _similar_ and taken into account for repetitions (default: 4
 characters).
+
+mp.config.show_line_numbers
+---------------------------
+
+Set to 1 to show line numbers to the left of the document (default: 0).
 
 mp.config.smart_bol
 -------------------

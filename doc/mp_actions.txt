@@ -353,6 +353,20 @@ _Mark all_
 
 Marks (selects) all the document.
 
+mark_tag
+--------
+
+_Mark beginning/end of block_ (`f9')
+
+To be written.
+
+mark_tag_vertical
+-----------------
+
+_Mark vertical block_ (`ctrl-b')
+
+To be written.
+
 mark_vertical
 -------------
 
@@ -668,6 +682,13 @@ _Search text..._ (`ctrl-f')
 
 Shows the search text dialog.
 
+seek_matching
+-------------
+
+_Move to the matching bracket_ (`ctrl-j')
+
+To be written.
+
 seek_misspelled
 ---------------
 
@@ -721,6 +742,13 @@ end with the same letters. If a pair is found, the words are
 highlighted as spelling errors and the cursor moved over the first
 one. Otherwise, a message marking the end is shown and nothing is done.
 
+select_word_under_cursor
+------------------------
+
+_Select word under cursor_ (`mouse-left-dblclick')
+
+To be written.
+
 set_password
 ------------
 
@@ -731,6 +759,13 @@ when it's saved. From that moment on, each time the document is tried to open
 the password will be asked for.
 
 Minimum Profit encrypts documents using a variant of the ARCFOUR algorithm.
+
+suspend
+-------
+
+_Suspend_ (`ctrl-l')
+
+To be written.
 
 sync
 ----

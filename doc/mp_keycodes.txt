@@ -6,19 +6,25 @@ Table with Minimum Profit's keycodes and their default assigned actions.
  +---------------------+------------------------+
  |             Keycode |                 Action |
  +---------------------+------------------------+
- |               alt-a |                   menu |
+ |               alt-a |                 ctrl-a |
+ +---------------------+------------------------+
+ |     alt-cursor-down |            scroll_down |
  +---------------------+------------------------+
  |     alt-cursor-left |         unindent_block |
  +---------------------+------------------------+
  |    alt-cursor-right |           indent_block |
  +---------------------+------------------------+
- |             alt-end |               move_eof |
+ |       alt-cursor-up |              scroll_up |
  +---------------------+------------------------+
- |           alt-enter |      open_under_cursor |
+ |             alt-end |               ctrl-end |
  +---------------------+------------------------+
- |            alt-home |               move_bof |
+ |           alt-enter |             ctrl-enter |
  +---------------------+------------------------+
- |           alt-space |                   menu |
+ |            alt-home |              ctrl-home |
+ +---------------------+------------------------+
+ |           alt-space |                 ctrl-a |
+ +---------------------+------------------------+
+ |                ansi |              0x26b8860 |
  +---------------------+------------------------+
  |           backspace |            delete_left |
  +---------------------+------------------------+
@@ -26,13 +32,17 @@ Table with Minimum Profit's keycodes and their default assigned actions.
  +---------------------+------------------------+
  |              ctrl-a |                   menu |
  +---------------------+------------------------+
- |              ctrl-b |          mark_vertical |
+ |              ctrl-b |      mark_tag_vertical |
  +---------------------+------------------------+
  |              ctrl-c |              copy_mark |
+ +---------------------+------------------------+
+ |    ctrl-cursor-down |      move_section_down |
  +---------------------+------------------------+
  |    ctrl-cursor-left |         move_word_left |
  +---------------------+------------------------+
  |   ctrl-cursor-right |        move_word_right |
+ +---------------------+------------------------+
+ |      ctrl-cursor-up |        move_section_up |
  +---------------------+------------------------+
  |              ctrl-d |           section_list |
  +---------------------+------------------------+
@@ -44,9 +54,7 @@ Table with Minimum Profit's keycodes and their default assigned actions.
  +---------------------+------------------------+
  |              ctrl-f |                   seek |
  +---------------------+------------------------+
- |              ctrl-j |          seek_matching |
- +---------------------+------------------------+
- |            ctrl-f10 |           record_macro |
+ |            ctrl-f10 |                    f10 |
  +---------------------+------------------------+
  |             ctrl-f3 |              seek_prev |
  +---------------------+------------------------+
@@ -54,25 +62,31 @@ Table with Minimum Profit's keycodes and their default assigned actions.
  +---------------------+------------------------+
  |           ctrl-home |               move_bof |
  +---------------------+------------------------+
- |              ctrl-i |             insert_tab |
+ |              ctrl-i |                    tab |
+ +---------------------+------------------------+
+ |              ctrl-j |          seek_matching |
+ +---------------------+------------------------+
+ |              ctrl-k |               cut_line |
  +---------------------+------------------------+
  |       ctrl-kp-minus |               zoom_out |
  +---------------------+------------------------+
  |        ctrl-kp-plus |                zoom_in |
  +---------------------+------------------------+
- |              ctrl-m |            insert_line |
+ |              ctrl-l |                suspend |
+ +---------------------+------------------------+
+ |              ctrl-m |                  enter |
  +---------------------+------------------------+
  |              ctrl-n |                   next |
  +---------------------+------------------------+
  |              ctrl-o |                   open |
+ +---------------------+------------------------+
+ |              ctrl-p |                    vcs |
  +---------------------+------------------------+
  |      ctrl-page-down |         seek_next_char |
  +---------------------+------------------------+
  |        ctrl-page-up |         seek_prev_char |
  +---------------------+------------------------+
  |              ctrl-q |                   exit |
- +---------------------+------------------------+
- |              ctrl-l |                suspend |
  +---------------------+------------------------+
  |              ctrl-r |                replace |
  +---------------------+------------------------+
@@ -91,8 +105,6 @@ Table with Minimum Profit's keycodes and their default assigned actions.
  |              ctrl-x |               cut_mark |
  +---------------------+------------------------+
  |              ctrl-y |            delete_line |
- +---------------------+------------------------+
- |              ctrl-k |               cut_line |
  +---------------------+------------------------+
  |              ctrl-z |                   undo |
  +---------------------+------------------------+
@@ -136,7 +148,7 @@ Table with Minimum Profit's keycodes and their default assigned actions.
  +---------------------+------------------------+
  |                  f8 |                 unmark |
  +---------------------+------------------------+
- |                  f9 |                   mark |
+ |                  f9 |               mark_tag |
  +---------------------+------------------------+
  |                home |               move_bol |
  +---------------------+------------------------+
@@ -145,6 +157,10 @@ Table with Minimum Profit's keycodes and their default assigned actions.
  |          mouse-drag |        mouse_drag_mark |
  +---------------------+------------------------+
  |   mouse-left-button | move_to_mouse_position |
+ +---------------------+------------------------+
+ | mouse-left-dblclick | select_word_under_cursor |
+ +---------------------+------------------------+
+ |          mouse-menu |                   menu |
  +---------------------+------------------------+
  | mouse-middle-button | move_to_mouse_position |
  +---------------------+------------------------+

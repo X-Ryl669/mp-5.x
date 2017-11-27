@@ -112,8 +112,10 @@ update_ref_document('doc/mp_configuration.txt', mp.config, 'mp.config');
 
 local kc = {};
 
-foreach (k, keys(mp.keycodes))
-	kc[mp.keycodes[k]] = k;
+local all_keycodes = mp.keycodes ~ mp_doc.keycodes;
+
+foreach (k, keys(all_keycodes))
+	kc[all_keycodes[k]] = k;
 
 local def = {};
 
@@ -147,8 +149,8 @@ if ((f = open('doc/mp_keycodes.txt', 'w')) != NULL) {
 	write(f, sprintf(" | %19s | %22s |\n", 'Keycode', 'Action'));
 	write(f, tbl);
 
-	foreach(k, sort(keys(mp.keycodes))) {
-		write(f, sprintf(" | %19s | %22s |\n", k, mp.keycodes[k]));
+	foreach(k, sort(keys(all_keycodes))) {
+		write(f, sprintf(" | %19s | %22s |\n", k, all_keycodes[k]));
 		write(f, tbl);
 	}
 
