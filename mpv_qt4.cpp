@@ -4,7 +4,7 @@
 
     Qt4 driver.
 
-    Copyright (C) 2009/2014 Angel Ortega <angel@triptico.com>
+    Copyright (C) 2009/2017 Angel Ortega <angel@triptico.com> et al.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
