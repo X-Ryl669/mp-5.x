@@ -1269,30 +1269,26 @@ mpdm_t mp_c_search_hex(mpdm_t args, mpdm_t ctxt)
 }
 
 
-int *mp_load_save_window_state(char *m, int x, int y, int w, int h)
+mpdm_t mp_load_save_state(char *m, mpdm_t state)
 {
-    FILE *f;
-    static int state[4];
-    char *ptr = mpdm_wcstombs(
-        mpdm_string(
-            mpdm_strcat(
-                mpdm_hget_s(mpdm_root(), L"HOMEDIR"),
-                MPDM_LS(L".mp_state")
-            )
-        ),
-        NULL
-    );
+    mpdm_t f, l;
+    mpdm_t filename = mpdm_strcat(mpdm_hget_s(mpdm_root(), L"HOMEDIR"),
+        MPDM_LS(L".mp_state.json"));
 
-    state[0] = x; state[1] = y; state[2] = w; state[3] = h;
+    mpdm_ref(filename);
 
-    if ((f = fopen(ptr, m)) != NULL) {
-        if (*m == 'r')
-            fread(state, sizeof(state), 1, f);
+    if ((f = mpdm_open(filename, MPDM_LS(*m == 'r' ? L"r" : L"w"))) != NULL) {
+        if (*m == 'r') {
+            l = mpdm_read(f);
+            mpdm_set(&state, mpdm_aget(mpdm_sscanf(l, MPDM_LS(L"%j"), 0), 0));
+        }
         else
-            fwrite(state, sizeof(state), 1, f);
+            mpdm_write(f, mpdm_fmt(MPDM_LS(L"%j"), state));
+
+        mpdm_close(f);
     }
 
-    free(ptr);
+    mpdm_unref(filename);
 
     return state;
 }
