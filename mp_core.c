@@ -1275,8 +1275,6 @@ mpdm_t mp_load_save_state(char *m, mpdm_t state)
     mpdm_t filename = mpdm_strcat(mpdm_hget_s(mpdm_root(), L"HOMEDIR"),
         MPDM_LS(L".mp_state.json"));
 
-    mpdm_ref(filename);
-
     if ((f = mpdm_open(filename, MPDM_LS(*m == 'r' ? L"r" : L"w"))) != NULL) {
         if (*m == 'r') {
             l = mpdm_read(f);
@@ -1287,8 +1285,6 @@ mpdm_t mp_load_save_state(char *m, mpdm_t state)
 
         mpdm_close(f);
     }
-
-    mpdm_unref(filename);
 
     return state;
 }
