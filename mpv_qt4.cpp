@@ -137,21 +137,31 @@ MPWindow::MPWindow(QWidget * parent):QMainWindow(parent)
 
     this->setWindowIcon(QIcon(QPixmap(mp_xpm)));
 
-    int *state = mp_load_save_window_state("r", 20, 20, 600, 400);
+    mpdm_t st = mpdm_ref(MPDM_H(0));
+    mpdm_hset_s(st, L"x", MPDM_I(20));
+    mpdm_hset_s(st, L"y", MPDM_I(20));
+    mpdm_hset_s(st, L"w", MPDM_I(600));
+    mpdm_hset_s(st, L"h", MPDM_I(400));
+    st = mp_load_save_state("r", st);
 
-    move(QPoint(state[0], state[1]));
-    resize(QSize(state[2], state[3]));
+    move(QPoint(mpdm_ival(mpdm_hget_s(st, L"x")), mpdm_ival(mpdm_hget_s(st, L"y"))));
+    resize(QSize(mpdm_ival(mpdm_hget_s(st, L"w")), mpdm_ival(mpdm_hget_s(st, L"h"))));
+    mpdm_unref(st);
 }
 
 
 static void save_settings(MPWindow * w)
 {
-    mp_load_save_window_state("w",
-        w->pos().x(),
-        w->pos().y(),
-        w->size().width(),
-        w->size().height()
-    );
+    mpdm_t v;
+
+    v = mpdm_ref(MPDM_H(0));
+    mpdm_hset_s(v, L"x", MPDM_I(w->pos().x()));
+    mpdm_hset_s(v, L"y", MPDM_I(w->pos().y()));
+    mpdm_hset_s(v, L"w", MPDM_I(w->size().width()));
+    mpdm_hset_s(v, L"h", MPDM_I(w->size().height()));
+
+    mp_load_save_state("w", v);
+    mpdm_unref(v);
 }
 
 
