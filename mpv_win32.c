@@ -1108,10 +1108,19 @@ long CALLBACK WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
     case WM_CLOSE:
 
         {
-        RECT r;
+            RECT r;
+            mpdm_t v;
 
-        GetWindowRect(hwnd, &r);
-        mp_load_save_window_state("w", r.left, r.top, r.right, r.bottom);
+            GetWindowRect(hwnd, &r);
+
+            v = mpdm_ref(MPDM_H(0));
+            mpdm_hset_s(v, L"l", MPDM_I(r.left));
+            mpdm_hset_s(v, L"t", MPDM_I(r.top));
+            mpdm_hset_s(v, L"r", MPDM_I(r.right));
+            mpdm_hset_s(v, L"b", MPDM_I(r.bottom));
+
+            mp_load_save_state("w", v);
+            mpdm_unref(v);
         }
 
         if (!mp_exit_requested)
@@ -1815,14 +1824,23 @@ static mpdm_t win32_drv_startup(mpdm_t a, mpdm_t ctxt)
 
     RegisterClassW(&wc);
 
-    int *state = mp_load_save_window_state("r", 10, 10, 600, 400);
+    mpdm_t st = mpdm_ref(MPDM_H(0));
+    mpdm_hset_s(st, L"l", MPDM_I(10));
+    mpdm_hset_s(st, L"t", MPDM_I(10));
+    mpdm_hset_s(st, L"r", MPDM_I(600));
+    mpdm_hset_s(st, L"b", MPDM_I(400));
+    st = mp_load_save_state("r", st);
 
     /* create the window */
     hwnd = CreateWindowW(L"minimumprofit5.x", L"mp " VERSION,
-                         WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN |
-                         WS_VSCROLL, state[0], state[1],
-                         state[2], state[3], NULL, NULL, hinst,
-                         NULL);
+                         WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_VSCROLL,
+                         mpdm_ival(mpdm_get_s(st, L"l")),
+                         mpdm_ival(mpdm_get_s(st, L"t")),
+                         mpdm_ival(mpdm_get_s(st, L"r")),
+                         mpdm_ival(mpdm_get_s(st, L"b")),
+                         NULL, NULL, hinst, NULL);
+
+    mpdm_unref(st);
 
     ShowWindow(hwnd, SW_SHOW);
     UpdateWindow(hwnd);
