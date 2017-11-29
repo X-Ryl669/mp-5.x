@@ -1122,14 +1122,13 @@ static mpdm_t qt4_drv_shutdown(mpdm_t a, mpdm_t ctxt)
 {
     mpdm_t v;
 
-    v = mpdm_ref(MPDM_H(0));
+    v = mpdm_hget_s(MP, L"state");
     mpdm_hset_s(v, L"x", MPDM_I(window->pos().x()));
     mpdm_hset_s(v, L"y", MPDM_I(window->pos().y()));
     mpdm_hset_s(v, L"w", MPDM_I(window->size().width()));
     mpdm_hset_s(v, L"h", MPDM_I(window->size().height()));
 
     mp_load_save_state("w", v);
-    mpdm_unref(v);
 
     if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL) {
         mpdm_write_wcs(stdout, mpdm_string(v));

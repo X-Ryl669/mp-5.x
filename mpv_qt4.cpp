@@ -137,7 +137,7 @@ MPWindow::MPWindow(QWidget * parent):QMainWindow(parent)
 
     this->setWindowIcon(QIcon(QPixmap(mp_xpm)));
 
-    mpdm_t st = mpdm_ref(MPDM_H(0));
+    mpdm_t st = MPDM_H(0);
     mpdm_hset_s(st, L"x", MPDM_I(20));
     mpdm_hset_s(st, L"y", MPDM_I(20));
     mpdm_hset_s(st, L"w", MPDM_I(600));
@@ -146,7 +146,6 @@ MPWindow::MPWindow(QWidget * parent):QMainWindow(parent)
 
     move(QPoint(mpdm_ival(mpdm_hget_s(st, L"x")), mpdm_ival(mpdm_hget_s(st, L"y"))));
     resize(QSize(mpdm_ival(mpdm_hget_s(st, L"w")), mpdm_ival(mpdm_hget_s(st, L"h"))));
-    mpdm_unref(st);
 }
 
 
@@ -154,14 +153,13 @@ static void save_settings(MPWindow * w)
 {
     mpdm_t v;
 
-    v = mpdm_ref(MPDM_H(0));
+    v = mpdm_hget_s(MP, L"state");
     mpdm_hset_s(v, L"x", MPDM_I(w->pos().x()));
     mpdm_hset_s(v, L"y", MPDM_I(w->pos().y()));
     mpdm_hset_s(v, L"w", MPDM_I(w->size().width()));
     mpdm_hset_s(v, L"h", MPDM_I(w->size().height()));
 
     mp_load_save_state("w", v);
-    mpdm_unref(v);
 }
 
 
