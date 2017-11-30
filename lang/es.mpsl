@@ -215,5 +215,11 @@ __I18N__ = {
 	"Show line numbers:" => "Mostrar n\x{00fa}meros de l\x{00ed}nea",
 	"Not found." => "No encontrado.",
 	"Hex string to seek:" => "Cadena hexadecimal a buscar:",
+	"Mark selection block" => "Marcar bloque",
+	"Mark vertical selection block" => "Marcar bloque vertical",
+	"Suspend" => "Suspender",
+	"Select word under cursor" => "Seleccionar palabra bajo el cursor",
+	"Search wrapped" => "La b\x{00fa}squeda empez\x{00f3} desde arriba",
+	"Move to the matching bracket" => "Mover el cursor hasta el par\x{00e9}ntesis opuesto",
 	"-" => "-"
 };
