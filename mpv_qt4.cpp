@@ -137,7 +137,7 @@ MPWindow::MPWindow(QWidget * parent):QMainWindow(parent)
 
     this->setWindowIcon(QIcon(QPixmap(mp_xpm)));
 
-    mpdm_t st = mpdm_hset_s(MP, L"state", MPDM_H(0));
+    mpdm_t st = mpdm_hget_s(MP, L"state");
     mpdm_hset_s(st, L"x", MPDM_I(20));
     mpdm_hset_s(st, L"y", MPDM_I(20));
     mpdm_hset_s(st, L"w", MPDM_I(600));

@@ -1823,7 +1823,7 @@ static mpdm_t win32_drv_startup(mpdm_t a, mpdm_t ctxt)
 
     RegisterClassW(&wc);
 
-    mpdm_t st = mpdm_hset_s(MP, L"state", MPDM_H(0));
+    mpdm_t st = mpdm_gset_s(MP, L"state");
     mpdm_hset_s(st, L"l", MPDM_I(10));
     mpdm_hset_s(st, L"t", MPDM_I(10));
     mpdm_hset_s(st, L"r", MPDM_I(600));

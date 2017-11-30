@@ -2549,7 +2549,7 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
     	h = (gdk_screen_get_height(screen) * 2) / 3;
     }
 
-    mpdm_t st = mpdm_hset_s(MP, L"state", MPDM_H(0));
+    mpdm_t st = mpdm_hget_s(MP, L"state");
     mpdm_hset_s(st, L"x", MPDM_I(0));
     mpdm_hset_s(st, L"y", MPDM_I(0));
     mpdm_hset_s(st, L"w", MPDM_I(w));

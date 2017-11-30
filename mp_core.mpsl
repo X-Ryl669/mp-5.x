@@ -179,6 +179,9 @@ global mp = {
     /* form history */
     history:    {},
 
+    /* state saved from run to run (window size, etc.) */
+    state:      {},
+
     /* the menu */
     menu:       [
         [
