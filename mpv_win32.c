@@ -1119,7 +1119,7 @@ long CALLBACK WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
             mpdm_hset_s(v, L"r", MPDM_I(r.right));
             mpdm_hset_s(v, L"b", MPDM_I(r.bottom));
 
-            mp_load_save_state("w", v);
+            mp_load_save_state("w");
         }
 
         if (!mp_exit_requested)
@@ -1823,12 +1823,12 @@ static mpdm_t win32_drv_startup(mpdm_t a, mpdm_t ctxt)
 
     RegisterClassW(&wc);
 
-    mpdm_t st = MPDM_H(0);
+    mpdm_t st = mpdm_hset_s(MP, L"state", MPDM_H(0));
     mpdm_hset_s(st, L"l", MPDM_I(10));
     mpdm_hset_s(st, L"t", MPDM_I(10));
     mpdm_hset_s(st, L"r", MPDM_I(600));
     mpdm_hset_s(st, L"b", MPDM_I(400));
-    st = mp_load_save_state("r", st);
+    st = mp_load_save_state("r");
 
     /* create the window */
     hwnd = CreateWindowW(L"minimumprofit5.x", L"mp " VERSION,

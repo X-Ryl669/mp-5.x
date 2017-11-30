@@ -40,7 +40,7 @@ mpdm_t mp_get_history(mpdm_t key);
 mpdm_t mp_menu_label(mpdm_t action);
 mpdm_t mp_get_doc_names(void);
 int mp_keypress_throttle(int keydown);
-mpdm_t mp_load_save_state(char *m, mpdm_t state);
+mpdm_t mp_load_save_state(char *m);
 
 #ifdef __cplusplus
 }

@@ -2477,7 +2477,7 @@ static mpdm_t gtk_drv_shutdown(mpdm_t a, mpdm_t ctxt)
     mpdm_hset_s(v, L"w", MPDM_I(ls_w));
     mpdm_hset_s(v, L"h", MPDM_I(ls_h));
 
-    mp_load_save_state("w", v);
+    mp_load_save_state("w");
 
     if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL) {
         mpdm_write_wcs(stdout, mpdm_string(v));
@@ -2549,13 +2549,13 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
     	h = (gdk_screen_get_height(screen) * 2) / 3;
     }
 
-    mpdm_t st = MPDM_H(0);
+    mpdm_t st = mpdm_hset_s(MP, L"state", MPDM_H(0));
     mpdm_hset_s(st, L"x", MPDM_I(0));
     mpdm_hset_s(st, L"y", MPDM_I(0));
     mpdm_hset_s(st, L"w", MPDM_I(w));
     mpdm_hset_s(st, L"h", MPDM_I(h));
 
-    st = mp_load_save_state("r", st);
+    st = mp_load_save_state("r");
 
     gtk_window_move(GTK_WINDOW(window),
         mpdm_ival(mpdm_hget_s(st, L"x")), mpdm_ival(mpdm_hget_s(st, L"y")));

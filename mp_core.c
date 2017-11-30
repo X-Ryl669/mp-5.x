@@ -1269,11 +1269,13 @@ mpdm_t mp_c_search_hex(mpdm_t args, mpdm_t ctxt)
 }
 
 
-mpdm_t mp_load_save_state(char *m, mpdm_t state)
+mpdm_t mp_load_save_state(char *m)
 {
-    mpdm_t f, nst = state;
+    mpdm_t f, state;
     mpdm_t filename = mpdm_strcat(mpdm_hget_s(mpdm_root(), L"HOMEDIR"),
         MPDM_LS(L".mp_state.json"));
+
+    state = mpdm_hget_s(MP, L"state");
 
     if (*m == 'r') {
         if ((f = mpdm_open(filename, MPDM_LS(L"r"))) != NULL) {
@@ -1284,12 +1286,9 @@ mpdm_t mp_load_save_state(char *m, mpdm_t state)
 
             mpdm_close(f);
 
-            mpdm_ref(state);
-            nst = mpdm_aget(mpdm_sscanf(j, MPDM_LS(L"%j"), 0), 0);
-            mpdm_unref(state);
+            if ((state = mpdm_aget(mpdm_sscanf(j, MPDM_LS(L"%j"), 0), 0)))
+                mpdm_hset_s(MP, L"state", state);
         }
-
-        mpdm_hset_s(MP, L"state", nst);
     }
     else {
         if ((f = mpdm_open(filename, MPDM_LS(L"w"))) != NULL) {
@@ -1298,7 +1297,7 @@ mpdm_t mp_load_save_state(char *m, mpdm_t state)
         }
     }
 
-    return nst;
+    return state;
 }
 
 
