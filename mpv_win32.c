@@ -1114,10 +1114,10 @@ long CALLBACK WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
             GetWindowRect(hwnd, &r);
 
             v = mpdm_hget_s(MP, L"state");
-            mpdm_hset_s(v, L"l", MPDM_I(r.left));
-            mpdm_hset_s(v, L"t", MPDM_I(r.top));
-            mpdm_hset_s(v, L"r", MPDM_I(r.right));
-            mpdm_hset_s(v, L"b", MPDM_I(r.bottom));
+            mpdm_hset_s(v, L"x", MPDM_I(r.left));
+            mpdm_hset_s(v, L"y", MPDM_I(r.top));
+            mpdm_hset_s(v, L"w", MPDM_I(r.right - r.left));
+            mpdm_hset_s(v, L"h", MPDM_I(r.bottom - r.top));
 
             mp_load_save_state("w");
         }
@@ -1823,20 +1823,20 @@ static mpdm_t win32_drv_startup(mpdm_t a, mpdm_t ctxt)
 
     RegisterClassW(&wc);
 
-    mpdm_t st = mpdm_gset_s(MP, L"state");
-    mpdm_hset_s(st, L"l", MPDM_I(10));
-    mpdm_hset_s(st, L"t", MPDM_I(10));
-    mpdm_hset_s(st, L"r", MPDM_I(600));
-    mpdm_hset_s(st, L"b", MPDM_I(400));
+    mpdm_t st = mpdm_hget_s(MP, L"state");
+    mpdm_hset_s(st, L"x", MPDM_I(10));
+    mpdm_hset_s(st, L"y", MPDM_I(10));
+    mpdm_hset_s(st, L"w", MPDM_I(600));
+    mpdm_hset_s(st, L"h", MPDM_I(400));
     st = mp_load_save_state("r");
 
     /* create the window */
     hwnd = CreateWindowW(L"minimumprofit5.x", L"mp " VERSION,
                          WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_VSCROLL,
-                         mpdm_ival(mpdm_hget_s(st, L"l")),
-                         mpdm_ival(mpdm_hget_s(st, L"t")),
-                         mpdm_ival(mpdm_hget_s(st, L"r")),
-                         mpdm_ival(mpdm_hget_s(st, L"b")),
+                         mpdm_ival(mpdm_hget_s(st, L"x")),
+                         mpdm_ival(mpdm_hget_s(st, L"y")),
+                         mpdm_ival(mpdm_hget_s(st, L"w")),
+                         mpdm_ival(mpdm_hget_s(st, L"h")),
                          NULL, NULL, hinst, NULL);
 
     ShowWindow(hwnd, SW_SHOW);
