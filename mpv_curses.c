@@ -727,6 +727,8 @@ static mpdm_t ncursesw_drv_shutdown(mpdm_t a, mpdm_t ctxt)
 
     endwin();
 
+    mp_load_save_state("w");
+
     if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL) {
         mpdm_write_wcs(stdout, mpdm_string(v));
         printf("\n");
@@ -874,6 +876,8 @@ static mpdm_t ncursesw_drv_startup(mpdm_t a)
 #ifndef NCURSES_VERSION
     signal(SIGWINCH, nc_sigwinch);
 #endif
+
+    mp_load_save_state("r");
 
     return NULL;
 }
