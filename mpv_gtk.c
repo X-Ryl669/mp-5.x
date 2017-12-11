@@ -515,7 +515,7 @@ static gint scroll_event(GtkWidget * widget, GdkEventScroll * event)
         ptr = L"mouse-wheel-right";
         break;
 
-#ifdef GDK_SCROLL_SMOOTH
+#if CONFOPT_GTK == 3
     case GDK_SCROLL_SMOOTH:
         gdk_event_get_scroll_deltas(event, &dx, &dy);
 
