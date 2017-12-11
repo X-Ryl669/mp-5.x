@@ -514,6 +514,8 @@ static gint scroll_event(GtkWidget * widget, GdkEventScroll * event)
     case GDK_SCROLL_RIGHT:
         ptr = L"mouse-wheel-right";
         break;
+
+#ifdef GDK_SCROLL_SMOOTH
     case GDK_SCROLL_SMOOTH:
         gdk_event_get_scroll_deltas(event, &dx, &dy);
 
@@ -522,6 +524,7 @@ static gint scroll_event(GtkWidget * widget, GdkEventScroll * event)
         else
             ptr = L"mouse-wheel-up";
         break;
+#endif
 
     default:
         ptr = NULL;
