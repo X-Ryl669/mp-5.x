@@ -1286,7 +1286,7 @@ mpdm_t mp_load_save_state(char *m)
 
             mpdm_close(f);
 
-            if ((l = mpdm_aget(mpdm_sscanf(j, MPDM_LS(L"%j"), 0), 0)))
+            if (j && (l = mpdm_aget(mpdm_sscanf(j, MPDM_LS(L"%j"), 0), 0)))
                 state = mpdm_hset_s(MP, L"state", l);
         }
     }
