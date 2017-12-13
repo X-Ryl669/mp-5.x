@@ -522,7 +522,9 @@ static gint scroll_event(GtkWidget * widget, GdkEventScroll * event)
         if (dy > 0)
             ptr = L"mouse-wheel-down";
         else
+        if (dy < 0)
             ptr = L"mouse-wheel-up";
+
         break;
 #endif
 
