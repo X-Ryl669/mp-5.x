@@ -31,6 +31,7 @@ while [ $# -gt 0 ] ; do
     --without-win32)    WITHOUT_WIN32=1 ;;
     --with-kde4)        WITHOUT_KDE4=0 ;;
     --without-qt4)      WITHOUT_QT4=1 ;;
+    --without-ansi)     WITHOUT_ANSI=1 ;;
     --help)             CONFIG_HELP=1 ;;
 
     --mingw32)          CC=i586-mingw32msvc-cc
@@ -60,6 +61,7 @@ if [ "$CONFIG_HELP" = "1" ] ; then
     echo "--without-win32       Disable win32 interface detection."
     echo "--with-kde4           Enable KDE4 interface detection."
     echo "--without-qt4         Disable Qt4 interface detection."
+    echo "--without-ansi        Disable ANSI terminal interface detection."
     echo "--without-unix-glob   Disable glob.h usage (use workaround)."
     echo "--with-included-regex Use included regex code (gnu_regex.c)."
     echo "--with-pcre           Enable PCRE library detection."
@@ -224,6 +226,7 @@ else
         WITHOUT_GTK=1
         WITHOUT_CURSES=1
         WITHOUT_QT4=1
+        WITHOUT_ANSI=1
         TARGET="mp-5.exe mp-5c.exe"
     else
         echo "No"
@@ -250,6 +253,7 @@ else
         echo "OK (ncursesw)"
         DRIVERS="ncursesw $DRIVERS"
         DRV_OBJS="mpv_curses.o $DRV_OBJS"
+        WITHOUT_ANSI=1
     else
         echo "No"
         WITHOUT_CURSESW=1
@@ -274,6 +278,7 @@ if [ "$WITHOUT_CURSESW" = "1" ] ; then
         echo "OK (ncurses)"
         DRIVERS="ncursesw $DRIVERS"
         DRV_OBJS="mpv_curses.o $DRV_OBJS"
+        WITHOUT_ANSI=1
     else
         echo "No"
         WITHOUT_CURSES=1
@@ -433,6 +438,37 @@ else
         else
             echo "No"
         fi
+    fi
+fi
+
+# ANSI
+echo -n "Testing for ANSI terminal support... "
+
+if [ "$WITHOUT_ANSI" = "1" ] ; then
+    echo "Disabled"
+else
+    rm -f .tmp.c
+    echo "#include <stdio.h>" >> .tmp.c
+    echo "#include <termios.h>" >> .tmp.c
+    echo "#include <unistd.h>" >> .tmp.c
+    echo "#include <sys/select.h>" >> .tmp.c
+    echo "#include <signal.h>" >> .tmp.c
+    echo "int main(void) { struct termios o; tcgetattr(0, &o); return 0; }" >> .tmp.c
+
+    TMP_CFLAGS=""
+    TMP_LDFLAGS=""
+
+    $CC $TMP_CFLAGS .tmp.c $TMP_LDFLAGS -o .tmp.o 2>> .config.log
+    if [ $? = 0 ] ; then
+        echo "#define CONFOPT_ANSI 1" >> config.h
+        echo $TMP_CFLAGS >> config.cflags
+        echo $TMP_LDFLAGS >> config.ldflags
+        echo "OK"
+        DRIVERS="ansi $DRIVERS"
+        DRV_OBJS="mpv_ansi.o $DRV_OBJS"
+    else
+        echo "No"
+        WITHOUT_ANSI=1
     fi
 fi
 
