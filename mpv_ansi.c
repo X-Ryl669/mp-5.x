@@ -40,10 +40,6 @@
 #include "mp.h"
 
 
-/* global terminal size */
-int g_tx, g_ty;
-
-
 /** code **/
 
 
@@ -116,7 +112,6 @@ int ansi_read_string(int fd, char *buf, size_t max)
 static void ansi_get_tty_size(int *w, int *h)
 /* asks the tty for its size */
 {
-    mpdm_t v;
     char buffer[32];
 
     /* magic line: save cursor position, move to stupid position,
@@ -127,18 +122,21 @@ static void ansi_get_tty_size(int *w, int *h)
     ansi_read_string(0, buffer, sizeof(buffer));
 
     sscanf(buffer, "\033[%d;%dR", h, w);
-
-    v = mpdm_hget_s(MP, L"window");
-    mpdm_hset_s(v, L"tx", MPDM_I(*w));
-    mpdm_hset_s(v, L"ty", MPDM_I(*h));
 }
 
 
 static void ansi_sigwinch(int s)
 /* SIGWINCH signal handler */
 {
+    int tx, ty;
+    mpdm_t v;
+
     /* get new size */
-    ansi_get_tty_size(&g_tx, &g_ty);
+    ansi_get_tty_size(&tx, &ty);
+
+    v = mpdm_hget_s(MP, L"window");
+    mpdm_hset_s(v, L"tx", MPDM_I(tx));
+    mpdm_hset_s(v, L"ty", MPDM_I(ty));
 
     /* (re)attach signal */
     signal(SIGWINCH, ansi_sigwinch);
@@ -232,11 +230,31 @@ static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
 
     ansi_read_string(0, str, sizeof(str));
 
-    switch (str[0]) {
-    case ctrl('q'):     f = L"ctrl-q"; break;
+    /* only one char? it's an ASCII or ctrl character */
+    if (str[1] == '\0') {
+        if (str[0] == '\n' || str[0] == '\r')
+            f = L"enter";
+        else
+        if (str[0] == '\t')
+            f = L"tab";
+        else
+        if (str[0] == '\033')
+            f = L"escape";
+        else
+        if (str[0] == '\b' || str[0] == '\177')
+            f = L"backspace";
+        else
+        if (str[0] >= ctrl('a') && str[0] < ctrl('z')) {
+            char tmp[32];
+
+            sprintf(tmp, "ctrl-%c", str[0] + 'a' - ctrl('a'));
+            k = MPDM_MBS(tmp);
+        }
+        else
+            k = MPDM_MBS(str);
     }
 
-    if (f == NULL) {
+    if (k == NULL && f == NULL) {
         int n;
 
         for (n = 0; str_to_code[n].code != NULL; n++) {
@@ -247,7 +265,7 @@ static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
         }
     }
 
-    if (f != NULL)
+    if (k == NULL && f != NULL)
         k = MPDM_S(f);
 
     return k;
@@ -303,6 +321,8 @@ static mpdm_t ansi_drv_shutdown(mpdm_t a, mpdm_t ctxt)
     ansi_raw_tty(0);
 
     mp_load_save_state("w");
+
+    ansi_clrscr();
 
     if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL) {
         mpdm_write_wcs(stdout, mpdm_string(v));
