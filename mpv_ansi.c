@@ -181,11 +181,10 @@ static void ansi_set_attr(int a)
     c0 = ((ansi_attrs[a] & 0xff00) >> 8);
     c1 = ((ansi_attrs[a] & 0xff0000) >> 16);
 
-    printf("\033[0;%s%s%d;%dm",
+    printf("\033[0;%s%s%dm",
         cf & 0x1 ? "7;" : "",
         cf & 0x2 ? "1;" : "",
-        c0 + 30,
-        c1 + 40
+        c0 + 30
     );
 }
 
@@ -265,7 +264,7 @@ static void build_colors(void)
             (c1 = mpdm_seek(color_names, mpdm_aget(v, 1), 1)) == -1)
             continue;
 
-        if ((--c0) == -1) c0 = 0;
+        if ((--c0) == -1) c0 = 7;
         if ((--c1) == -1) c1 = 0;
 
         cp = (c1 << 16) | (c0 << 8);
