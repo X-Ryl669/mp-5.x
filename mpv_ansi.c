@@ -42,7 +42,6 @@
 
 
 static int *ansi_attrs = NULL;
-static int normal_attr = 0;
 
 
 /** code **/
@@ -252,10 +251,6 @@ static void build_colors(void)
         mpdm_t v = mpdm_hget_s(d, L"text");
         int cp, c0, c1;
 
-        /* store the 'normal' attribute */
-        if (wcscmp(mpdm_string(c), L"normal") == 0)
-            normal_attr = n;
-
         /* store the attr */
         mpdm_hset_s(d, L"attr", MPDM_I(n));
 
@@ -293,6 +288,15 @@ struct _str_to_code {
     { "\033[D",     L"cursor-left" },
     { "\033[5~",    L"page-up" },
     { "\033[6~",    L"page-down" },
+    { "\033OQ",     L"f2" },
+    { "\033OR",     L"f3" },
+    { "\033OS",     L"f4" },
+    { "\033[15~",   L"f5" },
+    { "\033[17~",   L"f6" },
+    { "\033[18~",   L"f7" },
+    { "\033[19~",   L"f8" },
+    { "\033[20~",   L"f9" },
+    { "\033[21~",   L"f10" },
     { NULL,         NULL }
 };
 
@@ -371,7 +375,6 @@ static mpdm_t ansi_doc_draw(mpdm_t args, mpdm_t ctxt)
             attr = mpdm_ival(mpdm_aget(l, m++));
             s = mpdm_aget(l, m);
 
-//            wattrset(cw, nc_attrs[attr]);
             ansi_set_attr(attr);
             ansi_print_v(s);
         }
