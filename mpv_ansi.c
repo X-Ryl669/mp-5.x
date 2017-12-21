@@ -318,6 +318,9 @@ static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
             k = MPDM_MBS(tmp);
         }
         else
+        if (str[0] == ctrl(' '))
+            f = L"ctrl-space";
+        else
             k = MPDM_MBS(str);
     }
 
