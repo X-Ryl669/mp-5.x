@@ -82,7 +82,7 @@ static int ansi_something_waiting(int fd)
     FD_SET(fd, &ids);
 
     tv.tv_sec  = 0;
-    tv.tv_usec = 100000;
+    tv.tv_usec = 10000;
 
     return select(1, &ids, NULL, NULL, &tv) > 0;
 }
@@ -209,6 +209,19 @@ int main(int argc, char *argv[])
 #endif
 
 
+struct _str_to_code {
+    char *ansi_str;
+    wchar_t *code;
+} str_to_code[] = {
+    { "\033[A",     L"cursor-up" },
+    { "\033[B",     L"cursor-down" },
+    { "\033[C",     L"cursor-right" },
+    { "\033[D",     L"cursor-left" },
+    { "\033[5~",    L"page-up" },
+    { "\033[6~",    L"page-down" },
+    { NULL,         NULL }
+};
+
 #define ctrl(k) ((k) & 31)
 
 static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
@@ -219,25 +232,19 @@ static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
 
     ansi_read_string(0, str, sizeof(str));
 
-    if (strlen(str) == 1) {
-        switch (str[0]) {
-        case ctrl('q'):
-            f = L"ctrl-q";
-            break;
-        }
+    switch (str[0]) {
+    case ctrl('q'):     f = L"ctrl-q"; break;
     }
-    else {
-        if (!strcmp(str, "\033[A"))
-            f = L"cursor-up";
-        else
-        if (!strcmp(str, "\033[B"))
-            f = L"cursor-down";
-        else
-        if (!strcmp(str, "\033[C"))
-            f = L"cursor-right";
-        else
-        if (!strcmp(str, "\033[D"))
-            f = L"cursor-left";
+
+    if (f == NULL) {
+        int n;
+
+        for (n = 0; str_to_code[n].code != NULL; n++) {
+            if (strcmp(str_to_code[n].ansi_str, str) == 0) {
+                f = str_to_code[n].code;
+                break;
+            }
+        }
     }
 
     if (f != NULL)
