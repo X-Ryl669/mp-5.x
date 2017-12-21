@@ -34,10 +34,15 @@
 #include <sys/select.h>
 #include <signal.h>
 #include <string.h>
+#include <wchar.h>
 
 #include "mpdm.h"
 #include "mpsl.h"
 #include "mp.h"
+
+
+static int *ansi_attrs = NULL;
+static int normal_attr = 0;
 
 
 /** code **/
@@ -168,6 +173,23 @@ static void ansi_print_v(mpdm_t v)
 }
 
 
+static void ansi_set_attr(int a)
+{
+    int cf, c0, c1;
+
+    cf = ansi_attrs[a] & 0xff;
+    c0 = ((ansi_attrs[a] & 0xff00) >> 8);
+    c1 = ((ansi_attrs[a] & 0xff0000) >> 16);
+
+    printf("\033[0;%s%s%d;%dm",
+        cf & 0x1 ? "7;" : "",
+        cf & 0x2 ? "1;" : "",
+        c0 + 30,
+        c1 + 40
+    );
+}
+
+
 #if 0
 int main(int argc, char *argv[])
 {
@@ -205,6 +227,61 @@ int main(int argc, char *argv[])
     return 0;
 }
 #endif
+
+
+static void build_colors(void)
+{
+    mpdm_t colors;
+    mpdm_t color_names;
+    mpdm_t l;
+    mpdm_t c;
+    int n, s;
+
+    /* gets the color definitions and attribute names */
+    colors      = mpdm_hget_s(MP, L"colors");
+    color_names = mpdm_hget_s(MP, L"color_names");
+
+    l = mpdm_ref(mpdm_keys(colors));
+    s = mpdm_size(l);
+
+    /* redim the structures */
+    ansi_attrs = realloc(ansi_attrs, sizeof(int) * s);
+
+    /* loop the colors */
+    for (n = 0; n < s && (c = mpdm_aget(l, n)) != NULL; n++) {
+        mpdm_t d = mpdm_hget(colors, c);
+        mpdm_t v = mpdm_hget_s(d, L"text");
+        int cp, c0, c1;
+
+        /* store the 'normal' attribute */
+        if (wcscmp(mpdm_string(c), L"normal") == 0)
+            normal_attr = n;
+
+        /* store the attr */
+        mpdm_hset_s(d, L"attr", MPDM_I(n));
+
+        /* get color indexes */
+        if ((c0 = mpdm_seek(color_names, mpdm_aget(v, 0), 1)) == -1 ||
+            (c1 = mpdm_seek(color_names, mpdm_aget(v, 1), 1)) == -1)
+            continue;
+
+        if ((--c0) == -1) c0 = 0;
+        if ((--c1) == -1) c1 = 0;
+
+        cp = (c1 << 16) | (c0 << 8);
+
+        /* flags */
+        v = mpdm_hget_s(d, L"flags");
+        if (mpdm_seek_s(v, L"reverse", 1) != -1)
+            cp |= 0x01;
+        if (mpdm_seek_s(v, L"bright", 1) != -1)
+            cp |= 0x02;
+        if (mpdm_seek_s(v, L"underline", 1) != -1)
+            cp |= 0x04;
+
+        ansi_attrs[n] = cp;
+    }
+}
 
 
 struct _str_to_code {
@@ -296,6 +373,7 @@ static mpdm_t ansi_doc_draw(mpdm_t args, mpdm_t ctxt)
             s = mpdm_aget(l, m);
 
 //            wattrset(cw, nc_attrs[attr]);
+            ansi_set_attr(attr);
             ansi_print_v(s);
         }
     }
@@ -447,6 +525,8 @@ static mpdm_t ansi_drv_startup(mpdm_t a)
 
     ansi_raw_tty(1);
     ansi_sigwinch(0);
+
+    build_colors();
 
     mp_load_save_state("r");
 
