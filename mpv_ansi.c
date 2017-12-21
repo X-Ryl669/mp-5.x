@@ -146,7 +146,7 @@ static void ansi_sigwinch(int s)
 static void ansi_gotoxy(int x, int y)
 /* positions the cursor */
 {
-    printf("\033[%d;%dH", y + 1, x + 1);
+    printf("\033[%d;%dH", y + 1, x);
 }
 
 
