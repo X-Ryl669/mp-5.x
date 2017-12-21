@@ -116,6 +116,7 @@ int ansi_read_string(int fd, char *buf, size_t max)
 static void ansi_get_tty_size(int *w, int *h)
 /* asks the tty for its size */
 {
+    mpdm_t v;
     char buffer[32];
 
     /* magic line: save cursor position, move to stupid position,
@@ -126,6 +127,10 @@ static void ansi_get_tty_size(int *w, int *h)
     ansi_read_string(0, buffer, sizeof(buffer));
 
     sscanf(buffer, "\033[%d;%dR", h, w);
+
+    v = mpdm_hget_s(MP, L"window");
+    mpdm_hset_s(v, L"tx", MPDM_I(*w));
+    mpdm_hset_s(v, L"ty", MPDM_I(*h));
 }
 
 
@@ -143,7 +148,25 @@ static void ansi_sigwinch(int s)
 static void ansi_gotoxy(int x, int y)
 /* positions the cursor */
 {
-    printf("\033[%d;%dH", y, x);
+    printf("\033[%d;%dH", y + 1, x + 1);
+}
+
+
+static void ansi_clrscr(void)
+/* clears the screen */
+{
+    printf("\033[2J");
+}
+
+
+static void ansi_print_v(mpdm_t v)
+/* prints an mpdm_t */
+{
+    char *ptr;
+
+    ptr = mpdm_wcstombs(mpdm_string(v), NULL);
+    printf("%s", ptr);
+    free(ptr);
 }
 
 
@@ -186,15 +209,125 @@ int main(int argc, char *argv[])
 #endif
 
 
+#define ctrl(k) ((k) & 31)
+
+static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
+{
+    char str[32];
+    wchar_t *f = NULL;
+    mpdm_t k = NULL;
+
+    ansi_read_string(0, str, sizeof(str));
+
+    if (strlen(str) == 1) {
+        switch (str[0]) {
+        case ctrl('q'):
+            f = L"ctrl-q";
+            break;
+        }
+    }
+    else {
+        if (!strcmp(str, "\033[A"))
+            f = L"cursor-up";
+        else
+        if (!strcmp(str, "\033[B"))
+            f = L"cursor-down";
+        else
+        if (!strcmp(str, "\033[C"))
+            f = L"cursor-right";
+        else
+        if (!strcmp(str, "\033[D"))
+            f = L"cursor-left";
+    }
+
+    if (f != NULL)
+        k = MPDM_S(f);
+
+    return k;
+}
+
+
+static mpdm_t ansi_doc_draw(mpdm_t args, mpdm_t ctxt)
+{
+    mpdm_t d;
+    int n, m;
+
+    ansi_clrscr();
+
+    d = mpdm_aget(args, 0);
+    d = mpdm_ref(mp_draw(d, 0));
+
+    for (n = 0; n < mpdm_size(d); n++) {
+        mpdm_t l = mpdm_aget(d, n);
+
+        ansi_gotoxy(0, n);
+
+        for (m = 0; m < mpdm_size(l); m++) {
+            int attr;
+            mpdm_t s;
+
+            /* get the attribute and the string */
+            attr = mpdm_ival(mpdm_aget(l, m++));
+            s = mpdm_aget(l, m);
+
+//            wattrset(cw, nc_attrs[attr]);
+            ansi_print_v(s);
+        }
+    }
+
+    fflush(stdout);
+
+    mpdm_unref(d);
+
+    return NULL;
+}
+
+
+static mpdm_t ansi_drv_timer(mpdm_t a, mpdm_t ctxt)
+{
+    return NULL;
+}
+
+
+static mpdm_t ansi_drv_shutdown(mpdm_t a, mpdm_t ctxt)
+{
+    mpdm_t v;
+
+    ansi_raw_tty(0);
+
+    mp_load_save_state("w");
+
+    if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL) {
+        mpdm_write_wcs(stdout, mpdm_string(v));
+        printf("\n");
+    }
+
+    return NULL;
+}
+
+
+static mpdm_t ansi_drv_suspend(mpdm_t a, mpdm_t ctxt)
+{
+    ansi_raw_tty(0);
+
+    printf("\nType 'fg' to return to Minimum Profit");
+    fflush(stdout);
+
+    /* Trigger suspending this process */
+    kill(getpid(), SIGSTOP);
+
+    ansi_raw_tty(1);
+
+    return NULL;
+}
+
+
+/** TUI **/
 
 static mpdm_t ansi_tui_addstr(mpdm_t a, mpdm_t ctxt)
 /* TUI: add a string */
 {
-    char *ptr;
-
-    ptr = mpdm_wcstombs(mpdm_string(mpdm_aget(a, 0)), NULL);
-    printf("%s", ptr);
-    free(ptr);
+    ansi_print_v(mpdm_aget(a, 0));
 
     return NULL;
 }
@@ -271,7 +404,7 @@ static void register_functions(void)
     /* execute tui */
     tui = mpsl_eval(MPDM_LS(L"load('mp_tui.mpsl');"), NULL, NULL);
 
-    mpdm_hset_s(tui, L"getkey",     MPDM_X(ansi_tui_getkey));
+    mpdm_hset_s(tui, L"getkey",     MPDM_X(ansi_getkey));
     mpdm_hset_s(tui, L"addstr",     MPDM_X(ansi_tui_addstr));
     mpdm_hset_s(tui, L"move",       MPDM_X(ansi_tui_move));
     mpdm_hset_s(tui, L"attr",       MPDM_X(ansi_tui_attr));
