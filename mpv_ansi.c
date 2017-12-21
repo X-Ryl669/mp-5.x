@@ -190,45 +190,6 @@ static void ansi_set_attr(int a)
 }
 
 
-#if 0
-int main(int argc, char *argv[])
-{
-    ansi_raw_tty(1);
-
-    ansi_sigwinch(0);
-
-    printf("%s", "\033[2J");
-    printf("\033[%d;%dH", 10, 10);
-    printf("%s", "\033[33;41m");
-    printf("LALALA");
-
-    char buffer[32];
-
-    for (;;) {
-        int n;
-
-        ansi_read_string(0, buffer, sizeof(buffer));
-
-        if (strcmp(buffer, "q") == 0)
-            break;
-
-        if (strcmp(buffer, "1") == 0) {
-            printf("\0337\033[r\033[999;999H\033[6n\0338");
-        }
-
-        printf("{%s}<", buffer);
-        for (n = 0; buffer[n]; n++)
-            printf("%02X", buffer[n]);
-        printf(">\n");
-    }
-
-    ansi_raw_tty(0);
-
-    return 0;
-}
-#endif
-
-
 static void build_colors(void)
 {
     mpdm_t colors;
