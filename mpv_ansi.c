@@ -34,6 +34,7 @@
 #include <sys/select.h>
 #include <signal.h>
 #include <string.h>
+#include <stdlib.h>
 #include <wchar.h>
 
 #include "mpdm.h"
@@ -328,6 +329,7 @@ struct _str_to_code {
 static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
 {
     char str[32];
+    wchar_t wstr[2];
     wchar_t *f = NULL;
     mpdm_t k = NULL;
 
@@ -357,6 +359,7 @@ static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
             k = MPDM_MBS(str);
     }
 
+    /* still nothing? search the table of keys */
     if (k == NULL && f == NULL) {
         int n;
 
@@ -367,12 +370,20 @@ static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
             }
         }
 
+        /* if a found key starts with _shift-, set shift_pressed flag */
         if (f && wcsncmp(f, L"_shift-", 7) == 0) {
             mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
             f += 7;
         }
     }
 
+    /* still nothing? try if the string converts to an wchar_t */
+    if (f == NULL) {
+        if (mbstowcs(wstr, str, 2) == 1)
+            f = wstr;
+    }
+
+    /* if something, create a value */
     if (k == NULL && f != NULL)
         k = MPDM_S(f);
 
