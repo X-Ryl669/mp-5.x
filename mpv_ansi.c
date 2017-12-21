@@ -291,6 +291,7 @@ struct _str_to_code {
     { "\033[6~",    L"page-down" },
     { "\033[H",     L"home" },
     { "\033[F",     L"end" },
+    { "\033OP",     L"f1" },
     { "\033OQ",     L"f2" },
     { "\033OR",     L"f3" },
     { "\033OS",     L"f4" },
