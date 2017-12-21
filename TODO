@@ -37,7 +37,6 @@ Pending Enhancements
    HTML / XML / SGML match < > pairs.
  * 1101: Paren matching should not be limited to just parentheses and
    similar, but to full strings (very useful for HTML open / close tags.)
- * 1109: Add jump to matching paren.
  * 1183: Many actions should operate only on the selection block
    (expand this issue).
  * 1203: Change the drawing engine to only apply the syntax highlighting
@@ -393,5 +392,7 @@ Closed
    (Wed, 13 Jun 2012 14:35:28 +0000).
  * 1307: 'play macro' crashes (dom, 02 dic 2012 11:22:07 +0100).
  * 1285: Fix KDE build (Thu, 26 Jun 2014 11:35:25 +0000).
+ * 1109: Add jump to matching paren (Fixed by X-Ryl669; Thu,
+   21 dec 2017 15:17:53 +0100).
 
 Email bugs to angel@triptico.com
