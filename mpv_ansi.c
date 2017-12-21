@@ -181,9 +181,10 @@ static void ansi_set_attr(int a)
     c0 = ((ansi_attrs[a] & 0xff00) >> 8);
     c1 = ((ansi_attrs[a] & 0xff0000) >> 16);
 
-    printf("\033[0;%s%s%d;%dm",
+    printf("\033[0;%s%s%s%d;%dm",
         cf & 0x1 ? "7;" : "",
         cf & 0x2 ? "1;" : "",
+        cf & 0x4 ? "4;" : "",
         c0 + 30,
         c1 + 40
     );
