@@ -289,6 +289,8 @@ struct _str_to_code {
     { "\033[D",     L"cursor-left" },
     { "\033[5~",    L"page-up" },
     { "\033[6~",    L"page-down" },
+    { "\033[H",     L"home" },
+    { "\033[F",     L"end" },
     { "\033OQ",     L"f2" },
     { "\033OR",     L"f3" },
     { "\033OS",     L"f4" },
@@ -298,6 +300,24 @@ struct _str_to_code {
     { "\033[19~",   L"f8" },
     { "\033[20~",   L"f9" },
     { "\033[21~",   L"f10" },
+    { "\033[1;2A",  L"shift-cursor-up" },
+    { "\033[1;2B",  L"shift-cursor-down" },
+    { "\033[1;2C",  L"shift-cursor-right" },
+    { "\033[1;2D",  L"shift-cursor-left" },
+    { "\033[1;5A",  L"ctrl-cursor-up" },
+    { "\033[1;5B",  L"ctrl-cursor-down" },
+    { "\033[1;5C",  L"ctrl-cursor-right" },
+    { "\033[1;5D",  L"ctrl-cursor-left" },
+    { "\033[1;5H",  L"ctrl-home" },
+    { "\033[1;5F",  L"ctrl-end" },
+    { "\033[1;3A",  L"alt-cursor-up" },
+    { "\033[1;3B",  L"alt-cursor-down" },
+    { "\033[1;3C",  L"alt-cursor-right" },
+    { "\033[1;3D",  L"alt-cursor-left" },
+    { "\033[1;3H",  L"alt-home" },
+    { "\033[1;3F",  L"alt-end" },
+    { "\033[3~",    L"delete" },
+    { "\033[2~",    L"insert" },
     { NULL,         NULL }
 };
 
@@ -325,7 +345,7 @@ static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
         if (str[0] == '\b' || str[0] == '\177')
             f = L"backspace";
         else
-        if (str[0] >= ctrl('a') && str[0] < ctrl('z')) {
+        if (str[0] >= ctrl('a') && str[0] <= ctrl('z')) {
             char tmp[32];
 
             sprintf(tmp, "ctrl-%c", str[0] + 'a' - ctrl('a'));
@@ -342,6 +362,12 @@ static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
             if (strcmp(str_to_code[n].ansi_str, str) == 0) {
                 f = str_to_code[n].code;
                 break;
+            }
+
+            if (f && wcsncmp(f, L"shift-", 6) == 0) {
+exit(0);
+                mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+                f += 6;
             }
         }
     }
@@ -457,10 +483,8 @@ static mpdm_t ansi_tui_move(mpdm_t a, mpdm_t ctxt)
 static mpdm_t ansi_tui_attr(mpdm_t a, mpdm_t ctxt)
 /* TUI: set attribute for next string */
 {
-/*    last_attr = mpdm_ival(mpdm_aget(a, 0));
+    ansi_set_attr(mpdm_ival(mpdm_aget(a, 0)));
 
-    set_attr();
-*/
     return NULL;
 }
 
