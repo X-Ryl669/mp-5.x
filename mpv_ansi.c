@@ -300,10 +300,10 @@ struct _str_to_code {
     { "\033[19~",   L"f8" },
     { "\033[20~",   L"f9" },
     { "\033[21~",   L"f10" },
-    { "\033[1;2A",  L"shift-cursor-up" },
-    { "\033[1;2B",  L"shift-cursor-down" },
-    { "\033[1;2C",  L"shift-cursor-right" },
-    { "\033[1;2D",  L"shift-cursor-left" },
+    { "\033[1;2A",  L"_shift-cursor-up" },
+    { "\033[1;2B",  L"_shift-cursor-down" },
+    { "\033[1;2C",  L"_shift-cursor-right" },
+    { "\033[1;2D",  L"_shift-cursor-left" },
     { "\033[1;5A",  L"ctrl-cursor-up" },
     { "\033[1;5B",  L"ctrl-cursor-down" },
     { "\033[1;5C",  L"ctrl-cursor-right" },
@@ -318,6 +318,7 @@ struct _str_to_code {
     { "\033[1;3F",  L"alt-end" },
     { "\033[3~",    L"delete" },
     { "\033[2~",    L"insert" },
+    { "\033[Z",     L"shift-tab" },
     { NULL,         NULL }
 };
 
@@ -363,12 +364,11 @@ static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
                 f = str_to_code[n].code;
                 break;
             }
+        }
 
-            if (f && wcsncmp(f, L"shift-", 6) == 0) {
-exit(0);
-                mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
-                f += 6;
-            }
+        if (f && wcsncmp(f, L"_shift-", 7) == 0) {
+            mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+            f += 7;
         }
     }
 
