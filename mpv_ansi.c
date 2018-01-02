@@ -140,7 +140,7 @@ static void ansi_sigwinch(int s)
     ansi_get_tty_size(&tx, &ty);
 
     v = mpdm_hget_s(MP, L"window");
-    mpdm_hset_s(v, L"tx", MPDM_I(tx));
+    mpdm_hset_s(v, L"tx", MPDM_I(tx + 1));
     mpdm_hset_s(v, L"ty", MPDM_I(ty));
 
     /* (re)attach signal */
