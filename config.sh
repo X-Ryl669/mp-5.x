@@ -318,6 +318,37 @@ if [ "$WITHOUT_CURSES" != "1" ] ; then
     fi
 fi
 
+# ANSI
+echo -n "Testing for ANSI terminal support... "
+
+if [ "$WITHOUT_ANSI" = "1" ] ; then
+    echo "Disabled"
+else
+    rm -f .tmp.c
+    echo "#include <stdio.h>" >> .tmp.c
+    echo "#include <termios.h>" >> .tmp.c
+    echo "#include <unistd.h>" >> .tmp.c
+    echo "#include <sys/select.h>" >> .tmp.c
+    echo "#include <signal.h>" >> .tmp.c
+    echo "int main(void) { struct termios o; tcgetattr(0, &o); return 0; }" >> .tmp.c
+
+    TMP_CFLAGS=""
+    TMP_LDFLAGS=""
+
+    $CC $TMP_CFLAGS .tmp.c $TMP_LDFLAGS -o .tmp.o 2>> .config.log
+    if [ $? = 0 ] ; then
+        echo "#define CONFOPT_ANSI 1" >> config.h
+        echo $TMP_CFLAGS >> config.cflags
+        echo $TMP_LDFLAGS >> config.ldflags
+        echo "OK"
+        DRIVERS="ansi $DRIVERS"
+        DRV_OBJS="mpv_ansi.o $DRV_OBJS"
+    else
+        echo "No"
+        WITHOUT_ANSI=1
+    fi
+fi
+
 # KDE4
 
 echo -n "Testing for KDE4... "
@@ -438,37 +469,6 @@ else
         else
             echo "No"
         fi
-    fi
-fi
-
-# ANSI
-echo -n "Testing for ANSI terminal support... "
-
-if [ "$WITHOUT_ANSI" = "1" ] ; then
-    echo "Disabled"
-else
-    rm -f .tmp.c
-    echo "#include <stdio.h>" >> .tmp.c
-    echo "#include <termios.h>" >> .tmp.c
-    echo "#include <unistd.h>" >> .tmp.c
-    echo "#include <sys/select.h>" >> .tmp.c
-    echo "#include <signal.h>" >> .tmp.c
-    echo "int main(void) { struct termios o; tcgetattr(0, &o); return 0; }" >> .tmp.c
-
-    TMP_CFLAGS=""
-    TMP_LDFLAGS=""
-
-    $CC $TMP_CFLAGS .tmp.c $TMP_LDFLAGS -o .tmp.o 2>> .config.log
-    if [ $? = 0 ] ; then
-        echo "#define CONFOPT_ANSI 1" >> config.h
-        echo $TMP_CFLAGS >> config.cflags
-        echo $TMP_LDFLAGS >> config.ldflags
-        echo "OK"
-        DRIVERS="ansi $DRIVERS"
-        DRV_OBJS="mpv_ansi.o $DRV_OBJS"
-    else
-        echo "No"
-        WITHOUT_ANSI=1
     fi
 fi
 
