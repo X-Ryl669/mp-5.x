@@ -269,7 +269,7 @@ sub mp.tui.list(prompt, data, pos)
 			else
 				mp.tui.attr(mp.colors.normal.attr);
 
-			mp.tui.addstr(regex(sprintf("%-" ~ (mp.window.tx - 1) ~ "s", l), r));
+			mp.tui.addstr(regex(sprintf("%-" ~ mp.window.tx ~ "s", l), r));
 
 			n++;
 		}
