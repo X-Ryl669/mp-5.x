@@ -489,7 +489,7 @@ static mpdm_t ansi_tui_getxy(mpdm_t a, mpdm_t ctxt)
     v = MPDM_A(2);
     mpdm_ref(v);
 
-    mpdm_aset(v, MPDM_I(x - 1), 0);
+    mpdm_aset(v, MPDM_I(x), 0);
     mpdm_aset(v, MPDM_I(y - 1), 1);
 
     mpdm_unrefnd(v);
