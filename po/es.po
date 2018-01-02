@@ -938,7 +938,7 @@ msgstr ""
 
 #: mp_edit.mpsl:149
 msgid "Show line numbers:"
-msgstr "Mostrar números de línea"
+msgstr "Mostrar números de línea:"
 
 #: mp_file.mpsl:867
 msgid "Not found."
