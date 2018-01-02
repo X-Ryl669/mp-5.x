@@ -385,8 +385,6 @@ static mpdm_t ansi_doc_draw(mpdm_t args, mpdm_t ctxt)
         }
     }
 
-    fflush(stdout);
-
     mpdm_unref(d);
 
     return NULL;
