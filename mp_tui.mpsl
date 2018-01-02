@@ -233,7 +233,7 @@ sub mp.tui.list(prompt, data, pos)
 	ty = mp.window.ty - 1;
 
 	/* clipping regex */
-	r = '/^.{1,' ~ (mp.window.tx) ~ '}/';
+	r = '/^.{1,' ~ (mp.window.tx - 1) ~ '}/';
 
 	if (pos == NULL)
 		pos = 0;
@@ -262,12 +262,12 @@ sub mp.tui.list(prompt, data, pos)
 			if (l == NULL)
 				break;
 
-			mp.tui.move(0, n + 1, 1);
-
 			if (n + vy == pos)
 				mp.tui.attr(mp.colors.cursor.attr);
 			else
 				mp.tui.attr(mp.colors.normal.attr);
+
+			mp.tui.move(0, n + 1, 1);
 
 			mp.tui.addstr(regex(sprintf("%-" ~ mp.window.tx ~ "s", l), r));
 
