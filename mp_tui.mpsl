@@ -233,7 +233,7 @@ sub mp.tui.list(prompt, data, pos)
 	ty = mp.window.ty - 1;
 
 	/* clipping regex */
-	r = '/^.{1,' ~ (mp.window.tx - 1) ~ '}/';
+	r = '/^.{1,' ~ (mp.window.tx) ~ '}/';
 
 	if (pos == NULL)
 		pos = 0;
