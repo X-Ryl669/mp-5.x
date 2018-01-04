@@ -362,8 +362,6 @@ static mpdm_t ansi_doc_draw(mpdm_t args, mpdm_t ctxt)
     mpdm_t d;
     int n, m;
 
-    ansi_clrscr();
-
     d = mpdm_aget(args, 0);
     d = mpdm_ref(mp_draw(d, 0));
 
@@ -383,6 +381,9 @@ static mpdm_t ansi_doc_draw(mpdm_t args, mpdm_t ctxt)
             ansi_set_attr(attr);
             ansi_print_v(s);
         }
+
+        /* delete to end of line */
+        printf("\033[K");
     }
 
     mpdm_unref(d);
