@@ -264,6 +264,16 @@ struct _str_to_code {
     { "\033[19~",   L"f8" },
     { "\033[20~",   L"f9" },
     { "\033[21~",   L"f10" },
+    { "\033[1;5P",  L"ctrl-f1" },
+    { "\033[1;5Q",  L"ctrl-f2" },
+    { "\033[1;5R",  L"ctrl-f3" },
+    { "\033[1;5S",  L"ctrl-f4" },
+    { "\033[15;5~", L"ctrl-f5" },
+    { "\033[17;5~", L"ctrl-f6" },
+    { "\033[18;5~", L"ctrl-f7" },
+    { "\033[19;5~", L"ctrl-f8" },
+    { "\033[20;5~", L"ctrl-f9" },
+    { "\033[21;5~", L"ctrl-f10" },
     { "\033[1;2A",  L"_shift-cursor-up" },
     { "\033[1;2B",  L"_shift-cursor-down" },
     { "\033[1;2C",  L"_shift-cursor-right" },
@@ -348,6 +358,9 @@ static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
         if (mbstowcs(wstr, str, 2) == 1)
             f = wstr;
     }
+
+    if (f == NULL)
+        mpdm_hset_s(MP, L"raw_key", MPDM_MBS(str));
 
     /* if something, create a value */
     if (k == NULL && f != NULL)
