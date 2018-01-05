@@ -165,11 +165,10 @@ static void ansi_clrscr(void)
 static void ansi_print_v(mpdm_t v)
 /* prints an mpdm_t */
 {
-    char *ptr;
+    char tmp[1024];
 
-    ptr = mpdm_wcstombs(mpdm_string(v), NULL);
-    printf("%s", ptr);
-    free(ptr);
+    wcstombs(tmp, mpdm_string(v), sizeof(tmp));
+    printf("%s", tmp);
 }
 
 
