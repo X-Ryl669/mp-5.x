@@ -550,6 +550,7 @@ sub mp_drv.menu()
 		mp.tui.move(0, 0, 1);
 
         local cx = 0;
+        pos = [];
 
 		while (n < size(mp.menu)) {
 			/* get the label */
@@ -561,14 +562,16 @@ sub mp_drv.menu()
 			mp.tui.attr(mp.colors.menu.attr);
 			mp.tui.addstr('   ');
 
-			if (n == mx) {
-				pos = mp.tui.getxy();
-				mp.tui.attr(mp.colors.cursor.attr);
-			}
+            cx += 3;
+
+            if (n == mx) {
+                pos[0] = cx;
+                mp.tui.attr(mp.colors.cursor.attr);
+            }
 
 			mp.tui.addstr(l);
 
-            cx += 3 + size(l);
+            cx += size(l);
             push(mouse_x, cx);
 
 			n++;
