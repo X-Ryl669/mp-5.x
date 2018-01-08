@@ -239,7 +239,7 @@ sub mp.tui.list(prompt, data, pos)
 		pos = 0;
 
 	while (1) {
-		local k, n;
+		local k, n, cp;
 
 		/* limits for pos */
 		if (pos < 0)
@@ -262,8 +262,10 @@ sub mp.tui.list(prompt, data, pos)
 			if (l == NULL)
 				break;
 
-			if (n + vy == pos)
+			if (n + vy == pos) {
+                cp = n;
 				mp.tui.attr(mp.colors.cursor.attr);
+            }
 			else
 				mp.tui.attr(mp.colors.normal.attr);
 
@@ -281,6 +283,7 @@ sub mp.tui.list(prompt, data, pos)
 			n++;
 		}
 
+        mp.tui.move(0, cp + 1);
         mp.tui.refresh();
 
 		k = mp.tui.getkey();
