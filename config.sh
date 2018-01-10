@@ -103,12 +103,8 @@ if [ "$CPP" = "" ] ; then
     which g++ > /dev/null 2>&1 && CPP=g++
 fi
 
-MOC="moc"
-which moc-qt4 > /dev/null 2>&1 && MOC=moc-qt4
-
 echo "CC=$CC" >> makefile.opts
 echo "CPP=$CPP" >> makefile.opts
-echo "MOC=$MOC" >> makefile.opts
 
 # add version
 cat VERSION >> config.h
@@ -177,23 +173,9 @@ for MPSL in ./mpsl ../mpsl NOTFOUND ; do
 done
 
 if [ "$MPSL" != "NOTFOUND" ] ; then
-    MPSL_VERSION=$(cut -f2 -d\" ${MPSL}/VERSION)
-
-    case $MPSL_VERSION in
-    3.*)
-        echo "Incompatible version (3.x)"
-        echo
-        echo "You have the '3.x' branch of MPSL, which is unsuitable"
-        echo "to build this version of Minimum Profit. You need to checkout"
-        echo "the 'master' branch instead."
-        exit 1
-        ;;
-    *)
-        echo "-I$MPSL" >> config.cflags
-        echo "-L$MPSL -lmpsl" >> config.ldflags
-        echo "OK ($MPSL)"
-        ;;
-    esac
+    echo "-I$MPSL" >> config.cflags
+    echo "-L$MPSL -lmpsl" >> config.ldflags
+    echo "OK ($MPSL)"
 else
     echo "No"
     exit 1
@@ -400,6 +382,10 @@ if [ "$WITHOUT_QT4" = "1" ] ; then
 else
     if which pkg-config > /dev/null 2>&1
     then
+        MOC="moc"
+        which moc-qt4 > /dev/null 2>&1 && MOC=moc-qt4
+        echo "MOC=$MOC" >> makefile.opts
+
         TMP_CFLAGS=$(pkg-config --cflags QtGui)
         TMP_LDFLAGS="$(pkg-config --libs QtGui) -lX11"
 
