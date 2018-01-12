@@ -567,6 +567,14 @@ sub mp.prev()
 sub mp.close()
 /* closes the active document */
 {
+    /* no state for files? create it */
+    if (!exists(mp.state, 'files'))
+        mp.state.files = {};
+
+    /* store in the state of files */
+    local l = mp.active();
+    mp.state.files[l.name] = { y: l.txt.y, vy: l.txt.vy };
+
     /* delete from the list */
     adel(mp.docs, mp.active_i);
 
