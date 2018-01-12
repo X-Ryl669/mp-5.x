@@ -238,11 +238,11 @@ else
         WITHOUT_ANSI=1
     else
         echo "No"
-        WITHOUT_CURSESW=1
+        WITHOUT_CURSES=1
     fi
 fi
 
-if [ "$WITHOUT_CURSESW" = "1" ] ; then
+if [ "$WITHOUT_CURSES" != "1" ] ; then
     # test for curses / ncurses library
     echo -n "Testing for recent ncurses... "
 
