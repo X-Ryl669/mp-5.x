@@ -2557,8 +2557,6 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
 
     mpdm_t st = mp_load_save_state("r");
 
-    st = mpdm_hget_s(MP, L"state");
-
     if ((st = mpdm_hget_s(st, L"window")) == NULL) {
         st = mpdm_hset_s(mpdm_hget_s(MP, L"state"), L"window", MPDM_H(0));
         mpdm_hset_s(st, L"x", MPDM_I(0));
