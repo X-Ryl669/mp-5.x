@@ -1289,6 +1289,8 @@ mpdm_t mp_load_save_state(char *m)
             if (j && (l = mpdm_aget(mpdm_sscanf(j, MPDM_LS(L"%j"), 0), 0)))
                 state = mpdm_hset_s(MP, L"state", l);
         }
+        else
+            state = mpdm_hset_s(MP, L"state", MPDM_H(0));
     }
     else {
         if ((f = mpdm_open(filename, MPDM_LS(L"w"))) != NULL) {
