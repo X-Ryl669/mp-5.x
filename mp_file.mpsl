@@ -573,7 +573,7 @@ sub mp.close()
 
     /* store in the state of files */
     local l = mp.active();
-    mp.state.files[l.name] = { y: l.txt.y, vy: l.txt.vy };
+    mp.state.files[l.name] = { x: l.txt.x, y: l.txt.y, vy: l.txt.vy };
 
     /* delete from the list */
     adel(mp.docs, mp.active_i);
@@ -696,6 +696,14 @@ sub mp.open(filename, password)
     }
 
     if (d) {
+        /* look in the state if we have a previous position */
+        local p;
+        if ((p = mp.state.files[filename]) != NULL) {
+            d->set_y(p.y);
+            d->set_x(p.x);
+            d.txt.vy = p.vy;
+        }
+
         if (y)
             d->search_set_y(y - 1);
         if (x)
