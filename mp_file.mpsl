@@ -573,7 +573,10 @@ sub mp.close()
 
     /* store in the state of files */
     local l = mp.active();
-    mp.state.files[l.name] = { x: l.txt.x, y: l.txt.y, vy: l.txt.vy };
+    if (l.txt.x == 0 && l.txt.y == 0)
+        hdel(mp.state.files, l.name);
+    else
+        mp.state.files[l.name] = { x: l.txt.x, y: l.txt.y, vy: l.txt.vy };
 
     /* delete from the list */
     adel(mp.docs, mp.active_i);
