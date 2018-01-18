@@ -322,7 +322,7 @@ mp_doc.actions['open_under_cursor'] = sub (d) {
             d = mp.open(f ~ ':' ~ l ~ ':');
     }
     else
-    if ((w = d->get_word("/[^ \t]+/")) != NULL)
+    if ((w = d->get_word("/[^ \t\"\'<>]+/")) != NULL)
         d = mp.open(w);
 
     return d;
