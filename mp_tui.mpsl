@@ -644,12 +644,12 @@ sub mp_drv.menu()
 
 				if (vy) {
 					mp.tui.move(pos[0] + pos[2] - 1, 1);
-					mp.tui.addstr('+');
+					mp.tui.addstr("\x{25b2}");
 				}
 
 				if (pty + vy < size(mo)) {
 					mp.tui.move(pos[0] + pos[2] - 1, pty);
-					mp.tui.addstr('+');
+					mp.tui.addstr("\x{25bc}");
 				}
 			}
 
