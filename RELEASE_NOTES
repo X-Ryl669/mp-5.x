@@ -8,6 +8,7 @@ Minimum Profit Release Notes
    for systems who don't (want to) have libncursesw.
  - The cursor position for every file is remembered from
    session to session.
+ * Fixed action `open_under_cursor' (again).
 
 5.2.11
 ------
