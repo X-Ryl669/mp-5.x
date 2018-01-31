@@ -52,34 +52,50 @@ mp_doc.actions['seek'] = sub (d) {
     if (t != NULL) {
         mp.config.case_sensitive_search = t[1];
 
-        d->long_op(mp_doc.search, mp.backslash_codes(t[0])) ||
-            mp.alert(L("Text not found."));
+        d = mp_doc.actions.seek_next(d, mp.backslash_codes(t[0]));
     }
 
     return d;
 };
 
-mp_doc.actions['seek_next'] = sub (d) {
-    if (!d->long_op(mp_doc.search, NULL)) {
+
+mp_doc.actions['seek_next'] = sub (d, str) {
+    if (!d->long_op(mp_doc.search, str)) {
+
+        s = clone(d.txt);
         d->move_bof();
-        d->long_op(mp_doc.search, NULL);
-        mp.message = {
-            timeout:    time() + 2,
-            string:     L("Search wrapped")
-        };
+
+        if (!d->long_op(mp_doc.search, NULL)) {
+            d.txt = s;
+            mp.alert(L("Text not found."));
+        }
+        else {
+            mp.message = {
+                timeout:    time() + 2,
+                string:     L("Search wrapped")
+            };
+        }
     }
 
     return d;
 };
 
-mp_doc.actions['seek_prev'] = sub (d) {
-    if (!d->long_op(mp_doc.search_back, NULL)) { 
+mp_doc.actions['seek_prev'] = sub (d, str) {
+    if (!d->long_op(mp_doc.search_back, str)) { 
+
+        s = clone(d.txt);
         d->move_eof();
-        d->long_op(mp_doc.search_back, NULL);
-        mp.message = {
-            timeout:    time() + 2,
-            string:     L("Search wrapped")
-        };
+
+        if (!d->long_op(mp_doc.search_back, NULL)) {
+            d.txt = s;
+            mp.alert(L("Text not found."));
+        }
+        else {
+            mp.message = {
+                timeout:    time() + 2,
+                string:     L("Search wrapped")
+            };
+        }
     }
 
     return d;
