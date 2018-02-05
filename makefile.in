@@ -134,7 +134,7 @@ innosetup: mp-5.exe mp-5c.exe
 	iscc /O. /Fmp-$(VERSION) mp.iss
 
 install: $(INSTALL_MSG) installdoc $(INSTALLMO)
-	install $(APPNAME) $(PREFIX)/bin/$(APPNAME)
+	install -Dm 755 $(APPNAME) $(PREFIX)/bin/$(APPNAME)
 	./mkinstalldirs $(PREFIX)/share/$(APPNAME)
 	./mkinstalldirs $(PREFIX)/share/$(APPNAME)/lang
 	install -m 644 mp_*.mpsl $(PREFIX)/share/$(APPNAME)
