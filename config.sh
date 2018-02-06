@@ -47,6 +47,7 @@ while [ $# -gt 0 ] ; do
 
     --prefix)           PREFIX=$2 ; shift ;;
     --prefix=*)         PREFIX=`echo $1 | sed -e 's/--prefix=//'` ;;
+    --with-moc=*)       QT4MOC=`echo $1 | sed -e 's/--with-moc=//'` ;;
     esac
 
     shift
@@ -61,6 +62,7 @@ if [ "$CONFIG_HELP" = "1" ] ; then
     echo "--without-win32       Disable win32 interface detection."
     echo "--with-kde4           Enable KDE4 interface detection."
     echo "--without-qt4         Disable Qt4 interface detection."
+    echo "--with-moc            Path to your QT4 moc. Ie: --with-moc=/usr/lib64/qt4/bin/moc"
     echo "--without-ansi        Disable ANSI terminal interface detection."
     echo "--without-unix-glob   Disable glob.h usage (use workaround)."
     echo "--with-included-regex Use included regex code (gnu_regex.c)."
@@ -382,7 +384,11 @@ if [ "$WITHOUT_QT4" = "1" ] ; then
 else
     if which pkg-config > /dev/null 2>&1
     then
-        MOC="moc"
+	if [ ! $QT4MOC ]; then
+		MOC="moc"
+	else
+        	MOC="$QT4MOC"
+	fi
         which moc-qt4 > /dev/null 2>&1 && MOC=moc-qt4
         echo "MOC=$MOC" >> makefile.opts
 
