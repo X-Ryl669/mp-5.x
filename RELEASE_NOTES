@@ -4,13 +4,15 @@ Minimum Profit Release Notes
 5.2.12
 ------
 
- - This version includes a new driver for raw ANSI terminals,
-   for systems who don't (want to) have libncursesw.
- - The cursor position for every file is remembered from
-   session to session.
- - Fixed action `open_under_cursor' (again).
- - Fixed behaviour inconsistency between actions `seek' and
-   `seek-next'.
+ - New features:
+   - This version includes a new driver for raw ANSI terminals,
+     for systems who don't (want to) have libncursesw.
+   - The cursor position for every file is remembered from
+     session to session.
+ - Fixed bugs:
+   - Fixed action `open_under_cursor' (again).
+   - Fixed behaviour inconsistency between actions `seek' and
+     `seek-next'.
 
 5.2.11
 ------
