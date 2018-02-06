@@ -568,7 +568,7 @@ sub mp.usage()
 	mp.exit_message = 
 	sprintf(L(
 		"Minimum Profit %s - Programmer Text Editor\n"\
-		"Copyright (C) Angel Ortega <angel@triptico.com>\n"\
+		"Copyright (C) Angel Ortega <angel@triptico.com> et al.\n"\
 		"This software is covered by the GPL license. NO WARRANTY.\n"\
 		"\n"\
 		"Usage: mp-5 [options] [files...]\n"\
