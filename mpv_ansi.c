@@ -309,6 +309,9 @@ static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
 
     /* only one char? it's an ASCII or ctrl character */
     if (str[1] == '\0') {
+        if (str[0] == ' ')
+            f = L"space";
+        else
         if (str[0] == '\r')
             f = L"enter";
         else
