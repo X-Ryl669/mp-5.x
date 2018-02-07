@@ -576,6 +576,7 @@ sub mp.close()
     if (l.txt.x == 0 && l.txt.y == 0)
         hdel(mp.state.files, l.name);
     else
+    if (!regex(l.name, '/^<'))
         mp.state.files[l.name] = { x: l.txt.x, y: l.txt.y, vy: l.txt.vy };
 
     /* delete from the list */
