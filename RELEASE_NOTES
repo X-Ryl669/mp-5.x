@@ -13,6 +13,7 @@ Minimum Profit Release Notes
    - Fixed action `open_under_cursor' (again).
    - Fixed behaviour inconsistency between actions `seek' and
      `seek-next'.
+   - Fixed action `sync' (save all modified files).
 
 5.2.11
 ------
