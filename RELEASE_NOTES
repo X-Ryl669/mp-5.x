@@ -14,6 +14,10 @@ Minimum Profit Release Notes
    - Fixed behaviour inconsistency between actions `seek' and
      `seek-next'.
    - Fixed action `sync' (save all modified files).
+ - Other features:
+   - Version numbering convention has changed: development
+     versions shall no longer have (CURRENTVERSION+1)-dev,
+     but (CURRENTVERSION)-patch.
 
 5.2.11
 ------
