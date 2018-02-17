@@ -293,6 +293,8 @@ struct _str_to_code {
     { "\033[2~",    L"insert" },
     { "\033[Z",     L"shift-tab" },
     { "\033\r",     L"alt-enter" },
+    { "\033[1~",    L"home" },
+    { "\033[4~",    L"end" },
     { NULL,         NULL }
 };
 
