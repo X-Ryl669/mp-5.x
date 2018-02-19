@@ -2,9 +2,9 @@
 
     Minimum Profit - Programmer Text Editor
 
-    Qt4 driver.
+    Qt4 (and Qt5) driver.
 
-    Copyright (C) 2009/2017 Angel Ortega <angel@triptico.com> et al.
+    Copyright (C) 2009/2018 Angel Ortega <angel@triptico.com> et al.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -37,7 +37,11 @@ extern "C" int qt4_drv_detect(int *argc, char ***argv);
 #include "mp.h"
 #include "mp.xpm"
 
+#ifdef CONFOPT_QT5
+#include <QtWidgets>
+#else
 #include <QtGui>
+#endif
 
 /** data **/
 
@@ -511,30 +515,41 @@ static mpdm_t qt4_drv_startup(mpdm_t a, mpdm_t ctxt)
 
     return NULL;
 }
-
+#if 0
 extern "C" Display * XOpenDisplay(char *);
+#endif
 
 extern "C" int qt4_drv_detect(int *argc, char ***argv)
 {
     mpdm_t drv;
+#if 0
     Display *x11_display;
+#endif
     int n;
 
     for (n = 0; n < *argc; n++) {
         if (strcmp(argv[0][n], "-txt") == 0)
             return 0;
     }
-
+#if 0
     /* try connecting directly to the Xserver */
     if ((x11_display = XOpenDisplay((char *) NULL)) == NULL)
         return 0;
 
     /* this is where it crashes if no X server */
     app = new QApplication(x11_display);
+#else
+    app = new QApplication(*argc, *argv);
+#endif
 
     drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
 
+#ifdef CONFOPT_QT5
+    mpdm_hset_s(drv, L"id",         MPDM_LS(L"qt5"));
+#else
     mpdm_hset_s(drv, L"id",         MPDM_LS(L"qt4"));
+#endif
+
     mpdm_hset_s(drv, L"startup",    MPDM_X(qt4_drv_startup));
 
     return 1;

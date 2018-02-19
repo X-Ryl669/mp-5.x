@@ -376,6 +376,55 @@ else
     fi
 fi
 
+# Qt5
+
+echo -n "Testing for Qt5... "
+if [ "$WITHOUT_QT5" = "1" ] ; then
+    echo "Disabled"
+else
+    if which pkg-config > /dev/null 2>&1
+    then
+        if which moc-qt5 > /dev/null 2>&1
+        then
+            MOC=moc-qt5
+            echo "MOC=$MOC" >> makefile.opts
+
+            TMP_CFLAGS="$(pkg-config --cflags Qt5Widgets) -fPIC"
+            TMP_LDFLAGS=$(pkg-config --libs Qt5Widgets)
+
+            echo "#include <QtWidgets>" > .tmp.cpp
+            echo "int main(int argc, char *argv[]) { new QApplication(argc, argv) ; return 0; } " >> .tmp.cpp
+ 
+            echo "$CPP $TMP_CFLAGS .tmp.cpp $TMP_LDFLAGS -o .tmp.o" >> .config.log
+            $CPP $TMP_CFLAGS .tmp.cpp $TMP_LDFLAGS -o .tmp.o 2>> .config.log
+
+            if [ $? = 0 ] ; then
+                echo $TMP_CFLAGS >> config.cflags
+                echo $TMP_LDFLAGS >> config.ldflags
+
+                echo "#define CONFOPT_QT5 1" >> config.h
+                echo "OK"
+
+                DRIVERS="qt4 $DRIVERS"
+                DRV_OBJS="mpv_qt4.o $DRV_OBJS"
+                if [ "$CCLINK" = "" ] ; then
+                    CCLINK="g++"
+                fi
+
+                WITHOUT_QT4=1
+                WITHOUT_GTK=1
+            else
+                echo "No 1"
+            fi
+        else
+            echo "No 2"
+        fi
+    else
+        echo "No 3"
+    fi
+fi
+
+
 # Qt4
 
 echo -n "Testing for Qt4... "
