@@ -26,6 +26,7 @@
 
 /* override auto-generated definition in config.h */
 extern "C" int qt4_drv_detect(int *argc, char ***argv);
+extern "C" int qt5_drv_detect(int *argc, char ***argv);
 
 #include "config.h"
 
@@ -515,42 +516,60 @@ static mpdm_t qt4_drv_startup(mpdm_t a, mpdm_t ctxt)
 
     return NULL;
 }
-#if 0
+
+
+#ifdef CONFOPT_QT4
 extern "C" Display * XOpenDisplay(char *);
-#endif
 
 extern "C" int qt4_drv_detect(int *argc, char ***argv)
 {
     mpdm_t drv;
-#if 0
     Display *x11_display;
-#endif
     int n;
 
     for (n = 0; n < *argc; n++) {
         if (strcmp(argv[0][n], "-txt") == 0)
             return 0;
     }
-#if 0
+
     /* try connecting directly to the Xserver */
     if ((x11_display = XOpenDisplay((char *) NULL)) == NULL)
         return 0;
 
     /* this is where it crashes if no X server */
     app = new QApplication(x11_display);
-#else
-    app = new QApplication(*argc, *argv);
-#endif
 
     drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
 
-#ifdef CONFOPT_QT5
-    mpdm_hset_s(drv, L"id",         MPDM_LS(L"qt5"));
-#else
     mpdm_hset_s(drv, L"id",         MPDM_LS(L"qt4"));
-#endif
 
     mpdm_hset_s(drv, L"startup",    MPDM_X(qt4_drv_startup));
 
     return 1;
 }
+
+#endif
+
+
+
+extern "C" int qt5_drv_detect(int *argc, char ***argv)
+{
+    mpdm_t drv;
+    int n;
+
+    for (n = 0; n < *argc; n++) {
+        if (strcmp(argv[0][n], "-txt") == 0)
+            return 0;
+    }
+
+    app = new QApplication(*argc, *argv);
+
+    drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
+
+    mpdm_hset_s(drv, L"id",         MPDM_LS(L"qt5"));
+
+    mpdm_hset_s(drv, L"startup",    MPDM_X(qt4_drv_startup));
+
+    return 1;
+}
+
