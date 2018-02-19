@@ -405,7 +405,7 @@ else
                 echo "#define CONFOPT_QT5 1" >> config.h
                 echo "OK"
 
-                DRIVERS="qt4 $DRIVERS"
+                DRIVERS="qt5 $DRIVERS"
                 DRV_OBJS="mpv_qt4.o $DRV_OBJS"
                 if [ "$CCLINK" = "" ] ; then
                     CCLINK="g++"
@@ -414,13 +414,13 @@ else
                 WITHOUT_QT4=1
                 WITHOUT_GTK=1
             else
-                echo "No 1"
+                echo "No"
             fi
         else
-            echo "No 2"
+            echo "No"
         fi
     else
-        echo "No 3"
+        echo "No"
     fi
 fi
 
