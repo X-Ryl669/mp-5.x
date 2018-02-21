@@ -5,7 +5,7 @@
 
     Miscellaneous editor actions.
 
-    Copyright (C) 1991-2017 Angel Ortega <angel@triptico.com> et al.
+    Copyright (C) 1991-2018 Angel Ortega <angel@triptico.com> et al.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -154,7 +154,7 @@ mp.actions['about'] = sub {
     local msg = L(
     "Minimum Profit %s (%s) - Programmer Text Editor\n\n"\
     "Components: MPDM %s, MPSL %s\n\n"\
-    "Copyright (C) 1991-2017 Angel Ortega <angel@triptico.com> et al.\n"\
+    "Copyright (C) 1991-2018 Angel Ortega <angel@triptico.com> et al.\n"\
     "\n"\
     "This program is free software; you can redistribute it and/or\n"\
     "modify it under the terms of the GNU General Public License\n"\

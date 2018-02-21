@@ -2,7 +2,7 @@ Minimum Profit README
 =====================
 
  Minimum Profit - Programmer Text Editor
- Copyright (C) 1991-2017 Angel Ortega <angel@triptico.com> et al.
+ Copyright (C) 1991-2018 Angel Ortega <angel@triptico.com> et al.
  Home Page: http://triptico.com/software/mp.html
 
 Minimum Profit (mp) is a text editor for programmers. Among its features
@@ -26,7 +26,7 @@ are the following:
  - Understandable interface: drop-down menus, reasonable default key bindings.
  - Configurable keys, menus and colors.
  - Text templates can be easily defined / accessed.
- - Multiplatform: Unix/Linux ANSI and Curses, Qt4, GTK+, KDE4, MS Windows
+ - Multiplatform: Unix/Linux ANSI and Curses, Qt4/Qt5, GTK+, KDE4, MS Windows
    (both windowed and console).
  - Automatic indentation, word wrapping, internal _grep_, learning /
    repeating functions.
