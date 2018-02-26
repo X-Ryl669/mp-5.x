@@ -600,7 +600,7 @@ mp.syntax.python = {
 	'defs'		=>	[
 		'word1',	[
 			mp.syn_token_list( [
-				"and", "assert", "break", "class", "continue",
+				"and", "as", "assert", "break", "class", "continue",
 				"def", "del", "elif", "else", "except", "exec",
 				"finally", "for", "from", "if", "import", "in",
 				"is", "lambda", "not", "or", "pass", "print",
