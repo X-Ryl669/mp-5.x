@@ -551,16 +551,19 @@ extern "C" int qt4_drv_detect(int *argc, char ***argv)
 #endif
 
 
-
 extern "C" int qt5_drv_detect(int *argc, char ***argv)
 {
     mpdm_t drv;
     int n;
+    char *display;
 
     for (n = 0; n < *argc; n++) {
         if (strcmp(argv[0][n], "-txt") == 0)
             return 0;
     }
+
+    if ((display = getenv("DISPLAY")) == NULL || *display == '\0')
+        return 0;
 
     app = new QApplication(*argc, *argv);
 
