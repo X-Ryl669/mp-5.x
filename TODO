@@ -4,7 +4,7 @@ Minimum Profit 5 TODO / Bug List
 Release Critical Bugs
 ---------------------
 
- * 1308: Document mp_doc.keycodes in mp_data_model.
+None!
 
 Open Bugs
 ---------
@@ -29,6 +29,7 @@ Open Bugs
  * 1282: The timer function in the Curses driver does not work
    while pressing keys.
  * 1306: Fix win32 file permissions.
+ * 1308: Document mp_doc.keycodes in mp_data_model.
 
 Pending Enhancements
 --------------------
