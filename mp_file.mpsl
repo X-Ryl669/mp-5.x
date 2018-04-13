@@ -331,7 +331,7 @@ mp_doc.actions['open_under_cursor'] = sub (d) {
 mp.actions['hex_view']	= sub {
     local n;
 
-    if ((n = mp.openfile(L("File to open:"))) != NULL && n ne "")
+    if ((n = mp.openfile(L("File to open:"))) != NULL && n ne "") {
         local d = new(mp_hex_view, { name: n})->init();
 
         if (d == NULL)
@@ -339,6 +339,7 @@ mp.actions['hex_view']	= sub {
                         mp.trim(n, 32), ERRNO));
         else
             mp.add(d);
+    }
 
     return d;
 };
