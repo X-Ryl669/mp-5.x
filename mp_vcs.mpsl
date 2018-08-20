@@ -52,7 +52,6 @@ mp.vcs = {
             "git diff '%s'"     => { unique_log: 1 },
             'git status'        => NULL,
             "git blame '%s'"    => { unique_log: 1 },
-            "git checkout '%s'" => NULL,
             "git stash"         => NULL,
             "git stash apply"   => NULL,
             "git push"          => NULL,
