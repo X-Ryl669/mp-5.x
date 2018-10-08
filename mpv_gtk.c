@@ -1902,7 +1902,7 @@ static mpdm_t gtk_drv_clip_to_sys(mpdm_t a, mpdm_t ctxt)
 /* driver-dependent mp to system clipboard */
 {
     got_selection = gtk_selection_owner_set(area,
-                                            GDK_SELECTION_PRIMARY,
+                                            GDK_SELECTION_CLIPBOARD,
                                             GDK_CURRENT_TIME);
 
     return NULL;
@@ -1919,7 +1919,7 @@ static mpdm_t gtk_drv_sys_to_clip(mpdm_t a, mpdm_t ctxt)
         for (n = 0; formats[n] != NULL; n++) {
 
             /* triggers a selection capture */
-            if (gtk_selection_convert(area, GDK_SELECTION_PRIMARY,
+            if (gtk_selection_convert(area, GDK_SELECTION_CLIPBOARD,
                                       gdk_atom_intern(formats[n], FALSE),
                                       GDK_CURRENT_TIME)) {
 
@@ -2678,7 +2678,7 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
     g_signal_connect(G_OBJECT(area), "drag_data_received",
                      G_CALLBACK(drag_data_received), NULL);
 
-    gtk_selection_add_target(area, GDK_SELECTION_PRIMARY,
+    gtk_selection_add_target(area, GDK_SELECTION_CLIPBOARD,
                              GDK_SELECTION_TYPE_STRING, 1);
 
     g_signal_connect(G_OBJECT(file_tabs), "switch_page",
