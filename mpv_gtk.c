@@ -2283,6 +2283,8 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
             path = gtk_tree_path_new_from_indices(i, -1);
             gtk_tree_view_set_cursor(GTK_TREE_VIEW(list), path, NULL,
                                      FALSE);
+            gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(list), path, NULL,
+                                    FALSE, 0, 0);
             gtk_tree_path_free(path);
 
             g_signal_connect_swapped(G_OBJECT(list), "row-activated",
