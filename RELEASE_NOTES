@@ -1,6 +1,32 @@
 Minimum Profit Release Notes
 ============================
 
+5.2.13-patch
+------------
+
+ - Fixes:
+   - In Qt5, as there is no equivalent of Qt4's
+     QApplication() creator with an X11 Display object as
+     argument, there is no other way of detecting a
+     non-functioning X11 environment than checking the
+     existence of the DISPLAY environment variable, so that
+     is what is used to fall back to text mode.
+   - Cancellation of the opening of hexadecimal dumps
+     works again.
+   - The "git checkout" option in the VCS has been removed,
+     as I keep constantly hitting it by error.
+   - The `scroll_up' and `scroll_down' actions has been
+     swapped, so they make much more sense.
+   - After a word-wrapping is done, the horizontal visual
+     column is set to 0, as it's expected to do.
+   - Makefile output is left at the end of the file (where
+     fail / success information is most probably found instead
+     of the beginning of the file).
+   - GTK driver uses GDK_SELECTION_CLIPBOARD instead of
+     GDK_SELECTION_PRIMARY for copy / paste.
+   - GTK form lists are correctly scrolled to show the
+     selected item.
+
 5.2.13
 ------
 
