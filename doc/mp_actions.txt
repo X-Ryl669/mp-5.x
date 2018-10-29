@@ -73,6 +73,13 @@ _Copy block_ (`ctrl-c')
 
 Copies the currently selected block to the clipboard.
 
+cut_line
+--------
+
+_Cut line_ (`ctrl-k')
+
+Cuts current line.
+
 cut_lines_with_string
 ---------------------
 
@@ -176,6 +183,15 @@ exit
 _Exit_ (`ctrl-q')
 
 Closes all documents and exists Minimum Profit.
+
+export_as_rtf
+-------------
+
+_Export as RTF..._
+
+Exports the current document as a very basic RTF file. Words surrounded by
+asterisks are converted as strong text and those surrended by underscores
+are converted as emphasized text.
 
 filter_selection
 ----------------
@@ -666,6 +682,20 @@ _Save session_
 
 Saves all documents and its positions as a session to be later loaded
 by `load_session'.
+
+scroll_down
+-----------
+
+_Scroll document down_ (`alt-cursor-down')
+
+Scrolls the document down.
+
+scroll_up
+---------
+
+_Scroll document up_ (`alt-cursor-up')
+
+Scrolls the document up.
 
 section_list
 ------------
