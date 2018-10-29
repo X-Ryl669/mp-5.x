@@ -534,8 +534,19 @@ sub mp_doc.export_as_rtf(doc, fn)
         write(f, '{\rtf1\ansi {\plain \fs24 \sa227', "\n");
 
         foreach (l, doc.txt.lines) {
-            if (l)
+            if (l) {
+                /* convert *text* to strong */
+                while(l->regex('/\*[a-zA-Z ]+\*/')) {
+                    l = l->sregex('/\*/', '{\b ')->sregex('/\*/', '}');
+                }
+
+                /* convert _text_ to emphasized */
+                while(l->regex('/_[a-zA-Z ]+_/')) {
+                    l = l->sregex('/_/', '{\i ')->sregex('/_/', '}');
+                }
+
                 write(f, l, " ");
+            }
             else
                 write(f, '\par');
 
