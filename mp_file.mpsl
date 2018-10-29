@@ -548,6 +548,9 @@ sub mp_doc.export_as_rtf(doc, fn)
 
         foreach (l, doc.txt.lines) {
             if (l) {
+                /* escape backslashes */
+                l = l->sregex("@\\\\@g", "\\\\\\");
+
                 /* convert *text* to strong */
                 while (l->regex('/\*[a-zA-Z ]+\*/')) {
                     l = l->sregex('/\*/', '{\b ')->sregex('/\*/', '}');
