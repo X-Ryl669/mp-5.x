@@ -26,6 +26,11 @@ Minimum Profit Release Notes
      GDK_SELECTION_PRIMARY for copy / paste.
    - GTK form lists are correctly scrolled to show the
      selected item.
+- New features:
+   - A new `export_as_rtf' action, to write current text
+     as a very basic RTF file. Words surrounded by asterisks
+     are written as strong text and surrounded by underscores
+     as emphasized text.
 
 5.2.13
 ------
