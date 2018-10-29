@@ -75,6 +75,15 @@ mp_doc.actions['save'] = sub (d) {
     return d;
 };
 
+mp_doc.actions['export_as_rtf'] = sub (d, filename) {
+    if (filename == NULL)
+        filename = mp.openfile(L("RTF file name"));
+
+    if (filename == NULL && filename ne "")
+        d.export_as_rtf(filename);
+};
+
+
 mp.actions['close']	= sub (d) {
     if (d->query_close() != 0)
         mp.close();
@@ -368,6 +377,7 @@ mp_doc.keycodes['alt-enter']    = 'ctrl-enter';
 mp.actdesc['new']                = LL("New");
 mp.actdesc['save']               = LL("Save...");
 mp.actdesc['save_as']            = LL("Save as...");
+mp.actdesc['export_as_rtf']      = LL("Export as RTF...");
 mp.actdesc['next']               = LL("Next");
 mp.actdesc['prev']               = LL("Previous");
 mp.actdesc['open']               = LL("Open...");
@@ -536,12 +546,12 @@ sub mp_doc.export_as_rtf(doc, fn)
         foreach (l, doc.txt.lines) {
             if (l) {
                 /* convert *text* to strong */
-                while(l->regex('/\*[a-zA-Z ]+\*/')) {
+                while (l->regex('/\*[a-zA-Z ]+\*/')) {
                     l = l->sregex('/\*/', '{\b ')->sregex('/\*/', '}');
                 }
 
                 /* convert _text_ to emphasized */
-                while(l->regex('/_[a-zA-Z ]+_/')) {
+                while (l->regex('/_[a-zA-Z ]+_/')) {
                     l = l->sregex('/_/', '{\i ')->sregex('/_/', '}');
                 }
 
