@@ -544,7 +544,7 @@ sub mp_doc.export_as_rtf(doc, fn)
     encoding("iso8859-1");
 
     if ((f = open(fn, "w"))) {
-        write(f, '{\rtf1\ansi {\plain \fs24 \sa227', "\n");
+        write(f, '{\rtf1\ansi {\plain \fs24 \sa227', "\r\n");
 
         foreach (l, doc.txt.lines) {
             if (l) {
@@ -566,7 +566,7 @@ sub mp_doc.export_as_rtf(doc, fn)
             write(f, "\r\n");
         }
 
-        write(f, "}}\n");
+        write(f, "}}\r\n");
 
         close(f);
     }
