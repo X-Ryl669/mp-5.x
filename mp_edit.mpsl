@@ -211,6 +211,7 @@ mp_doc.keycodes['insert']           = "toggle_insert";
 
 mp.actdesc['insert_line']           = LL("Insert line");
 mp.actdesc['delete_line']           = LL("Delete line");
+mp.actdesc['cut_line']              = LL("Cut line");
 mp.actdesc['insert_space']          = LL("Insert space");
 mp.actdesc['insert_tab']            = LL("Insert tab");
 mp.actdesc['insert_real_tab']       = LL("Insert real tab character");

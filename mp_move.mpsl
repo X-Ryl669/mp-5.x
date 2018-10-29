@@ -169,6 +169,8 @@ mp.actdesc['move_to_mouse_position']    = LL("Move cursor to mouse click");
 mp.actdesc['move_mouse_wheel_down']     = LL("Mouse wheel up");
 mp.actdesc['move_mouse_wheel_up']       = LL("Mouse wheel down");
 mp.actdesc['document_list']             = LL("Document list");
+mp.actdesc['scroll_down']               = LL("Scroll document down");
+mp.actdesc['scroll_up']                 = LL("Scroll document up");
 
 /** code **/
 
