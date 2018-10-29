@@ -77,10 +77,13 @@ mp_doc.actions['save'] = sub (d) {
 
 mp_doc.actions['export_as_rtf'] = sub (d, filename) {
     if (filename == NULL)
-        filename = mp.openfile(L("RTF file name"));
+        filename = mp.savefile(L("RTF file name"));
 
-    if (filename == NULL && filename ne "")
-        d.export_as_rtf(filename);
+    if (filename != NULL && filename ne "") {
+        if (d->export_as_rtf(filename) == -1)
+            mp.alert(sprintf(L("Error saving '%s': %s"),
+                        mp.trim(filename, 32), ERRNO));
+    }
 };
 
 
