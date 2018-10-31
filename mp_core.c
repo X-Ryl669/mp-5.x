@@ -689,6 +689,9 @@ static wchar_t drw_char(wchar_t c)
         else
         if (c == '\n' || c == '\0')
             c = L'\xb6';
+        else
+        if (c == '\f')
+            c = L'\x21a1';
     }
     else {
         if (c == L'\t' || c == L'\n' || c == L'\0')
