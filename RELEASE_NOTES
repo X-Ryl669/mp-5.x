@@ -32,6 +32,8 @@ Minimum Profit Release Notes
      are written as strong text and surrounded by underscores
      as emphasized text. Also, form feeds (ascii 0C) are
      converted to page breaks.
+   - A new `insert_page_break' action, to insert an ASCII
+     page break character (FF, 0x0C).
 
 5.2.13
 ------

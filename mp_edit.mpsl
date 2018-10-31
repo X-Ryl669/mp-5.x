@@ -44,6 +44,7 @@ mp_doc.actions['insert_real_tab']   = sub (d) { d->store_undo()->unindent_block(
 mp_doc.actions['delete']            = sub (d) { d->store_undo()->delete_char(); };
 mp_doc.actions['indent_block']      = sub (d) { d->store_undo()->indent_block(0); };
 mp_doc.actions['unindent_block']    = sub (d) { d->store_undo()->unindent_block(0); };
+mp_doc.actions['insert_page_break'] = sub (d) { d->store_undo()->insert("\x{000c}"); };
 
 mp_doc.actions['delete_left']	= sub (d) {
     if (d.txt.x + d.txt.y)
@@ -226,6 +227,7 @@ mp.actdesc['word_wrap_paragraph']   = LL("Word-wrap a paragraph");
 mp.actdesc['line_options']          = LL("Line options...");
 mp.actdesc['tab_options']           = LL("Tab options...");
 mp.actdesc['toggle_insert']         = LL("Toggle insert/overwrite mode");
+mp.actdesc['insert_page_break']     = LL("Insert page break character (FF)");
 
 /** code **/
 /**

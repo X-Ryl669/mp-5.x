@@ -226,5 +226,6 @@ __I18N__ = {
 	"Export as RTF..." => "Exportar como RTF...",
 	"Scroll document down" => "Desplazar el documento hacia abajo",
 	"Scroll document up" => "Desplazar el documento hacia arriba",
+	"Insert page break character (FF)" => "Insertar salto de p\x{00e1}gina (FF)",
 	"-" => "-"
 };
