@@ -561,6 +561,9 @@ sub mp_doc.export_as_rtf(doc, fn)
                     l = l->sregex('/_/', '{\i ')->sregex('/_/', '}');
                 }
 
+                if (l eq "\x{000c}")
+                    l = '\page';
+
                 write(f, l, " ");
             }
             else
