@@ -30,7 +30,8 @@ Minimum Profit Release Notes
    - A new `export_as_rtf' action, to write current text
      as a very basic RTF file. Words surrounded by asterisks
      are written as strong text and surrounded by underscores
-     as emphasized text.
+     as emphasized text. Also, form feeds (ascii 0C) are
+     converted to page breaks.
 
 5.2.13
 ------

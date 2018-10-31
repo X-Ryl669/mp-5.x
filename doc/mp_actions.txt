@@ -191,7 +191,8 @@ _Export as RTF..._
 
 Exports the current document as a very basic RTF file. Words surrounded by
 asterisks are converted as strong text and those surrended by underscores
-are converted as emphasized text.
+are converted as emphasized text. Also, form feeds (ascii 0C) are converted
+to page breaks.
 
 filter_selection
 ----------------
