@@ -544,7 +544,9 @@ sub mp_doc.export_as_rtf(doc, fn)
     encoding("iso8859-1");
 
     if ((f = open(fn, "w"))) {
-        write(f, '{\rtf1\ansi {\plain \fs24 \sa227', "\r\n");
+        local p = [];
+
+        f->write('{\rtf1\ansi {\plain \fs24 \sa227', "\r\n");
 
         foreach (l, doc.txt.lines) {
             if (l) {
@@ -561,20 +563,23 @@ sub mp_doc.export_as_rtf(doc, fn)
                     l = l->sregex('/_/', '{\i ')->sregex('/_/', '}');
                 }
 
+                /* de-escape unicode characters */
+                l = l->sregex('/\\\\u/g', "\\u");
+
                 if (l eq "\x{000c}")
                     l = '\page';
 
-                write(f, l, " ");
+                p->push(l);
             }
-            else
-                write(f, '\par');
-
-            write(f, "\r\n");
+            else {
+                f->write(p->join(" \r\n"), "\\par\r\n");
+                p = [];
+            }
         }
 
-        write(f, "}}\r\n");
+        f->write(p->join(" \r\n"), "\\par\r\n}}\r\n");
 
-        close(f);
+        f->close();
     }
     else
         ret = -1;
