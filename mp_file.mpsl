@@ -560,12 +560,12 @@ sub mp_doc.export_as_rtf(doc, fn)
                 }
 
                 /* convert *text* to strong */
-                while (l->regex('/\*[a-zA-Z0-9 ]+\*/')) {
+                while (l->regex('/\*[a-zA-Z0-9 ,]+\*/')) {
                     l = l->sregex('/\*/', '{\b ')->sregex('/\*/', '}');
                 }
 
                 /* convert _text_ to emphasized */
-                while (l->regex('/_[a-zA-Z0-9 ]+_/')) {
+                while (l->regex('/_[a-zA-Z0-9 ,]+_/')) {
                     l = l->sregex('/_/', '{\i ')->sregex('/_/', '}');
                 }
 
