@@ -1571,27 +1571,35 @@ static gint key_press_event(GtkWidget * widget, GdkEventKey * event,
     else {
         switch (event->keyval) {
         case MP_KEY_Up:
+        case GDK_KEY_KP_Up:
             ptr = L"cursor-up";
             break;
         case MP_KEY_Down:
+        case GDK_KEY_KP_Down:
             ptr = L"cursor-down";
             break;
         case MP_KEY_Left:
+        case GDK_KEY_KP_Left:
             ptr = L"cursor-left";
             break;
         case MP_KEY_Right:
+        case GDK_KEY_KP_Right:
             ptr = L"cursor-right";
             break;
         case MP_KEY_Prior:
+        case GDK_KEY_KP_Prior:
             ptr = L"page-up";
             break;
         case MP_KEY_Next:
+        case GDK_KEY_KP_Next:
             ptr = L"page-down";
             break;
         case MP_KEY_Home:
+        case GDK_KEY_KP_Home:
             ptr = L"home";
             break;
         case MP_KEY_End:
+        case GDK_KEY_KP_End:
             ptr = L"end";
             break;
         case MP_KEY_space:
