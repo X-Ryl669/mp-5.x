@@ -546,7 +546,7 @@ sub mp_doc.export_as_rtf(doc, fn)
     if ((f = open(fn, "wb"))) {
         local p = [];
 
-        f->write('{\rtf1\ansi {\plain \fs24 \sa227', "\r\n");
+        f->write('{\rtf1\ansi \paperw11906\paperh16838 {\plain \fs24 \sa227', "\r\n");
         f->write('{\*\generator Minimum Profit ', mp.VERSION, "}\r\n");
 
         foreach (l, doc.txt.lines) {
