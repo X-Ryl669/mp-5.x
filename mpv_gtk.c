@@ -1873,8 +1873,7 @@ static void selection_get(GtkWidget * widget,
     ptr = (unsigned char *) mpdm_wcstombs(d->data, &s);
 
     /* pastes into primary selection */
-    gtk_selection_data_set(sel, GDK_SELECTION_TYPE_STRING, 8, ptr,
-                           (gsize) s);
+    gtk_selection_data_set_text(sel, ptr, (gsize) s);
 
     free(ptr);
 
