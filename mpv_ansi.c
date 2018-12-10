@@ -4,7 +4,7 @@
 
     Raw ANSI terminal driver.
 
-    Copyright (C) 1991-2017 Angel Ortega <angel@triptico.com> et al.
+    Copyright (C) 1991-2018 Angel Ortega <angel@triptico.com> et al.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -304,7 +304,7 @@ struct _str_to_code {
 
 static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
 {
-    char str[32];
+    char str[2048];
     wchar_t wstr[2];
     wchar_t *f = NULL;
     mpdm_t k = NULL;
@@ -365,8 +365,10 @@ static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
             f = wstr;
     }
 
-    if (f == NULL)
-        mpdm_hset_s(MP, L"raw_key", MPDM_MBS(str));
+    if (f == NULL) {
+        mpdm_hset_s(MP, L"raw_string", MPDM_MBS(str));
+        f = L"insert-raw-string";
+    }
 
     /* if something, create a value */
     if (k == NULL && f != NULL)

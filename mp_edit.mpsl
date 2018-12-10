@@ -5,7 +5,7 @@
 
     Editing.
 
-    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2018 Angel Ortega <angel@triptico.com> et al.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -37,6 +37,7 @@ mp_doc.actions['insert_line'] = sub (d) {
     return d;
 };
 
+mp_doc.actions['insert_raw_string'] = sub (d) { d->store_undo()->insert(mp.raw_string); };
 mp_doc.actions['delete_line']       = sub (d) { d->store_undo()->delete_line(); };
 mp_doc.actions['insert_space']      = sub (d) { d->store_undo()->insert_space(); };
 mp_doc.actions['insert_tab']        = sub (d) { d->store_undo()->indent_block(1); };
@@ -207,6 +208,7 @@ mp_doc.keycodes['alt-cursor-left']  = "unindent_block";
 mp_doc.keycodes['ctrl-z']           = "undo";
 mp_doc.keycodes['f4']               = "word_wrap_paragraph";
 mp_doc.keycodes['insert']           = "toggle_insert";
+mp_doc.keycodes['insert-raw-string'] = "insert_raw_string";
 
 /** action descriptions **/
 
