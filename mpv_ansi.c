@@ -348,9 +348,10 @@ static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
     /* still nothing? search the table of keys */
     if (k == NULL && f == NULL) {
         int n;
+        char *ptr;
 
-        for (n = 0; str_to_code[n].code != NULL; n++) {
-            if (strcmp(str_to_code[n].ansi_str, str) == 0) {
+        for (n = 0; (ptr = str_to_code[n].ansi_str) != NULL; n++) {
+            if (strncmp(ptr, str, strlen(ptr)) == 0) {
                 f = str_to_code[n].code;
                 break;
             }
