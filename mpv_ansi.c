@@ -245,6 +245,8 @@ struct _str_to_code {
     char *ansi_str;
     wchar_t *code;
 } str_to_code[] = {
+    { "\033[A\033[A\033[A", L"mouse-wheel-up" },
+    { "\033[B\033[B\033[B", L"mouse-wheel-down" },
     { "\033[A",             L"cursor-up" },
     { "\033[B",             L"cursor-down" },
     { "\033[C",             L"cursor-right" },
@@ -295,8 +297,6 @@ struct _str_to_code {
     { "\033\r",             L"alt-enter" },
     { "\033[1~",            L"home" },
     { "\033[4~",            L"end" },
-    { "\033[A\033[A\033[A", L"mouse-wheel-up" },
-    { "\033[B\033[B\033[B", L"mouse-wheel-down" },
     { "\033[5;5~",          L"ctrl-page-up" },
     { "\033[6;5~",          L"ctrl-page-down" },
     { "\033[5;3~",          L"alt-page-up" },
