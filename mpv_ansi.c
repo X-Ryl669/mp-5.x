@@ -89,42 +89,50 @@ static int ansi_something_waiting(int fd)
 }
 
 
-int ansi_read_string(int fd, char *buf, size_t max)
+char *ansi_read_string(int fd)
 /* reads an ansi string, waiting in the first char */
 {
+    static char *buf = NULL;
+    static size_t z = 32;
     int n = 0;
+
+    if (buf == NULL)
+        buf = malloc(z);
 
     /* first char blocks, rest of possible chars not */
     do {
         char c;
 
-        if (n == max)
-            n = -2;
-        else
         if (read(fd, &c, sizeof(c)) == -1)
-            n = -1;
+            break;
         else {
+            if (n == z) {
+                z += 32;
+                buf = realloc(buf, z + 1);
+            }
+
             buf[n++] = c;
-            buf[n]   = '\0';
         }
 
-    } while (n >= 0 && ansi_something_waiting(fd));
+    } while (ansi_something_waiting(fd));
 
-    return n;
+    buf[n] = '\0';
+
+    return buf;
 }
 
 
 static void ansi_get_tty_size(int *w, int *h)
 /* asks the tty for its size */
 {
-    char buffer[32];
+    char *buffer;
 
     /* magic line: save cursor position, move to stupid position,
        ask for current position and restore cursor position */
     printf("\0337\033[r\033[999;999H\033[6n\0338");
     fflush(stdout);
 
-    ansi_read_string(0, buffer, sizeof(buffer));
+    buffer = ansi_read_string(0);
 
     sscanf(buffer, "\033[%d;%dR", h, w);
 }
@@ -308,11 +316,11 @@ struct _str_to_code {
 
 static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
 {
-    char str[2048];
+    char *str;
     wchar_t *f = NULL;
     mpdm_t k = NULL;
 
-    ansi_read_string(0, str, sizeof(str));
+    str = ansi_read_string(0);
 
     /* only one char? it's an ASCII or ctrl character */
     if (str[1] == '\0') {
@@ -365,6 +373,14 @@ static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
 
     /* if there is still no recognized ANSI string, return string as is */
     if (f == NULL) {
+        int n;
+
+        /* convert carriage returns to new lines */
+        for (n = 0; str[n]; n++) {
+            if (str[n] == '\r')
+                str[n] = '\n';
+        }
+
         mpdm_hset_s(MP, L"raw_string", MPDM_MBS(str));
         f = L"insert-raw-string";
     }
@@ -499,12 +515,12 @@ static mpdm_t ansi_tui_getxy(mpdm_t a, mpdm_t ctxt)
 {
     mpdm_t v;
     int x, y;
-    char buffer[32];
+    char *buffer;
 
     printf("\033[6n");
     fflush(stdout);
 
-    ansi_read_string(0, buffer, sizeof(buffer));
+    buffer = ansi_read_string(0);
     sscanf(buffer, "\033[%d;%dR", &y, &x);
 
     v = MPDM_A(2);
