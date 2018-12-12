@@ -244,7 +244,7 @@ else
     fi
 fi
 
-if [ "$WITHOUT_CURSES" = "1" ] ; then
+if [ "$WITHOUT_CURSES" != "1" ] ; then
     # test for curses / ncurses library
     echo -n "Testing for recent ncurses... "
 
