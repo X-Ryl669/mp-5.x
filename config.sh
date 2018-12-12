@@ -260,8 +260,6 @@ if [ "$WITHOUT_CURSES" != "1" ] ; then
         echo $TMP_CFLAGS >> config.cflags
         echo $TMP_LDFLAGS >> config.ldflags
         echo "OK (ncurses)"
-        DRIVERS="ncursesw $DRIVERS"
-        DRV_OBJS="mpv_curses.o $DRV_OBJS"
         WITHOUT_ANSI=1
     else
         echo "No"
