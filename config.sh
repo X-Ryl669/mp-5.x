@@ -439,8 +439,8 @@ else
         which moc-qt4 > /dev/null 2>&1 && MOC=moc-qt4
         echo "MOC=$MOC" >> makefile.opts
 
-        TMP_CFLAGS=$(pkg-config --cflags QtGui)
-        TMP_LDFLAGS="$(pkg-config --libs QtGui) -lX11"
+        TMP_CFLAGS=`sh -c 'pkg-config --cflags QtGui' 2>/dev/null`
+        TMP_LDFLAGS="`sh -c 'pkg-config --libs QtGui' 2>/dev/null` -lX11"
 
         echo "#include <QtGui>" > .tmp.cpp
         echo "int main(int argc, char *argv[]) { new QApplication(argc, argv) ; return 0; } " >> .tmp.cpp
