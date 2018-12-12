@@ -2615,7 +2615,7 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
 #endif
     gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(hbox), menu_bar, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(hbox), file_tabs, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox), file_tabs, FALSE, FALSE, 0);
 
     gtk_notebook_popup_enable(GTK_NOTEBOOK(file_tabs));
 
