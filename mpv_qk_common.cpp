@@ -4,7 +4,7 @@
 
     Code common to Qt4 and KDE4 drivers.
 
-    Copyright (C) 2009/2014 Angel Ortega <angel@triptico.com>
+    Copyright (C) 2009/2018 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -244,7 +244,7 @@ static void build_menu(void)
         mi = mpdm_aget(m, n);
         v = mpdm_aget(mi, 0);
 
-        MENU_CLASS *menu = new MENU_CLASS(str_to_qstring(mpdm_gettext(v)));
+        MENU_CLASS *menu = menubar->addMenu(str_to_qstring(mpdm_gettext(v)));
 
         /* get the items */
         v = mpdm_aget(mi, 1);
@@ -262,8 +262,6 @@ static void build_menu(void)
                 qaction_to_action[menu->addAction(str_to_qstring(mp_menu_label(w)))] = w;
             }
         }
-
-        menubar->addMenu(menu);
     }
 
     menubar->show();
