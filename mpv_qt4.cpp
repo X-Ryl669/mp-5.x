@@ -99,7 +99,7 @@ MPWindow::MPWindow(QWidget * parent):QMainWindow(parent)
     hb->setContentsMargins(0, 0, 0, 0);
 
     hb->addWidget(menubar);
-    hb->addWidget(file_tabs);
+//    hb->addWidget(file_tabs);
     QWidget *ta = new QWidget();
     ta->setLayout(hb);
     ta->setMaximumHeight(height);
@@ -121,6 +121,7 @@ MPWindow::MPWindow(QWidget * parent):QMainWindow(parent)
     vb = new QVBoxLayout();
 
     vb->addWidget(ta);
+    vb->addWidget(file_tabs);
     vb->addWidget(cc);
 
     QWidget *mc = new QWidget();
