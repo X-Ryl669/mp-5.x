@@ -1272,7 +1272,7 @@ mpdm_t mp_c_search_hex(mpdm_t args, mpdm_t ctxt)
 }
 
 
-mpdm_t mp_load_save_state(char *m)
+mpdm_t mp_load_save_state(const char *m)
 {
     mpdm_t f, state;
     mpdm_t filename = mpdm_strcat(mpdm_hget_s(mpdm_root(), L"HOMEDIR"),
