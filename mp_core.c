@@ -1306,6 +1306,14 @@ mpdm_t mp_load_save_state(char *m)
 }
 
 
+mpdm_t search_embedded_mpsl_file(mpdm_t args, mpdm_t ctxt)
+/* searches for embedded MPSL code */
+{
+    /* TBD */
+    return NULL;
+}
+
+
 void mp_startup(int argc, char *argv[])
 {
     mpdm_t INC;
@@ -1342,6 +1350,11 @@ void mp_startup(int argc, char *argv[])
        put if before enything else */
     if ((ptr = getenv("MP_LIBRARY_PATH")) != NULL)
         mpdm_push(INC, MPDM_MBS(ptr));
+
+#if 0
+    /* embedded MPSL files */
+    mpdm_push(INC, MPDM_X(search_embedded_mpsl_file));
+#endif
 
     /* add installed library path */
     mpdm_push(INC, mpdm_hget_s(mpdm_root(), L"APPDIR"));
