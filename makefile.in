@@ -33,7 +33,7 @@ $(MPSL)/libmpsl.a: $(MPDM)/libmpdm.a
 	( cd $(MPSL); $(MAKE) )
 
 dep:
-	gcc -MM *.c `cat config.cflags` > makefile.depend
+	gcc -MM *.c *.cpp `cat config.cflags` > makefile.depend
 
 $(APPNAME): $(OBJS) $(MPDM)/libmpdm.a $(MPSL)/libmpsl.a
 	$(CCLINK) $(CFLAGS) $(OBJS) `cat config.ldflags` -o $@
