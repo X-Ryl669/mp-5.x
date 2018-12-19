@@ -1,6 +1,12 @@
 Minimum Profit Release Notes
 ============================
 
+5.2.15-dev
+----------
+
+ - Fixes:
+   - Bug in GTK form combo boxes.
+
 5.2.14
 ------
 
