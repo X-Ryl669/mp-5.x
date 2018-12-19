@@ -2220,6 +2220,7 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
                 combo_items = g_list_prepend(combo_items, ptr);
 #if CONFOPT_GTK == 3
                 gtk_combo_box_text_prepend_text(GTK_COMBO_BOX_TEXT(widget), ptr);
+                gtk_combo_box_set_active(GTK_COMBO_BOX_TEXT(widget), 0);
 #endif
             }
 
