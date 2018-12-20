@@ -1,11 +1,16 @@
 Minimum Profit Release Notes
 ============================
 
-5.2.15-dev
-----------
+5.2.15
+------
 
  - Fixes:
-   - Bug in GTK form combo boxes.
+   - A severe bug in the GTK driver. Sometimes comboboxes
+     in forms do not correctly show the default value. This
+     can be specially troublesome in the "Line options"
+     form because the end-of-line separator can be
+     accidentally set to an empty string and destroy
+     newly created files.
 
 5.2.14
 ------
