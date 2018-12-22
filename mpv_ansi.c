@@ -309,6 +309,7 @@ struct _str_to_code {
     { "\033[6;5~",          L"ctrl-page-down" },
     { "\033[5;3~",          L"alt-page-up" },
     { "\033[6;3~",          L"alt-page-down" },
+    { "\033-",              L"alt-minus" },
     { NULL,                 NULL }
 };
 
