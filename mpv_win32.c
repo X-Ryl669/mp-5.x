@@ -650,6 +650,9 @@ static void win32_vkey(int c)
         case VK_F12:
             ptr = L"alt-f12";
             break;
+        case 0xbd: /* VK_OEM_MINUS */
+            ptr = L"alt-minus";
+            break;
         }
     }
     else {
@@ -850,6 +853,9 @@ static void win32_akey(int k)
         break;
     case 27:
         ptr = L"escape";
+        break;
+    case '-':
+        ptr = (GetKeyState(VK_LMENU) & 0x8000) ? L"alt-minus" : L"-";
         break;
 
     default:
