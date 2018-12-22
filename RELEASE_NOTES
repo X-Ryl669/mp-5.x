@@ -1,6 +1,12 @@
 Minimum Profit Release Notes
 ============================
 
+5.2.16-dev
+----------
+
+ - New features:
+   - New action `insert_m_dash', bound by default to `alt-minus'.
+
 5.2.15
 ------
 
