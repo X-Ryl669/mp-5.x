@@ -575,6 +575,11 @@ sub mp_doc.export_as_rtf(doc, fn)
                 if (l eq "\x{000c}")
                     l = '\page';
 
+                /* and now convert non-ASCII characters to unicode */
+                l = l->split()->map(sub (e) {
+                        ord(e) > 127 && sprintf("\\u%d?", ord(e)) || e;
+                    })->join();
+
                 p->push(l);
             }
             else {
