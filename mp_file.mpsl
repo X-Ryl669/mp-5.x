@@ -541,8 +541,6 @@ sub mp_doc.export_as_rtf(doc, fn)
 {
     local ret = 0;
 
-    encoding("iso8859-1");
-
     if ((f = open(fn, "wb"))) {
         local p = [];
 
@@ -594,8 +592,6 @@ sub mp_doc.export_as_rtf(doc, fn)
     }
     else
         ret = -1;
-
-    encoding();
 
     return ret;
 }
