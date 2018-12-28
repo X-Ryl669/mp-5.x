@@ -314,6 +314,12 @@ struct _str_to_code {
     { "\033\033[B",         L"alt-cursor-down" },
     { "\033\033[C",         L"alt-cursor-right" },
     { "\033\033[D",         L"alt-cursor-left" },
+    { "\033\033[1~",        L"alt-home" },
+    { "\033\033[2~",        L"alt-insert" },
+    { "\033\033[3~",        L"alt-delete" },
+    { "\033\033[4~",        L"alt-end" },
+    { "\033\033[5~",        L"alt-page-up" },
+    { "\033\033[6~",        L"alt-page-down" },
     { NULL,                 NULL }
 };
 
