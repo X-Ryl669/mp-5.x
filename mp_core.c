@@ -684,10 +684,10 @@ static mpdm_t drw_push_pair(mpdm_t l, int i, int a, wchar_t * tmp)
 static wchar_t drw_char(wchar_t c)
 {
     if (drw_1.mark_eol) {
-        if (c == '\t')
+        if (c == L'\t')
             c = L'\xb7';
         else
-        if (c == '\n' || c == '\0')
+        if (c == L'\n' || c == L'\0')
             c = L'\xb6';
     }
     else {
@@ -695,8 +695,13 @@ static wchar_t drw_char(wchar_t c)
             c = L' ';
     }
 
-    if (c == '\f')
+    /* replace form feed with visual representation and
+       the rest of control codes with the Unicode replace char */
+    if (c == L'\f')
         c = L'\x21a1';
+    else
+    if (c < L' ')
+        c = L'\xfffd';
 
     return c;
 }
