@@ -95,7 +95,7 @@ msgstr "File dove cercare:"
 msgid "Tag to seek:"
 msgstr "Tag da cercare:"
 
-#: mp_edit.mpsl:119
+#: mp_edit.mpsl:121
 msgid "Word wrap on column (0, no word wrap):"
 msgstr "Word wrap alla colonna:"
 
@@ -259,11 +259,11 @@ msgstr "Pagina giu'"
 msgid "Go to line..."
 msgstr "Vai a riga..."
 
-#: mp_edit.mpsl:213
+#: mp_edit.mpsl:217
 msgid "Insert line"
 msgstr "Inserisci riga"
 
-#: mp_edit.mpsl:217
+#: mp_edit.mpsl:221
 msgid "Insert tab"
 msgstr "Inserisci tabulazione"
 
@@ -273,7 +273,7 @@ msgstr "Elimina il carattere sopra il cursore"
 msgid "Delete char to the left of cursor"
 msgstr "Elimina il carattere alla sinistra del cursore"
 
-#: mp_edit.mpsl:214
+#: mp_edit.mpsl:218
 msgid "Delete line"
 msgstr "Elimina la riga"
 
@@ -362,7 +362,7 @@ msgstr "Salva tabulazioni"
 msgid "Save LF as CR/LF"
 msgstr "Salva LF come CR/LF"
 
-#: mp_edit.mpsl:125
+#: mp_edit.mpsl:127
 msgid "Automatic indentation"
 msgstr "Indentazione automatica"
 
@@ -607,31 +607,31 @@ msgstr ""
 msgid "Passwords don't match."
 msgstr ""
 
-#: mp_edit.mpsl:86
+#: mp_edit.mpsl:88
 msgid "Word wrapping must be set"
 msgstr ""
 
-#: mp_edit.mpsl:216
+#: mp_edit.mpsl:220
 msgid "Insert space"
 msgstr ""
 
-#: mp_edit.mpsl:219
+#: mp_edit.mpsl:223
 msgid "Delete character"
 msgstr ""
 
-#: mp_edit.mpsl:220
+#: mp_edit.mpsl:224
 msgid "Delete character to the left"
 msgstr ""
 
-#: mp_edit.mpsl:223
+#: mp_edit.mpsl:227
 msgid "Undo"
 msgstr ""
 
-#: mp_edit.mpsl:225
+#: mp_edit.mpsl:229
 msgid "Join a paragraph in one line"
 msgstr ""
 
-#: mp_edit.mpsl:226
+#: mp_edit.mpsl:230
 msgid "Word-wrap a paragraph"
 msgstr ""
 
@@ -739,23 +739,23 @@ msgstr ""
 msgid "Template to insert:"
 msgstr ""
 
-#: mp_edit.mpsl:130
+#: mp_edit.mpsl:132
 msgid "Line termination"
 msgstr ""
 
-#: mp_edit.mpsl:170
+#: mp_edit.mpsl:172
 msgid "Tab size"
 msgstr ""
 
-#: mp_edit.mpsl:174
+#: mp_edit.mpsl:176
 msgid "Convert tabs to spaces"
 msgstr ""
 
-#: mp_edit.mpsl:227
+#: mp_edit.mpsl:231
 msgid "Line options..."
 msgstr ""
 
-#: mp_edit.mpsl:228
+#: mp_edit.mpsl:232
 msgid "Tab options..."
 msgstr ""
 
@@ -836,7 +836,7 @@ msgstr ""
 msgid "Error writing to command '%s'"
 msgstr ""
 
-#: mp_edit.mpsl:224
+#: mp_edit.mpsl:228
 msgid "Redo"
 msgstr ""
 
@@ -867,12 +867,12 @@ msgstr ""
 msgid "Unknown action '%s'"
 msgstr ""
 
-#: mp_edit.mpsl:691
+#: mp_edit.mpsl:696
 #, c-format
 msgid "Unbound keystroke '%s'"
 msgstr ""
 
-#: mp_file.mpsl:688
+#: mp_file.mpsl:700
 #, c-format
 msgid "New file '%s'"
 msgstr ""
@@ -896,7 +896,7 @@ msgstr ""
 msgid "Mark using mouse dragging"
 msgstr ""
 
-#: mp_edit.mpsl:140
+#: mp_edit.mpsl:142
 msgid "Mark end of lines"
 msgstr ""
 
@@ -989,7 +989,7 @@ msgstr ""
 msgid "Delete block"
 msgstr ""
 
-#: mp_edit.mpsl:135
+#: mp_edit.mpsl:137
 msgid "Keep original end of lines"
 msgstr ""
 
@@ -1021,7 +1021,7 @@ msgid ""
 "Mailing list: mp-subscribe@lists.triptico.com\n"
 msgstr ""
 
-#: mp_edit.mpsl:177
+#: mp_edit.mpsl:179
 msgid "Use previous line for tab columns"
 msgstr ""
 
@@ -1076,7 +1076,7 @@ msgstr ""
 msgid "Insert next item"
 msgstr ""
 
-#: mp_edit.mpsl:229
+#: mp_edit.mpsl:233
 msgid "Toggle insert/overwrite mode"
 msgstr ""
 
@@ -1104,15 +1104,15 @@ msgstr ""
 msgid "Cut lines containing a string..."
 msgstr ""
 
-#: mp_edit.mpsl:218
+#: mp_edit.mpsl:222
 msgid "Insert real tab character"
 msgstr ""
 
-#: mp_edit.mpsl:221
+#: mp_edit.mpsl:225
 msgid "Indent block"
 msgstr ""
 
-#: mp_edit.mpsl:222
+#: mp_edit.mpsl:226
 msgid "Unindent block"
 msgstr ""
 
@@ -1146,7 +1146,7 @@ msgstr ""
 msgid "Template file to edit:"
 msgstr ""
 
-#: mp_edit.mpsl:145
+#: mp_edit.mpsl:147
 msgid "'Smart' move to beginning of line:"
 msgstr ""
 
@@ -1418,15 +1418,15 @@ msgid ""
 "Homepage: http://triptico.com/software/mp.html\n"
 msgstr ""
 
-#: mp_edit.mpsl:150
+#: mp_edit.mpsl:152
 msgid "Show line numbers:"
 msgstr ""
 
-#: mp_file.mpsl:950
+#: mp_file.mpsl:962
 msgid "Not found."
 msgstr ""
 
-#: mp_file.mpsl:959
+#: mp_file.mpsl:971
 msgid "Hex string to seek:"
 msgstr ""
 
@@ -1524,7 +1524,7 @@ msgid ""
 "Homepage: http://triptico.com/software/mp.html\n"
 msgstr ""
 
-#: mp_edit.mpsl:215
+#: mp_edit.mpsl:219
 msgid "Cut line"
 msgstr ""
 
@@ -1570,6 +1570,10 @@ msgstr ""
 msgid "Scroll document up"
 msgstr ""
 
-#: mp_edit.mpsl:230
+#: mp_edit.mpsl:234
 msgid "Insert page break character (FF)"
+msgstr ""
+
+#: mp_edit.mpsl:235
+msgid "Insert m-dash character"
 msgstr ""
