@@ -22,6 +22,9 @@ CONF_ARGS="$*"
 # No KDE4 by default
 WITHOUT_KDE4=1
 
+# No msgfmt by default
+WITHOUT_MSGFMT=1
+
 # parse arguments
 while [ $# -gt 0 ] ; do
 
@@ -511,19 +514,26 @@ else
     fi
 fi
 
-# msgfnt
+# msgfmt
 echo -n "Testing for msgfmt... "
 
-if which msgfmt > /dev/null 2>&1 ; then
-    echo "OK"
-    echo "BUILDMO=build-mo" >> makefile.opts
-    echo "INSTALLMO=install-mo" >> makefile.opts
-    echo "UNINSTALLMO=uninstall-mo" >> makefile.opts
-else
-    echo "No"
+if [ "$WITHOUT_MSGFMT" = "1" ] ; then
+    echo "Disabled"
     echo "BUILDMO=" >> makefile.opts
     echo "INSTALLMO=" >> makefile.opts
     echo "UNINSTALLMO=" >> makefile.opts
+else
+    if which msgfmt > /dev/null 2>&1 ; then
+        echo "OK"
+        echo "BUILDMO=build-mo" >> makefile.opts
+        echo "INSTALLMO=install-mo" >> makefile.opts
+        echo "UNINSTALLMO=uninstall-mo" >> makefile.opts
+    else
+        echo "No"
+        echo "BUILDMO=" >> makefile.opts
+        echo "INSTALLMO=" >> makefile.opts
+        echo "UNINSTALLMO=" >> makefile.opts
+    fi
 fi
 
 if [ "$CCLINK" = "" ] ; then
