@@ -35,6 +35,9 @@ $(MPSL)/libmpsl.a: $(MPDM)/libmpdm.a
 dep:
 	gcc -MM *.c `cat config.cflags` > makefile.depend
 
+mp.tar: *.mpsl lang/*.mpsl
+	tar cf mp.tar *.mpsl lang/*.mpsl
+
 $(APPNAME): $(OBJS) $(MPDM)/libmpdm.a $(MPSL)/libmpsl.a
 	$(CCLINK) $(CFLAGS) $(OBJS) `cat config.ldflags` -o $@
 
