@@ -5,7 +5,7 @@
 
     Useless things.
 
-    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2018 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -24,16 +24,6 @@
     http://triptico.com
 
 */
-
-/** editor actions **/
-
-mp.actions['pipes'] =   sub (d) {
-    mp.add(new(mp_pipes))->init();
-};
-
-/** action descriptions **/
-
-mp.actdesc['pipes'] = LL("Play \"Pipes\"");
 
 /** code **/
 

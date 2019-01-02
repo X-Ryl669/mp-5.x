@@ -185,6 +185,15 @@ mp.actions['about'] = sub {
 };
 
 
+mp.actions['pipes'] = sub {
+    /* load toys on demand */
+    if (mp_pipes == NULL)
+        load("mp_toys.mpsl");
+
+    mp.add(new(mp_pipes))->init();
+};
+
+
 mp.actions.check_for_updates = sub {
     local d = mp.open("<updates>");
 
@@ -280,6 +289,8 @@ mp.actdesc['zoom_in']           = LL("Bigger font");
 mp.actdesc['zoom_out']          = LL("Smaller font");
 mp.actdesc['about']             = LL("About...");
 mp.actdesc['check_for_updates'] = LL("Check for updates...");
+mp.actdesc['pipes']             = LL("Play \"Pipes\"");
+
 
 /** code **/
 
