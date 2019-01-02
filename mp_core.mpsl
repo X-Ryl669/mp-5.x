@@ -33,7 +33,8 @@ L = gettext;
 sub LL(x) { x; }
 
 /* set gettext() domain */
-gettext_domain('minimum-profit', APPDIR ~ 'locale');
+/* NOTE: THIS IS BROKEN, so it's been disabled */
+/*gettext_domain('minimum-profit', APPDIR ~ 'locale');*/
 
 /* test if gettext() can do a basic translation */
 if (gettext('&File') eq '&File' && ENV.LANG) {
