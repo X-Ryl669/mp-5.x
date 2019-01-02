@@ -5,7 +5,7 @@
 
     Version Control System support
 
-    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2018 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -24,14 +24,6 @@
     http://triptico.com
 
 */
-
-/** default key bindings **/
-
-mp_doc.keycodes['ctrl-p'] = 'vcs';
-
-/** action descriptions **/
-
-mp.actdesc['vcs'] = LL("Version Control...");
 
 /** mp_doc commit subclass **/
 
@@ -93,9 +85,9 @@ mp.vcs = {
     }
 };
 
-/** editor actions **/
 
-mp.actions['vcs'] = sub {
+sub vcs_form()
+{
     local v = NULL;
 
     /* find which VCS apply to current directory */

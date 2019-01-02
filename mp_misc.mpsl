@@ -194,6 +194,15 @@ mp.actions['pipes'] = sub {
 };
 
 
+mp.actions['vcs'] = sub {
+    /* load vcs code on demand */
+    if (mp_doc_vcs == NULL)
+        load("mp_vcs.mpsl");
+
+    vcs_form();
+};
+
+
 mp.actions.check_for_updates = sub {
     local d = mp.open("<updates>");
 
@@ -276,6 +285,8 @@ mp.keycodes['f12']              = 'zoom_in';
 mp.keycodes['ctrl-kp-plus' ]    = 'zoom_in';
 mp.keycodes['f11']              = 'zoom_out';
 mp.keycodes['ctrl-kp-minus' ]   = 'zoom_out';
+mp_doc.keycodes['ctrl-p']       = 'vcs';
+
 
 /** action descriptions **/
 
@@ -290,6 +301,8 @@ mp.actdesc['zoom_out']          = LL("Smaller font");
 mp.actdesc['about']             = LL("About...");
 mp.actdesc['check_for_updates'] = LL("Check for updates...");
 mp.actdesc['pipes']             = LL("Play \"Pipes\"");
+mp.actdesc['vcs']               = LL("Version Control...");
+
 
 
 /** code **/
