@@ -57,10 +57,10 @@ mp_res.o: mp_res.rc
 	$(WINDRES) mp_res.rc mp_res.o
 
 mp-5.exe: mp_core.o $(MORE_OBJS) mpv_win32.o mp_res.o $(MPDM)/libmpdm.a $(MPSL)/libmpsl.a
-	$(CC) $(CFLAGS) mp_core.o mpv_win32.o mp_res.o `cat config.ldflags` -o $@
+	$(CC) $(CFLAGS) mp_core.o $(MORE_OBJS) mpv_win32.o mp_res.o `cat config.ldflags` -o $@
 
 mp-5c.exe: mp_core.o $(MORE_OBJS) mpv_win32c.o mp_res.o $(MPDM)/libmpdm.a $(MPSL)/libmpsl.a
-	$(CC) $(CFLAGS) mp_core.o mpv_win32c.o mp_res.o `grep -v mwindows config.ldflags` -o $@
+	$(CC) $(CFLAGS) mp_core.o $(MORE_OBJS) mpv_win32c.o mp_res.o `grep -v mwindows config.ldflags` -o $@
 
 clean:
 	rm -f $(TARGET) $(OBJS) mp.tar *.o *.moc tags *.tar.gz *.exe *.zip .installer.c *.1 *.asc
