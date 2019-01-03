@@ -564,6 +564,7 @@ else
 
     if [ $? = 0 ] ; then
         echo "Yes"
+        DRV_OBJS="mp.tar.o ${DRV_OBJS}"
     else
         echo "No"
         WITH_EXTERNAL_TAR=1

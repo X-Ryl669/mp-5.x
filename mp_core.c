@@ -1313,11 +1313,30 @@ mpdm_t mp_load_save_state(const char *m)
 
 #ifndef CONFOPT_EXTERNAL_TAR
 
-static mpdm_t search_embedded_tar(mpdm_t args, mpdm_t ctxt)
+extern const char _binary_mp_tar_start;
+extern const char _binary_mp_tar_end;
+extern const char binary_mp_tar_start;
+extern const char binary_mp_tar_end;
+
+static mpdm_t find_in_embedded_tar(mpdm_t args, mpdm_t ctxt)
 /* searches for embedded MPSL code */
 {
-    /* TBD */
-    return NULL;
+    mpdm_t f;
+    mpdm_t r = NULL;
+
+    f = mpdm_aget(args, 0);
+    f = mpdm_ref(MPDM_2MBS((wchar_t *)f->data));
+    r = mpsl_find_in_embedded_tar((const char *)f->data,
+
+#ifdef CONFOPT_WIN32
+        &binary_mp_tar_start, &binary_mp_tar_end);
+#else
+        &_binary_mp_tar_start, &_binary_mp_tar_end);
+#endif
+
+    mpdm_unref(f);
+
+    return r;
 }
 
 #endif
@@ -1370,7 +1389,7 @@ void mp_startup(int argc, char *argv[])
 #else /* CONFOPT_EXTERNAL_TAR */
 
     /* add code library as embedded tar */
-    mpdm_push(INC, MPDM_X(search_embedded_tar));
+    mpdm_push(INC, MPDM_X(find_in_embedded_tar));
 
 #endif /* CONFOPT_EXTERNAL_TAR */
 
