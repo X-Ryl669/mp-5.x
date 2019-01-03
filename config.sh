@@ -25,7 +25,7 @@ WITHOUT_KDE4=1
 # No msgfmt by default
 WITHOUT_MSGFMT=1
 
-WITH_EXTERNAL_TAR=1
+WITH_EXTERNAL_TAR=0
 
 # parse arguments
 while [ $# -gt 0 ] ; do
@@ -79,6 +79,7 @@ if [ "$CONFIG_HELP" = "1" ] ; then
     echo "--with-null-hash      Tell MPDM to use a NULL hashing function."
     echo "--mingw32             Build using the mingw32 compiler."
     echo "--debian              Build for Debian ('make deb')."
+    echo "--with-external-tar   Store code in external tar (vs. embedded)."
 
     echo
     echo "Environment variables:"
@@ -537,6 +538,38 @@ else
         echo "INSTALLMO=" >> makefile.opts
         echo "UNINSTALLMO=" >> makefile.opts
     fi
+fi
+
+# test for embeddable binaries
+echo -n "Testing for embeddable binaries... "
+if [ "$WITH_EXTERNAL_TAR" = "1" ] ; then
+    echo "Disabled"
+else
+    echo "test" > tmp.bin
+    ld -r -b binary tmp.bin -o tmp.bin.o
+
+    echo "extern const char _binary_tmp_bin_start;" > .tmp.c
+    echo "extern const char _binary_tmp_bin_end;" >> .tmp.c
+    echo "extern const char binary_tmp_bin_start;" >> .tmp.c
+    echo "extern const char binary_tmp_bin_end;" >> .tmp.c
+    echo "int main(void) { " >> .tmp.c
+    echo "#ifdef WIN32" >> .tmp.c
+    echo "  int c = &binary_tmp_bin_end - &binary_tmp_bin_start;" >> .tmp.c
+    echo "#else" >> .tmp.c
+    echo "  int c = &_binary_tmp_bin_end - &_binary_tmp_bin_start;" >> .tmp.c
+    echo "#endif" >> .tmp.c
+    echo "  return c; } " >> .tmp.c
+
+    $CC .tmp.c tmp.bin.o -o .tmp.o 2>> .config.log
+
+    if [ $? = 0 ] ; then
+        echo "Yes"
+    else
+        echo "No"
+        WITH_EXTERNAL_TAR=1
+    fi
+
+    rm -f tmp.bin tmp.bin.o
 fi
 
 if [ "$CCLINK" = "" ] ; then
