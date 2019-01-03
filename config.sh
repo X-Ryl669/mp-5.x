@@ -4,6 +4,7 @@
 
 DRIVERS=""
 DRV_OBJS=""
+MORE_OBJS=""
 APPNAME="mp-5"
 TARGET=""
 
@@ -564,7 +565,7 @@ else
 
     if [ $? = 0 ] ; then
         echo "Yes"
-        DRV_OBJS="mp.tar.o ${DRV_OBJS}"
+        MORE_OBJS="mp.tar.o ${MORE_OBJS}"
     else
         echo "No"
         WITH_EXTERNAL_TAR=1
@@ -594,6 +595,7 @@ echo "PREFIX=\$(DESTDIR)$PREFIX" >> makefile.opts
 echo "APPNAME=$APPNAME" >> makefile.opts
 echo "TARGET=$TARGET" >> makefile.opts
 echo "DRV_OBJS=$DRV_OBJS" >> makefile.opts
+echo "MORE_OBJS=$MORE_OBJS" >> makefile.opts
 echo "CCLINK=$CCLINK" >> makefile.opts
 echo >> makefile.opts
 
