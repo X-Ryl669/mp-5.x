@@ -1,9 +1,13 @@
 Minimum Profit Release Notes
 ============================
 
-5.2.16-dev
+5.3.0-dev
 ----------
 
+ - Architectural changes:
+   - MPSL code is no longer deployed as separate files, but
+     embedded in a tar file or inside the program binary itself.
+   - Some MPSL code is loaded on demand.
  - New features:
    - New action `insert_m_dash', bound by default to `alt-minus'.
 

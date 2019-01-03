@@ -1364,6 +1364,10 @@ void mp_startup(int argc, char *argv[])
     /* add installed library path */
     mpdm_push(INC, mpdm_hget_s(mpdm_root(), L"APPDIR"));
 
+    /* add installed library tar */
+    mpdm_push(INC, mpdm_strcat_s(
+        mpdm_hget_s(mpdm_root(), L"APPDIR"), L"/mp.tar"));
+
     if (!TRY_DRIVERS()) {
         printf("No usable driver found; exiting.\n");
         exit(1);
