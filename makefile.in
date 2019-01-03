@@ -38,6 +38,9 @@ dep:
 mp.tar: *.mpsl lang/*.mpsl
 	tar cvf mp.tar *.mpsl lang/*.mpsl
 
+mp.tar.o: mp.tar
+	ld -r -b binary $< -o $@
+
 $(APPNAME): $(OBJS) $(MPDM)/libmpdm.a $(MPSL)/libmpsl.a
 	$(CCLINK) $(CFLAGS) $(OBJS) `cat config.ldflags` -o $@
 

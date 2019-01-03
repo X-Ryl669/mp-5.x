@@ -25,17 +25,20 @@ WITHOUT_KDE4=1
 # No msgfmt by default
 WITHOUT_MSGFMT=1
 
+WITH_EXTERNAL_TAR=1
+
 # parse arguments
 while [ $# -gt 0 ] ; do
 
     case $1 in
-    --without-curses)   WITHOUT_CURSES=1 ;;
-    --without-gtk)      WITHOUT_GTK=1 ;;
-    --without-win32)    WITHOUT_WIN32=1 ;;
-    --with-kde4)        WITHOUT_KDE4=0 ;;
-    --without-qt4)      WITHOUT_QT4=1 ;;
-    --without-ansi)     WITHOUT_ANSI=1 ;;
-    --help)             CONFIG_HELP=1 ;;
+    --without-curses)    WITHOUT_CURSES=1 ;;
+    --without-gtk)       WITHOUT_GTK=1 ;;
+    --without-win32)     WITHOUT_WIN32=1 ;;
+    --with-kde4)         WITHOUT_KDE4=0 ;;
+    --without-qt4)       WITHOUT_QT4=1 ;;
+    --without-ansi)      WITHOUT_ANSI=1 ;;
+    --with-external-tar) WITH_EXTERNAL_TAR=1 ;;
+    --help)              CONFIG_HELP=1 ;;
 
     --mingw32)          CC=i586-mingw32msvc-cc
                         WINDRES=i586-mingw32msvc-windres
@@ -538,6 +541,10 @@ fi
 
 if [ "$CCLINK" = "" ] ; then
     CCLINK=$CC
+fi
+
+if [ "$WITH_EXTERNAL_TAR" = "1" ] ; then
+    echo "#define CONFOPT_EXTERNAL_TAR 1" >> config.h
 fi
 
 echo >> config.h

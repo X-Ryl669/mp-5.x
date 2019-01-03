@@ -1311,13 +1311,16 @@ mpdm_t mp_load_save_state(const char *m)
 }
 
 
-mpdm_t search_embedded_mpsl_file(mpdm_t args, mpdm_t ctxt)
+#ifndef CONFOPT_EXTERNAL_TAR
+
+static mpdm_t search_embedded_tar(mpdm_t args, mpdm_t ctxt)
 /* searches for embedded MPSL code */
 {
     /* TBD */
     return NULL;
 }
 
+#endif
 
 void mp_startup(int argc, char *argv[])
 {
@@ -1356,17 +1359,20 @@ void mp_startup(int argc, char *argv[])
     if ((ptr = getenv("MP_LIBRARY_PATH")) != NULL)
         mpdm_push(INC, MPDM_MBS(ptr));
 
-#if 0
-    /* embedded MPSL files */
-    mpdm_push(INC, MPDM_X(search_embedded_mpsl_file));
-#endif
-
     /* add installed library path */
     mpdm_push(INC, mpdm_hget_s(mpdm_root(), L"APPDIR"));
 
-    /* add installed library tar */
+#ifdef CONFOPT_EXTERNAL_TAR
+    /* add code library as externally installed tar */
     mpdm_push(INC, mpdm_strcat_s(
         mpdm_hget_s(mpdm_root(), L"APPDIR"), L"/mp.tar"));
+
+#else /* CONFOPT_EXTERNAL_TAR */
+
+    /* add code library as embedded tar */
+    mpdm_push(INC, MPDM_X(search_embedded_tar));
+
+#endif /* CONFOPT_EXTERNAL_TAR */
 
     if (!TRY_DRIVERS()) {
         printf("No usable driver found; exiting.\n");
