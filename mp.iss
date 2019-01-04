@@ -14,7 +14,6 @@ SolidCompression=yes
 [Files]
 Source: "mp-5.exe"; DestDir: "{app}"
 Source: "mp-5c.exe"; DestDir: "{app}"
-Source: "mp.tar"; DestDir: "{app}"
 Source: "doc\*.txt"; DestDir: "{app}\doc"
 Source: "README" ; DestDir: "{app}\doc"
 Source: "AUTHORS" ; DestDir: "{app}\doc"
@@ -22,7 +21,6 @@ Source: "COPYING" ; DestDir: "{app}\doc"
 Source: "RELEASE_NOTES" ; DestDir: "{app}\doc"
 Source: "mp_templates.sample" ; DestDir: "{app}\doc"
 Source: "TODO" ; DestDir: "{app}\doc"
-Source: "mp.reg" ; DestDir: "{app}\doc"
 
 [Icons]
 Name: "{group}\Minimum Profit"; Filename: "{app}\mp-5.exe"
