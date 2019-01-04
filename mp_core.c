@@ -1374,7 +1374,7 @@ void mp_startup(int argc, char *argv[])
     INC = mpdm_hset_s(mpdm_root(), L"INC", MPDM_A(0));
 
     /* if the MP_LIBRARY_PATH environment variable is set,
-       put if before enything else */
+       put it before anything else */
     if ((ptr = getenv("MP_LIBRARY_PATH")) != NULL)
         mpdm_push(INC, MPDM_MBS(ptr));
 
