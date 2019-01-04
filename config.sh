@@ -113,8 +113,18 @@ if [ "$CPP" = "" ] ; then
     which g++ > /dev/null 2>&1 && CPP=g++
 fi
 
+if [ "$LD" = "" ] ; then
+    LD=ld
+fi
+
+if [ "$TAR" = "" ] ; then
+    TAR=tar
+fi
+
 echo "CC=$CC" >> makefile.opts
 echo "CPP=$CPP" >> makefile.opts
+echo "LD=$LD" >> makefile.opts
+echo "TAR=$TAR" >> makefile.opts
 
 # add version
 cat VERSION >> config.h
@@ -547,7 +557,7 @@ if [ "$WITH_EXTERNAL_TAR" = "1" ] ; then
     echo "Disabled"
 else
     echo "test" > tmp.bin
-    ld -r -b binary tmp.bin -o tmp.bin.o
+    $LD -r -b binary tmp.bin -o tmp.bin.o
 
     echo "extern const char _binary_tmp_bin_start;" > .tmp.c
     echo "extern const char _binary_tmp_bin_end;" >> .tmp.c

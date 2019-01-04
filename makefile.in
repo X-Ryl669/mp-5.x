@@ -36,10 +36,10 @@ dep:
 	gcc -MM *.c `cat config.cflags` > makefile.depend
 
 mp.tar: *.mpsl lang/*.mpsl
-	tar cvf mp.tar *.mpsl lang/*.mpsl
+	$(TAR) cvf mp.tar *.mpsl lang/*.mpsl
 
 mp.tar.o: mp.tar
-	ld -r -b binary $< -o $@
+	$(LD) -r -b binary $< -o $@
 
 $(APPNAME): $(OBJS) $(MPDM)/libmpdm.a $(MPSL)/libmpsl.a
 	$(CCLINK) $(CFLAGS) $(OBJS) `cat config.ldflags` -o $@
@@ -106,17 +106,17 @@ docs: $(DOCS)
 
 distcopy: distclean docs
 	mkdir -p $(DIST_TARGET) ; \
-	tar cf - * | (cd $(DIST_TARGET) ; tar xf -) ; \
+	$(TAR) cf - * | (cd $(DIST_TARGET) ; $(TAR) xf -) ; \
 	(cd $(MPDM) ; $(MAKE) distcopy DIST_TARGET=$(DIST_TARGET)/mpdm ) ; \
 	(cd $(MPSL) ; $(MAKE) distcopy DIST_TARGET=$(DIST_TARGET)/mpsl )
 
 dist: distcopy po/minimum-profit.pot build-mo
-	(cd /tmp ; tar czf - $(PROJ)-$(VERSION)/* ) > $(PROJ)-$(VERSION).tar.gz ; \
+	(cd /tmp ; $(TAR) czf - $(PROJ)-$(VERSION)/* ) > $(PROJ)-$(VERSION).tar.gz ; \
 	rm -rf $(DIST_TARGET)
 
 midnight:
 	$(MAKE) distcopy DIST_TARGET=/tmp/mp-midnight
-	(cd /tmp ; tar czf - mp-midnight/* ) > mp-midnight.tar.gz ; \
+	(cd /tmp ; $(TAR) czf - mp-midnight/* ) > mp-midnight.tar.gz ; \
 	rm -rf /tmp/mp-midnight
 
 win32dist: mp-5.exe
