@@ -1328,7 +1328,7 @@ static mpdm_t find_in_embedded_tar(mpdm_t args, mpdm_t ctxt)
     f = mpdm_ref(MPDM_2MBS((wchar_t *)f->data));
     r = mpsl_find_in_embedded_tar((const char *)f->data,
 
-#ifdef CONFOPT_WIN32
+#ifdef CONFOPT_EMBED_NOUNDER
         &binary_mp_tar_start, &binary_mp_tar_end);
 #else
         &_binary_mp_tar_start, &_binary_mp_tar_end);

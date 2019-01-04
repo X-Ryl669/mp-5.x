@@ -554,7 +554,7 @@ else
     echo "extern const char binary_tmp_bin_start;" >> .tmp.c
     echo "extern const char binary_tmp_bin_end;" >> .tmp.c
     echo "int main(void) { " >> .tmp.c
-    echo "#ifdef WIN32" >> .tmp.c
+    echo "#ifdef CONFOPT_EMBED_NOUNDER" >> .tmp.c
     echo "  int c = &binary_tmp_bin_end - &binary_tmp_bin_start;" >> .tmp.c
     echo "#else" >> .tmp.c
     echo "  int c = &_binary_tmp_bin_end - &_binary_tmp_bin_start;" >> .tmp.c
@@ -564,11 +564,19 @@ else
     $CC .tmp.c tmp.bin.o -o .tmp.o 2>> .config.log
 
     if [ $? = 0 ] ; then
-        echo "Yes"
+        echo "Yes (with underscores)"
         MORE_OBJS="mp.tar.o ${MORE_OBJS}"
     else
-        echo "No"
-        WITH_EXTERNAL_TAR=1
+        $CC -DCONFOPT_EMBED_NOUNDER .tmp.c tmp.bin.o -o .tmp.o 2>> .config.log
+
+        if [ $? = 0 ] ; then
+            echo "Yes (without underscores)"
+            MORE_OBJS="mp.tar.o ${MORE_OBJS}"
+            echo "#define CONFOPT_EMBED_NOUNDER 1" >> config.h
+        else
+            echo "No"
+            WITH_EXTERNAL_TAR=1
+        fi
     fi
 
     rm -f tmp.bin tmp.bin.o
