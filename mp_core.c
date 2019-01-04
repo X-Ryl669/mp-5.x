@@ -1368,9 +1368,6 @@ void mp_startup(int argc, char *argv[])
     if ((ptr = getenv("MP_LIBRARY_PATH")) != NULL)
         mpdm_push(INC, MPDM_MBS(ptr));
 
-    /* add installed library path */
-    mpdm_push(INC, mpdm_hget_s(mpdm_root(), L"APPDIR"));
-
 #ifdef CONFOPT_EXTERNAL_TAR
     /* add code library as externally installed tar */
     mpdm_push(INC, mpdm_strcat_s(
