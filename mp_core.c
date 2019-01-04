@@ -1179,7 +1179,6 @@ mpdm_t mp_c_plain_load(mpdm_t args, mpdm_t ctxt)
     int eol = 1;
 
     a = MPDM_A(0);
-    mpdm_ref(a);
 
     /* clean last seen EOL */
     mpdm_hset_s(MP, L"last_seen_eol", NULL);
@@ -1212,8 +1211,6 @@ mpdm_t mp_c_plain_load(mpdm_t args, mpdm_t ctxt)
 
     /* store the last seen EOL */
     mpdm_hset_s(MP, L"last_seen_eol", MPDM_LS(eol == 2 ? L"\r\n" : L"\n"));
-
-    mpdm_unrefnd(a);
 
     return a;
 }
@@ -1324,8 +1321,7 @@ static mpdm_t find_in_embedded_tar(mpdm_t args, mpdm_t ctxt)
     mpdm_t f;
     mpdm_t r = NULL;
 
-    f = mpdm_aget(args, 0);
-    f = mpdm_ref(MPDM_2MBS((wchar_t *)f->data));
+    f = mpdm_ref(MPDM_2MBS(mpdm_string(mpdm_aget(args, 0))));
     r = mpsl_find_in_embedded_tar((const char *)f->data,
 
 #ifdef CONFOPT_EMBED_NOUNDER
