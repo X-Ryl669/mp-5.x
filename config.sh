@@ -5,6 +5,7 @@
 DRIVERS=""
 DRV_OBJS=""
 MORE_OBJS=""
+MORE_TARGETS=""
 APPNAME="mp-5"
 TARGET=""
 
@@ -598,6 +599,7 @@ fi
 
 if [ "$WITH_EXTERNAL_TAR" = "1" ] ; then
     echo "#define CONFOPT_EXTERNAL_TAR 1" >> config.h
+    MORE_TARGETS="mp-dist.tar $MORE_TARGETS"
 fi
 
 echo >> config.h
@@ -614,6 +616,7 @@ echo "APPNAME=$APPNAME" >> makefile.opts
 echo "TARGET=$TARGET" >> makefile.opts
 echo "DRV_OBJS=$DRV_OBJS" >> makefile.opts
 echo "MORE_OBJS=$MORE_OBJS" >> makefile.opts
+echo "MORE_TARGETS=$MORE_TARGETS" >> makefile.opts
 echo "CCLINK=$CCLINK" >> makefile.opts
 echo >> makefile.opts
 

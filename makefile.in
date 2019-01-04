@@ -1,6 +1,6 @@
 # -*- Mode: sh
 
-all: $(TARGET) mp.tar docs $(BUILDMO)
+all: $(TARGET) $(MORE_TARGETS) docs $(BUILDMO)
 
 PROJ=mp
 
@@ -36,7 +36,10 @@ dep:
 	gcc -MM *.c `cat config.cflags` > makefile.depend
 
 mp.tar: *.mpsl lang/*.mpsl
-	$(TAR) cvf mp.tar *.mpsl lang/*.mpsl
+	$(TAR) cvf $@ *.mpsl lang/*.mpsl
+
+mp-dist.tar: *.mpsl lang/*.mpsl
+	$(TAR) cvf $@ *.mpsl lang/*.mpsl
 
 mp.tar.o: mp.tar
 	$(LD) -r -b binary $< -o $@
@@ -63,7 +66,7 @@ mp-5c.exe: mp_core.o $(MORE_OBJS) mpv_win32c.o mp_res.o $(MPDM)/libmpdm.a $(MPSL
 	$(CC) $(CFLAGS) mp_core.o $(MORE_OBJS) mpv_win32c.o mp_res.o `grep -v mwindows config.ldflags` -o $@
 
 clean:
-	rm -f $(TARGET) $(OBJS) mp.tar *.o *.moc tags *.tar.gz *.exe *.zip .installer.c *.1 *.asc
+	rm -f $(TARGET) $(OBJS) mp*.tar *.o *.moc tags *.tar.gz *.exe *.zip .installer.c *.1 *.asc
 	(cd $(MPDM) ; make clean)
 	(cd $(MPSL) ; make clean)
 
@@ -141,8 +144,7 @@ innosetup: mp-5.exe mp-5c.exe
 
 install: $(INSTALL_MSG) installdoc $(INSTALLMO)
 	install -Dm 755 $(APPNAME) $(PREFIX)/bin/$(APPNAME)
-	./mkinstalldirs $(PREFIX)/share/$(APPNAME)
-	install -m 644 mp.tar $(PREFIX)/share/$(APPNAME)
+	[ -f mp-dist.tar ] && ./mkinstalldirs $(PREFIX)/share/$(APPNAME) && install -m 644 mp-dist.tar $(PREFIX)/share/$(APPNAME) || true
 	./mkinstalldirs $(PREFIX)/share/man/man1
 	[ -f $(APPNAME).1 ] && install -m 644 $(APPNAME).1 $(PREFIX)/share/man/man1/$(APPNAME).1 || true
 	( cd $(MPSL) ; make install )
