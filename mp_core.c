@@ -1007,11 +1007,10 @@ mpdm_t mp_draw(mpdm_t doc, int optimize)
     if ((f = mpdm_hget_s(doc, L"render")) != NULL) {
         /* create a context to contain the object itself
            (i.e. call as a method) */
-        mpdm_t ctxt = mpdm_ref(MPDM_A(0));
+        mpdm_t ctxt = MPDM_A(0);
 
         mpdm_push(ctxt, doc);
         r = mpdm_exec_2(f, doc, MPDM_I(optimize), ctxt);
-        mpdm_unref(ctxt);
     }
 
     return r;
@@ -1156,7 +1155,7 @@ mpdm_t mp_c_x2vx(mpdm_t args, mpdm_t ctxt)
 
 mpdm_t mp_c_vpos2pos(mpdm_t args, mpdm_t ctxt)
 {
-    mpdm_t r = mpdm_ref(MPDM_A(2));
+    mpdm_t r = MPDM_A(2);
     int x = mpdm_ival(mpdm_aget(args, 0));
     int y = mpdm_ival(mpdm_aget(args, 1));
 
@@ -1165,7 +1164,7 @@ mpdm_t mp_c_vpos2pos(mpdm_t args, mpdm_t ctxt)
     mpdm_aset(r, MPDM_I(x), 0);
     mpdm_aset(r, MPDM_I(y), 1);
 
-    return mpdm_unrefnd(r);
+    return r;
 }
 
 
