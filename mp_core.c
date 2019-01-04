@@ -2,7 +2,7 @@
 
     Minimum Profit - Programmer Text Editor
 
-    Copyright (C) 1991-2014 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2019 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -404,6 +404,8 @@ static void drw_multiline_regex(mpdm_t a, int attr)
 {
     int n;
 
+    mpdm_ref(a);
+
     for (n = 0; n < mpdm_size(a); n++) {
         mpdm_t r = mpdm_aget(a, n);
         int o = 0;
@@ -461,6 +463,8 @@ static void drw_multiline_regex(mpdm_t a, int attr)
             }
         }
     }
+
+    mpdm_unref(a);
 }
 
 
@@ -556,11 +560,10 @@ static void drw_search_hit(void)
 /* colorize the search hit, if any */
 {
     if (drw_1.last_search != NULL) {
-        mpdm_t l = mpdm_ref(MPDM_A(0));
+        mpdm_t l = MPDM_A(0);
 
         mpdm_aset(l, drw_1.last_search, 0);
         drw_multiline_regex(l, drw_get_attr(L"search"));
-        mpdm_unref(l);
     }
 }
 
@@ -649,8 +652,6 @@ static mpdm_t drw_push_pair(mpdm_t l, int i, int a, wchar_t * tmp)
     if (l == NULL)
         l = MPDM_A(0);
 
-    mpdm_ref(l);
-
     /* finish the string */
     tmp[i] = L'\0';
 
@@ -673,13 +674,9 @@ static mpdm_t drw_push_pair(mpdm_t l, int i, int a, wchar_t * tmp)
     mpdm_push(l, MPDM_I(a));
     mpdm_push(l, MPDM_S(tmp));
 
-    mpdm_unrefnd(l);
-
     return l;
 }
 
-
-#define BUF_LINE 128
 
 static wchar_t drw_char(wchar_t c)
 {
@@ -842,7 +839,7 @@ static void drw_remap_truncate(void)
 
 static mpdm_t drw_remap_to_array(void)
 {
-    mpdm_t r = mpdm_ref(MPDM_A(0));
+    mpdm_t r = MPDM_A(0);
     wchar_t *line = malloc((drw_1.tx + 1) * sizeof(wchar_t));
     int my;
     mpdm_t fmt = NULL;
@@ -857,10 +854,8 @@ static mpdm_t drw_remap_to_array(void)
         int mx = 0;
 
         if (drw_1.xoffset && drw_1.vy + my < drw_1.t_lines) {
-            mpdm_ref(l);
             mpdm_push(l, MPDM_I(drw_1.normal_attr));
             mpdm_push(l, mpdm_fmt(fmt, MPDM_I(drw_1.vy + 1 + my)));
-            mpdm_unrefnd(l);
         }
 
         while (mx < drw_1.tx && drw_2.amap[o] != -1) {
@@ -882,7 +877,7 @@ static mpdm_t drw_remap_to_array(void)
 
     mpdm_unref(fmt);
 
-    return mpdm_unrefnd(r);
+    return r;
 }
 
 
