@@ -5,7 +5,7 @@
 
     Text User Interface.
 
-    Copyright (C) 1991-2017 Angel Ortega <angel@triptico.com> et al.
+    Copyright (C) 1991-2019 Angel Ortega <angel@triptico.com> et al.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -167,6 +167,12 @@ sub mp.tui.readline(prompt, history, default, flags)
 		if (k eq 'end') {
 			x = size(r);
 		}
+        else
+        if (k eq 'insert-raw-string') {
+            r = splice(r, mp.raw_string, x, 0);
+            r = r[0];
+            x++;
+        }
 		else
 		if (k eq 'tab' && flags.file) {
             if (regex(r, '/^~/') && ENV['HOME']) {
