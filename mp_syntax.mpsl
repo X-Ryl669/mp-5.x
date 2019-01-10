@@ -230,24 +230,6 @@ mp.syntax.c = {
 };
 
 
-mp.syntax.conf = {
-	'id'		=>	'conf',
-	'name'		=>	'Config file',
-	'filenames'	=>	[ '/\.conf$/i', '/\.cfg$/i', '/^.*\/?\.[0-9a-z_-]+rc$/i' ],
-	'defs'		=>	[
-		'word1',	[ '/^\[.+\]$/m' ],
-		'word2',	[ "/^[^:=\n]+[:=]/m" ],
-		'quotes',	[
-			"/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/",	/* double-quoted strings */
-			"/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",		/* single-quoted strings */
-			"/\<-?[0-9]+\>/",			/* numbers */
-			"/\<0x[0-9a-f]+\>/i"			/* hex numbers */
-		],
-		'comments',	[ "/#.*$/m" ]
-	]
-};
-
-
 mp.syntax.php = {
 	'id'		=>	'php',
 	'name'		=>	'PHP',
