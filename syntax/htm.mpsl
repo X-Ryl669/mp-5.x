@@ -1,1 +1,1 @@
-load("syntax/html.mpsl");
+mp.syntax.html || load("syntax/html.mpsl");

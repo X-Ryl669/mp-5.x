@@ -1,1 +1,1 @@
-load("syntax/sh.mpsl");
+mp.syntax.sh || load("syntax/sh.mpsl");
