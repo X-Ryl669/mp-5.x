@@ -762,8 +762,7 @@ local mp_modules = [
     'crypt',
     'session',
     'build',
-    'writing',
-    'dir'
+    'writing'
 ];
 
 foreach (m, mp_modules) {

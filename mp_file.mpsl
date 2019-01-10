@@ -136,6 +136,13 @@ mp.actions['open'] = sub (d, filename) {
     return filename;
 };
 
+mp.actions['open_folder'] = sub {
+    local f;
+
+    if ((f = mp_drv.openfolder(L("Folder to open"))) != NULL)
+        mp.actions.open(NULL, f);
+};
+
 mp_doc.actions['revert'] = sub (d) {
     /* save current name */
     local p = d.name;
@@ -389,6 +396,7 @@ mp.actdesc['suspend']            = LL("Suspend");
 mp.actdesc['close']              = LL("Close");
 mp.actdesc['revert']             = LL("Revert");
 mp.actdesc['close_all']          = LL("Close all");
+mp.actdesc['open_folder']        = LL("Open folder...");
 
 mp.actdesc['open_config_file']   = LL("Edit configuration file");
 mp.actdesc['sync']               = LL("Save modified texts");
@@ -751,6 +759,10 @@ sub mp.open(filename, password)
         if (s[2] & 0040000) {
             /* it's a directory: show it */
             ERRNO = NULL;
+
+            /* load on demand */
+            if (mp_doc_dir == NULL)
+                load("mp_dir.mpsl");
 
             d = mp.add(new(mp_doc_dir, { name: filename }));
 

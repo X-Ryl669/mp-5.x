@@ -5,7 +5,7 @@
 
     Directory edition.
 
-    Copyright (C) 2012 Angel Ortega <angel@triptico.com>
+    Copyright (C) 2012/2019 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -25,21 +25,6 @@
 
 */
 
-/** editor actions **/
-
-mp.actions['open_folder'] = sub {
-    local f;
-
-    if ((f = mp_drv.openfolder(L("Folder to open"))) != NULL) {
-        local d = mp.add(new(mp_doc_dir, { name: f }));
-        d->setup();
-    }
-};
-
-
-/** action descriptions **/
-
-mp.actdesc['open_folder'] = LL("Open folder...");
 
 /** mp_doc_dir subclass **/
 
