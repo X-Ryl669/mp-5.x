@@ -4,7 +4,7 @@
 
     Code common to Qt4 and KDE4 drivers.
 
-    Copyright (C) 2009/2018 Angel Ortega <angel@triptico.com>
+    Copyright (C) 2009/2019 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -792,6 +792,9 @@ void MPArea::keyPressEvent(QKeyEvent * event)
             break;
         case 'Z':
             ptr = (wchar_t *) L"alt-z";
+            break;
+        case '-':
+            ptr = (wchar_t *) L"alt-minus";
             break;
         case Qt::Key_Return:
         case Qt::Key_Enter:
