@@ -930,6 +930,17 @@ mp.syntax.json = {
 
 /** code **/
 
+sub get_syntax(key)
+{
+    local r = NULL;
+
+    if (exists(mp.syntax, key))
+        r = mp.syntax[key];
+
+    return r;
+}
+
+
 sub mp_doc.detect_syntax(doc)
 /* tries to detect the syntax of a document */
 {
@@ -943,6 +954,20 @@ sub mp_doc.detect_syntax(doc)
         foreach (ext, s.filenames) {
             if (regex(doc.name, ext)) {
                 doc.syntax = s;
+                return doc;
+            }
+        }
+    }
+
+    local l = doc.txt.lines[0];
+
+    /* test for she-bangs */
+    if (regex(l, "/^#!/")) {
+        /* strip paths and possible command-line options */
+        l = l->sregex("/^.*\//")->sregex("/ -.*/g");
+
+        foreach (e, split(l, " ")) {
+            if ((doc.syntax = get_syntax(e))) {
                 return doc;
             }
         }
