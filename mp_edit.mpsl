@@ -234,6 +234,7 @@ mp.actdesc['tab_options']           = LL("Tab options...");
 mp.actdesc['toggle_insert']         = LL("Toggle insert/overwrite mode");
 mp.actdesc['insert_page_break']     = LL("Insert page break character (FF)");
 mp.actdesc['insert_m_dash']         = LL("Insert m-dash character");
+mp.actdesc['insert_raw_string']     = LL("Insert raw string");
 
 /** code **/
 /**
