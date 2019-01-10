@@ -11,3 +11,4 @@ po/*.mo
 po/minimum-profit.pot
 *.[oa]
 *.moc
+mp.tar
