@@ -51,8 +51,7 @@ sub mp_doc.actions.help(d) {
         hd.txt.lines    = h;
         hd.txt.y        = 0;
         hd.read_only    = 1;
-
-        hd.syntax = d.syntax;
+        hd.syntax       = d.syntax;
     }
 }
 
@@ -229,36 +228,6 @@ mp.syntax.c = {
     ]
 };
 
-
-mp.syntax.diff = {
-    id:         'diff',
-    name:       'diff',
-    filenames:  [
-        '/\.diff$/i',
-        '/\.patch$/i'
-    ],
-    defs: [
-        'word1',    [ '/^\+.+$/m' ],
-        'word2',    [ '/^\-.+$/m' ],
-        'quotes',   [ '/^@@.+@@.*$/m' ]
-    ],
-    section:        [ '/^@@/' ],
-    detect:         sub (d) {
-        local r, n;
-
-        n = 0;
-        while (n < 100) {
-            if (regex(d.txt.lines[n++], '/^--- /'))
-                break;
-        }
-
-        if (regex(d.txt.lines[n++], '/^\+\+\+ /') &&
-            regex(d.txt.lines[n++], '/^@@ /'))
-            r = 1;
-
-        return r;
-    }
-};
 
 /** code **/
 

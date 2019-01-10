@@ -5,7 +5,7 @@
 
     Version Control System support
 
-    Copyright (C) 1991-2018 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2019 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -40,8 +40,8 @@ mp.vcs = {
             "git add '%s'"      => NULL,
             'git log'           => { unique_log: 1 },
             "git log '%s'"      => { unique_log: 1 },
-            'git diff'          => { unique_log: 1 },
-            "git diff '%s'"     => { unique_log: 1 },
+            'git diff'          => { unique_log: 1, diff: 1 },
+            "git diff '%s'"     => { unique_log: 1, diff: 1 },
             'git status'        => NULL,
             "git blame '%s'"    => { unique_log: 1 },
             "git stash"         => NULL,
@@ -55,7 +55,7 @@ mp.vcs = {
         id:     'SVN',
         check:  [ '.svn', '../.svn', '../../.svn', '../../../.svn' ],
         opts:   {
-            'svn diff'          => { unique_log: 1 },
+            'svn diff'          => { unique_log: 1, diff: 1 },
             'svn status'        => NULL,
             'svn log'           => { unique_log: 1 },
             "svn diff '%s'"     => NULL,
@@ -71,7 +71,7 @@ mp.vcs = {
         id:     'Mercurial',
         check:  [ '.hg', '../.hg', '../../.hg' ],
         opts:   {
-            'hg diff'          => { unique_log: 1 },
+            'hg diff'          => { unique_log: 1, diff: 1 },
             'hg status'        => NULL,
             'hg log'           => { unique_log: 1 },
             "hg diff '%s'"     => NULL,
@@ -159,7 +159,10 @@ sub vcs_form()
                 log->actions.exec_command(cmd);
 
                 if (opts.unique_log) {
-                    log->detect_syntax()->move_bof();
+                    if (opts.diff)
+                        log.syntax = mp.get_syntax("diff");
+
+                    log->move_bof();
                 }
                 else
                     log->insert_newline();
