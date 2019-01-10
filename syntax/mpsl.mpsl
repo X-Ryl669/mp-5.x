@@ -1,0 +1,44 @@
+{
+    id:         'mpsl',
+    name:       'MPSL',
+    filenames:  [ '/\.mpsl?$/i' ],
+    defs:       [
+        'word1', [
+            mp.syn_token_list(
+                [
+                    'if', 'else', 'while', 'foreach', 'for',
+                    'sub', 'break', 'return', 'eq', 'ne'
+                ]
+            ),
+            mp.syn_token_list(keys(MPSL.CORE))
+        ],
+        'word2', [
+            "/(NULL|local|global|this)/"
+        ],
+        'word3', [
+            '/]/',
+            '/[\.-=<>\?\+\*\/\!\%&\|\{\}\[]+/'
+        ],
+        'quotes', [
+            /* from http://ad.hominem.org/log/2005/05/quoted_strings.php */
+            "/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/", /* double-quoted strings */
+            "/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",     /* single-quoted strings */
+            "/\<-?[0-9]+\>/",                           /* numbers */
+            "/\<0x[0-9a-f]+\>/i",                       /* hex numbers */
+            "/\<0b[0-1]+\>/i",                          /* binary numbers */
+            '/\w+\s*:/',                                /* JS-type hashes */
+            "/\<[0-9[:upper:]_]+\>/"                    /* all-caps words */
+        ],
+        'word3',    [
+            '/:/'
+        ],
+        'comments', [
+            [ '|/\*|', '|\*/|' ]                        /* C-like */
+        ],
+        'documentation', [
+            [ "|/\*\*\n|", '|\*/|' ],                   /* mp_doccer */
+            '/^/\*\*.*\*\*/$/m'                         /* section mark */
+        ]
+    ],
+    section:    [ '/(^[A-Za-z_]|^\/\*\*.*\*\*\/$)/' ]
+};
