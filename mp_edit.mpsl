@@ -211,6 +211,7 @@ mp_doc.keycodes['f4']               = "word_wrap_paragraph";
 mp_doc.keycodes['insert']           = "toggle_insert";
 mp_doc.keycodes['insert-raw-string'] = "insert_raw_string";
 mp_doc.keycodes['alt-minus']        = "insert_m_dash";
+mp_doc.keycodes['alt-kp-minus']     = "insert_m_dash";
 
 /** action descriptions **/
 

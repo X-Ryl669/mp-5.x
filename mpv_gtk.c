@@ -1565,6 +1565,9 @@ static gint key_press_event(GtkWidget * widget, GdkEventKey * event,
             case 'Z':
                 ptr = L"alt-z";
                 break;
+            case '-':
+                ptr = L"alt-minus";
+                break;
             }
         }
     }
