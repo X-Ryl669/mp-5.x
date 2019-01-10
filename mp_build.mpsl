@@ -122,7 +122,7 @@ sub mp.build_execute(target)
         log.txt.mod = 0;
         log.read_only = 1;
 
-        log.syntax = mp.syntax.make_output;
+        log.syntax = mp.get_syntax('make_output');
 
         log->move_eof();
         log->move_bol();

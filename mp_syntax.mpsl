@@ -897,7 +897,7 @@ mp.syntax.json = {
 
 /** code **/
 
-sub get_syntax(key)
+sub mp.get_syntax(key)
 {
     local r = NULL;
 
@@ -912,41 +912,46 @@ sub mp_doc.detect_syntax(doc)
 /* tries to detect the syntax of a document */
 {
     doc.syntax = NULL;
+    local v;
 
-    /* loops the syntax highlight definitions */
-    foreach (n, keys(mp.syntax)) {
-        local s = mp.syntax[n];
+    /* try extensions */
+    if ((v = doc.name->regex("/\.[^.]+$/"))) {
+        v = v->sregex("/\./");
+        doc.syntax = mp.get_syntax(v);
+    }
 
-        /* test the extensions */
-        foreach (ext, s.filenames) {
-            if (regex(doc.name, ext)) {
+    /* try full name (Makefile, etc.) */
+    if (doc.syntax == NULL) {
+        if ((v = doc.name->regex("/[^/]+$/"))) {
+            doc.syntax = mp.get_syntax(v);
+        }
+    }
+
+    if (doc.syntax == NULL) {
+        /* test for she-bangs */
+        v = doc.txt.lines[0];
+
+        if (regex(v, "/^#!/")) {
+            /* strip paths and possible command-line options */
+            v = v->sregex("/^.*\//")->sregex("/ -.*/g");
+
+            foreach (e, split(v, " ")) {
+                if ((doc.syntax = mp.get_syntax(e))) {
+                    break;
+                }
+            }
+        }
+    }
+
+    /* not yet? try the 'detect' subroutine */
+    if (doc.syntax == NULL) {
+        foreach (n, keys(mp.syntax)) {
+            local s = mp.syntax[n];
+
+            if (is_exec(s.detect) && s.detect(doc)) {
                 doc.syntax = s;
-                return doc;
+                break;
             }
-        }
-    }
-
-    local l = doc.txt.lines[0];
-
-    /* test for she-bangs */
-    if (regex(l, "/^#!/")) {
-        /* strip paths and possible command-line options */
-        l = l->sregex("/^.*\//")->sregex("/ -.*/g");
-
-        foreach (e, split(l, " ")) {
-            if ((doc.syntax = get_syntax(e))) {
-                return doc;
-            }
-        }
-    }
-
-    /* not by extension? try the 'detect' subroutine */
-    foreach (n, keys(mp.syntax)) {
-        local s = mp.syntax[n];
-
-        if (is_exec(s.detect) && s.detect(doc)) {
-            doc.syntax = s;
-            return doc;
         }
     }
 
