@@ -315,7 +315,7 @@ sub dump(v)
     d->move_eof()->insert(dumper(v));
     d.txt.mod   = 0;
     d.read_only = 1;
-    d.syntax    = mp.syntax.mpsl;
+    d.syntax    = mp.get_syntax("mpsl");
 }
 
 
