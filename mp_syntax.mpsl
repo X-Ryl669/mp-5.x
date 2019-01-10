@@ -872,37 +872,23 @@ mp.syntax.js = {
 };
 
 
-mp.syntax.json = {
-    id:         'json',
-    name:       'JSON',
-    filenames:  [
-        '/\.json$/i'
-    ],
-    defs:       [
-        'word1', [
-            "/\<-?[0-9]+\>/"
-        ],
-        'quotes', [
-            "/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/"
-        ],
-        'word2', [
-            "/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"\s*:/"
-        ],
-        'word3', [
-            "/\<(true|false|null)\>/"
-        ]
-    ]
-};
-
-
 /** code **/
 
 sub mp.get_syntax(key)
 {
     local r = NULL;
 
+    key = lc(key);
+
     if (exists(mp.syntax, key))
         r = mp.syntax[key];
+    else {
+        /* try on-demand load */
+        if ((r = eval("load('syntax/" ~ key ~ ".mpsl');")) != NULL)
+            mp.syntax[key] = r;
+
+        ERROR = NULL;
+    }
 
     return r;
 }

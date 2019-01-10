@@ -35,11 +35,11 @@ $(MPSL)/libmpsl.a: $(MPDM)/libmpdm.a
 dep:
 	gcc -MM *.c `cat config.cflags` > makefile.depend
 
-mp.tar: *.mpsl lang/*.mpsl
-	$(TAR) cvf $@ *.mpsl lang/*.mpsl
+mp.tar: *.mpsl lang/*.mpsl syntax/*.mpsl
+	$(TAR) cvf $@ *.mpsl lang/*.mpsl syntax/*.mpsl
 
-mp-dist.tar: *.mpsl lang/*.mpsl
-	$(TAR) cvf $@ *.mpsl lang/*.mpsl
+mp-dist.tar: *.mpsl lang/*.mpsl syntax/*.mpsl
+	$(TAR) cvf $@ *.mpsl lang/*.mpsl syntax/*.mpsl
 
 mp.tar.o: mp.tar
 	$(LD) -r -b binary $< -o $@
