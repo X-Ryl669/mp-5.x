@@ -637,16 +637,8 @@ sub mp.process_cmdline()
         if (o eq '-t')
             mp.open_tag(shift(ARGV));
         else
-        if (o eq '-x') {
-            local s = shift(ARGV);
-
-            local d = new(mp_hex_view, { name: s })->init();
-
-            if (d == NULL)
-                ERROR = sprintf(L("Cannot open '%s'"), s);
-            else
-                mp.add(d);
-        }
+        if (o eq '-x')
+            mp.actions.hex_view(NULL, shift(ARGV));
         else
         if (o eq '-txt')
             mp.config.text_mode = 1;
@@ -733,8 +725,8 @@ sub mp.test_versions()
 {
     local mpdm = MPDM();
 
-    mp.assert_version(mpdm.version, '2.1.4', 'MPDM');
-    mp.assert_version(MPSL.VERSION, '2.2.2', 'MPSL');
+    mp.assert_version(mpdm.version, '2.1.8', 'MPDM');
+    mp.assert_version(MPSL.VERSION, '2.2.5', 'MPSL');
 }
 
 
