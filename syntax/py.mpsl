@@ -1,0 +1,47 @@
+{
+    'id'        =>  'python',
+    'name'      =>  'Python',
+    'help'      =>  [
+                        "python -c 'help(%s)'",
+                        "python -c 'import %s as m; help(m)'"
+                    ],
+    'defs'      =>  [
+        'word1',    [
+            mp.syn_token_list( [
+                "and", "as", "assert", "break", "class", "continue",
+                "def", "del", "elif", "else", "except", "exec",
+                "finally", "for", "from", "if", "import", "in",
+                "is", "lambda", "not", "or", "pass", "print",
+                "raise", "return", "try", "while", "with", "yield"
+                ]
+            )
+        ],
+        'word2',  [
+            '/global/', '/\$\w+/', '/__[a-z]+__/',
+            mp.syn_token_list([
+                "True", "False", "None", "self",
+                "dict", "list", "set", "bool",
+                "int", "float", "str", "repr"
+                ]
+            )
+        ],
+        'word3', [
+            '/]/',
+            '/[-=<>:\.\?\+\*\!\%&\|{}\[\/]+/'
+        ],
+        'quotes',	[
+            "/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/", /* double-quoted strings */
+            "/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",     /* single-quoted strings */
+            "/\<-?[0-9]+\>/",                           /* numbers */
+            "/\<0x[0-9a-f]+\>/i",                       /* hex numbers */
+            "/\<[0-9[:upper:]_]+\>/"                    /* all-caps words */
+        ],
+        'comments',         [ "/#.*$/m" ],
+        'documentation',    [ [ '/"""/m', '/"""$/m' ] ]
+    ],
+    'section'   =>  [ '/^[ \t]*(def|class) /' ],
+    'build_targets' => [
+        'python %s',
+        'python -m py_compile %s && echo "Syntax OK"'
+    ]
+};

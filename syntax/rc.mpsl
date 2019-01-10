@@ -1,0 +1,21 @@
+{
+    'id'        =>  'rc',
+    'name'     => 'Resource file',
+    'defs'      => [
+        'word1',    [ ],
+        'word2',    [ ],
+        'quotes',   [
+            /* from http://ad.hominem.org/log/2005/05/quoted_strings.php */
+            "/\"([^\"\\\\\n]*(\\\\.[^\"\\\\\n]*)*)\"/", /* double-quoted strings */
+            "/'([^'\\\\\n]*(\\\\.[^'\\\\\n]*)*)'/",     /* single-quoted strings */
+            "/\<-?[0-9]+\>/",                           /* numbers */
+            "/\<0x[0-9a-f]+\>/i",                       /* hex numbers */
+            "/\<[0-9[:upper:]_]+\>/"                    /* all-caps words */
+        ],
+        'comments', [
+            [ '|/\*|', '|\*/|' ],                       /* C-like */
+            '|//.*$|m',                                 /* C++ */
+            '/^\s*#[a-z]+/m'                            /* CPP directives */
+        ]
+    ]
+};
