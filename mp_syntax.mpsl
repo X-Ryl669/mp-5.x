@@ -271,12 +271,6 @@ mp.syntax.mpsl = {
             '/^/\*\*.*\*\*/$/m'                         /* section mark */
         ]
     ],
-    detect: sub (d) {
-        /* take the first line */
-        local f = d.txt.lines[0];
-
-        return regex(f, '|^#!\s*/usr/(local/)?bin/(env )?mpsl|');
-    },
     section:    [ '/(^[A-Za-z_]|^\/\*\*.*\*\*\/$)/' ]
 };
 
@@ -322,12 +316,6 @@ mp.syntax.nh3 = {
             '/^/\*\*.*\*\*/$/m'                         /* section mark */
         ]
     ],
-    detect: sub (d) {
-        /* take the first line */
-        local f = d.txt.lines[0];
-
-        return regex(f, '|^#!.*nh3|');
-    },
     section:    [ '/(^[A-Za-z_]|^\/\*\*.*\*\*\/$)/' ],
     build_targets: [
         "nh3 %s",
@@ -413,13 +401,6 @@ mp.syntax.perl = {
 				"/^=cut$/m" ]			/* POD */
 		]
 	],
-	'detect'	=>	sub (d) {
-		/* take the first line */
-		local f = d.txt.lines[0];
-
-		/* is it a 'she-bang' for Perl? */
-		return regex(f, '/^#!\s*/usr/bin/(env )?perl/');
-	},
 	'section'	=>	[ '/(^sub \w+|^package|^## )/' ],
     'build_targets' => [
         'perl %s',
@@ -631,13 +612,6 @@ mp.syntax.python = {
 		'comments',		[ "/#.*$/m" ],
 		'documentation',	[ [ '/"""/m', '/"""$/m' ] ]
 	],
-	'detect'	=>	sub (d) {
-		/* take the first line */
-		local f = d.txt.lines[0];
-
-		/* is it a 'she-bang'? */
-		return regex(f, '/^#!\s*/usr/bin/(env )?python/');
-	},
 	'section'	=>	[ '/^[ \t]*(def|class) /' ],
     'build_targets' => [
         'python %s',
@@ -672,14 +646,7 @@ mp.syntax.ruby = {
 			[ "/`/", "/`/" ]			/* backticks */
 		],
 		'comments',	[ "/#.*$/m" ]
-	],
-	'detect'	=>	sub (d) {
-		/* take the first line */
-		local f = d.txt.lines[0];
-
-		/* is it a 'she-bang'? */
-		return regex(f, '/^#!\s*/usr/bin/(env )?ruby/');
-	}
+	]
 };
 
 mp.syntax.diff = {
