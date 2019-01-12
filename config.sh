@@ -37,7 +37,10 @@ while [ $# -gt 0 ] ; do
     --without-gtk)       WITHOUT_GTK=1 ;;
     --without-win32)     WITHOUT_WIN32=1 ;;
     --with-kde4)         WITHOUT_KDE4=0 ;;
+    --without-qt)        WITHOUT_QT5=1 && WITHOUT_QT4=1 ;;
     --without-qt4)       WITHOUT_QT4=1 ;;
+    --without-qt5)       WITHOUT_QT5=1 ;;
+
     --without-ansi)      WITHOUT_ANSI=1 ;;
     --with-external-tar) WITH_EXTERNAL_TAR=1 ;;
     --help)              CONFIG_HELP=1 ;;
@@ -55,7 +58,7 @@ while [ $# -gt 0 ] ; do
 
     --prefix)           PREFIX=$2 ; shift ;;
     --prefix=*)         PREFIX=`echo $1 | sed -e 's/--prefix=//'` ;;
-    --with-moc=*)       QT4MOC=`echo $1 | sed -e 's/--with-moc=//'` ;;
+    --with-moc=*)       MOC=`echo $1 | sed -e 's/--with-moc=//'` ;;
     esac
 
     shift
@@ -69,8 +72,10 @@ if [ "$CONFIG_HELP" = "1" ] ; then
     echo "--without-gtk         Disable GTK interface detection."
     echo "--without-win32       Disable win32 interface detection."
     echo "--with-kde4           Enable KDE4 interface detection."
+    echo "--without-qt          Disable Qt interface detection."
     echo "--without-qt4         Disable Qt4 interface detection."
-    echo "--with-moc            Path to your QT4 moc. Ie: --with-moc=/usr/lib64/qt4/bin/moc"
+    echo "--without-qt5         Disable Qt5 interface detection."
+    echo "--with-moc            Path to your Qt moc. Ie: --with-moc=/usr/lib64/qt4/bin/moc"
     echo "--without-ansi        Disable ANSI terminal interface detection."
     echo "--without-unix-glob   Disable glob.h usage (use workaround)."
     echo "--with-included-regex Use included regex code (gnu_regex.c)."
@@ -401,38 +406,34 @@ if [ "$WITHOUT_QT5" = "1" ] ; then
 else
     if which pkg-config > /dev/null 2>&1
     then
-        if which moc-qt5 > /dev/null 2>&1
-        then
-            MOC=moc-qt5
-            echo "MOC=$MOC" >> makefile.opts
+        [ -z "$MOC" ] && which moc-qt5 > /dev/null 2>&1 && MOC=moc-qt5
+        [ -z "$MOC" ] && MOC=moc
+        echo "MOC=$MOC" >> makefile.opts
 
-            TMP_CFLAGS="$(pkg-config --cflags Qt5Widgets) -fPIC"
-            TMP_LDFLAGS=$(pkg-config --libs Qt5Widgets)
+        TMP_CFLAGS="$(pkg-config --cflags Qt5Widgets) -fPIC"
+        TMP_LDFLAGS=$(pkg-config --libs Qt5Widgets)
 
-            echo "#include <QtWidgets>" > .tmp.cpp
-            echo "int main(int argc, char *argv[]) { new QApplication(argc, argv) ; return 0; } " >> .tmp.cpp
+        echo "#include <QtWidgets>" > .tmp.cpp
+        echo "int main(int argc, char *argv[]) { new QApplication(argc, argv) ; return 0; } " >> .tmp.cpp
  
-            echo "$CPP $TMP_CFLAGS .tmp.cpp $TMP_LDFLAGS -o .tmp.o" >> .config.log
-            $CPP $TMP_CFLAGS .tmp.cpp $TMP_LDFLAGS -o .tmp.o 2>> .config.log
+        echo "$CPP $TMP_CFLAGS .tmp.cpp $TMP_LDFLAGS -o .tmp.o" >> .config.log
+        $CPP $TMP_CFLAGS .tmp.cpp $TMP_LDFLAGS -o .tmp.o 2>> .config.log
 
-            if [ $? = 0 ] ; then
-                echo $TMP_CFLAGS >> config.cflags
-                echo $TMP_LDFLAGS >> config.ldflags
+        if [ $? = 0 ] ; then
+            echo $TMP_CFLAGS >> config.cflags
+            echo $TMP_LDFLAGS >> config.ldflags
 
-                echo "#define CONFOPT_QT5 1" >> config.h
-                echo "OK"
+            echo "#define CONFOPT_QT5 1" >> config.h
+            echo "OK"
 
-                DRIVERS="qt5 $DRIVERS"
-                DRV_OBJS="mpv_qt4.o $DRV_OBJS"
-                if [ "$CCLINK" = "" ] ; then
-                    CCLINK="g++"
-                fi
-
-                WITHOUT_QT4=1
-                WITHOUT_GTK=1
-            else
-                echo "No"
+            DRIVERS="qt5 $DRIVERS"
+            DRV_OBJS="mpv_qt4.o $DRV_OBJS"
+            if [ "$CCLINK" = "" ] ; then
+                CCLINK="g++"
             fi
+
+            WITHOUT_QT4=1
+            WITHOUT_GTK=1
         else
             echo "No"
         fi
@@ -450,12 +451,8 @@ if [ "$WITHOUT_QT4" = "1" ] ; then
 else
     if which pkg-config > /dev/null 2>&1
     then
-	if [ ! $QT4MOC ]; then
-		MOC="moc"
-	else
-        	MOC="$QT4MOC"
-	fi
-        which moc-qt4 > /dev/null 2>&1 && MOC=moc-qt4
+        [ -z "$MOC" ] && which moc-qt4 > /dev/null 2>&1 && MOC=moc-qt4
+        [ -z "$MOC" ] && MOC=moc
         echo "MOC=$MOC" >> makefile.opts
 
         TMP_CFLAGS=`sh -c 'pkg-config --cflags QtGui' 2>/dev/null`
