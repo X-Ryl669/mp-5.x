@@ -1780,12 +1780,35 @@ static gint motion_notify_event(GtkWidget * widget, GdkEventMotion * event,
 }
 
 
-static void drag_data_received(GtkWidget * widget, GdkDragContext * dc,
-                               gint x, gint y, GtkSelectionData * data,
+static void drag_data_received(GtkWidget *widget, GdkDragContext *dc,
+                               gint x, gint y, GtkSelectionData *data,
                                guint info, guint time)
 /* 'drag_data_received' handler */
 {
-    printf("drag_data_received (unsupported)\n");
+    char *ptr;
+    mpdm_t a = MPDM_A(1);
+
+    /* get data */
+    ptr = gtk_selection_data_get_text(data);
+
+    /* strip URI crap */
+    if (strncmp(ptr, "file://", 7) == 0)
+        ptr = strdup(ptr + 7);
+    else
+        ptr = strdup(ptr);
+
+    /* strip possible EOLs */
+    if (ptr[strlen(ptr) - 1] == '\n')
+        ptr[strlen(ptr) - 1] = '\0';
+
+    mpdm_aset(a, MPDM_MBS(ptr), 0);
+    mpdm_hset_s(MP, L"dropped_files", a);
+
+    free(ptr);
+    mp_process_event(MPDM_LS(L"dropped-files"));
+    gtk_drv_render(mp_active(), 1);
+
+    gtk_drag_finish(dc, TRUE, TRUE, data);
 }
 
 
