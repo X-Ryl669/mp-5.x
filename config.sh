@@ -407,7 +407,7 @@ else
     if which pkg-config > /dev/null 2>&1
     then
         [ -z "$MOC" ] && which moc-qt5 > /dev/null 2>&1 && MOC=moc-qt5
-        [ -z "$MOC" ] && MOC=moc
+        [ -z "$MOC" ] && MOC="moc -qt5"
         echo "MOC=$MOC" >> makefile.opts
 
         TMP_CFLAGS="$(pkg-config --cflags Qt5Widgets) -fPIC"
@@ -452,7 +452,7 @@ else
     if which pkg-config > /dev/null 2>&1
     then
         [ -z "$MOC" ] && which moc-qt4 > /dev/null 2>&1 && MOC=moc-qt4
-        [ -z "$MOC" ] && MOC=moc
+        [ -z "$MOC" ] && MOC="moc -qt4"
         echo "MOC=$MOC" >> makefile.opts
 
         TMP_CFLAGS=`sh -c 'pkg-config --cflags QtGui' 2>/dev/null`
