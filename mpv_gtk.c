@@ -1785,26 +1785,22 @@ static void drag_data_received(GtkWidget *widget, GdkDragContext *dc,
                                guint info, guint time)
 /* 'drag_data_received' handler */
 {
-    char *ptr;
-    mpdm_t a = MPDM_A(1);
+    mpdm_t v;
 
     /* get data */
-    ptr = gtk_selection_data_get_text(data);
+    v = MPDM_MBS((char *)gtk_selection_data_get_text(data));
 
     /* strip URI crap */
-    if (strncmp(ptr, "file://", 7) == 0)
-        ptr = strdup(ptr + 7);
-    else
-        ptr = strdup(ptr);
+    v = mpdm_sregex(v, MPDM_LS(L"!file://!g"), NULL, 0);
 
-    /* strip possible EOLs */
-    if (ptr[strlen(ptr) - 1] == '\n')
-        ptr[strlen(ptr) - 1] = '\0';
+    /* split */
+    v = mpdm_split_s(v, L"\n");
 
-    mpdm_aset(a, MPDM_MBS(ptr), 0);
-    mpdm_hset_s(MP, L"dropped_files", a);
+    /* drop last element, as it's an empty string */
+    mpdm_adel(v, -1);
 
-    free(ptr);
+    mpdm_hset_s(MP, L"dropped_files", v);
+
     mp_process_event(MPDM_LS(L"dropped-files"));
     gtk_drv_render(mp_active(), 1);
 
