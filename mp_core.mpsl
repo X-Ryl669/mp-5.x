@@ -529,15 +529,9 @@ sub mp.menu_label(action)
     if (action ne '-') {
         l = L(mp.actdesc[action]) || action;
 
-        local ks = [];
-
-        /* look for this action in mp_doc keycodes */
-        foreach (i, mp_doc.keycodes->grep(sub(k, v) {v eq action;})->keys())
-            push(ks, i);
-
-        /* look now in global keycodes */
-        foreach (i, mp.keycodes->grep(sub(k, v) {v eq action;})->keys())
-            push(ks, i);
+        /* search this action in mp_doc and global keycodes */
+        local ks = (mp_doc.keycodes ~ mp.keycodes)->
+            grep(sub(k, v) { v eq action; })->keys();
 
         if (size(ks))
             l = l ~ ' [' ~ join(ks, ', ') ~ ']';
