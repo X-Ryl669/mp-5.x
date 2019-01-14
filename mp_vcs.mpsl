@@ -86,14 +86,12 @@ mp.vcs = {
 };
 
 
-sub vcs_form()
+sub mp.vcs_form()
 {
     local v = NULL;
 
     /* find which VCS apply to current directory */
-    foreach (k, keys(mp.vcs)) {
-        local n = mp.vcs[k];
-
+    foreach (n, mp.vcs) {
         foreach (d, n.check) {
             if (stat(d) != NULL) {
                 v = n;

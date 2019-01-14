@@ -199,7 +199,7 @@ mp.actions['vcs'] = sub {
     if (mp_doc_vcs == NULL)
         load("mp_vcs.mpsl");
 
-    vcs_form();
+    mp.vcs_form();
 };
 
 
