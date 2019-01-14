@@ -410,8 +410,8 @@ else
         [ -z "$MOC" ] && MOC="moc -qt5"
         echo "MOC=$MOC" >> makefile.opts
 
-        TMP_CFLAGS="$(pkg-config --cflags Qt5Widgets) -fPIC"
-        TMP_LDFLAGS=$(pkg-config --libs Qt5Widgets)
+        TMP_CFLAGS="`sh -c 'pkg-config --cflags Qt5Widgets' 2>/dev/null` -fPIC"
+        TMP_LDFLAGS="`sh -c 'pkg-config --libs Qt5Widgets' 2>/dev/null`"
 
         echo "#include <QtWidgets>" > .tmp.cpp
         echo "int main(int argc, char *argv[]) { new QApplication(argc, argv) ; return 0; } " >> .tmp.cpp
