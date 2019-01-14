@@ -246,6 +246,8 @@ static void build_colors(void)
 
         ansi_attrs[n] = cp;
     }
+
+    mpdm_unref(l);
 }
 
 
