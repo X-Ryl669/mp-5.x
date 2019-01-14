@@ -202,33 +202,31 @@ static void build_colors(void)
 {
     mpdm_t colors;
     mpdm_t color_names;
-    mpdm_t l;
-    mpdm_t c;
-    int n, s;
+    mpdm_t k, v;
+    int n, i;
 
     /* gets the color definitions and attribute names */
     colors      = mpdm_hget_s(MP, L"colors");
     color_names = mpdm_hget_s(MP, L"color_names");
 
-    l = mpdm_ref(mpdm_keys(colors));
-    s = mpdm_size(l);
+    n = mpdm_hsize(colors);
 
     /* redim the structures */
-    ansi_attrs = realloc(ansi_attrs, sizeof(int) * s);
+    ansi_attrs = realloc(ansi_attrs, sizeof(int) * n);
 
     /* loop the colors */
-    for (n = 0; n < s && (c = mpdm_aget(l, n)) != NULL; n++) {
-        mpdm_t d = mpdm_hget(colors, c);
-        mpdm_t v = mpdm_hget_s(d, L"text");
+    n = i = 0;
+    while (mpdm_iterator(colors, &i, &k, &v)) {
+        mpdm_t w = mpdm_hget_s(v, L"text");
         int cp, c0, c1;
 
-        /* store the attr */
-        mpdm_hset_s(d, L"attr", MPDM_I(n));
-
         /* get color indexes */
-        if ((c0 = mpdm_seek(color_names, mpdm_aget(v, 0), 1)) == -1 ||
-            (c1 = mpdm_seek(color_names, mpdm_aget(v, 1), 1)) == -1)
+        if ((c0 = mpdm_seek(color_names, mpdm_aget(w, 0), 1)) == -1 ||
+            (c1 = mpdm_seek(color_names, mpdm_aget(w, 1), 1)) == -1)
             continue;
+
+        /* store the attr */
+        mpdm_hset_s(v, L"attr", MPDM_I(n));
 
         if ((--c0) == -1) c0 = 9;
         if ((--c1) == -1) c1 = 9;
@@ -236,18 +234,17 @@ static void build_colors(void)
         cp = (c1 << 16) | (c0 << 8);
 
         /* flags */
-        v = mpdm_hget_s(d, L"flags");
-        if (mpdm_seek_s(v, L"reverse", 1) != -1)
+        w = mpdm_hget_s(v, L"flags");
+        if (mpdm_seek_s(w, L"reverse", 1) != -1)
             cp |= 0x01;
-        if (mpdm_seek_s(v, L"bright", 1) != -1)
+        if (mpdm_seek_s(w, L"bright", 1) != -1)
             cp |= 0x02;
-        if (mpdm_seek_s(v, L"underline", 1) != -1)
+        if (mpdm_seek_s(w, L"underline", 1) != -1)
             cp |= 0x04;
 
         ansi_attrs[n] = cp;
+        n++;
     }
-
-    mpdm_unref(l);
 }
 
 
