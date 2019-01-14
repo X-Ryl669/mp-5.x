@@ -198,7 +198,7 @@ static void ansi_set_attr(int a)
 }
 
 
-static void build_colors(void)
+static void ansi_build_colors(void)
 {
     mpdm_t colors;
     mpdm_t color_names;
@@ -545,7 +545,7 @@ static mpdm_t ansi_tui_getxy(mpdm_t a, mpdm_t ctxt)
 }
 
 
-static void register_functions(void)
+static void ansi_register_functions(void)
 {
     mpdm_t drv;
     mpdm_t tui;
@@ -571,12 +571,12 @@ static void register_functions(void)
 
 static mpdm_t ansi_drv_startup(mpdm_t a)
 {
-    register_functions();
+    ansi_register_functions();
 
     ansi_raw_tty(1);
     ansi_sigwinch(0);
 
-    build_colors();
+    ansi_build_colors();
 
     mp_load_save_state("r");
 
