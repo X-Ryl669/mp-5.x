@@ -116,68 +116,58 @@ QBrush papers[MAX_COLORS];
 bool underlines[MAX_COLORS];
 int normal_attr = 0;
 
-static void build_colors(void)
+static void qk_build_colors(void)
 /* builds the colors */
 {
     mpdm_t colors;
-    mpdm_t l;
-    mpdm_t c;
-    int n, s;
+    mpdm_t k, v;
+    int n, i;
 
     /* gets the color definitions and attribute names */
     colors = mpdm_hget_s(MP, L"colors");
-    l = mpdm_ref(mpdm_keys(colors));
-    s = mpdm_size(l);
+    n = mpdm_hsize(colors);
 
     /* loop the colors */
-    for (n = 0; n < s && (c = mpdm_aget(l, n)) != NULL; n++) {
+    n = i = 0;
+    while (mpdm_iterator(colors, &i, &k, &v)) {
         int rgbi, rgbp;
-        mpdm_t d = mpdm_hget(colors, c);
-        mpdm_t v = mpdm_hget_s(d, L"gui");
+        mpdm_t w = mpdm_hget_s(v, L"gui");
 
         /* store the 'normal' attribute */
-        if (wcscmp(mpdm_string(c), L"normal") == 0)
+        if (wcscmp(mpdm_string(k), L"normal") == 0)
             normal_attr = n;
 
         /* store the attr */
-        mpdm_hset_s(d, L"attr", MPDM_I(n));
+        mpdm_hset_s(v, L"attr", MPDM_I(n));
 
-        rgbi = mpdm_ival(mpdm_aget(v, 0));
-        rgbp = mpdm_ival(mpdm_aget(v, 1));
+        rgbi = mpdm_ival(mpdm_aget(w, 0));
+        rgbp = mpdm_ival(mpdm_aget(w, 1));
 
         /* flags */
-        v = mpdm_hget_s(d, L"flags");
+        w = mpdm_hget_s(v, L"flags");
 
-        if (mpdm_seek_s(v, L"reverse", 1) != -1) {
+        if (mpdm_seek_s(w, L"reverse", 1) != -1) {
             int t = rgbi;
             rgbi = rgbp;
             rgbp = t;
         }
 
-        underlines[n] =
-            mpdm_seek_s(v, L"underline", 1) != -1 ? true : false;
+        underlines[n] = mpdm_seek_s(w, L"underline", 1) != -1 ? true : false;
 
-        inks[n] = QPen(QColor::fromRgbF((float) ((rgbi & 0x00ff0000) >> 16)
-                                        / 256.0,
-                                        (float) ((rgbi & 0x0000ff00) >> 8)
-                                        / 256.0,
-                                        (float) ((rgbi & 0x000000ff)) /
-                                        256.0, 1));
+        inks[n] = QPen(QColor::fromRgbF((float) ((rgbi & 0x00ff0000) >> 16) / 256.0,
+                                        (float) ((rgbi & 0x0000ff00) >> 8)  / 256.0,
+                                        (float) ((rgbi & 0x000000ff)) / 256.0, 1));
 
-        papers[n] = QBrush(QColor::fromRgbF((float)
-                                            ((rgbp & 0x00ff0000) >> 16) /
-                                            256.0,
-                                            (float) ((rgbp & 0x0000ff00) >>
-                                                     8) / 256.0,
-                                            (float) ((rgbp & 0x000000ff)) /
-                                            256.0, 1));
+        papers[n] = QBrush(QColor::fromRgbF((float) ((rgbp & 0x00ff0000) >> 16) / 256.0,
+                                            (float) ((rgbp & 0x0000ff00) >> 8) / 256.0,
+                                            (float) ((rgbp & 0x000000ff)) / 256.0, 1));
+
+        n++;
     }
-
-    mpdm_unref(l);
 }
 
 
-static QFont build_font(int rebuild)
+static QFont qk_build_font(int rebuild)
 /* (re)builds the font */
 {
     static QFont font;
@@ -223,7 +213,7 @@ static QFont build_font(int rebuild)
 }
 
 
-static void build_menu(void)
+static void qk_build_menu(void)
 /* builds the menu */
 {
     int n;
@@ -396,7 +386,7 @@ void MPArea::paintEvent(QPaintEvent *)
         painter.drawRect(0, 0, ls_width, ls_height);
     }
 
-    font = build_font(0);
+    font = qk_build_font(0);
     font.setUnderline(false);
     painter.setFont(font);
 
@@ -1090,9 +1080,9 @@ void MPArea::from_timer(void)
 
 static mpdm_t qt4_drv_update_ui(mpdm_t a, mpdm_t ctxt)
 {
-    build_font(1);
-    build_colors();
-    build_menu();
+    qk_build_font(1);
+    qk_build_colors();
+    qk_build_menu();
 
     area->ls_width = area->ls_height = -1;
     area->update();

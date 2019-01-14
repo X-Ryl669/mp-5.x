@@ -86,7 +86,7 @@ MPWindow::MPWindow(QWidget * parent):QMainWindow(parent)
     setWindowTitle("mp " VERSION);
 
     menubar = this->menuBar();
-    build_menu();
+    qk_build_menu();
 
     /* pick an optimal height for the menu & tabs */
     height = menubar->sizeHint().height();
@@ -509,8 +509,8 @@ static mpdm_t qt4_drv_startup(mpdm_t a, mpdm_t ctxt)
 {
     register_functions();
 
-    build_font(1);
-    build_colors();
+    qk_build_font(1);
+    qk_build_colors();
 
     window = new MPWindow();
     window->show();
