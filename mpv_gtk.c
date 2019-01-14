@@ -251,49 +251,47 @@ static void build_colors(void)
 /* builds the colors */
 {
     mpdm_t colors;
-    mpdm_t l;
-    mpdm_t c;
-    int n, s;
+    mpdm_t k, v;
+    int n, i;
 
     /* gets the color definitions and attribute names */
     colors = mpdm_hget_s(MP, L"colors");
-    l = mpdm_ref(mpdm_keys(colors));
-    s = mpdm_size(l);
+    n = mpdm_hsize(colors);
 
     /* redim the structures */
-    inks = realloc(inks, sizeof(GdkColor) * s);
-    papers = realloc(papers, sizeof(GdkColor) * s);
-    underlines = realloc(underlines, sizeof(int) * s);
+    inks = realloc(inks, sizeof(GdkColor) * n);
+    papers = realloc(papers, sizeof(GdkColor) * n);
+    underlines = realloc(underlines, sizeof(int) * n);
 
     /* loop the colors */
-    for (n = 0; n < s && (c = mpdm_aget(l, n)) != NULL; n++) {
-        mpdm_t d = mpdm_hget(colors, c);
-        mpdm_t v = mpdm_hget_s(d, L"gui");
+    n = i = 0;
+    while (mpdm_iterator(colors, &i, &k, &v)) {
+        mpdm_t w = mpdm_hget_s(v, L"gui");
 
         /* store the 'normal' attribute */
-        if (wcscmp(mpdm_string(c), L"normal") == 0)
+        if (wcscmp(mpdm_string(k), L"normal") == 0)
             normal_attr = n;
 
         /* store the attr */
-        mpdm_hset_s(d, L"attr", MPDM_I(n));
+        mpdm_hset_s(v, L"attr", MPDM_I(n));
 
-        build_color(&inks[n], mpdm_ival(mpdm_aget(v, 0)));
-        build_color(&papers[n], mpdm_ival(mpdm_aget(v, 1)));
+        build_color(&inks[n],   mpdm_ival(mpdm_aget(w, 0)));
+        build_color(&papers[n], mpdm_ival(mpdm_aget(w, 1)));
 
         /* flags */
-        v = mpdm_hget_s(d, L"flags");
-        underlines[n] = mpdm_seek_s(v, L"underline", 1) != -1 ? 1 : 0;
+        w = mpdm_hget_s(v, L"flags");
+        underlines[n] = mpdm_seek_s(w, L"underline", 1) != -1 ? 1 : 0;
 
-        if (mpdm_seek_s(v, L"reverse", 1) != -1) {
+        if (mpdm_seek_s(w, L"reverse", 1) != -1) {
             GdkColor t;
 
             t = inks[n];
             inks[n] = papers[n];
             papers[n] = t;
         }
-    }
 
-    mpdm_unref(l);
+        n++;
+    }
 }
 
 
