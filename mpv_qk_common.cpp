@@ -291,13 +291,13 @@ bool MPArea::event(QEvent *event)
 
         if (ke->key() == Qt::Key_Tab) {
             mp_process_event(MPDM_LS(L"tab"));
-            area->update();
+            update();
             return true;
         }
         else
         if (ke->key() == Qt::Key_Backtab) {
             mp_process_event(MPDM_LS(L"shift-tab"));
-            area->update();
+            update();
             return true;
         }
     }
@@ -460,7 +460,7 @@ void MPArea::paintEvent(QPaintEvent *)
     draw_scrollbar();
     draw_status();
 
-    area->setFocus(Qt::OtherFocusReason);
+    setFocus(Qt::OtherFocusReason);
 }
 
 
@@ -469,7 +469,7 @@ void MPArea::inputMethodEvent(QInputMethodEvent *event)
     QString s = event->commitString();
 
     mp_process_event(qstring_to_v(s));
-    area->update();
+    update();
 }
 
 
@@ -893,7 +893,7 @@ void MPArea::keyPressEvent(QKeyEvent *event)
         mp_process_event(k);
 
     if (mp_keypress_throttle(1))
-        area->update();
+        update();
 }
 
 
@@ -925,7 +925,7 @@ void MPArea::mousePressEvent(QMouseEvent *event)
     if (ptr != NULL)
         mp_process_event(MPDM_S(ptr));
 
-    area->update();
+    update();
 }
 
 
@@ -950,7 +950,7 @@ void MPArea::mouseDoubleClickEvent(QMouseEvent *event)
     if (ptr != NULL)
         mp_process_event(MPDM_S(ptr));
 
-    area->update();
+    update();
 }
 
 
@@ -976,7 +976,7 @@ void MPArea::mouseMoveEvent(QMouseEvent *event)
 
         mp_process_event(MPDM_LS(L"mouse-drag"));
 
-        area->update();
+        update();
     }
 }
 
@@ -988,7 +988,7 @@ void MPArea::wheelEvent(QWheelEvent *event)
     else
         mp_process_event(MPDM_S(L"mouse-wheel-down"));
 
-    area->update();
+    update();
 }
 
 
@@ -1027,7 +1027,7 @@ void MPArea::dropEvent(QDropEvent *event)
     event->acceptProposedAction();
     mp_process_event(MPDM_LS(L"dropped-files"));
 
-    area->update();
+    update();
 }
 
 
@@ -1044,7 +1044,7 @@ void MPArea::from_scrollbar(int value)
         v = mpdm_hget_s(v, L"txt");
         mpdm_hset_s(v, L"vy", MPDM_I(value));
 
-        area->update();
+        update();
     }
 }
 
@@ -1054,7 +1054,7 @@ void MPArea::from_filetabs(int value)
     if (value >= 0) {
         /* sets the active one */
         mpdm_hset_s(MP, L"active_i", MPDM_I(value));
-        area->update();
+        update();
     }
 }
 
@@ -1063,14 +1063,14 @@ void MPArea::from_menu(QAction * action)
 {
     mp_process_action(qaction_to_action[action]);
 
-    area->update();
+    update();
 }
 
 
 void MPArea::from_timer(void)
 {
     mpdm_void(mpdm_exec(timer_func, NULL, NULL));
-    area->update();
+    update();
 }
 
 
