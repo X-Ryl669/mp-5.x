@@ -59,7 +59,6 @@ public:
 QApplication *app;
 MPWindow *window;
 QMenuBar *menubar;
-QTabBar *file_tabs;
 
 #define MENU_CLASS QMenu
 
@@ -80,9 +79,6 @@ MPWindow::MPWindow(QWidget * parent) : QMainWindow(parent)
 
     /* pick an optimal height for the menu & tabs */
     height = menubar->sizeHint().height();
-
-    file_tabs = new QTabBar();
-    file_tabs->setFocusPolicy(Qt::NoFocus);
 
     /* top area */
     hb = new QHBoxLayout();
@@ -108,7 +104,7 @@ MPWindow::MPWindow(QWidget * parent) : QMainWindow(parent)
     vb = new QVBoxLayout();
 
     vb->addWidget(ta);
-    vb->addWidget(file_tabs);
+    vb->addWidget(area->file_tabs);
     vb->addWidget(cc);
 
     QWidget *mc = new QWidget();
@@ -121,7 +117,7 @@ MPWindow::MPWindow(QWidget * parent) : QMainWindow(parent)
     connect(area->scrollbar, SIGNAL(valueChanged(int)),
             area, SLOT(from_scrollbar(int)));
 
-    connect(file_tabs, SIGNAL(currentChanged(int)),
+    connect(area->file_tabs, SIGNAL(currentChanged(int)),
             area, SLOT(from_filetabs(int)));
 
     connect(menubar, SIGNAL(triggered(QAction *)),

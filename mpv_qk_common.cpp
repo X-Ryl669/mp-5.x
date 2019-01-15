@@ -44,15 +44,18 @@ public:
 
     void draw_scrollbar();
     void draw_status();
+    void draw_filetabs();
 
     QScrollBar *scrollbar;
     QLabel *statusbar;
+    QTabBar *file_tabs;
 
     QTimer *timer;
 
     QPixmap *pixmap;
     int ls_width;
     int ls_height;
+    int ignore_scrollbar_signal;
 
 protected:
     void paintEvent(QPaintEvent * event);
@@ -251,38 +254,6 @@ static void qk_build_menu(void)
 }
 
 
-static void draw_filetabs(void)
-{
-    static mpdm_t prev = NULL;
-    mpdm_t names;
-    int n, i;
-
-    names = mpdm_ref(mp_get_doc_names());
-
-    /* get mp.active_i now, because it can be changed
-       from the signal handler */
-    i = mpdm_ival(mpdm_hget_s(MP, L"active_i"));
-
-    /* is the list different from the previous one? */
-    if (mpdm_cmp(names, prev) != 0) {
-        while (file_tabs->count())
-            file_tabs->removeTab(0);
-
-        /* create the new ones */
-        for (n = 0; n < mpdm_size(names); n++)
-            file_tabs->addTab(v_to_qstring(mpdm_aget(names, n)));
-
-        /* store for the next time */
-        mpdm_set(&prev, names);
-    }
-
-    mpdm_unref(names);
-
-    /* set the active one */
-    file_tabs->setCurrentIndex(i);
-}
-
-
 /** MPArea methods **/
 
 MPArea::MPArea(QWidget *parent) : QWidget(parent)
@@ -301,6 +272,11 @@ MPArea::MPArea(QWidget *parent) : QWidget(parent)
     scrollbar->setFocusPolicy(Qt::NoFocus);
 
     statusbar = new QLabel();
+
+    file_tabs = new QTabBar();
+    file_tabs->setFocusPolicy(Qt::NoFocus);
+
+    ignore_scrollbar_signal = 0;
 }
 
 
@@ -327,8 +303,6 @@ bool MPArea::event(QEvent *event)
     return QWidget::event(event);
 }
 
-
-static int ignore_scrollbar_signal = 0;
 
 void MPArea::draw_scrollbar(void)
 {
@@ -357,6 +331,38 @@ void MPArea::draw_scrollbar(void)
 void MPArea::draw_status(void)
 {
     statusbar->setText(v_to_qstring(mp_build_status_line()));
+}
+
+
+void MPArea::draw_filetabs(void)
+{
+    static mpdm_t prev = NULL;
+    mpdm_t names;
+    int n, i;
+
+    names = mpdm_ref(mp_get_doc_names());
+
+    /* get mp.active_i now, because it can be changed
+       from the signal handler */
+    i = mpdm_ival(mpdm_hget_s(MP, L"active_i"));
+
+    /* is the list different from the previous one? */
+    if (mpdm_cmp(names, prev) != 0) {
+        while (file_tabs->count())
+            file_tabs->removeTab(0);
+
+        /* create the new ones */
+        for (n = 0; n < mpdm_size(names); n++)
+            file_tabs->addTab(v_to_qstring(mpdm_aget(names, n)));
+
+        /* store for the next time */
+        mpdm_set(&prev, names);
+    }
+
+    mpdm_unref(names);
+
+    /* set the active one */
+    file_tabs->setCurrentIndex(i);
 }
 
 
