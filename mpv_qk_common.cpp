@@ -51,6 +51,7 @@ public:
     QTabBar *file_tabs;
 
     QTimer *timer;
+    mpdm_t timer_func;
 
     QPixmap *pixmap;
     int ls_width;
@@ -73,8 +74,6 @@ static int font_width = -1;
 static int font_height = -1;
 static int mouse_down = 0;
 static int key_down = 0;
-
-mpdm_t timer_func = NULL;
 
 /* hash of qactions to MP actions */
 QHash <QAction *, mpdm_t> qaction_to_action;
@@ -107,7 +106,7 @@ QString v_to_qstring(mpdm_t s)
 }
 
 
-#define MAX_COLORS 1000
+#define MAX_COLORS 100
 QPen inks[MAX_COLORS];
 QBrush papers[MAX_COLORS];
 bool underlines[MAX_COLORS];
@@ -277,6 +276,7 @@ MPArea::MPArea(QWidget *parent) : QWidget(parent)
     file_tabs->setFocusPolicy(Qt::NoFocus);
 
     ignore_scrollbar_signal = 0;
+    timer_func = NULL;
 }
 
 
@@ -1170,9 +1170,9 @@ static mpdm_t qt4_drv_timer(mpdm_t a, mpdm_t ctxt)
     int msecs = mpdm_ival(mpdm_aget(a, 0));
     mpdm_t func = mpdm_aget(a, 1);
 
-    mpdm_set(&timer_func, func);
+    mpdm_set(&area->timer_func, func);
 
-    if (timer_func == NULL)
+    if (area->timer_func == NULL)
         area->timer->stop();
     else
         area->timer->start(msecs);
