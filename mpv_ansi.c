@@ -4,7 +4,7 @@
 
     Raw ANSI terminal driver.
 
-    Copyright (C) 1991-2018 Angel Ortega <angel@triptico.com> et al.
+    Copyright (C) 1991-2019 Angel Ortega <angel@triptico.com> et al.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -42,11 +42,11 @@
 #include "mp.h"
 
 
-static int *ansi_attrs = NULL;
+#define MAX_COLORS 1000
+char ansi_attrs[MAX_COLORS][32];
 
 
 /** code **/
-
 
 static void ansi_raw_tty(int start)
 /* sets/unsets stdin in raw mode */
@@ -182,19 +182,7 @@ static void ansi_print_v(mpdm_t v)
 
 static void ansi_set_attr(int a)
 {
-    int cf, c0, c1;
-
-    cf = ansi_attrs[a] & 0xff;
-    c0 = ((ansi_attrs[a] & 0xff00) >> 8);
-    c1 = ((ansi_attrs[a] & 0xff0000) >> 16);
-
-    printf("\033[0;%s%s%s%d;%dm",
-        cf & 0x1 ? "7;" : "",
-        cf & 0x2 ? "1;" : "",
-        cf & 0x4 ? "4;" : "",
-        c0 + 30,
-        c1 + 40
-    );
+    printf("%s", ansi_attrs[a]);
 }
 
 
@@ -211,14 +199,11 @@ static void ansi_build_colors(void)
 
     n = mpdm_hsize(colors);
 
-    /* redim the structures */
-    ansi_attrs = realloc(ansi_attrs, sizeof(int) * n);
-
     /* loop the colors */
     n = i = 0;
     while (mpdm_iterator(colors, &i, &k, &v)) {
         mpdm_t w = mpdm_hget_s(v, L"text");
-        int cp, c0, c1;
+        int c0, c1, cf = 0;
 
         /* get color indexes */
         if ((c0 = mpdm_seek(color_names, mpdm_aget(w, 0), 1)) == -1 ||
@@ -231,18 +216,23 @@ static void ansi_build_colors(void)
         if ((--c0) == -1) c0 = 9;
         if ((--c1) == -1) c1 = 9;
 
-        cp = (c1 << 16) | (c0 << 8);
-
         /* flags */
         w = mpdm_hget_s(v, L"flags");
         if (mpdm_seek_s(w, L"reverse", 1) != -1)
-            cp |= 0x01;
+            cf |= 0x01;
         if (mpdm_seek_s(w, L"bright", 1) != -1)
-            cp |= 0x02;
+            cf |= 0x02;
         if (mpdm_seek_s(w, L"underline", 1) != -1)
-            cp |= 0x04;
+            cf |= 0x04;
 
-        ansi_attrs[n] = cp;
+        sprintf(ansi_attrs[n], "\033[0;%s%s%s%d;%dm",
+            cf & 0x1 ? "7;" : "",
+            cf & 0x2 ? "1;" : "",
+            cf & 0x4 ? "4;" : "",
+            c0 + 30,
+            c1 + 40
+        );
+
         n++;
     }
 }
