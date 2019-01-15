@@ -82,7 +82,6 @@ static int normal_attr = 0;
 
 /* mp.drv.form() controls */
 
-static GtkWidget **form_widgets = NULL;
 static mpdm_t form_args = NULL;
 static mpdm_t form_values = NULL;
 
@@ -1969,7 +1968,7 @@ static mpdm_t gtk_drv_sys_to_clip(mpdm_t a, mpdm_t ctxt)
 
 /** interface functions **/
 
-static void clicked_ok(GtkWidget * widget, gpointer data)
+static void clicked_ok(GtkWidget **form_widgets)
 /* 'clicked_on' signal handler (for gtk_drv_form) */
 {
     int n;
@@ -2053,20 +2052,16 @@ static gint timer_callback(gpointer data)
 }
 
 
-static void build_form_data(mpdm_t widget_list)
+static GtkWidget **build_form_data(mpdm_t widget_list)
 /* builds the necessary information for a list of widgets */
 {
     mpdm_unref(form_args);
     form_args = mpdm_ref(widget_list);
 
     mpdm_unref(form_values);
-    form_values = widget_list == NULL ? NULL :
-        mpdm_ref(MPDM_A(mpdm_size(form_args)));
+    form_values = widget_list == NULL ? NULL : mpdm_ref(MPDM_A(mpdm_size(form_args)));
 
-    /* resize the widget array */
-    form_widgets = (GtkWidget **) realloc(form_widgets,
-                                          mpdm_size(form_args) *
-                                          sizeof(GtkWidget *));
+    return (GtkWidget **) calloc(mpdm_size(form_args), sizeof(GtkWidget *));
 }
 
 
@@ -2087,11 +2082,8 @@ static mpdm_t gtk_drv_alert(mpdm_t a, mpdm_t ctxt)
     gchar *ptr;
     GtkWidget *dlg;
 
-    build_form_data(NULL);
-
     /* 1# arg: prompt */
-    if ((ptr = v_to_utf8(mpdm_aget(a, 0))) == NULL)
-        return NULL;
+    ptr = v_to_utf8(mpdm_aget(a, 0));
 
     dlg = gtk_message_dialog_new(GTK_WINDOW(window), GTK_DIALOG_MODAL,
                                  GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, "%s", ptr);
@@ -2112,11 +2104,8 @@ static mpdm_t gtk_drv_confirm(mpdm_t a, mpdm_t ctxt)
     GtkWidget *dlg;
     gint response;
 
-    build_form_data(NULL);
-
     /* 1# arg: prompt */
-    if ((ptr = v_to_utf8(mpdm_aget(a, 0))) == NULL)
-        return NULL;
+    ptr = v_to_utf8(mpdm_aget(a, 0));
 
     dlg = gtk_message_dialog_new(GTK_WINDOW(window), GTK_DIALOG_MODAL,
                                  GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
@@ -2144,11 +2133,12 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
     GtkWidget *dlg;
     GtkWidget *table;
     GtkWidget *content_area;
+    GtkWidget **form_widgets;
     int n;
     mpdm_t ret = NULL;
 
     /* first argument: list of widgets */
-    build_form_data(mpdm_aget(a, 0));
+    form_widgets = build_form_data(mpdm_aget(a, 0));
 
     dlg = gtk_dialog_new_with_buttons("mp " VERSION, GTK_WINDOW(window),
                                       GTK_DIALOG_MODAL,
@@ -2332,10 +2322,12 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
     gtk_box_pack_start(GTK_BOX(content_area), table, TRUE, TRUE, 0);
 
     if (gtk_dialog_run(GTK_DIALOG(dlg)) == GTK_RESPONSE_OK) {
-        clicked_ok(NULL, NULL);
+        clicked_ok(form_widgets);
         ret = form_values;
     }
     gtk_widget_destroy(dlg);
+
+    free(form_widgets);
 
     return ret;
 }
