@@ -61,7 +61,6 @@ public:
 QApplication *app;
 MPWindow *window;
 QMenuBar *menubar;
-//QStatusBar *statusbar;
 QLabel *statusbar;
 QTabBar *file_tabs;
 
@@ -77,7 +76,7 @@ static void draw_status(void)
 
 /** MPWindow methods **/
 
-MPWindow::MPWindow(QWidget * parent):QMainWindow(parent)
+MPWindow::MPWindow(QWidget * parent) : QMainWindow(parent)
 {
     QVBoxLayout *vb;
     QHBoxLayout *hb;
@@ -99,7 +98,6 @@ MPWindow::MPWindow(QWidget * parent):QMainWindow(parent)
     hb->setContentsMargins(0, 0, 0, 0);
 
     hb->addWidget(menubar);
-//    hb->addWidget(file_tabs);
     QWidget *ta = new QWidget();
     ta->setLayout(hb);
     ta->setMaximumHeight(height);
@@ -157,7 +155,7 @@ MPWindow::MPWindow(QWidget * parent):QMainWindow(parent)
 }
 
 
-static void save_settings(MPWindow * w)
+static void save_settings(MPWindow *w)
 {
     mpdm_t v;
 
@@ -191,7 +189,7 @@ void MPWindow::closeEvent(QCloseEvent *event)
 }
 
 
-bool MPWindow::event(QEvent * event)
+bool MPWindow::event(QEvent *event)
 {
     /* do the processing */
     bool r = QWidget::event(event);
@@ -296,7 +294,7 @@ static mpdm_t qt4_drv_openfolder(mpdm_t a, mpdm_t ctxt)
 class MPForm : public QDialog
 {
 public:
-    QDialogButtonBox * button_box;
+    QDialogButtonBox *button_box;
 
     MPForm(QWidget * parent = 0) : QDialog(parent)
     {
@@ -314,7 +312,7 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
     int n;
     mpdm_t widget_list;
     QWidget *qlist[100];
-    mpdm_t r;
+    mpdm_t r = NULL;
 
     MPForm *dialog = new MPForm(window);
     dialog->setWindowTitle("mp " VERSION);
@@ -422,68 +420,61 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
 
     dialog->setLayout(ml);
 
-    n = dialog->exec();
+    if (dialog->exec()) {
+        r = MPDM_A(mpdm_size(widget_list));
 
-    if (!n)
-        return NULL;
+        /* fill the return values */
+        for (n = 0; n < mpdm_size(widget_list); n++) {
+            mpdm_t w = mpdm_aget(widget_list, n);
+            mpdm_t v = NULL;
+            wchar_t *type;
 
-    r = MPDM_A(mpdm_size(widget_list));
-    mpdm_ref(r);
+            type = mpdm_string(mpdm_hget_s(w, L"type"));
 
-    /* fill the return values */
-    for (n = 0; n < mpdm_size(widget_list); n++) {
-        mpdm_t w = mpdm_aget(widget_list, n);
-        mpdm_t v = NULL;
-        wchar_t *type;
+            if (wcscmp(type, L"text") == 0) {
+                mpdm_t h;
+                QComboBox *ql = (QComboBox *) qlist[n];
 
-        type = mpdm_string(mpdm_hget_s(w, L"type"));
+                v = mpdm_ref(qstring_to_v(ql->currentText()));
 
-        if (wcscmp(type, L"text") == 0) {
-            mpdm_t h;
-            QComboBox *ql = (QComboBox *) qlist[n];
+                /* if it has history, add to it */
+                if (v && (h = mpdm_hget_s(w, L"history")) && mpdm_cmp_s(v, L"")) {
+                    h = mp_get_history(h);
 
-            v = mpdm_ref(qstring_to_v(ql->currentText()));
+                    if (mpdm_cmp(v, mpdm_aget(h, -1)) != 0)
+                        mpdm_push(h, v);
+                }
 
-            /* if it has history, add to it */
-            if ((h = mpdm_hget_s(w, L"history")) != NULL &&
-                v != NULL && mpdm_cmp_s(v, L"") != 0) {
-                h = mp_get_history(h);
+                mpdm_unrefnd(v);
+            }
+            else
+            if (wcscmp(type, L"password") == 0) {
+                QLineEdit *ql = (QLineEdit *) qlist[n];
 
-                if (mpdm_cmp(v, mpdm_aget(h, -1)) != 0)
-                    mpdm_push(h, v);
+                v = qstring_to_v(ql->text());
+            }
+            else
+            if (wcscmp(type, L"checkbox") == 0) {
+                QCheckBox *qb = (QCheckBox *) qlist[n];
+
+                v = MPDM_I(qb->checkState() == Qt::Checked);
+            }
+            else
+            if (wcscmp(type, L"list") == 0) {
+                QListWidget *ql = (QListWidget *) qlist[n];
+
+                v = MPDM_I(ql->currentRow());
             }
 
-            mpdm_unrefnd(v);
+            mpdm_aset(r, v, n);
         }
-        else
-        if (wcscmp(type, L"password") == 0) {
-            QLineEdit *ql = (QLineEdit *) qlist[n];
-
-            v = qstring_to_v(ql->text());
-        }
-        else
-        if (wcscmp(type, L"checkbox") == 0) {
-            QCheckBox *qb = (QCheckBox *) qlist[n];
-
-            v = MPDM_I(qb->checkState() == Qt::Checked);
-        }
-        else
-        if (wcscmp(type, L"list") == 0) {
-            QListWidget *ql = (QListWidget *) qlist[n];
-
-            v = MPDM_I(ql->currentRow());
-        }
-
-        mpdm_aset(r, v, n);
     }
-
-    mpdm_unrefnd(r);
 
     return r;
 }
 
 
-static void register_functions(void)
+static void qt4_register_functions(void)
 {
     mpdm_t drv;
 
@@ -507,7 +498,7 @@ static void register_functions(void)
 static mpdm_t qt4_drv_startup(mpdm_t a, mpdm_t ctxt)
 /* driver initialization */
 {
-    register_functions();
+    qt4_register_functions();
 
     qk_build_font(1);
     qk_build_colors();
@@ -520,33 +511,36 @@ static mpdm_t qt4_drv_startup(mpdm_t a, mpdm_t ctxt)
 
 
 #ifdef CONFOPT_QT4
-extern "C" Display * XOpenDisplay(char *);
+extern "C" Display *XOpenDisplay(char *);
 
 extern "C" int qt4_drv_detect(int *argc, char ***argv)
 {
-    mpdm_t drv;
-    Display *x11_display;
-    int n;
+    int n, ret = 1;
 
     for (n = 0; n < *argc; n++) {
         if (strcmp(argv[0][n], "-txt") == 0)
-            return 0;
+            ret = 0;
     }
 
-    /* try connecting directly to the Xserver */
-    if ((x11_display = XOpenDisplay((char *) NULL)) == NULL)
-        return 0;
+    if (ret) {
+        Display *x11_display;
 
-    /* this is where it crashes if no X server */
-    app = new QApplication(x11_display);
+        /* try connecting directly to the Xserver */
+        if ((x11_display = XOpenDisplay((char *) NULL))) {
+            mpdm_t drv;
 
-    drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
+            /* this is where it crashes if no X server */
+            app = new QApplication(x11_display);
 
-    mpdm_hset_s(drv, L"id",         MPDM_LS(L"qt4"));
+            drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
+            mpdm_hset_s(drv, L"id",      MPDM_LS(L"qt4"));
+            mpdm_hset_s(drv, L"startup", MPDM_X(qt4_drv_startup));
+        }
+        else
+            ret = 0;
+    }
 
-    mpdm_hset_s(drv, L"startup",    MPDM_X(qt4_drv_startup));
-
-    return 1;
+    return ret;
 }
 
 #endif
@@ -554,26 +548,29 @@ extern "C" int qt4_drv_detect(int *argc, char ***argv)
 
 extern "C" int qt5_drv_detect(int *argc, char ***argv)
 {
-    mpdm_t drv;
-    int n;
-    char *display;
+    int n, ret = 1;
 
     for (n = 0; n < *argc; n++) {
         if (strcmp(argv[0][n], "-txt") == 0)
-            return 0;
+            ret = 0;
     }
 
-    if ((display = getenv("DISPLAY")) == NULL || *display == '\0')
-        return 0;
+    if (ret) {
+        char *display;
 
-    app = new QApplication(*argc, *argv);
+        if ((display = getenv("DISPLAY")) && *display) {
+            mpdm_t drv;
 
-    drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
+            app = new QApplication(*argc, *argv);
 
-    mpdm_hset_s(drv, L"id",         MPDM_LS(L"qt5"));
+            drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
+            mpdm_hset_s(drv, L"id",      MPDM_LS(L"qt5"));
+            mpdm_hset_s(drv, L"startup", MPDM_X(qt4_drv_startup));
+        }
+        else
+            ret = 0;
+    }
 
-    mpdm_hset_s(drv, L"startup",    MPDM_X(qt4_drv_startup));
-
-    return 1;
+    return ret;
 }
 
