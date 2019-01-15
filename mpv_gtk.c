@@ -124,21 +124,6 @@ static char *v_to_utf8(mpdm_t v)
     return ptr;
 }
 
-static wchar_t *utf8_to_wcs(const char *ptr)
-/* converts utf-8 to wcs */
-{
-    wchar_t *wptr;
-    gsize i, o;
-
-    i = strlen(ptr);
-
-    /* do the conversion */
-    wptr = (wchar_t *) g_convert((gchar *) ptr, i + 1,
-                                 "WCHAR_T", "UTF-8", NULL, &o, NULL);
-
-    return wptr;
-}
-
 
 static void update_window_size(void)
 /* updates the viewport size in characters */
@@ -1959,19 +1944,15 @@ static mpdm_t retrieve_form_data(mpdm_t form_args, GtkWidget **form_widgets)
                 gw = gtk_bin_get_child(GTK_BIN(widget));
 #endif
 
-            if ((ptr =
-                 gtk_editable_get_chars(GTK_EDITABLE(gw), 0, -1)) != NULL
-                && (wptr = utf8_to_wcs(ptr)) != NULL) {
-                v = MPDM_S(wptr);
-                g_free(wptr);
+            if ((ptr = gtk_editable_get_chars(GTK_EDITABLE(gw), 0, -1)) != NULL) {
+                v = MPDM_MBS(ptr);
                 g_free(ptr);
             }
 
             mpdm_ref(v);
 
             /* if it has history, fill it */
-            if ((h = mpdm_hget_s(w, L"history")) != NULL &&
-                v != NULL && mpdm_cmp_s(v, L"") != 0) {
+            if (v && (h = mpdm_hget_s(w, L"history")) && mpdm_cmp_s(v, L"")) {
                 h = mp_get_history(h);
 
                 if (mpdm_cmp(v, mpdm_aget(h, -1)) != 0)
@@ -1982,22 +1963,19 @@ static mpdm_t retrieve_form_data(mpdm_t form_args, GtkWidget **form_widgets)
         }
         else
         if (wcscmp(wptr, L"checkbox") == 0) {
-            v = MPDM_I(gtk_toggle_button_get_active
-                       (GTK_TOGGLE_BUTTON(widget)));
+            v = MPDM_I(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
         }
         else
         if (wcscmp(wptr, L"list") == 0) {
             GtkWidget *list = gtk_bin_get_child(GTK_BIN(widget));
             GtkTreeSelection *selection =
-                gtk_tree_view_get_selection(GTK_TREE_VIEW(list));
-            GList *selected =
-                gtk_tree_selection_get_selected_rows(selection, NULL);
+                              gtk_tree_view_get_selection(GTK_TREE_VIEW(list));
+            GList *selected = gtk_tree_selection_get_selected_rows(selection, NULL);
             GtkTreePath *path = selected->data;
 
             v = MPDM_I(gtk_tree_path_get_indices(path)[0]);
             gtk_tree_path_free(path);
             g_list_free(selected);
-
         }
 
         mpdm_aset(ret, v, n);
@@ -2017,15 +1995,6 @@ static gint timer_callback(gpointer data)
 
 
 /** dialog functions **/
-
-#define DIALOG_BUTTON(l,f) do { GtkWidget * btn; \
-	ptr = localize(l); btn = gtk_button_new_with_label(ptr); \
-	g_signal_connect_swapped(G_OBJECT(btn), "clicked", \
-		G_CALLBACK(f), G_OBJECT(dlg)); \
-	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dlg)->action_area), \
-		btn, TRUE, TRUE, 0); \
-	g_free(ptr); \
-	} while (0);
 
 static mpdm_t gtk_drv_alert(mpdm_t a, mpdm_t ctxt)
 /* alert driver function */
@@ -2122,19 +2091,17 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
         if ((t = mpdm_hget_s(w, L"label")) != NULL) {
             GtkWidget *label;
 
-            if ((ptr = v_to_utf8(mpdm_gettext(t))) != NULL) {
-                label = gtk_label_new(ptr);
-                gtk_misc_set_alignment(GTK_MISC(label), 0, .5);
+            ptr = v_to_utf8(mpdm_gettext(t));
+            label = gtk_label_new(ptr);
+            gtk_misc_set_alignment(GTK_MISC(label), 0, .5);
 
-                gtk_table_attach_defaults(GTK_TABLE(table),
-                                          label, 0, wcscmp(type,
-                                                           L"label") ==
-                                          0 ? 2 : 1, n, n + 1);
+            gtk_table_attach_defaults(GTK_TABLE(table), label, 0,
+                                      wcscmp(type, L"label") == 0 ? 2 : 1,
+                                      n, n + 1);
 
-                g_free(ptr);
+            g_free(ptr);
 
-                col++;
-            }
+            col++;
         }
 
         t = mpdm_hget_s(w, L"value");
@@ -2147,15 +2114,12 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
             widget = gtk_combo_new();
             gtk_combo_set_use_arrows_always(GTK_COMBO(widget), TRUE);
             gtk_combo_set_case_sensitive(GTK_COMBO(widget), TRUE);
-            gtk_entry_set_activates_default(GTK_ENTRY
-                                            (GTK_COMBO(widget)->entry),
-                                            TRUE);
+            gtk_entry_set_activates_default(GTK_ENTRY(GTK_COMBO(widget)->entry), TRUE);
 #endif
 #if CONFOPT_GTK == 3
             widget = gtk_combo_box_text_new_with_entry();
-            gtk_entry_set_activates_default(GTK_ENTRY
-                                            (gtk_bin_get_child(GTK_BIN(widget))),
-                                            TRUE);
+            gtk_entry_set_activates_default(
+                        GTK_ENTRY(gtk_bin_get_child(GTK_BIN(widget))), TRUE);
 #endif
 
             gtk_widget_set_size_request(widget, 300, -1);
@@ -2174,6 +2138,8 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
 #if CONFOPT_GTK == 3
                     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(widget), ptr);
 #endif
+
+                    g_free(ptr);
                 }
             }
 
@@ -2185,6 +2151,8 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
                 gtk_combo_box_text_prepend_text(GTK_COMBO_BOX_TEXT(widget), ptr);
                 gtk_combo_box_set_active(GTK_COMBO_BOX_TEXT(widget), 0);
 #endif
+
+                g_free(ptr);
             }
 
 #if CONFOPT_GTK == 2
@@ -2193,7 +2161,7 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
             g_list_free(combo_items);
         }
         else
-    if (wcscmp(type, L"password") == 0) {
+        if (wcscmp(type, L"password") == 0) {
             widget = gtk_entry_new();
             gtk_widget_set_size_request(widget, 300, -1);
             gtk_entry_set_visibility(GTK_ENTRY(widget), FALSE);
@@ -2227,8 +2195,7 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
                                                 (widget), GTK_SHADOW_IN);
 
             list_store = gtk_list_store_new(1, G_TYPE_STRING);
-            list =
-                gtk_tree_view_new_with_model(GTK_TREE_MODEL(list_store));
+            list = gtk_tree_view_new_with_model(GTK_TREE_MODEL(list_store));
             gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(list), FALSE);
             renderer = gtk_cell_renderer_text_new();
             column = gtk_tree_view_column_new_with_attributes("", renderer,
@@ -2240,12 +2207,12 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
             l = mpdm_hget_s(w, L"list");
 
             for (i = 0; i < mpdm_size(l); i++) {
-                if ((ptr = v_to_utf8(mpdm_aget(l, i))) != NULL) {
-                    GtkTreeIter iter;
-                    gtk_list_store_append(list_store, &iter);
-                    gtk_list_store_set(list_store, &iter, 0, ptr, -1);
-                    g_free(ptr);
-                }
+                GtkTreeIter iter;
+
+                ptr = v_to_utf8(mpdm_aget(l, i));
+                gtk_list_store_append(list_store, &iter);
+                gtk_list_store_set(list_store, &iter, 0, ptr, -1);
+                g_free(ptr);
             }
 
             /* initial position */
@@ -2259,14 +2226,12 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
             gtk_tree_path_free(path);
 
             g_signal_connect_swapped(G_OBJECT(list), "row-activated",
-                                     G_CALLBACK
-                                     (gtk_window_activate_default), dlg);
+                                     G_CALLBACK(gtk_window_activate_default), dlg);
         }
 
         if (widget != NULL) {
             form_widgets[n] = widget;
-            gtk_table_attach_defaults(GTK_TABLE(table),
-                                      widget, col, 2, n, n + 1);
+            gtk_table_attach_defaults(GTK_TABLE(table), widget, col, 2, n, n + 1);
         }
     }
 
