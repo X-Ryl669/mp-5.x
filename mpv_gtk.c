@@ -55,7 +55,6 @@ static GtkWidget *area = NULL;
 static GtkWidget *scrollbar = NULL;
 static GtkWidget *status = NULL;
 static GtkWidget *menu_bar = NULL;
-static GtkIMContext *im = NULL;
 
 /* character read from the keyboard */
 static wchar_t im_char[2];
@@ -1051,11 +1050,32 @@ static gint key_release_event(GtkWidget * widget, GdkEventKey * event,
 #define MP_KEY_Escape GDK_KEY_Escape
 #endif /* CONFOPT_GTK == 3 */
 
+static void im_commit(GtkIMContext *i, char *str, gpointer u)
+/* 'commit' handler */
+{
+    wchar_t *wstr;
+
+    wstr = (wchar_t *) g_convert(str, -1, "WCHAR_T", "UTF-8", NULL, NULL, NULL);
+
+    im_char[0] = *wstr;
+    im_char[1] = L'\0';
+
+    g_free(wstr);
+}
+
+
 static gint key_press_event(GtkWidget * widget, GdkEventKey * event,
                             gpointer data)
 /* 'key_press_event' handler */
 {
+    static GtkIMContext *im = NULL;
     wchar_t *ptr = NULL;
+
+    if (im == NULL) {
+        im = gtk_im_multicontext_new();
+        g_signal_connect(im, "commit", G_CALLBACK(im_commit), NULL);
+        gtk_im_context_set_client_window(im, gtk_widget_get_window(widget));
+    }
 
     gtk_im_context_filter_keypress(im, event);
 
@@ -1802,27 +1822,12 @@ static void drag_data_received(GtkWidget *widget, GdkDragContext *dc,
 
 /** clipboard functions **/
 
-static void commit(GtkIMContext * i, char *str, gpointer u)
-/* 'commit' handler */
-{
-    wchar_t *wstr;
-
-    wstr = (wchar_t *) g_convert(str, -1,
-                                 "WCHAR_T", "UTF-8", NULL, NULL, NULL);
-
-    im_char[0] = *wstr;
-    im_char[1] = L'\0';
-
-    g_free(wstr);
-}
-
-
 static void realize(GtkWidget * widget)
 /* 'realize' handler */
 {
-    im = gtk_im_multicontext_new();
+/*    im = gtk_im_multicontext_new();
     g_signal_connect(im, "commit", G_CALLBACK(commit), NULL);
-    gtk_im_context_set_client_window(im, gtk_widget_get_window(widget));
+    gtk_im_context_set_client_window(im, gtk_widget_get_window(widget));*/
 }
 
 
