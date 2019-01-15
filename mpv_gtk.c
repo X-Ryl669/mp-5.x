@@ -2570,8 +2570,6 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
 #endif
     );
 
-    gtk_widget_set_double_buffered(area, FALSE);
-
     g_signal_connect(G_OBJECT(area), "configure_event",
                      G_CALLBACK(configure_event), NULL);
 
