@@ -59,6 +59,7 @@ public:
     int ls_width;
     int ls_height;
     int ignore_scrollbar_signal;
+    int mouse_down;
 
 protected:
     void paintEvent(QPaintEvent * event);
@@ -74,8 +75,6 @@ public slots:
 MPArea *area;
 static int font_width = -1;
 static int font_height = -1;
-static int mouse_down = 0;
-static int key_down = 0;
 
 /* hash of qactions to MP actions */
 QHash <QAction *, mpdm_t> qaction_to_action;
@@ -277,6 +276,7 @@ MPArea::MPArea(QWidget *parent) : QWidget(parent)
     file_tabs->setFocusPolicy(Qt::NoFocus);
 
     ignore_scrollbar_signal = 0;
+    mouse_down = 0;
     timer_func = NULL;
 }
 
@@ -474,10 +474,6 @@ void MPArea::inputMethodEvent(QInputMethodEvent *event)
 void MPArea::keyReleaseEvent(QKeyEvent *event)
 {
     if (!event->isAutoRepeat()) {
-        key_down = 0;
-
-//        if (mp_keypress_throttle(0))
-//            area->update();
     }
 }
 
@@ -486,8 +482,6 @@ void MPArea::keyPressEvent(QKeyEvent *event)
 {
     mpdm_t k = NULL;
     wchar_t *ptr = NULL;
-
-    key_down = 1;
 
     /* set mp.shift_pressed */
     if (event->modifiers() & Qt::ShiftModifier)
