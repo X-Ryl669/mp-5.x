@@ -406,10 +406,6 @@ if [ "$WITHOUT_QT5" = "1" ] ; then
 else
     if which pkg-config > /dev/null 2>&1
     then
-        [ -z "$MOC" ] && which moc-qt5 > /dev/null 2>&1 && MOC=moc-qt5
-        [ -z "$MOC" ] && MOC="moc -qt5"
-        echo "MOC=$MOC" >> makefile.opts
-
         TMP_CFLAGS="`sh -c 'pkg-config --cflags Qt5Widgets' 2>/dev/null` -fPIC"
         TMP_LDFLAGS="`sh -c 'pkg-config --libs Qt5Widgets' 2>/dev/null`"
 
@@ -434,6 +430,10 @@ else
 
             WITHOUT_QT4=1
             WITHOUT_GTK=1
+
+            [ -z "$MOC" ] && which moc-qt5 > /dev/null 2>&1 && MOC=moc-qt5
+            [ -z "$MOC" ] && MOC="moc -qt5"
+            echo "MOC=$MOC" >> makefile.opts
         else
             echo "No"
         fi
@@ -451,10 +451,6 @@ if [ "$WITHOUT_QT4" = "1" ] ; then
 else
     if which pkg-config > /dev/null 2>&1
     then
-        [ -z "$MOC" ] && which moc-qt4 > /dev/null 2>&1 && MOC=moc-qt4
-        [ -z "$MOC" ] && MOC="moc -qt4"
-        echo "MOC=$MOC" >> makefile.opts
-
         TMP_CFLAGS=`sh -c 'pkg-config --cflags QtGui' 2>/dev/null`
         TMP_LDFLAGS="`sh -c 'pkg-config --libs QtGui' 2>/dev/null` -lX11"
 
@@ -478,6 +474,10 @@ else
             fi
 
             WITHOUT_GTK=1
+
+            [ -z "$MOC" ] && which moc-qt4 > /dev/null 2>&1 && MOC=moc-qt4
+            [ -z "$MOC" ] && MOC="moc -qt4"
+            echo "MOC=$MOC" >> makefile.opts
         else
             echo "No"
         fi
