@@ -228,7 +228,7 @@ static mpdm_t kde4_drv_form(mpdm_t a, mpdm_t ctxt)
     int n;
     mpdm_t widget_list;
     QWidget *qlist[100];
-    mpdm_t r;
+    mpdm_t r = NULL;
 
     KDialog *dialog = new KDialog(window);
 
@@ -318,56 +318,54 @@ static mpdm_t kde4_drv_form(mpdm_t a, mpdm_t ctxt)
             qlist[n]->setFocus(Qt::OtherFocusReason);
     }
 
-    n = dialog->exec();
+    if (dialog->exec()) {
+        r = MPDM_A(mpdm_size(widget_list));
 
-    if (!n)
-        return NULL;
+        /* fill the return values */
+        for (n = 0; n < mpdm_size(widget_list); n++) {
+            mpdm_t w = mpdm_aget(widget_list, n);
+            mpdm_t v = NULL;
+            wchar_t *type;
 
-    r = MPDM_A(mpdm_size(widget_list));
+            type = mpdm_string(mpdm_hget_s(w, L"type"));
 
-    /* fill the return values */
-    for (n = 0; n < mpdm_size(widget_list); n++) {
-        mpdm_t w = mpdm_aget(widget_list, n);
-        mpdm_t v = NULL;
-        wchar_t *type;
+            if (wcscmp(type, L"text") == 0) {
+                mpdm_t h;
+                QComboBox *ql = (QComboBox *) qlist[n];
 
-        type = mpdm_string(mpdm_hget_s(w, L"type"));
+                v = mpdm_ref(qstring_to_v(ql->currentText()));
 
-        if (wcscmp(type, L"text") == 0) {
-            mpdm_t h;
-            QComboBox *ql = (QComboBox *) qlist[n];
+                /* if it has history, add to it */
+                if (v && (h = mpdm_hget_s(w, L"history")) && mpdm_cmp_s(v, L"")) {
+                    h = mp_get_history(h);
 
-            v = qstring_to_v(ql->currentText());
+                    if (mpdm_cmp(v, mpdm_aget(h, -1)) != 0)
+                        mpdm_push(h, v);
+                }
 
-            /* if it has history, add to it */
-            if ((h = mpdm_hget_s(w, L"history")) != NULL &&
-                v != NULL && mpdm_cmp_s(v, L"") != 0) {
-                h = mp_get_history(h);
-
-                if (mpdm_cmp(v, mpdm_aget(h, -1)) != 0)
-                    mpdm_push(h, v);
+                mpdm_unrefnd(v);
             }
-        }
-        else
-        if (wcscmp(type, L"password") == 0) {
-            QLineEdit *ql = (QLineEdit *) qlist[n];
+            else
+            if (wcscmp(type, L"password") == 0) {
+                QLineEdit *ql = (QLineEdit *) qlist[n];
 
-            v = qstring_to_v(ql->text());
-        }
-        else
-        if (wcscmp(type, L"checkbox") == 0) {
-            QCheckBox *qb = (QCheckBox *) qlist[n];
+                v = qstring_to_v(ql->text());
+            }
+            else
+            if (wcscmp(type, L"checkbox") == 0) {
+                QCheckBox *qb = (QCheckBox *) qlist[n];
 
-            v = MPDM_I(qb->checkState() == Qt::Checked);
-        }
-        else
-        if (wcscmp(type, L"list") == 0) {
-            QListWidget *ql = (QListWidget *) qlist[n];
+                v = MPDM_I(qb->checkState() == Qt::Checked);
+            }
+            else
+            if (wcscmp(type, L"list") == 0) {
+                QListWidget *ql = (QListWidget *) qlist[n];
 
-            v = MPDM_I(ql->currentRow());
-        }
+                v = MPDM_I(ql->currentRow());
+            }
 
-        mpdm_aset(r, v, n);
+            mpdm_aset(r, v, n);
+        }
     }
 
     return r;
@@ -409,7 +407,7 @@ static mpdm_t kde4_drv_timer(mpdm_t a, mpdm_t ctxt)
     return qt4_drv_timer(a, ctxt);
 }
 
-static void register_functions(void)
+static void kde4_register_functions(void)
 {
     mpdm_t drv;
 
@@ -432,10 +430,10 @@ static void register_functions(void)
 static mpdm_t kde4_drv_startup(mpdm_t a, mpdm_t ctxt)
 /* driver initialization */
 {
-    register_functions();
+    kde4_register_functions();
 
-    build_font(1);
-    build_colors();
+    qk_build_font(1);
+    qk_build_colors();
 
     window = new MPWindow();
     window->show();
@@ -443,25 +441,26 @@ static mpdm_t kde4_drv_startup(mpdm_t a, mpdm_t ctxt)
     return NULL;
 }
 
-extern "C" Display * XOpenDisplay(char *);
+extern "C" Display *XOpenDisplay(char *);
 
 extern "C" int kde4_drv_detect(int *argc, char ***argv)
 {
-    mpdm_t drv;
     KCmdLineOptions opts;
-    Display *x11_display;
-    int n;
+    int n, ret = 1;
 
     for (n = 0; n < *argc; n++) {
         if (strcmp(argv[0][n], "-txt") == 0)
-            return 0;
+            ret = 0;
     }
 
-    /* try connecting directly to the Xserver */
-    if ((x11_display = XOpenDisplay((char *) NULL)) == NULL)
-        return 0;
+    if (ret) {
+        Display *x11_display;
 
-    KAboutData aboutData("mp", 0,
+        /* try connecting directly to the Xserver */
+        if ((x11_display = XOpenDisplay((char *) NULL))) {
+            mpdm_t drv;
+
+            KAboutData aboutData("mp", 0,
                          ki18n("Minimum Profit"), VERSION,
                          ki18n("A programmer's text editor"),
                          KAboutData::License_GPL,
@@ -469,26 +468,31 @@ extern "C" int kde4_drv_detect(int *argc, char ***argv)
                          ki18n(""),
                          "http://triptico.com", "angel@triptico.com");
 
-    KCmdLineArgs::init(*argc, *argv, &aboutData);
+            KCmdLineArgs::init(*argc, *argv, &aboutData);
 
-    /* command line options should be inserted here (I don't like this) */
-    opts.add("t {tag}",         ki18n("Edits the file where tag is defined"));
-    opts.add("e {mpsl_code}",   ki18n("Executes MPSL code"));
-    opts.add("f {mpsl_script}", ki18n("Executes MPSL script file"));
-    opts.add("d {directory}",   ki18n("Sets working directory"));
-    opts.add("x {file}",        ki18n("Open file in the hexadecimal viewer"));
-    opts.add(" +NNN",           ki18n("Moves to line number NNN of last file"));
-    opts.add("txt",             ki18n("Use text mode instead of GUI"));
-    opts.add("+[file(s)]",      ki18n("Documents to open"));
-    KCmdLineArgs::addCmdLineOptions(opts);
+            /* command line options should be inserted here (I don't like this) */
+            opts.add("t {tag}",         ki18n("Edits the file where tag is defined"));
+            opts.add("e {mpsl_code}",   ki18n("Executes MPSL code"));
+            opts.add("f {mpsl_script}", ki18n("Executes MPSL script file"));
+            opts.add("d {directory}",   ki18n("Sets working directory"));
+            opts.add("x {file}",        ki18n("Open file in the hexadecimal viewer"));
+            opts.add(" +NNN",           ki18n("Moves to line number NNN of last file"));
+            opts.add("txt",             ki18n("Use text mode instead of GUI"));
+            opts.add("+[file(s)]",      ki18n("Documents to open"));
 
-    /* this is where it crashes if no X server */
-    app = new KApplication(x11_display);
+            KCmdLineArgs::addCmdLineOptions(opts);
 
-    drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
+            /* this is where it crashes if no X server */
+            app = new KApplication(x11_display);
 
-    mpdm_hset_s(drv, L"id",         MPDM_LS(L"kde4"));
-    mpdm_hset_s(drv, L"startup",    MPDM_X(kde4_drv_startup));
+            drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
 
-    return 1;
+            mpdm_hset_s(drv, L"id",      MPDM_LS(L"kde4"));
+            mpdm_hset_s(drv, L"startup", MPDM_X(kde4_drv_startup));
+        }
+        else
+            ret = 0;
+    }
+
+    return ret;
 }
