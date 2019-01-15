@@ -56,9 +56,6 @@ static GtkWidget *scrollbar = NULL;
 static GtkWidget *status = NULL;
 static GtkWidget *menu_bar = NULL;
 
-/* character read from the keyboard */
-static wchar_t im_char[2];
-
 /* font information */
 static int font_width = 0;
 static int font_height = 0;
@@ -1051,9 +1048,10 @@ static gint key_release_event(GtkWidget * widget, GdkEventKey * event,
 #endif /* CONFOPT_GTK == 3 */
 
 static void im_commit(GtkIMContext *i, char *str, gpointer u)
-/* 'commit' handler */
+/* GtkIM 'commit' handler */
 {
     wchar_t *wstr;
+    wchar_t *im_char = (wchar_t *)u;
 
     wstr = (wchar_t *) g_convert(str, -1, "WCHAR_T", "UTF-8", NULL, NULL, NULL);
 
@@ -1064,16 +1062,16 @@ static void im_commit(GtkIMContext *i, char *str, gpointer u)
 }
 
 
-static gint key_press_event(GtkWidget * widget, GdkEventKey * event,
-                            gpointer data)
+static gint key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 /* 'key_press_event' handler */
 {
     static GtkIMContext *im = NULL;
+    static wchar_t im_char[2] = L"";
     wchar_t *ptr = NULL;
 
     if (im == NULL) {
         im = gtk_im_multicontext_new();
-        g_signal_connect(im, "commit", G_CALLBACK(im_commit), NULL);
+        g_signal_connect(im, "commit", G_CALLBACK(im_commit), im_char);
         gtk_im_context_set_client_window(im, gtk_widget_get_window(widget));
     }
 
