@@ -93,6 +93,7 @@ int ls_x, ls_y, ls_w, ls_h;
 
 /** support functions **/
 
+#define L(m) (m)
 #define LL(m) (m)
 
 static char *wcs_to_utf8(const wchar_t * wptr)
@@ -2033,9 +2034,9 @@ static mpdm_t gtk_drv_confirm(mpdm_t a, mpdm_t ctxt)
     gtk_window_set_title(GTK_WINDOW(dlg), "mp " VERSION);
     g_free(ptr);
 
-    gtk_dialog_add_button(GTK_DIALOG(dlg), GTK_STOCK_YES, 1);
-    gtk_dialog_add_button(GTK_DIALOG(dlg), GTK_STOCK_NO, 2);
-    gtk_dialog_add_button(GTK_DIALOG(dlg), GTK_STOCK_CANCEL, 0);
+    gtk_dialog_add_button(GTK_DIALOG(dlg), L("Yes"), 1);
+    gtk_dialog_add_button(GTK_DIALOG(dlg), L("No"), 2);
+    gtk_dialog_add_button(GTK_DIALOG(dlg), L("Cancel"), 0);
 
     response = gtk_dialog_run(GTK_DIALOG(dlg));
     gtk_widget_destroy(dlg);
@@ -2064,8 +2065,8 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
 
     dlg = gtk_dialog_new_with_buttons("mp " VERSION, GTK_WINDOW(window),
                                       GTK_DIALOG_MODAL,
-                                      GTK_STOCK_CANCEL,
-                                      GTK_RESPONSE_CANCEL, GTK_STOCK_OK,
+                                      L("Cancel"),
+                                      GTK_RESPONSE_CANCEL, L("OK"),
                                       GTK_RESPONSE_OK, NULL);
     gtk_dialog_set_default_response(GTK_DIALOG(dlg), GTK_RESPONSE_OK);
     gtk_container_set_border_width(GTK_CONTAINER(dlg), 5);
@@ -2272,17 +2273,17 @@ static mpdm_t run_filechooser(mpdm_t a, int type)
     case FC_OPEN:
         dlg = gtk_file_chooser_dialog_new(ptr, GTK_WINDOW(window),
                                           GTK_FILE_CHOOSER_ACTION_OPEN,
-                                          GTK_STOCK_CANCEL,
+                                          L("Cancel"),
                                           GTK_RESPONSE_CANCEL,
-                                          GTK_STOCK_OK, GTK_RESPONSE_OK,
+                                          L("OK"), GTK_RESPONSE_OK,
                                           NULL);
         break;
 
     case FC_SAVE:
         dlg = gtk_file_chooser_dialog_new(ptr, GTK_WINDOW(window),
                                           GTK_FILE_CHOOSER_ACTION_SAVE,
-                                          GTK_STOCK_CANCEL,
-                                          GTK_STOCK_CANCEL, GTK_STOCK_OK,
+                                          L("Cancel"),
+                                          L("Cancel"), L("OK"),
                                           GTK_RESPONSE_OK, NULL);
         gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER
                                                        (dlg), TRUE);
@@ -2291,9 +2292,9 @@ static mpdm_t run_filechooser(mpdm_t a, int type)
     case FC_FOLDER:
         dlg = gtk_file_chooser_dialog_new(ptr, GTK_WINDOW(window),
                                           GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-                                          GTK_STOCK_CANCEL,
+                                          L("Cancel"),
                                           GTK_RESPONSE_CANCEL,
-                                          GTK_STOCK_OK, GTK_RESPONSE_OK,
+                                          L("OK"), GTK_RESPONSE_OK,
                                           NULL);
         break;
     }
