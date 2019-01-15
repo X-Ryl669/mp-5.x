@@ -60,6 +60,8 @@ public:
     int ls_height;
     int ignore_scrollbar_signal;
     int mouse_down;
+    int font_width;
+    int font_height;
 
 protected:
     void paintEvent(QPaintEvent * event);
@@ -73,8 +75,6 @@ public slots:
 
 
 MPArea *area;
-static int font_width = -1;
-static int font_height = -1;
 
 /* hash of qactions to MP actions */
 QHash <QAction *, mpdm_t> qaction_to_action;
@@ -278,6 +278,8 @@ MPArea::MPArea(QWidget *parent) : QWidget(parent)
     ignore_scrollbar_signal = 0;
     mouse_down = 0;
     timer_func = NULL;
+
+    font_width = font_height = -1;
 }
 
 
