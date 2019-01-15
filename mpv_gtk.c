@@ -82,7 +82,6 @@ static int normal_attr = 0;
 
 /* mp.drv.form() controls */
 
-static mpdm_t form_args = NULL;
 static mpdm_t form_values = NULL;
 
 /* mouse down flag */
@@ -1968,7 +1967,7 @@ static mpdm_t gtk_drv_sys_to_clip(mpdm_t a, mpdm_t ctxt)
 
 /** interface functions **/
 
-static void clicked_ok(GtkWidget **form_widgets)
+static void clicked_ok(mpdm_t form_args, GtkWidget **form_widgets)
 /* 'clicked_on' signal handler (for gtk_drv_form) */
 {
     int n;
@@ -2052,14 +2051,11 @@ static gint timer_callback(gpointer data)
 }
 
 
-static GtkWidget **build_form_data(mpdm_t widget_list)
+static GtkWidget **build_form_data(mpdm_t form_args)
 /* builds the necessary information for a list of widgets */
 {
-    mpdm_unref(form_args);
-    form_args = mpdm_ref(widget_list);
-
     mpdm_unref(form_values);
-    form_values = widget_list == NULL ? NULL : mpdm_ref(MPDM_A(mpdm_size(form_args)));
+    form_values = form_args == NULL ? NULL : mpdm_ref(MPDM_A(mpdm_size(form_args)));
 
     return (GtkWidget **) calloc(mpdm_size(form_args), sizeof(GtkWidget *));
 }
@@ -2134,11 +2130,13 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
     GtkWidget *table;
     GtkWidget *content_area;
     GtkWidget **form_widgets;
+    mpdm_t form_args;
     int n;
     mpdm_t ret = NULL;
 
     /* first argument: list of widgets */
-    form_widgets = build_form_data(mpdm_aget(a, 0));
+    form_args = mpdm_aget(a, 0);
+    form_widgets = build_form_data(form_args);
 
     dlg = gtk_dialog_new_with_buttons("mp " VERSION, GTK_WINDOW(window),
                                       GTK_DIALOG_MODAL,
@@ -2322,7 +2320,7 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
     gtk_box_pack_start(GTK_BOX(content_area), table, TRUE, TRUE, 0);
 
     if (gtk_dialog_run(GTK_DIALOG(dlg)) == GTK_RESPONSE_OK) {
-        clicked_ok(form_widgets);
+        clicked_ok(form_args, form_widgets);
         ret = form_values;
     }
     gtk_widget_destroy(dlg);
@@ -2349,8 +2347,7 @@ static mpdm_t run_filechooser(mpdm_t a, int type)
     gint response;
 
     /* 1# arg: prompt */
-    if ((ptr = v_to_utf8(mpdm_aget(a, 0))) == NULL)
-        return (NULL);
+    ptr = v_to_utf8(mpdm_aget(a, 0));
 
     switch (type) {
     case FC_OPEN:
@@ -2383,8 +2380,6 @@ static mpdm_t run_filechooser(mpdm_t a, int type)
     }
 
     g_free(ptr);
-
-    build_form_data(NULL);
 
     /* override stupid GTK3 "optimal" current folder */
     char tmp[2048];
