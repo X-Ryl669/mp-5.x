@@ -80,10 +80,6 @@ static int wait_for_selection = 0;
 /* code for the 'normal' attribute */
 static int normal_attr = 0;
 
-/* mp.drv.form() controls */
-
-static mpdm_t form_values = NULL;
-
 /* mouse down flag */
 static int mouse_down = 0;
 
@@ -1967,21 +1963,17 @@ static mpdm_t gtk_drv_sys_to_clip(mpdm_t a, mpdm_t ctxt)
 
 /** interface functions **/
 
-static void clicked_ok(mpdm_t form_args, GtkWidget **form_widgets)
+static mpdm_t clicked_ok(mpdm_t form_args, GtkWidget **form_widgets)
 /* 'clicked_on' signal handler (for gtk_drv_form) */
 {
     int n;
+    mpdm_t ret = MPDM_A(mpdm_size(form_args));
 
     for (n = 0; n < mpdm_size(form_args); n++) {
         GtkWidget *widget = form_widgets[n];
         mpdm_t w = mpdm_aget(form_args, n);
         wchar_t *wptr = mpdm_string(mpdm_hget_s(w, L"type"));
         mpdm_t v = NULL;
-
-        /* if there is already a value there, if was
-           previously set from a callback */
-        if (mpdm_aget(form_values, n) != NULL)
-            continue;
 
         if (wcscmp(wptr, L"text") == 0 || wcscmp(wptr, L"password") == 0) {
             char *ptr;
@@ -2037,8 +2029,10 @@ static void clicked_ok(mpdm_t form_args, GtkWidget **form_widgets)
 
         }
 
-        mpdm_aset(form_values, v, n);
+        mpdm_aset(ret, v, n);
     }
+
+    return ret;
 }
 
 
@@ -2048,16 +2042,6 @@ static gint timer_callback(gpointer data)
     redraw();
 
     return TRUE;
-}
-
-
-static GtkWidget **build_form_data(mpdm_t form_args)
-/* builds the necessary information for a list of widgets */
-{
-    mpdm_unref(form_values);
-    form_values = form_args == NULL ? NULL : mpdm_ref(MPDM_A(mpdm_size(form_args)));
-
-    return (GtkWidget **) calloc(mpdm_size(form_args), sizeof(GtkWidget *));
 }
 
 
@@ -2135,8 +2119,8 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
     mpdm_t ret = NULL;
 
     /* first argument: list of widgets */
-    form_args = mpdm_aget(a, 0);
-    form_widgets = build_form_data(form_args);
+    form_args    = mpdm_aget(a, 0);
+    form_widgets = (GtkWidget **) calloc(mpdm_size(form_args), sizeof(GtkWidget *));
 
     dlg = gtk_dialog_new_with_buttons("mp " VERSION, GTK_WINDOW(window),
                                       GTK_DIALOG_MODAL,
@@ -2319,10 +2303,9 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
 
     gtk_box_pack_start(GTK_BOX(content_area), table, TRUE, TRUE, 0);
 
-    if (gtk_dialog_run(GTK_DIALOG(dlg)) == GTK_RESPONSE_OK) {
-        clicked_ok(form_args, form_widgets);
-        ret = form_values;
-    }
+    if (gtk_dialog_run(GTK_DIALOG(dlg)) == GTK_RESPONSE_OK)
+        ret = clicked_ok(form_args, form_widgets);
+
     gtk_widget_destroy(dlg);
 
     free(form_widgets);
