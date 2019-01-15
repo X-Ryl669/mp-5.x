@@ -1963,8 +1963,8 @@ static mpdm_t gtk_drv_sys_to_clip(mpdm_t a, mpdm_t ctxt)
 
 /** interface functions **/
 
-static mpdm_t clicked_ok(mpdm_t form_args, GtkWidget **form_widgets)
-/* 'clicked_on' signal handler (for gtk_drv_form) */
+static mpdm_t retrieve_form_data(mpdm_t form_args, GtkWidget **form_widgets)
+/* called when confirmation of a form */
 {
     int n;
     mpdm_t ret = MPDM_A(mpdm_size(form_args));
@@ -2304,7 +2304,7 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
     gtk_box_pack_start(GTK_BOX(content_area), table, TRUE, TRUE, 0);
 
     if (gtk_dialog_run(GTK_DIALOG(dlg)) == GTK_RESPONSE_OK)
-        ret = clicked_ok(form_args, form_widgets);
+        ret = retrieve_form_data(form_args, form_widgets);
 
     gtk_widget_destroy(dlg);
 
@@ -2374,16 +2374,15 @@ static mpdm_t run_filechooser(mpdm_t a, int type)
     if (response == GTK_RESPONSE_OK) {
         gchar *filename;
         gchar *utf8name;
-        wchar_t *wfilename;
 
         filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dlg));
         utf8name = g_filename_to_utf8(filename, -1, NULL, NULL, NULL);
         g_free(filename);
-        wfilename = utf8_to_wcs(utf8name);
+
+        ret = MPDM_MBS(utf8name);
         g_free(utf8name);
-        ret = MPDM_S(wfilename);
-        g_free(wfilename);
     }
+
     gtk_widget_destroy(dlg);
 
     return ret;
@@ -2494,7 +2493,7 @@ static mpdm_t gtk_drv_shutdown(mpdm_t a, mpdm_t ctxt)
 }
 
 
-static void register_functions(void)
+static void gtk_register_functions(void)
 {
     mpdm_t drv;
 
@@ -2535,7 +2534,7 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
         {"text/uri-list", 0, 1}
     };
 
-    register_functions();
+    gtk_register_functions();
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
