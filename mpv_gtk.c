@@ -2094,7 +2094,13 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
 
             ptr = v_to_utf8(mpdm_gettext(t));
             label = gtk_label_new(ptr);
+#if CONFOPT_GTK == 2
             gtk_misc_set_alignment(GTK_MISC(label), 0, .5);
+#endif
+#if CONFOPT_GTK == 3
+            gtk_label_set_xalign(GTK_LABEL(status), 0.0);
+            gtk_label_set_yalign(GTK_LABEL(status), 0.5);
+#endif
 
             gtk_table_attach_defaults(GTK_TABLE(table), label, 0,
                                       wcscmp(type, L"label") == 0 ? 2 : 1,
@@ -2638,7 +2644,15 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
     /* the status bar */
     status = gtk_label_new("mp " VERSION);
     gtk_box_pack_start(GTK_BOX(vbox), status, FALSE, FALSE, 0);
-    gtk_misc_set_alignment(GTK_MISC(status), 0, 0.5);
+
+#if CONFOPT_GTK == 2
+    gtk_misc_set_alignment(GTK_MISC(label), 0, .5);
+#endif
+#if CONFOPT_GTK == 3
+    gtk_label_set_xalign(GTK_LABEL(status), 0.0);
+    gtk_label_set_yalign(GTK_LABEL(status), 0.5);
+#endif
+
     gtk_label_set_justify(GTK_LABEL(status), GTK_JUSTIFY_LEFT);
 
     gtk_widget_show_all(window);
