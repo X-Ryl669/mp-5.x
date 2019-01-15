@@ -58,9 +58,9 @@ public:
 /* global data */
 QApplication *app;
 MPWindow *window;
-QMenuBar *menubar;
 
 #define MENU_CLASS QMenu
+#define MENUBAR_CLASS QMenuBar
 
 #include "mpv_qk_common.cpp"
 
@@ -70,24 +70,14 @@ MPWindow::MPWindow(QWidget * parent) : QMainWindow(parent)
 {
     QVBoxLayout *vb;
     QHBoxLayout *hb;
-    int height;
 
     setWindowTitle("mp " VERSION);
 
-    menubar = this->menuBar();
-    qk_build_menu();
+//    menubar = this->menuBar();
+    qk_build_menu(this->menuBar());
 
     /* pick an optimal height for the menu & tabs */
-    height = menubar->sizeHint().height();
-
-    /* top area */
-    hb = new QHBoxLayout();
-    hb->setContentsMargins(0, 0, 0, 0);
-
-    hb->addWidget(menubar);
-    QWidget *ta = new QWidget();
-    ta->setLayout(hb);
-    ta->setMaximumHeight(height);
+//    int height = menubar->sizeHint().height();
 
     /* main area */
     hb = new QHBoxLayout();
@@ -103,7 +93,6 @@ MPWindow::MPWindow(QWidget * parent) : QMainWindow(parent)
     /* the full container */
     vb = new QVBoxLayout();
 
-    vb->addWidget(ta);
     vb->addWidget(area->file_tabs);
     vb->addWidget(cc);
 
@@ -120,7 +109,7 @@ MPWindow::MPWindow(QWidget * parent) : QMainWindow(parent)
     connect(area->file_tabs, SIGNAL(currentChanged(int)),
             area, SLOT(from_filetabs(int)));
 
-    connect(menubar, SIGNAL(triggered(QAction *)),
+    connect(this->menuBar(), SIGNAL(triggered(QAction *)),
             area, SLOT(from_menu(QAction *)));
 
     this->setWindowIcon(QIcon(QPixmap(mp_xpm)));

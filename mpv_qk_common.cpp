@@ -207,7 +207,7 @@ static QFont *qk_build_font(void)
 }
 
 
-static void qk_build_menu(void)
+static void qk_build_menu(MENUBAR_CLASS *menubar)
 /* builds the menu */
 {
     int n;
@@ -1080,7 +1080,7 @@ static mpdm_t qt4_drv_update_ui(mpdm_t a, mpdm_t ctxt)
 {
     area->font = qk_build_font();
     qk_build_colors();
-    qk_build_menu();
+    qk_build_menu(window->menuBar());
 
     area->ls_width = area->ls_height = -1;
     area->update();
