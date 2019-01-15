@@ -2679,28 +2679,31 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
 
 int gtk_drv_detect(int *argc, char ***argv)
 {
-    mpdm_t drv;
-    int n;
+    int n, ret = 1;
 
     for (n = 0; n < *argc; n++) {
         if (strcmp(argv[0][n], "-txt") == 0)
-            return 0;
+            ret = 0;
     }
 
-    if (!gtk_init_check(argc, argv))
-        return 0;
+    if (ret) {
+        if (gtk_init_check(argc, argv)) {
+            mpdm_t drv;
 
-    drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
+            drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
 
 #if CONFOPT_GTK == 3
-    mpdm_hset_s(drv, L"id", MPDM_LS(L"gtk3"));
+            mpdm_hset_s(drv, L"id", MPDM_LS(L"gtk3"));
 #else
-    mpdm_hset_s(drv, L"id", MPDM_LS(L"gtk2"));
+            mpdm_hset_s(drv, L"id", MPDM_LS(L"gtk2"));
 #endif
+            mpdm_hset_s(drv, L"startup", MPDM_X(gtk_drv_startup));
+        }
+        else
+            ret = 0;
+    }
 
-    mpdm_hset_s(drv, L"startup", MPDM_X(gtk_drv_startup));
-
-    return 1;
+    return ret;
 }
 
 #endif                          /* CONFOPT_GTK */
