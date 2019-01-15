@@ -46,6 +46,8 @@ public:
     void draw_status();
     void draw_filetabs();
 
+    QFont *font;
+
     QScrollBar *scrollbar;
     QLabel *statusbar;
     QTabBar *file_tabs;
@@ -163,47 +165,44 @@ static void qk_build_colors(void)
 }
 
 
-static QFont qk_build_font(int rebuild)
+static QFont *qk_build_font(void)
 /* (re)builds the font */
 {
-    static QFont font;
+    QFont *font;
+    mpdm_t c;
+    mpdm_t w = NULL;
+    int font_size       = 10;
+    char *font_face     = (char *) "Courier";
+    double font_weight  = 0.0;
 
-    if (rebuild) {
-        mpdm_t c;
-        mpdm_t w = NULL;
-        int font_size       = 10;
-        char *font_face     = (char *) "Courier";
-        double font_weight  = 0.0;
+    if ((c = mpdm_hget_s(MP, L"config")) != NULL) {
+        mpdm_t v;
 
-        if ((c = mpdm_hget_s(MP, L"config")) != NULL) {
-            mpdm_t v;
+        if ((v = mpdm_hget_s(c, L"font_size")) != NULL)
+            font_size = mpdm_ival(v);
+        else
+            mpdm_hset_s(c, L"font_size", MPDM_I(font_size));
 
-            if ((v = mpdm_hget_s(c, L"font_size")) != NULL)
-                font_size = mpdm_ival(v);
-            else
-                mpdm_hset_s(c, L"font_size", MPDM_I(font_size));
+        if ((v = mpdm_hget_s(c, L"font_weight")) != NULL)
+            font_weight = mpdm_rval(v) * 100.0;
+        else
+            mpdm_hset_s(c, L"font_weight", MPDM_R(font_weight / 100.0));
 
-            if ((v = mpdm_hget_s(c, L"font_weight")) != NULL)
-                font_weight = mpdm_rval(v) * 100.0;
-            else
-                mpdm_hset_s(c, L"font_weight", MPDM_R(font_weight / 100.0));
-
-            if ((v = mpdm_hget_s(c, L"font_face")) != NULL) {
-                w = mpdm_ref(MPDM_2MBS((wchar_t *) v->data));
-                font_face = (char *) w->data;
-            }
-            else
-                mpdm_hset_s(c, L"font_face", MPDM_MBS(font_face));
+        if ((v = mpdm_hget_s(c, L"font_face")) != NULL) {
+            w = mpdm_ref(MPDM_2MBS((wchar_t *) v->data));
+            font_face = (char *) w->data;
         }
-
-        font = QFont(QString(font_face), font_size);
-        font.setStyleHint(QFont::TypeWriter);
-
-        if (font_weight > 0.0)
-            font.setWeight((int) font_weight);
-
-        mpdm_unref(w);
+        else
+            mpdm_hset_s(c, L"font_face", MPDM_MBS(font_face));
     }
+
+    font = new QFont(QString(font_face), font_size);
+    font->setStyleHint(QFont::TypeWriter);
+
+    if (font_weight > 0.0)
+        font->setWeight((int) font_weight);
+
+    mpdm_unref(w);
 
     return font;
 }
@@ -257,6 +256,8 @@ static void qk_build_menu(void)
 
 MPArea::MPArea(QWidget *parent) : QWidget(parent)
 {
+    font = qk_build_font();
+
     setAttribute(Qt::WA_InputMethodEnabled, true);
 
     setAcceptDrops(true);
@@ -370,7 +371,6 @@ void MPArea::paintEvent(QPaintEvent *)
 {
     mpdm_t w;
     int n, m, y, yb;
-    QFont font;
     bool underline = false;
     QPen *epen;
     int is_new = 0;
@@ -393,9 +393,8 @@ void MPArea::paintEvent(QPaintEvent *)
         painter.drawRect(0, 0, ls_width, ls_height);
     }
 
-    font = qk_build_font(0);
-    font.setUnderline(false);
-    painter.setFont(font);
+    font->setUnderline(false);
+    painter.setFont(*font);
 
     font_width = painter.fontMetrics().width("M");
     font_height = painter.fontMetrics().height();
@@ -433,8 +432,8 @@ void MPArea::paintEvent(QPaintEvent *)
 
                 if (underline != underlines[attr]) {
                     underline = underlines[attr];
-                    font.setUnderline(underline);
-                    painter.setFont(font);
+                    font->setUnderline(underline);
+                    painter.setFont(*font);
                 }
 
                 painter.drawText(x, y + yb, qs);
@@ -1083,7 +1082,7 @@ void MPArea::from_timer(void)
 
 static mpdm_t qt4_drv_update_ui(mpdm_t a, mpdm_t ctxt)
 {
-    qk_build_font(1);
+    area->font = qk_build_font();
     qk_build_colors();
     qk_build_menu();
 

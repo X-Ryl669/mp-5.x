@@ -484,7 +484,6 @@ static mpdm_t qt4_drv_startup(mpdm_t a, mpdm_t ctxt)
 {
     qt4_register_functions();
 
-    qk_build_font(1);
     qk_build_colors();
 
     window = new MPWindow();
