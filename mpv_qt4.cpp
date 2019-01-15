@@ -71,7 +71,7 @@ QTabBar *file_tabs;
 
 static void draw_status(void)
 {
-    statusbar->setText(str_to_qstring(mp_build_status_line()));
+    statusbar->setText(v_to_qstring(mp_build_status_line()));
 }
 
 
@@ -212,7 +212,7 @@ static mpdm_t qt4_drv_alert(mpdm_t a, mpdm_t ctxt)
 {
     /* 1# arg: prompt */
     QMessageBox::information(window, "mp " VERSION,
-                             str_to_qstring(mpdm_aget(a, 0)));
+                             v_to_qstring(mpdm_aget(a, 0)));
 
     return NULL;
 }
@@ -224,7 +224,7 @@ static mpdm_t qt4_drv_confirm(mpdm_t a, mpdm_t ctxt)
 
     /* 1# arg: prompt */
     r = QMessageBox::question(window, "mp" VERSION,
-                              str_to_qstring(mpdm_aget(a, 0)),
+                              v_to_qstring(mpdm_aget(a, 0)),
                               QMessageBox::Yes | QMessageBox::
                               No | QMessageBox::Cancel);
 
@@ -255,9 +255,9 @@ static mpdm_t qt4_drv_openfile(mpdm_t a, mpdm_t ctxt)
 
     /* 1# arg: prompt */
     r = QFileDialog::getOpenFileName(window,
-                                     str_to_qstring(mpdm_aget(a, 0)), tmp);
+                                     v_to_qstring(mpdm_aget(a, 0)), tmp);
 
-    return qstring_to_str(r);
+    return qstring_to_v(r);
 }
 
 
@@ -270,9 +270,9 @@ static mpdm_t qt4_drv_savefile(mpdm_t a, mpdm_t ctxt)
 
     /* 1# arg: prompt */
     r = QFileDialog::getSaveFileName(window,
-                                     str_to_qstring(mpdm_aget(a, 0)), tmp);
+                                     v_to_qstring(mpdm_aget(a, 0)), tmp);
 
-    return qstring_to_str(r);
+    return qstring_to_v(r);
 }
 
 
@@ -285,11 +285,11 @@ static mpdm_t qt4_drv_openfolder(mpdm_t a, mpdm_t ctxt)
 
     /* 1# arg: prompt */
     r = QFileDialog::getExistingDirectory(window,
-                                    str_to_qstring(mpdm_aget(a, 0)),
+                                    v_to_qstring(mpdm_aget(a, 0)),
                                     tmp,
                                     QFileDialog::ShowDirsOnly);
 
-    return qstring_to_str(r);
+    return qstring_to_v(r);
 }
 
 
@@ -335,7 +335,7 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
         type = mpdm_string(mpdm_hget_s(w, L"type"));
 
         if ((t = mpdm_hget_s(w, L"label")) != NULL) {
-            ql->setText(str_to_qstring(mpdm_gettext(t)));
+            ql->setText(v_to_qstring(mpdm_gettext(t)));
         }
 
         t = mpdm_hget_s(w, L"value");
@@ -349,7 +349,7 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
             qc->setMaxVisibleItems(8);
 
             if (t != NULL)
-                qc->setEditText(str_to_qstring(t));
+                qc->setEditText(v_to_qstring(t));
 
             qlist[n] = qc;
 
@@ -360,7 +360,7 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
                 h = mp_get_history(h);
 
                 for (i = mpdm_size(h) - 1; i >= 0; i--)
-                    qc->addItem(str_to_qstring(mpdm_aget(h, i)));
+                    qc->addItem(v_to_qstring(mpdm_aget(h, i)));
             }
 
             /* select all the editable field */
@@ -401,7 +401,7 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
             mpdm_t l = mpdm_hget_s(w, L"list");
 
             for (i = 0; i < mpdm_size(l); i++)
-                qlw->addItem(str_to_qstring(mpdm_aget(l, i)));
+                qlw->addItem(v_to_qstring(mpdm_aget(l, i)));
 
             qlw->setCurrentRow(mpdm_ival(t));
 
@@ -442,7 +442,7 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
             mpdm_t h;
             QComboBox *ql = (QComboBox *) qlist[n];
 
-            v = mpdm_ref(qstring_to_str(ql->currentText()));
+            v = mpdm_ref(qstring_to_v(ql->currentText()));
 
             /* if it has history, add to it */
             if ((h = mpdm_hget_s(w, L"history")) != NULL &&
@@ -459,7 +459,7 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
         if (wcscmp(type, L"password") == 0) {
             QLineEdit *ql = (QLineEdit *) qlist[n];
 
-            v = qstring_to_str(ql->text());
+            v = qstring_to_v(ql->text());
         }
         else
         if (wcscmp(type, L"checkbox") == 0) {

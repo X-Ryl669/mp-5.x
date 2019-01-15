@@ -76,37 +76,28 @@ QHash <QAction *, mpdm_t> qaction_to_action;
 
 static void draw_status(void);
 
-static mpdm_t qstring_to_str(QString s)
+static mpdm_t qstring_to_v(QString s)
 /* converts a QString to an MPDM string */
 {
     mpdm_t r = NULL;
 
     if (s != NULL) {
         int t = s.size();
-        wchar_t *wptr = (wchar_t *) malloc((t + 1) * sizeof(wchar_t));
+        wchar_t *wptr = (wchar_t *) calloc((t + 1), sizeof(wchar_t));
 
         r = MPDM_ENS(wptr, t);
 
         s.toWCharArray(wptr);
-        wptr[t] = L'\0';
     }
 
     return r;
 }
 
 
-QString str_to_qstring(mpdm_t s)
+QString v_to_qstring(mpdm_t s)
 /* converts an MPDM string to a QString */
 {
-    QString r;
-    wchar_t *wptr;
-
-    mpdm_ref(s);
-    wptr = mpdm_string(s);
-    r = QString::fromWCharArray(wptr);
-    mpdm_unref(s);
-
-    return r;
+    return QString::fromWCharArray(mpdm_string(s));
 }
 
 
@@ -220,8 +211,7 @@ static void qk_build_menu(void)
     mpdm_t m;
 
     /* gets the current menu */
-    if ((m = mpdm_hget_s(MP, L"menu")) == NULL)
-        return;
+    m = mpdm_hget_s(MP, L"menu");
 
     menubar->clear();
 
@@ -234,7 +224,7 @@ static void qk_build_menu(void)
         mi = mpdm_aget(m, n);
         v = mpdm_aget(mi, 0);
 
-        MENU_CLASS *menu = menubar->addMenu(str_to_qstring(mpdm_gettext(v)));
+        MENU_CLASS *menu = menubar->addMenu(v_to_qstring(mpdm_gettext(v)));
 
         /* get the items */
         v = mpdm_aget(mi, 1);
@@ -249,7 +239,7 @@ static void qk_build_menu(void)
                 menu->addSeparator();
             else {
                 mpdm_ref(w);
-                qaction_to_action[menu->addAction(str_to_qstring(mp_menu_label(w)))] = w;
+                qaction_to_action[menu->addAction(v_to_qstring(mp_menu_label(w)))] = w;
             }
         }
     }
@@ -262,17 +252,16 @@ static int ignore_scrollbar_signal = 0;
 
 static void draw_scrollbar(void)
 {
-    static int ol = -1;
+    static int ol  = -1;
     static int ovy = -1;
     static int oty = -1;
-    mpdm_t txt = mpdm_hget_s(mp_active(), L"txt");
-    mpdm_t window = mpdm_hget_s(MP, L"window");
-    int vy = mpdm_ival(mpdm_hget_s(txt, L"vy"));
-    int ty = mpdm_ival(mpdm_hget_s(window, L"ty"));
-    int l = mpdm_size(mpdm_hget_s(txt, L"lines")) - ty;
+    mpdm_t txt     = mpdm_hget_s(mp_active(), L"txt");
+    mpdm_t window  = mpdm_hget_s(MP, L"window");
+    int vy         = mpdm_ival(mpdm_hget_s(txt, L"vy"));
+    int ty         = mpdm_ival(mpdm_hget_s(window, L"ty"));
+    int l          = mpdm_size(mpdm_hget_s(txt, L"lines")) - ty;
 
     if (ol != l || ovy != vy || oty != ty) {
-
         ignore_scrollbar_signal = 1;
 
         scrollbar->setMinimum(0);
@@ -287,7 +276,7 @@ static void draw_scrollbar(void)
 
 static void draw_filetabs(void)
 {
-    static mpdm_t last = NULL;
+    static mpdm_t prev = NULL;
     mpdm_t names;
     int n, i;
 
@@ -298,18 +287,16 @@ static void draw_filetabs(void)
     i = mpdm_ival(mpdm_hget_s(MP, L"active_i"));
 
     /* is the list different from the previous one? */
-    if (mpdm_cmp(names, last) != 0) {
-
+    if (mpdm_cmp(names, prev) != 0) {
         while (file_tabs->count())
             file_tabs->removeTab(0);
 
         /* create the new ones */
         for (n = 0; n < mpdm_size(names); n++)
-            file_tabs->addTab(str_to_qstring(mpdm_aget(names, n)));
+            file_tabs->addTab(v_to_qstring(mpdm_aget(names, n)));
 
         /* store for the next time */
-        mpdm_unref(last);
-        last = mpdm_ref(names);
+        mpdm_set(&prev, names);
     }
 
     mpdm_unref(names);
@@ -321,7 +308,7 @@ static void draw_filetabs(void)
 
 /** MPArea methods **/
 
-MPArea::MPArea(QWidget * parent):QWidget(parent)
+MPArea::MPArea(QWidget *parent) : QWidget(parent)
 {
     setAttribute(Qt::WA_InputMethodEnabled, true);
 
@@ -335,7 +322,7 @@ MPArea::MPArea(QWidget * parent):QWidget(parent)
 }
 
 
-bool MPArea::event(QEvent * event)
+bool MPArea::event(QEvent *event)
 {
     /* special tab processing */
     if (event->type() == QEvent::KeyPress) {
@@ -358,6 +345,7 @@ bool MPArea::event(QEvent * event)
     return QWidget::event(event);
 }
 
+
 void MPArea::paintEvent(QPaintEvent *)
 {
     mpdm_t w;
@@ -370,9 +358,8 @@ void MPArea::paintEvent(QPaintEvent *)
     if (this->width() != ls_width && this->height() != ls_height) {
         ls_width    = this->width();
         ls_height   = this->height();
-
         pixmap      = new QPixmap(ls_width, ls_height);
-        is_new = 1;
+        is_new      = 1;
     }
 
     epen = new QPen(inks[normal_attr]);
@@ -422,7 +409,7 @@ void MPArea::paintEvent(QPaintEvent *)
                 painter.setPen(inks[attr]);
                 painter.setBackground(papers[attr]);
 
-                QString qs = str_to_qstring(s);
+                QString qs = v_to_qstring(s);
 
                 if (underline != underlines[attr]) {
                     underline = underlines[attr];
@@ -456,16 +443,16 @@ void MPArea::paintEvent(QPaintEvent *)
 }
 
 
-void MPArea::inputMethodEvent(QInputMethodEvent * event)
+void MPArea::inputMethodEvent(QInputMethodEvent *event)
 {
     QString s = event->commitString();
 
-    mp_process_event(qstring_to_str(s));
+    mp_process_event(qstring_to_v(s));
     area->update();
 }
 
 
-void MPArea::keyReleaseEvent(QKeyEvent * event)
+void MPArea::keyReleaseEvent(QKeyEvent *event)
 {
     if (!event->isAutoRepeat()) {
         key_down = 0;
@@ -476,7 +463,7 @@ void MPArea::keyReleaseEvent(QKeyEvent * event)
 }
 
 
-void MPArea::keyPressEvent(QKeyEvent * event)
+void MPArea::keyPressEvent(QKeyEvent *event)
 {
     mpdm_t k = NULL;
     wchar_t *ptr = NULL;
@@ -883,7 +870,7 @@ void MPArea::keyPressEvent(QKeyEvent * event)
     }
 
     if (ptr == NULL)
-        k = qstring_to_str(event->text());
+        k = qstring_to_v(event->text());
     else
         k = MPDM_S(ptr);
 
@@ -895,7 +882,7 @@ void MPArea::keyPressEvent(QKeyEvent * event)
 }
 
 
-void MPArea::mousePressEvent(QMouseEvent * event)
+void MPArea::mousePressEvent(QMouseEvent *event)
 {
     wchar_t *ptr = NULL;
 
@@ -952,13 +939,13 @@ void MPArea::mouseDoubleClickEvent(QMouseEvent *event)
 }
 
 
-void MPArea::mouseReleaseEvent(QMouseEvent * event)
+void MPArea::mouseReleaseEvent(QMouseEvent *event)
 {
     mouse_down = 0;
 }
 
 
-void MPArea::mouseMoveEvent(QMouseEvent * event)
+void MPArea::mouseMoveEvent(QMouseEvent *event)
 {
     if (mouse_down) {
         int x, y;
@@ -979,7 +966,7 @@ void MPArea::mouseMoveEvent(QMouseEvent * event)
 }
 
 
-void MPArea::wheelEvent(QWheelEvent * event)
+void MPArea::wheelEvent(QWheelEvent *event)
 {
     if (event->delta() > 0)
         mp_process_event(MPDM_S(L"mouse-wheel-up"));
@@ -990,20 +977,18 @@ void MPArea::wheelEvent(QWheelEvent * event)
 }
 
 
-void MPArea::dragEnterEvent(QDragEnterEvent * event)
+void MPArea::dragEnterEvent(QDragEnterEvent *event)
 {
     if (event->mimeData()->hasFormat("text/uri-list"))
         event->acceptProposedAction();
 }
 
 
-void MPArea::dropEvent(QDropEvent * event)
+void MPArea::dropEvent(QDropEvent *event)
 {
     int n;
-    mpdm_t v = qstring_to_str(event->mimeData()->text());
+    mpdm_t v = qstring_to_v(event->mimeData()->text());
     mpdm_t l = MPDM_A(0);
-
-    mpdm_ref(l);
 
     /* split the list of files */
     v = mpdm_split_s(v, L"\n");
@@ -1026,8 +1011,6 @@ void MPArea::dropEvent(QDropEvent * event)
 
     event->acceptProposedAction();
     mp_process_event(MPDM_LS(L"dropped-files"));
-
-    mpdm_unref(l);
 
     area->update();
 }
@@ -1140,8 +1123,9 @@ static mpdm_t qt4_drv_clip_to_sys(mpdm_t a, mpdm_t ctxt)
     v = mpdm_hget_s(MP, L"clipboard");
 
     if (mpdm_size(v) != 0) {
-        v = mpdm_join_s(v, L"\n");
-        qc->setText(str_to_qstring(v), QClipboard::Selection);
+        v = mpdm_ref(mpdm_join_s(v, L"\n"));
+        qc->setText(v_to_qstring(v), QClipboard::Selection);
+        mpdm_unref(v);
     }
 
     return NULL;
@@ -1154,7 +1138,7 @@ static mpdm_t qt4_drv_sys_to_clip(mpdm_t a, mpdm_t ctxt)
     QString qs = qc->text(QClipboard::Selection);
 
     /* split and set as the clipboard */
-    mpdm_hset_s(MP, L"clipboard", mpdm_split_s(qstring_to_str(qs), L"\n"));
+    mpdm_hset_s(MP, L"clipboard", mpdm_split_s(qstring_to_v(qs), L"\n"));
     mpdm_hset_s(MP, L"clipboard_vertical", MPDM_I(0));
 
     return NULL;

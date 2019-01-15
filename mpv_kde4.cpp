@@ -80,7 +80,7 @@ KTabBar *file_tabs;
 
 static void draw_status(void)
 {
-    statusbar->changeItem(str_to_qstring(mp_build_status_line()), 0);
+    statusbar->changeItem(v_to_qstring(mp_build_status_line()), 0);
 }
 
 /** MPWindow methods **/
@@ -159,7 +159,7 @@ static mpdm_t kde4_drv_alert(mpdm_t a, mpdm_t ctxt)
 /* alert driver function */
 {
     /* 1# arg: prompt */
-    KMessageBox::information(0, str_to_qstring(mpdm_aget(a, 0)),
+    KMessageBox::information(0, v_to_qstring(mpdm_aget(a, 0)),
                              i18n("mp " VERSION));
 
     return NULL;
@@ -172,7 +172,7 @@ static mpdm_t kde4_drv_confirm(mpdm_t a, mpdm_t ctxt)
 
     /* 1# arg: prompt */
     r = KMessageBox::questionYesNoCancel(0,
-                                         str_to_qstring(mpdm_aget(a, 0)),
+                                         v_to_qstring(mpdm_aget(a, 0)),
                                          i18n("mp" VERSION));
 
     switch (r) {
@@ -202,9 +202,9 @@ static mpdm_t kde4_drv_openfile(mpdm_t a, mpdm_t ctxt)
 
     /* 1# arg: prompt */
     r = KFileDialog::getOpenFileName(KUrl::fromPath(tmp), "*", 0,
-                                     str_to_qstring(mpdm_aget(a, 0)));
+                                     v_to_qstring(mpdm_aget(a, 0)));
 
-    return qstring_to_str(r);
+    return qstring_to_v(r);
 }
 
 
@@ -217,9 +217,9 @@ static mpdm_t kde4_drv_savefile(mpdm_t a, mpdm_t ctxt)
 
     /* 1# arg: prompt */
     r = KFileDialog::getSaveFileName(KUrl::fromPath(tmp), "*", 0,
-                                     str_to_qstring(mpdm_aget(a, 0)));
+                                     v_to_qstring(mpdm_aget(a, 0)));
 
-    return qstring_to_str(r);
+    return qstring_to_v(r);
 }
 
 
@@ -250,7 +250,7 @@ static mpdm_t kde4_drv_form(mpdm_t a, mpdm_t ctxt)
 
         if ((t = mpdm_hget_s(w, L"label")) != NULL) {
             QLabel *ql = new QLabel(hb);
-            ql->setText(str_to_qstring(mpdm_gettext(t)));
+            ql->setText(v_to_qstring(mpdm_gettext(t)));
         }
 
         t = mpdm_hget_s(w, L"value");
@@ -264,7 +264,7 @@ static mpdm_t kde4_drv_form(mpdm_t a, mpdm_t ctxt)
             ql->setMaxVisibleItems(8);
 
             if (t != NULL)
-                ql->setEditText(str_to_qstring(t));
+                ql->setEditText(v_to_qstring(t));
 
             qlist[n] = ql;
 
@@ -275,7 +275,7 @@ static mpdm_t kde4_drv_form(mpdm_t a, mpdm_t ctxt)
                 h = mp_get_history(h);
 
                 for (i = mpdm_size(h) - 1; i >= 0; i--)
-                    ql->addItem(str_to_qstring(mpdm_aget(h, i)));
+                    ql->addItem(v_to_qstring(mpdm_aget(h, i)));
             }
         }
         else
@@ -307,7 +307,7 @@ static mpdm_t kde4_drv_form(mpdm_t a, mpdm_t ctxt)
             mpdm_t l = mpdm_hget_s(w, L"list");
 
             for (i = 0; i < mpdm_size(l); i++)
-                ql->addItem(str_to_qstring(mpdm_aget(l, i)));
+                ql->addItem(v_to_qstring(mpdm_aget(l, i)));
 
             ql->setCurrentRow(mpdm_ival(t));
 
@@ -337,7 +337,7 @@ static mpdm_t kde4_drv_form(mpdm_t a, mpdm_t ctxt)
             mpdm_t h;
             QComboBox *ql = (QComboBox *) qlist[n];
 
-            v = qstring_to_str(ql->currentText());
+            v = qstring_to_v(ql->currentText());
 
             /* if it has history, add to it */
             if ((h = mpdm_hget_s(w, L"history")) != NULL &&
@@ -352,7 +352,7 @@ static mpdm_t kde4_drv_form(mpdm_t a, mpdm_t ctxt)
         if (wcscmp(type, L"password") == 0) {
             QLineEdit *ql = (QLineEdit *) qlist[n];
 
-            v = qstring_to_str(ql->text());
+            v = qstring_to_v(ql->text());
         }
         else
         if (wcscmp(type, L"checkbox") == 0) {
