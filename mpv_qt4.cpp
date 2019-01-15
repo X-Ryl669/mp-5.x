@@ -53,8 +53,6 @@ public:
     bool queryExit(void);
     void closeEvent(QCloseEvent *event);
     bool event(QEvent * event);
-
-    QSettings *settings;
 };
 
 /* global data */
@@ -107,11 +105,9 @@ MPWindow::MPWindow(QWidget * parent) : QMainWindow(parent)
     hb->setContentsMargins(0, 0, 0, 0);
 
     area = new MPArea();
-    scrollbar = new QScrollBar();
-    scrollbar->setFocusPolicy(Qt::NoFocus);
 
     hb->addWidget(area);
-    hb->addWidget(scrollbar);
+    hb->addWidget(area->scrollbar);
     QWidget *cc = new QWidget();
     cc->setLayout(hb);
 
@@ -130,7 +126,7 @@ MPWindow::MPWindow(QWidget * parent) : QMainWindow(parent)
 
     setCentralWidget(mc);
 
-    connect(scrollbar, SIGNAL(valueChanged(int)),
+    connect(area->scrollbar, SIGNAL(valueChanged(int)),
             area, SLOT(from_scrollbar(int)));
 
     connect(file_tabs, SIGNAL(currentChanged(int)),

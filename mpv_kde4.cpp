@@ -103,12 +103,10 @@ MPWindow::MPWindow(QWidget * parent) : KMainWindow(parent)
 
     /* main area */
     area = new MPArea(hb);
-    scrollbar = new QScrollBar(hb);
-    scrollbar->setFocusPolicy(Qt::NoFocus);
 
     setCentralWidget(vb);
 
-    connect(scrollbar, SIGNAL(valueChanged(int)),
+    connect(area->scrollbar, SIGNAL(valueChanged(int)),
             area, SLOT(from_scrollbar(int)));
 
     connect(file_tabs, SIGNAL(currentChanged(int)),

@@ -42,6 +42,10 @@ public:
     void dropEvent(QDropEvent * event);
     bool event(QEvent * event);
 
+    void draw_scrollbar();
+
+    QScrollBar *scrollbar;
+
     QTimer *timer;
 
     QPixmap *pixmap;
@@ -60,7 +64,6 @@ public slots:
 
 
 MPArea *area;
-QScrollBar *scrollbar;
 static int font_width = -1;
 static int font_height = -1;
 static int mouse_down = 0;
@@ -248,32 +251,6 @@ static void qk_build_menu(void)
 }
 
 
-static int ignore_scrollbar_signal = 0;
-
-static void draw_scrollbar(void)
-{
-    static int ol  = -1;
-    static int ovy = -1;
-    static int oty = -1;
-    mpdm_t txt     = mpdm_hget_s(mp_active(), L"txt");
-    mpdm_t window  = mpdm_hget_s(MP, L"window");
-    int vy         = mpdm_ival(mpdm_hget_s(txt, L"vy"));
-    int ty         = mpdm_ival(mpdm_hget_s(window, L"ty"));
-    int l          = mpdm_size(mpdm_hget_s(txt, L"lines")) - ty;
-
-    if (ol != l || ovy != vy || oty != ty) {
-        ignore_scrollbar_signal = 1;
-
-        scrollbar->setMinimum(0);
-        scrollbar->setMaximum(ol = l);
-        scrollbar->setValue(ovy = vy);
-        scrollbar->setPageStep(oty = ty);
-
-        ignore_scrollbar_signal = 0;
-    }
-}
-
-
 static void draw_filetabs(void)
 {
     static mpdm_t prev = NULL;
@@ -319,6 +296,9 @@ MPArea::MPArea(QWidget *parent) : QWidget(parent)
 
     ls_width    = -1;
     ls_height   = -1;
+
+    scrollbar = new QScrollBar();
+    scrollbar->setFocusPolicy(Qt::NoFocus);
 }
 
 
@@ -343,6 +323,32 @@ bool MPArea::event(QEvent *event)
 
     /* keep normal processing */
     return QWidget::event(event);
+}
+
+
+static int ignore_scrollbar_signal = 0;
+
+void MPArea::draw_scrollbar(void)
+{
+    static int ol  = -1;
+    static int ovy = -1;
+    static int oty = -1;
+    mpdm_t txt     = mpdm_hget_s(mp_active(), L"txt");
+    mpdm_t window  = mpdm_hget_s(MP, L"window");
+    int vy         = mpdm_ival(mpdm_hget_s(txt, L"vy"));
+    int ty         = mpdm_ival(mpdm_hget_s(window, L"ty"));
+    int l          = mpdm_size(mpdm_hget_s(txt, L"lines")) - ty;
+
+    if (ol != l || ovy != vy || oty != ty) {
+        ignore_scrollbar_signal = 1;
+
+        scrollbar->setMinimum(0);
+        scrollbar->setMaximum(ol = l);
+        scrollbar->setValue(ovy = vy);
+        scrollbar->setPageStep(oty = ty);
+
+        ignore_scrollbar_signal = 0;
+    }
 }
 
 
