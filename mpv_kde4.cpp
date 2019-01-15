@@ -78,10 +78,6 @@ KTabBar *file_tabs;
 
 #include "mpv_qk_common.cpp"
 
-static void draw_status(void)
-{
-    statusbar->changeItem(v_to_qstring(mp_build_status_line()), 0);
-}
 
 /** MPWindow methods **/
 

@@ -43,8 +43,10 @@ public:
     bool event(QEvent * event);
 
     void draw_scrollbar();
+    void draw_status();
 
     QScrollBar *scrollbar;
+    QLabel *statusbar;
 
     QTimer *timer;
 
@@ -76,8 +78,6 @@ QHash <QAction *, mpdm_t> qaction_to_action;
 
 
 /** code **/
-
-static void draw_status(void);
 
 static mpdm_t qstring_to_v(QString s)
 /* converts a QString to an MPDM string */
@@ -299,6 +299,8 @@ MPArea::MPArea(QWidget *parent) : QWidget(parent)
 
     scrollbar = new QScrollBar();
     scrollbar->setFocusPolicy(Qt::NoFocus);
+
+    statusbar = new QLabel();
 }
 
 
@@ -349,6 +351,12 @@ void MPArea::draw_scrollbar(void)
 
         ignore_scrollbar_signal = 0;
     }
+}
+
+
+void MPArea::draw_status(void)
+{
+    statusbar->setText(v_to_qstring(mp_build_status_line()));
 }
 
 

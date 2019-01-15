@@ -4,7 +4,7 @@
 
     Qt4 (and Qt5) driver.
 
-    Copyright (C) 2009/2018 Angel Ortega <angel@triptico.com> et al.
+    Copyright (C) 2009/2019 Angel Ortega <angel@triptico.com> et al.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -59,18 +59,11 @@ public:
 QApplication *app;
 MPWindow *window;
 QMenuBar *menubar;
-QLabel *statusbar;
 QTabBar *file_tabs;
 
 #define MENU_CLASS QMenu
 
 #include "mpv_qk_common.cpp"
-
-static void draw_status(void)
-{
-    statusbar->setText(v_to_qstring(mp_build_status_line()));
-}
-
 
 /** MPWindow methods **/
 
@@ -121,8 +114,7 @@ MPWindow::MPWindow(QWidget * parent) : QMainWindow(parent)
     QWidget *mc = new QWidget();
     mc->setLayout(vb);
 
-    statusbar = new QLabel();
-    this->statusBar()->addWidget(statusbar);
+    this->statusBar()->addWidget(area->statusbar);
 
     setCentralWidget(mc);
 
