@@ -455,7 +455,7 @@ static void draw_status(void)
 }
 
 
-static gint scroll_event(GtkWidget * widget, GdkEventScroll * event)
+static gint scroll_event(GtkWidget *widget, GdkEventScroll *event)
 /* 'scroll_event' handler (mouse wheel) */
 {
     double dx, dy;
@@ -477,7 +477,7 @@ static gint scroll_event(GtkWidget * widget, GdkEventScroll * event)
 
 #if CONFOPT_GTK == 3
     case GDK_SCROLL_SMOOTH:
-        gdk_event_get_scroll_deltas(event, &dx, &dy);
+        gdk_event_get_scroll_deltas((GdkEvent *)event, &dx, &dy);
 
         if (dy > 0)
             ptr = L"mouse-wheel-down";
@@ -1779,7 +1779,7 @@ static void drag_data_received(GtkWidget *w, GdkDragContext *dc,
     mp_process_event(MPDM_LS(L"dropped-files"));
     gtk_drv_render(mp_active(), 1);
 
-    gtk_drag_finish(dc, TRUE, TRUE, data);
+    gtk_drag_finish(dc, TRUE, TRUE, time);
 }
 
 
@@ -1837,13 +1837,13 @@ static void selection_get(GtkWidget *w, GtkSelectionData *sel, guint info, guint
         d = mpdm_hget_s(MP, L"clipboard");
 
         if (mpdm_size(d)) {
-            unsigned char *ptr;
+            char *ptr;
             int s;
 
             d = mpdm_ref(mpdm_join_s(d, L"\n"));
 
             /* convert to current locale */
-            ptr = (unsigned char *) mpdm_wcstombs(d->data, &s);
+            ptr = mpdm_wcstombs(d->data, &s);
 
             /* pastes into primary selection */
             gtk_selection_data_set_text(sel, ptr, (gsize) s);
@@ -1861,7 +1861,7 @@ static void selection_received(GtkWidget *w, GtkSelectionData *sel, gpointer d)
 {
     if (gtk_selection_data_get_data(sel) != NULL) {
         /* get selection */
-        mpdm_t v = MPDM_MBS(gtk_selection_data_get_data(sel));
+        mpdm_t v = MPDM_MBS((char *)gtk_selection_data_get_data(sel));
 
         /* split and set as the clipboard */
         mpdm_hset_s(MP, L"clipboard",          mpdm_split_s(v, L"\n"));
@@ -2149,7 +2149,7 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
                 combo_items = g_list_prepend(combo_items, ptr);
 #if CONFOPT_GTK == 3
                 gtk_combo_box_text_prepend_text(GTK_COMBO_BOX_TEXT(widget), ptr);
-                gtk_combo_box_set_active(GTK_COMBO_BOX_TEXT(widget), 0);
+                gtk_combo_box_set_active(GTK_COMBO_BOX(widget), 0);
 #endif
 
                 g_free(ptr);
