@@ -2384,8 +2384,12 @@ static mpdm_t gtk_drv_busy(mpdm_t a, mpdm_t ctxt)
     int onoff = mpdm_ival(mpdm_aget(a, 0));
 
     gdk_window_set_cursor(gtk_widget_get_window(window),
-                          gdk_cursor_new(onoff ? GDK_WATCH :
-                                         GDK_LEFT_PTR));
+#if CONFOPT_GTK == 2
+                          gdk_cursor_new(
+#else
+                          gdk_cursor_new_for_display(gdk_display_get_default(),
+#endif
+                          onoff ? GDK_WATCH : GDK_LEFT_PTR));
 
     while (gtk_events_pending())
         gtk_main_iteration();
