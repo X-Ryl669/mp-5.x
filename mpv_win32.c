@@ -378,7 +378,7 @@ void draw_status(void)
 }
 
 
-static void win32_draw(HWND hwnd, mpdm_t doc)
+static void win32_draw(HWND hwnd)
 /* win32 document draw function */
 {
     HDC hdc;
@@ -397,7 +397,7 @@ static void win32_draw(HWND hwnd, mpdm_t doc)
         build_colors();
     }
 
-    d = mp_draw(doc, 0);
+    d = mp_draw(mp_active(), 0);
 
     mpdm_ref(d);
 
@@ -993,7 +993,9 @@ long CALLBACK WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
 
     case WM_PAINT:
 
-        win32_draw(hwnd, mp_active());
+        if (mpdm_size(mpdm_hget_s(MP, L"docs")))
+            win32_draw(hwnd);
+
         return 0;
 
     case WM_SIZE:
