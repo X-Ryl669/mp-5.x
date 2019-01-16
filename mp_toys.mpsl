@@ -123,6 +123,8 @@ global mp_maze = new(mp_base, {
                 game_map[y][x] = '@';
 
                 state = 'PLAY';
+                tx = mp.window.tx;
+                ty = mp.window.ty;
             }
         },
         keypress:   sub (maze, keycode) {
