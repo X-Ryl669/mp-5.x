@@ -79,9 +79,6 @@ static int normal_attr = 0;
 /* mouse down flag */
 static int mouse_down = 0;
 
-/* timer function */
-static mpdm_t timer_func = NULL;
-
 /* maximize wanted? */
 static int maximize = 0;
 
@@ -1988,8 +1985,12 @@ static mpdm_t retrieve_form_data(mpdm_t form_args, GtkWidget **form_widgets)
 
 static gint timer_callback(gpointer data)
 {
-    mpdm_void(mpdm_exec(timer_func, NULL, NULL));
-    redraw();
+    mpdm_t v;
+
+    if ((v = mpdm_hget_s(MP, L"timer_func"))) {
+        mpdm_void(mpdm_exec(v, NULL, NULL));
+        redraw();
+    }
 
     return TRUE;
 }
@@ -2371,15 +2372,14 @@ static mpdm_t gtk_drv_timer(mpdm_t a, mpdm_t ctxt)
     int msecs = mpdm_ival(mpdm_aget(a, 0));
     mpdm_t func = mpdm_aget(a, 1);
 
-    /* previously defined one? remove */
-    if (timer_func != NULL)
+    if (prev)
         g_source_remove(prev);
+
+    mpdm_hset_s(MP, L"timer_func", func);
 
     /* if msecs and func are set, program timer */
     if (msecs > 0 && func != NULL)
         prev = g_timeout_add(msecs, timer_callback, NULL);
-
-    mpdm_set(&timer_func, func);
 
     return NULL;
 }
