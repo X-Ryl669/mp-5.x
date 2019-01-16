@@ -85,9 +85,6 @@ static mpdm_t form_values = NULL;
 /* mouse down flag */
 static int mouse_down = 0;
 
-/* timer function */
-static mpdm_t timer_func = NULL;
-
 /** code **/
 
 static void update_window_size(void)
@@ -1138,8 +1135,14 @@ long CALLBACK WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
         return 0;
 
     case WM_TIMER:
-        mpdm_void(mpdm_exec(timer_func, NULL, NULL));
-        redraw();
+        {
+            mpdm_t v;
+
+            if ((v = mpdm_hget_s(MP, L"timer_func"))) {
+                mpdm_void(mpdm_exec(v, NULL, NULL));
+                redraw();
+            }
+        }
 
         return 0;
     }
@@ -1732,15 +1735,13 @@ static mpdm_t win32_drv_timer(mpdm_t a, mpdm_t ctxt)
     int msecs = mpdm_ival(mpdm_aget(a, 0));
     mpdm_t func = mpdm_aget(a, 1);
 
-    /* previously defined one? remove */
-    if (timer_func != NULL)
-        KillTimer(hwnd, 1);
+    KillTimer(hwnd, 1);
+
+    mpdm_hset_s(MP, L"timer_func", func);
 
     /* if msecs and func are set, program timer */
     if (msecs > 0 && func != NULL)
         SetTimer(hwnd, 1, msecs, NULL);
-
-    mpdm_set(&timer_func, func);
 
     return NULL;
 }
