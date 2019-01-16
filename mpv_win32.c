@@ -1294,8 +1294,7 @@ static LPWORD lpwAlign(LPWORD lpIn)
 #define LABEL_ID	1000
 #define CTRL_ID		2000
 
-BOOL CALLBACK formDlgProc(HWND hwnd, UINT msg, WPARAM wparam,
-                          LPARAM lparam)
+BOOL CALLBACK formDlgProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 /* mp.drv.form() dialog proc */
 {
     int n;
@@ -1426,8 +1425,7 @@ BOOL CALLBACK formDlgProc(HWND hwnd, UINT msg, WPARAM wparam,
                 mpdm_aset(form_values, v, n);
 
                 /* if it has history, fill it */
-                if ((h = mpdm_hget_s(w, L"history")) != NULL &&
-                    v != NULL && mpdm_cmp_s(v, L"") != 0) {
+                if (v && (h = mpdm_hget_s(w, L"history")) && mpdm_cmp_s(v, L"")) {
                     h = mp_get_history(h);
 
                     if (mpdm_cmp(v, mpdm_aget(h, -1)) != 0)
@@ -1482,16 +1480,16 @@ LPWORD static build_control(LPWORD lpw, int x, int y,
 {
     LPDLGITEMTEMPLATE lpdit;
 
-    lpw = lpwAlign(lpw);
-    lpdit = (LPDLGITEMTEMPLATE) lpw;
-    lpdit->x = x;
-    lpdit->y = y;
-    lpdit->cx = cx;
-    lpdit->cy = cy;
-    lpdit->id = id;
+    lpw          = lpwAlign(lpw);
+    lpdit        = (LPDLGITEMTEMPLATE) lpw;
+    lpdit->x     = x;
+    lpdit->y     = y;
+    lpdit->cx    = cx;
+    lpdit->cy    = cy;
+    lpdit->id    = id;
     lpdit->style = style;
 
-    lpw = (LPWORD) (lpdit + 1);
+    lpw    = (LPWORD) (lpdit + 1);
     *lpw++ = 0xFFFF;
     *lpw++ = class;
 
@@ -1531,11 +1529,11 @@ static mpdm_t win32_drv_form(mpdm_t a, mpdm_t ctxt)
     lpdt->style =
         WS_POPUP | WS_BORDER | WS_SYSMENU | DS_MODALFRAME | WS_CAPTION;
     lpdt->cdit = (2 * mpdm_size(form_args)) + 2;
-    lpdt->x = 20;
-    lpdt->y = 20;
-    lpdt->cx = 260;
+    lpdt->x    = 20;
+    lpdt->y    = 20;
+    lpdt->cx   = 260;
 
-    lpw = (LPWORD) (lpdt + 1);
+    lpw    = (LPWORD) (lpdt + 1);
     *lpw++ = 0;                 /* No menu */
     *lpw++ = 0;                 /* Predefined dialog box class (by default) */
     *lpw++ = 0;                 /* No title */
@@ -1643,19 +1641,17 @@ static mpdm_t open_or_save(int o, mpdm_t a)
     ptr = mpdm_wcstombs(wptr, NULL);
 
     memset(&ofn, '\0', sizeof(OPENFILENAME));
-    ofn.lStructSize = sizeof(OPENFILENAME);
-    ofn.hwndOwner = hwnd;
-    ofn.lpstrFilter = "*.*\0*.*\0";
+    ofn.lStructSize  = sizeof(OPENFILENAME);
+    ofn.hwndOwner    = hwnd;
+    ofn.lpstrFilter  = "*.*\0*.*\0";
     ofn.nFilterIndex = 1;
-    ofn.lpstrFile = buf;
-    ofn.nMaxFile = sizeof(buf);
-    ofn.lpstrTitle = ptr;
-    ofn.lpstrDefExt = "";
+    ofn.lpstrFile    = buf;
+    ofn.nMaxFile     = sizeof(buf);
+    ofn.lpstrTitle   = ptr;
+    ofn.lpstrDefExt  = "";
 
     GetCurrentDirectory(sizeof(buf2), buf2);
     ofn.lpstrInitialDir = buf2;
-
-/*	ofn.lpstrDefExt=(def==NULL ? "" : def);*/
 
     if (o) {
         ofn.Flags = OFN_PATHMUSTEXIST | OFN_HIDEREADONLY |
@@ -1671,10 +1667,7 @@ static mpdm_t open_or_save(int o, mpdm_t a)
 
     free(ptr);
 
-    if (r)
-        return MPDM_MBS(buf);
-
-    return NULL;
+    return r ? MPDM_MBS(buf) : NULL;
 }
 
 
@@ -1705,11 +1698,11 @@ static mpdm_t win32_drv_openfolder(mpdm_t a, mpdm_t ctxt)
     ptr = mpdm_wcstombs(mpdm_string(mpdm_aget(a, 0)), NULL);
 
     memset(&bi, '\0', sizeof(bi));
-    bi.hwndOwner        = hwnd;
-    bi.pidlRoot         = NULL;
-    bi.pszDisplayName   = tmp;
-    bi.lpszTitle        = ptr;
-    bi.ulFlags          = BIF_RETURNONLYFSDIRS;
+    bi.hwndOwner      = hwnd;
+    bi.pidlRoot       = NULL;
+    bi.pszDisplayName = tmp;
+    bi.lpszTitle      = ptr;
+    bi.ulFlags        = BIF_RETURNONLYFSDIRS;
 
     if ((i = SHBrowseForFolder(&bi)) != NULL) {
         if (SHGetPathFromIDList(i, tmp) != 0)
@@ -1795,15 +1788,15 @@ static mpdm_t win32_drv_startup(mpdm_t a, mpdm_t ctxt)
     hinst = GetModuleHandle(NULL);
 
     /* register the window */
-    wc.style = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
-    wc.lpfnWndProc = WndProc;
-    wc.cbClsExtra = 0;
-    wc.cbWndExtra = 0;
-    wc.hInstance = hinst;
-    wc.hIcon = LoadIcon(hinst, "MP_ICON");
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wc.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
+    wc.lpfnWndProc   = WndProc;
+    wc.cbClsExtra    = 0;
+    wc.cbWndExtra    = 0;
+    wc.hInstance     = hinst;
+    wc.hIcon         = LoadIcon(hinst, "MP_ICON");
+    wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = NULL;
-    wc.lpszMenuName = NULL;
+    wc.lpszMenuName  = NULL;
     wc.lpszClassName = L"minimumprofit5.x";
 
     RegisterClassW(&wc);
@@ -1866,20 +1859,23 @@ static mpdm_t win32_drv_startup(mpdm_t a, mpdm_t ctxt)
 
 int win32_drv_detect(int *argc, char ***argv)
 {
-    mpdm_t drv;
-    int n;
+    int n, ret = 1;
 
     for (n = 0; n < *argc; n++) {
         if (strcmp(argv[0][n], "-txt") == 0)
-            return 0;
+            ret = 0;
     }
 
-    drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
+    if (ret) {
+        mpdm_t drv;
 
-    mpdm_hset_s(drv, L"id",         MPDM_LS(L"win32"));
-    mpdm_hset_s(drv, L"startup",    MPDM_X(win32_drv_startup));
+        drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
 
-    return 1;
+        mpdm_hset_s(drv, L"id",      MPDM_LS(L"win32"));
+        mpdm_hset_s(drv, L"startup", MPDM_X(win32_drv_startup));
+    }
+
+    return ret;
 }
 
 #endif                          /* CONFOPT_WIN32 */
