@@ -30,16 +30,18 @@
 /*mp.add(new(mp_maze));*/
 
 global mp_maze = new(mp_base, {
-        name:       'maze',
+        name:       '<maze>',
         x:          0,
         y:          0,
         tx:         -1,
         ty:         -1,
         state:      'RST',
         game_map:   NULL,
+        brick:      "\x{2592}",
+        hero:       "@",
 
         get_status: sub (maze) {
-            L("Maze - help @ to find the treasure. As always, the X marks the spot.");
+            sprintf(L("Maze - help %s to find the treasure. As always, the X marks the spot."), hero);
         },
         init:       sub (maze) {
             if (state eq 'RST' || tx != mp.window.tx || ty != mp.window.ty) {
@@ -58,7 +60,7 @@ global mp_maze = new(mp_base, {
                     sub {
                         map(
                             [1 .. tx],
-                            sub { '#'; }
+                            sub { brick; }
                         );
                     }
                 );
@@ -80,7 +82,7 @@ global mp_maze = new(mp_base, {
 
                         /* can space be opened in this direction?
                            save as possible next position */
-                        if (nx > 0 && ny > 0 && game_map[ny][nx] eq '#')
+                        if (nx > 0 && ny > 0 && game_map[ny][nx] eq brick)
                             push(d, t);
                     }
 
@@ -120,7 +122,7 @@ global mp_maze = new(mp_base, {
                 x = 1 + random(tx / 2) * 2;
                 y = 1 + random(ty / 2) * 2;
 
-                game_map[y][x] = '@';
+                game_map[y][x] = hero;
 
                 state = 'PLAY';
                 tx = mp.window.tx;
@@ -130,8 +132,8 @@ global mp_maze = new(mp_base, {
         keypress:   sub (maze, keycode) {
             maze->init();
 
-            local py = x;
-            local px = y;
+            local py = y;
+            local px = x;
 
             game_map[y][x] = ' ';
 
@@ -147,12 +149,13 @@ global mp_maze = new(mp_base, {
             if (game_map[y][x] eq 'X') {
                 state = 'WON';
             }
+            else
             if (game_map[y][x] ne ' ') {
                 y = py;
                 x = px;
             }
 
-            game_map[y][x] = '@';
+            game_map[y][x] = hero;
         },
         render:     sub (maze) {
             maze->init();
@@ -173,6 +176,7 @@ global mp_maze = new(mp_base, {
         }
     }
 );
+
 
 /** pipes **/
 
