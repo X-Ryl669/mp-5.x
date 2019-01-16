@@ -4,7 +4,7 @@
 
     Win32 console driver.
 
-    Copyright (C) 1991-2014 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2019 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -75,41 +75,38 @@ static void update_window_size(void)
 }
 
 static void build_colors(void)
-/* builds the colors */
 {
     mpdm_t colors;
     mpdm_t color_names;
-    mpdm_t l;
-    mpdm_t c;
-    int n, s;
+    mpdm_t k, v;
+    int n, i;
 
     /* gets the color definitions and attribute names */
     colors      = mpdm_hget_s(MP, L"colors");
     color_names = mpdm_hget_s(MP, L"color_names");
 
-    l = mpdm_ref(mpdm_keys(colors));
-    s = mpdm_size(l);
+    n = mpdm_hsize(colors);
 
     /* redim the structures */
-    win32c_attrs = realloc(win32c_attrs, sizeof(WORD) * s);
+    win32c_attrs = realloc(win32c_attrs, sizeof(WORD) * n);
 
     /* loop the colors */
-    for (n = 0; n < s && (c = mpdm_aget(l, n)) != NULL; n++) {
-        mpdm_t d = mpdm_hget(colors, c);
-        mpdm_t v = mpdm_hget_s(d, L"text");
+    n = i = 0;
+    while (mpdm_iterator(colors, &i, &k, &v)) {
+        mpdm_t w = mpdm_hget_s(v, L"text");
         int c0, c1;
     	WORD cp = 0;
 
         /* store the 'normal' attribute */
-        if (wcscmp(mpdm_string(c), L"normal") == 0)
+        if (wcscmp(mpdm_string(k), L"normal") == 0)
             normal_attr = n;
 
         /* store the attr */
-        mpdm_hset_s(d, L"attr", MPDM_I(n));
+        mpdm_hset_s(v, L"attr", MPDM_I(n));
 
         /* get color indexes */
-        if ((c0 = mpdm_seek(color_names, mpdm_aget(v, 0), 1)) == -1 ||
-            (c1 = mpdm_seek(color_names, mpdm_aget(v, 1), 1)) == -1)
+        if ((c0 = mpdm_seek(color_names, mpdm_aget(w, 0), 1)) == -1 ||
+            (c1 = mpdm_seek(color_names, mpdm_aget(w, 1), 1)) == -1)
             continue;
 
         /* color names match the color bits; 0 is 'default' */
@@ -120,14 +117,14 @@ static void build_colors(void)
         c1--;
 
         /* flags */
-        v = mpdm_hget_s(d, L"flags");
+        w = mpdm_hget_s(v, L"flags");
 
-        if (mpdm_seek_s(v, L"reverse", 1) != -1) {
+        if (mpdm_seek_s(w, L"reverse", 1) != -1) {
             int t = c0;
             c0 = c1;
             c1 = t;
         }
-        if (mpdm_seek_s(v, L"bright", 1) != -1)
+        if (mpdm_seek_s(w, L"bright", 1) != -1)
             cp |= FOREGROUND_INTENSITY;
 
         if ((c0 & 1)) cp |= FOREGROUND_RED;
@@ -138,9 +135,8 @@ static void build_colors(void)
         if ((c1 & 4)) cp |= BACKGROUND_BLUE;
 
         win32c_attrs[n] = cp;
+        n++;
     }
-
-    mpdm_unref(l);
 }
 
 
