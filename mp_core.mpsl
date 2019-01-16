@@ -797,5 +797,5 @@ mp_drv.startup();
 mp.process_cmdline();
 mp.test_versions();
 mp_drv.main_loop();
-mp.save_state();
 mp_drv.shutdown();
+mp.save_state();

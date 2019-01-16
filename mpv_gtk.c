@@ -2429,8 +2429,6 @@ static mpdm_t gtk_drv_shutdown(mpdm_t a, mpdm_t ctxt)
     mpdm_hset_s(v, L"w", MPDM_I(ls_w));
     mpdm_hset_s(v, L"h", MPDM_I(ls_h));
 
-    mp_load_save_state("w");
-
     if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL) {
         mpdm_write_wcs(stdout, mpdm_string(v));
         printf("\n");
@@ -2501,20 +2499,19 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
     	h = (gdk_screen_get_height(screen) * 2) / 3;
     }
 
-    mpdm_t st = mp_load_save_state("r");
-
-    if ((st = mpdm_hget_s(st, L"window")) == NULL) {
-        st = mpdm_hset_s(mpdm_hget_s(MP, L"state"), L"window", MPDM_H(0));
-        mpdm_hset_s(st, L"x", MPDM_I(0));
-        mpdm_hset_s(st, L"y", MPDM_I(0));
-        mpdm_hset_s(st, L"w", MPDM_I(w));
-        mpdm_hset_s(st, L"h", MPDM_I(h));
+    v = mpdm_hget_s(MP, L"state");
+    if ((v = mpdm_hget_s(v, L"window")) == NULL) {
+        v = mpdm_hset_s(mpdm_hget_s(MP, L"state"), L"window", MPDM_H(0));
+        mpdm_hset_s(v, L"x", MPDM_I(0));
+        mpdm_hset_s(v, L"y", MPDM_I(0));
+        mpdm_hset_s(v, L"w", MPDM_I(w));
+        mpdm_hset_s(v, L"h", MPDM_I(h));
     }
 
     gtk_window_move(GTK_WINDOW(window),
-        mpdm_ival(mpdm_hget_s(st, L"x")), mpdm_ival(mpdm_hget_s(st, L"y")));
+        mpdm_ival(mpdm_hget_s(v, L"x")), mpdm_ival(mpdm_hget_s(v, L"y")));
     gtk_window_set_default_size(GTK_WINDOW(window),
-        mpdm_ival(mpdm_hget_s(st, L"w")), mpdm_ival(mpdm_hget_s(st, L"h")));
+        mpdm_ival(mpdm_hget_s(v, L"w")), mpdm_ival(mpdm_hget_s(v, L"h")));
 
     g_signal_connect(G_OBJECT(window), "delete_event",
                      G_CALLBACK(delete_event), NULL);
