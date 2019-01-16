@@ -55,9 +55,11 @@ class MPWindow : public QMainWindow
 {
 public:
     MPWindow(QWidget * parent = 0);
+    ~MPWindow(void);
     bool queryExit(void);
     void closeEvent(QCloseEvent *event);
     bool event(QEvent * event);
+    void save_settings(void);
     MPArea *area;
 };
 
@@ -129,26 +131,27 @@ MPWindow::MPWindow(QWidget * parent) : QMainWindow(parent)
 }
 
 
-static void save_settings(MPWindow *w)
+MPWindow::~MPWindow(void)
+{
+}
+
+
+void MPWindow::save_settings(void)
 {
     mpdm_t v;
 
     v = mpdm_hget_s(MP, L"state");
     v = mpdm_hset_s(v, L"window", MPDM_H(0));
-    mpdm_hset_s(v, L"x", MPDM_I(w->pos().x()));
-    mpdm_hset_s(v, L"y", MPDM_I(w->pos().y()));
-    mpdm_hset_s(v, L"w", MPDM_I(w->size().width()));
-    mpdm_hset_s(v, L"h", MPDM_I(w->size().height()));
-
-    mp_load_save_state("w");
+    mpdm_hset_s(v, L"x", MPDM_I(pos().x()));
+    mpdm_hset_s(v, L"y", MPDM_I(pos().y()));
+    mpdm_hset_s(v, L"w", MPDM_I(size().width()));
+    mpdm_hset_s(v, L"h", MPDM_I(size().height()));
 }
 
 
 bool MPWindow::queryExit(void)
 {
     mp_process_event(MPDM_LS(L"close-window"));
-
-//    save_settings(this);
 
     return mp_exit_requested ? true : false;
 }
@@ -171,7 +174,7 @@ bool MPWindow::event(QEvent *event)
     bool r = QWidget::event(event);
 
     if (mp_exit_requested) {
-//        qt4_drv_shutdown(NULL, NULL);
+        save_settings();
         QApplication::exit(0);
     }
 
@@ -476,21 +479,6 @@ static mpdm_t qt4_drv_busy(mpdm_t a, mpdm_t ctxt)
 static mpdm_t qt4_drv_main_loop(mpdm_t a, mpdm_t ctxt)
 {
     app->exec();
-
-    return NULL;
-}
-
-
-static mpdm_t qt4_drv_shutdown(mpdm_t a, mpdm_t ctxt)
-{
-    mpdm_t v;
-
-    save_settings(window);
-
-    if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL) {
-        mpdm_write_wcs(stdout, mpdm_string(v));
-        printf("\n");
-    }
 
     return NULL;
 }
