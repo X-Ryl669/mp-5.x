@@ -25,135 +25,152 @@
 
 */
 
-/** code **/
+/** maze **/
 
-sub mp.maze(doc, keycode)
-{
-	local tx = mp.window.tx;
-	local ty = mp.window.ty;
+/*mp.add(new(mp_maze));*/
 
-	if (doc == NULL)
-		doc = mp.open('<maze>');
+global mp_maze = new(mp_base, {
+        name:       'maze',
+        x:          0,
+        y:          0,
+        tx:         -1,
+        ty:         -1,
+        state:      'RST',
+        game_map:   NULL,
 
-	local maze = doc.maze;
+        get_status: sub (maze) {
+            L("Maze - help @ to find the treasure. As always, the X marks the spot.");
+        },
+        init:       sub (maze) {
+            if (state eq 'RST' || tx != mp.window.tx || ty != mp.window.ty) {
+                tx = mp.window.tx;
+                ty = mp.window.ty;
 
-	if (maze == NULL || maze.tx != tx || maze.ty != ty) {
-		/* new or changed: rebuild everything */
-		maze = {};
-		maze.tx = tx;
-		maze.ty = ty;
-		doc.maze = maze;
+                /* ensure odd size */
+                if (!(tx & 1))
+                    tx--;
+                if (!(ty & 1))
+                    ty--;
 
-		/* ensure odd size */
-		if (!(tx & 1))
-			tx--;
-		if (!(ty & 1))
-			ty--;
-
-		/* init */
-		maze.map = map(
-            [1 .. ty],
-            sub {
-                map(
-                    [1 .. tx],
-                    sub { '#'; }
+                /* init */
+                game_map = map(
+                    [1 .. ty],
+                    sub {
+                        map(
+                            [1 .. tx],
+                            sub { '#'; }
+                        );
+                    }
                 );
+
+                /* build */
+                x = 1;
+                y = 1;
+                local stack = [];
+
+                for (;;) {
+                    local d = [];
+
+                    /* clear */
+                    game_map[y][x] = ' ';
+
+                    foreach (t, [[0, -1], [1, 0], [0, 1], [-1, 0]]) {
+                        local ny = y + t[0] * 2;
+                        local nx = x + t[1] * 2;
+
+                        /* can space be opened in this direction?
+                           save as possible next position */
+                        if (nx > 0 && ny > 0 && game_map[ny][nx] eq '#')
+                            push(d, t);
+                    }
+
+                    if (size(d)) {
+                        /* more than one way? stack this position */
+                        if (size(d) > 1)
+                            push(stack, [y, x]);
+
+                        /* pick one direction at random and move there */
+                        local m = d[random(size(d))];
+
+                        y += m[0];
+                        x += m[1];
+
+                        game_map[y][x] = ' ';
+
+                        y += m[0];
+                        x += m[1];
+                    }
+                    else {
+                        /* no way from here; pop previous position */
+                        if ((d = pop(stack)) == NULL)
+                            break;
+
+                        y = d[0];
+                        x = d[1];
+                    }
+                }
+
+                /* pick treasure position */
+                x = 1 + random(tx / 2) * 2;
+                y = 1 + random(ty / 2) * 2;
+
+                game_map[y][x] = 'X';
+
+                /* pick hero position */
+                x = 1 + random(tx / 2) * 2;
+                y = 1 + random(ty / 2) * 2;
+
+                game_map[y][x] = '@';
+
+                state = 'PLAY';
             }
-        );
+        },
+        keypress:   sub (maze, keycode) {
+            maze->init();
 
-		/* build */
-		local x = 1;
-		local y = 1;
-		local stack = [];
+            local py = x;
+            local px = y;
 
-		while (1) {
-			local d = [];
+            game_map[y][x] = ' ';
 
-			/* clear */
-			maze.map[y][x] = ' ';
+            if (keycode eq 'cursor-up')
+                y--;
+            if (keycode eq 'cursor-down')
+                y++;
+            if (keycode eq 'cursor-left')
+                x--;
+            if (keycode eq 'cursor-right')
+                x++;
 
-			foreach (t, [[0, -1], [1, 0], [0, 1], [-1, 0]]) {
-				/* can space be opened? */
-				local ny = y + t[0] * 2;
-				local nx = x + t[1] * 2;
+            if (game_map[y][x] eq 'X') {
+                state = 'WON';
+            }
+            if (game_map[y][x] ne ' ') {
+                y = py;
+                x = px;
+            }
 
-				if (nx > 0 && ny > 0 && maze.map[ny][nx] eq '#')
-					push(d, t);
-			}
+            game_map[y][x] = '@';
+        },
+        render:     sub (maze) {
+            maze->init();
 
-			if (size(d)) {
-				/* more than one way? stack this position */
-				if (size(d) > 1)
-					push(stack, [y, x]);
+            local c = mp.colors.normal.attr;
+            local out = map(game_map, sub(e) {[c, join(e)];});
 
-				/* pick one direction at random and move there */
-				local m = d[random(size(d))];
+            if (state eq 'WON') {
+                out[0] = [
+                    mp.colors.cursor.attr,
+                    L("You won! Press any key.")
+                ];
 
-				y += m[0];
-				x += m[1];
+                state = 'RST';
+            }
 
-				maze.map[y][x] = ' ';
-
-				y += m[0];
-				x += m[1];
-			}
-			else {
-				/* no way from here: pop previous position */
-				if ((d = pop(stack)) == NULL)
-					break;
-
-				y = d[0];
-				x = d[1];
-			}
-		}
-
-		maze.x = 1 + random(tx / 2) * 2;
-		maze.y = 1 + random(ty / 2) * 2;
-
-		maze.map[maze.y][maze.x] = '@';
-
-		x = 1 + random(tx / 2) * 2;
-		y = 1 + random(ty / 2) * 2;
-
-		maze.map[y][x] = 'X';
-
-		doc.keypress = sub(d, k) { mp.maze(d, k); };
-
-		doc.render = sub(d) { map(d.maze.map, sub(e) { [8, join(e)];}); };
-	}
-
-	local x = maze.x;
-	local y = maze.y;
-
-	maze.map[y][x] = ' ';
-
-	if (keycode eq 'cursor-up')
-		y--;
-	if (keycode eq 'cursor-down')
-		y++;
-	if (keycode eq 'cursor-left')
-		x--;
-	if (keycode eq 'cursor-right')
-		x++;
-
-	if (maze.map[y][x] eq 'X') {
-		mp.alert(L("You won!"));
-		doc.maze = NULL;
-		return mp.maze(doc);
-	}
-
-	if (maze.map[y][x] eq ' ') {
-		maze.x = x;
-		maze.y = y;
-	}
-
-	maze.map[maze.y][maze.x] = '@';
-
-    doc->undo();
-
-	return doc;
-}
-
+            return out;
+        }
+    }
+);
 
 /** pipes **/
 
