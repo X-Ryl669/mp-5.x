@@ -190,7 +190,7 @@ mp.actions['pipes'] = sub {
     if (mp_pipes == NULL)
         load("mp_toys.mpsl");
 
-    mp.add(new(mp_pipes))->init();
+    mp.add(new(mp_pipes));
 };
 
 
