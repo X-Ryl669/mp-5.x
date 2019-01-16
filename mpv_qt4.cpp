@@ -46,6 +46,11 @@ extern "C" int qt5_drv_detect(int *argc, char ***argv);
 
 /** data **/
 
+#define MENU_CLASS QMenu
+#define MENUBAR_CLASS QMenuBar
+
+#include "mpv_qk_common.cpp"
+
 class MPWindow : public QMainWindow
 {
 public:
@@ -53,16 +58,12 @@ public:
     bool queryExit(void);
     void closeEvent(QCloseEvent *event);
     bool event(QEvent * event);
+    MPArea *area;
 };
 
-/* global data */
 QApplication *app;
 MPWindow *window;
 
-#define MENU_CLASS QMenu
-#define MENUBAR_CLASS QMenuBar
-
-#include "mpv_qk_common.cpp"
 
 /** MPWindow methods **/
 
@@ -147,7 +148,7 @@ bool MPWindow::queryExit(void)
 {
     mp_process_event(MPDM_LS(L"close-window"));
 
-    save_settings(this);
+//    save_settings(this);
 
     return mp_exit_requested ? true : false;
 }
@@ -162,14 +163,15 @@ void MPWindow::closeEvent(QCloseEvent *event)
 }
 
 
+static mpdm_t qt4_drv_shutdown(mpdm_t a, mpdm_t ctxt);
+
 bool MPWindow::event(QEvent *event)
 {
     /* do the processing */
     bool r = QWidget::event(event);
 
     if (mp_exit_requested) {
-        save_settings(this);
-        qt4_drv_shutdown(NULL, NULL);
+//        qt4_drv_shutdown(NULL, NULL);
         QApplication::exit(0);
     }
 
@@ -444,6 +446,69 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
     }
 
     return r;
+}
+
+
+static mpdm_t qt4_drv_update_ui(mpdm_t a, mpdm_t ctxt)
+{
+    window->area->font = qk_build_font();
+    qk_build_colors();
+    qk_build_menu(window->menuBar());
+
+    window->area->ls_width = -1;
+    window->area->ls_height = -1;
+    window->area->update();
+
+    return NULL;
+}
+
+
+static mpdm_t qt4_drv_busy(mpdm_t a, mpdm_t ctxt)
+{
+    int onoff = mpdm_ival(mpdm_aget(a, 0));
+
+    window->setCursor(onoff ? Qt::WaitCursor : Qt::ArrowCursor);
+
+    return NULL;
+}
+
+
+static mpdm_t qt4_drv_main_loop(mpdm_t a, mpdm_t ctxt)
+{
+    app->exec();
+
+    return NULL;
+}
+
+
+static mpdm_t qt4_drv_shutdown(mpdm_t a, mpdm_t ctxt)
+{
+    mpdm_t v;
+
+    save_settings(window);
+
+    if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL) {
+        mpdm_write_wcs(stdout, mpdm_string(v));
+        printf("\n");
+    }
+
+    return NULL;
+}
+
+
+static mpdm_t qt4_drv_timer(mpdm_t a, mpdm_t ctxt)
+{
+    int msecs = mpdm_ival(mpdm_aget(a, 0));
+    mpdm_t func = mpdm_aget(a, 1);
+
+    mpdm_set(&window->area->timer_func, func);
+
+    if (window->area->timer_func == NULL)
+        window->area->timer->stop();
+    else
+        window->area->timer->start(msecs);
+
+    return NULL;
 }
 
 

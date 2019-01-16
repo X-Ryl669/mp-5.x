@@ -74,8 +74,6 @@ public slots:
 };
 
 
-MPArea *area;
-
 /* hash of qactions to MP actions */
 QHash <QAction *, mpdm_t> qaction_to_action;
 
@@ -1076,58 +1074,6 @@ void MPArea::from_timer(void)
 
 /** driver functions **/
 
-static mpdm_t qt4_drv_update_ui(mpdm_t a, mpdm_t ctxt)
-{
-    area->font = qk_build_font();
-    qk_build_colors();
-    qk_build_menu(window->menuBar());
-
-    area->ls_width = area->ls_height = -1;
-    area->update();
-
-    return NULL;
-}
-
-
-static mpdm_t qt4_drv_busy(mpdm_t a, mpdm_t ctxt)
-{
-    int onoff = mpdm_ival(mpdm_aget(a, 0));
-
-    window->setCursor(onoff ? Qt::WaitCursor : Qt::ArrowCursor);
-
-    return NULL;
-}
-
-
-static mpdm_t qt4_drv_main_loop(mpdm_t a, mpdm_t ctxt)
-{
-    app->exec();
-
-    return NULL;
-}
-
-
-static mpdm_t qt4_drv_shutdown(mpdm_t a, mpdm_t ctxt)
-{
-    mpdm_t v;
-
-    v = mpdm_hget_s(MP, L"state");
-    mpdm_hset_s(v, L"x", MPDM_I(window->pos().x()));
-    mpdm_hset_s(v, L"y", MPDM_I(window->pos().y()));
-    mpdm_hset_s(v, L"w", MPDM_I(window->size().width()));
-    mpdm_hset_s(v, L"h", MPDM_I(window->size().height()));
-
-    mp_load_save_state("w");
-
-    if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL) {
-        mpdm_write_wcs(stdout, mpdm_string(v));
-        printf("\n");
-    }
-
-    return NULL;
-}
-
-
 static mpdm_t qt4_drv_clip_to_sys(mpdm_t a, mpdm_t ctxt)
 {
     mpdm_t v;
@@ -1159,20 +1105,5 @@ static mpdm_t qt4_drv_sys_to_clip(mpdm_t a, mpdm_t ctxt)
     return NULL;
 }
 
-
-static mpdm_t qt4_drv_timer(mpdm_t a, mpdm_t ctxt)
-{
-    int msecs = mpdm_ival(mpdm_aget(a, 0));
-    mpdm_t func = mpdm_aget(a, 1);
-
-    mpdm_set(&area->timer_func, func);
-
-    if (area->timer_func == NULL)
-        area->timer->stop();
-    else
-        area->timer->start(msecs);
-
-    return NULL;
-}
 
 #include "mpv_qk_common.moc"
