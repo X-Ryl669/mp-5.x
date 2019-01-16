@@ -728,7 +728,6 @@ sub mp.load_state()
 {
     local f;
 
-    print("mp.load_state\n");
     if ((f = open(HOMEDIR ~ ".mp_state.json", "r")) != NULL) {
         local l;
         local j = [];
@@ -738,7 +737,7 @@ sub mp.load_state()
 
         f->close();
 
-        mp._state = j->join()->sscanf("%j")->pop();
+        mp.state = j->join()->sscanf("%j")->pop();
     }
 }
 

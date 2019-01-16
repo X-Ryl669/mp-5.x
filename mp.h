@@ -2,7 +2,7 @@
 
     Minimum Profit - Programmer Text Editor
 
-    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2019 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -40,7 +40,6 @@ mpdm_t mp_get_history(mpdm_t key);
 mpdm_t mp_menu_label(mpdm_t action);
 mpdm_t mp_get_doc_names(void);
 int mp_keypress_throttle(int keydown);
-mpdm_t mp_load_save_state(const char *m);
 
 #ifdef __cplusplus
 }

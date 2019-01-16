@@ -440,8 +440,6 @@ static mpdm_t ansi_drv_shutdown(mpdm_t a, mpdm_t ctxt)
 
     ansi_raw_tty(0);
 
-    mp_load_save_state("w");
-
     ansi_clrscr();
 
     if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL) {
@@ -567,8 +565,6 @@ static mpdm_t ansi_drv_startup(mpdm_t a)
     ansi_sigwinch(0);
 
     ansi_build_colors();
-
-    mp_load_save_state("r");
 
     return NULL;
 }
