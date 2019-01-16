@@ -97,20 +97,18 @@ static void update_window_size(void)
     int tx, ty;
     mpdm_t v;
 
-    /* no font information? go */
-    if (font_width == 0 || font_height == 0)
-        return;
+    if (font_width && font_height) {
+        GetClientRect(hwnd, &rect);
 
-    GetClientRect(hwnd, &rect);
+        /* calculate the size in chars */
+        tx = ((rect.right - rect.left) / font_width) + 1;
+        ty = (rect.bottom - rect.top - tab_height) / font_height;
 
-    /* calculate the size in chars */
-    tx = ((rect.right - rect.left) / font_width) + 1;
-    ty = (rect.bottom - rect.top - tab_height) / font_height;
-
-    /* store the 'window' size */
-    v = mpdm_hget_s(MP, L"window");
-    mpdm_hset_s(v, L"tx", MPDM_I(tx));
-    mpdm_hset_s(v, L"ty", MPDM_I(ty));
+        /* store the 'window' size */
+        v = mpdm_hget_s(MP, L"window");
+        mpdm_hset_s(v, L"tx", MPDM_I(tx));
+        mpdm_hset_s(v, L"ty", MPDM_I(ty));
+    }
 }
 
 
@@ -121,9 +119,9 @@ static void build_fonts(HDC hdc)
     int n;
     mpdm_t v = NULL;
     mpdm_t c;
-    int font_size       = 10;
-    char *font_face     = "Lucida Console";
-    double font_weight  = 0.0;
+    int font_size      = 10;
+    char *font_face    = "Lucida Console";
+    double font_weight = 0.0;
 
     if (font_normal != NULL) {
         SelectObject(hdc, GetStockObject(SYSTEM_FONT));
@@ -180,55 +178,51 @@ static void build_colors(void)
 /* builds the colors */
 {
     mpdm_t colors;
-    mpdm_t l;
-    mpdm_t c;
-    int n, s;
+    mpdm_t k, v;
+    int n, i;
 
     /* gets the color definitions and attribute names */
     colors = mpdm_hget_s(MP, L"colors");
-    l = mpdm_ref(mpdm_keys(colors));
-    s = mpdm_size(l);
+    n = mpdm_hsize(colors);
 
     /* redim the structures */
-    inks = realloc(inks, sizeof(COLORREF) * s);
-    papers = realloc(papers, sizeof(COLORREF) * s);
-    underlines = realloc(underlines, sizeof(int) * s);
+    inks = realloc(inks, sizeof(COLORREF) * n);
+    papers = realloc(papers, sizeof(COLORREF) * n);
+    underlines = realloc(underlines, sizeof(int) * n);
 
     /* loop the colors */
-    for (n = 0; n < s && (c = mpdm_aget(l, n)) != NULL; n++) {
-        mpdm_t d = mpdm_hget(colors, c);
-        mpdm_t v = mpdm_hget_s(d, L"gui");
+    n = i = 0;
+    while (mpdm_iterator(colors, &i, &k, &v)) {
         int m;
+        mpdm_t w = mpdm_hget_s(v, L"gui");
 
         /* store the 'normal' attribute */
-        if (wcscmp(mpdm_string(c), L"normal") == 0)
+        if (wcscmp(mpdm_string(k), L"normal") == 0)
             normal_attr = n;
 
         /* store the attr */
-        mpdm_hset_s(d, L"attr", MPDM_I(n));
+        mpdm_hset_s(v, L"attr", MPDM_I(n));
 
-        m = mpdm_ival(mpdm_aget(v, 0));
-        inks[n] = ((m & 0x000000ff) << 16) |
-            ((m & 0x0000ff00)) | ((m & 0x00ff0000) >> 16);
-        m = mpdm_ival(mpdm_aget(v, 1));
-        papers[n] = ((m & 0x000000ff) << 16) |
-            ((m & 0x0000ff00)) | ((m & 0x00ff0000) >> 16);
+        m = mpdm_ival(mpdm_aget(w, 0));
+        inks[n] = ((m & 0x000000ff) << 16) | ((m & 0x0000ff00)) | ((m & 0x00ff0000) >> 16);
+        m = mpdm_ival(mpdm_aget(w, 1));
+        papers[n] = ((m & 0x000000ff) << 16) | ((m & 0x0000ff00)) | ((m & 0x00ff0000) >> 16);
 
         /* flags */
-        v = mpdm_hget_s(d, L"flags");
+        w = mpdm_hget_s(v, L"flags");
 
-        underlines[n] = mpdm_seek_s(v, L"underline", 1) != -1 ? 1 : 0;
+        underlines[n] = mpdm_seek_s(w, L"underline", 1) != -1 ? 1 : 0;
 
-        if (mpdm_seek_s(v, L"reverse", 1) != -1) {
+        if (mpdm_seek_s(w, L"reverse", 1) != -1) {
             COLORREF t;
 
             t = inks[n];
             inks[n] = papers[n];
             papers[n] = t;
         }
-    }
 
-    mpdm_unref(l);
+        n++;
+    }
 
     /* create the background brush */
     bgbrush = CreateSolidBrush(papers[normal_attr]);
@@ -243,8 +237,7 @@ static void build_menu(void)
     int win32_menu_id = 1000;
 
     /* gets the current menu */
-    if ((m = mpdm_hget_s(MP, L"menu")) == NULL)
-        return;
+    m = mpdm_hget_s(MP, L"menu");
 
     if (menu != NULL)
         DestroyMenu(menu);
@@ -301,17 +294,14 @@ static void build_menu(void)
 static void draw_filetabs(void)
 /* draws the filetabs */
 {
-    static mpdm_t last = NULL;
+    static mpdm_t prev = NULL;
     mpdm_t names;
     int n;
-
-    if (hwtabs == NULL)
-        return;
 
     names = mpdm_ref(mp_get_doc_names());
 
     /* is the list different from the previous one? */
-    if (mpdm_cmp(names, last) != 0) {
+    if (mpdm_cmp(names, prev) != 0) {
         TabCtrl_DeleteAllItems(hwtabs);
 
         for (n = 0; n < mpdm_size(names); n++) {
@@ -332,8 +322,7 @@ static void draw_filetabs(void)
         }
 
         /* store for the next time */
-        mpdm_unref(last);
-        last = mpdm_ref(names);
+        mpdm_set(&prev, names);
     }
 
     mpdm_unref(names);
@@ -351,9 +340,7 @@ static void draw_scrollbar(void)
     int pos, size, max;
     SCROLLINFO si;
 
-    /* gets the active document */
-    if ((d = mp_active()) == NULL)
-        return;
+    d = mp_active();
 
     /* get the coordinates */
     v = mpdm_hget_s(d, L"txt");
@@ -364,11 +351,11 @@ static void draw_scrollbar(void)
     size = mpdm_ival(mpdm_hget_s(v, L"ty"));
 
     si.cbSize = sizeof(si);
-    si.fMask = SIF_ALL;
-    si.nMin = 0;
-    si.nMax = max;
-    si.nPage = size;
-    si.nPos = pos;
+    si.fMask  = SIF_ALL;
+    si.nMin   = 0;
+    si.nMax   = max;
+    si.nPage  = size;
+    si.nPos   = pos;
 
     SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
 }
@@ -410,11 +397,7 @@ static void win32_draw(HWND hwnd, mpdm_t doc)
         build_colors();
     }
 
-    /* no document? end */
-    if ((d = mp_draw(doc, 0)) == NULL) {
-        EndPaint(hwnd, &ps);
-        return;
-    }
+    d = mp_draw(doc, 0);
 
     mpdm_ref(d);
 
@@ -1010,9 +993,7 @@ long CALLBACK WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
 
     case WM_PAINT:
 
-        if (mpdm_size(mpdm_hget_s(MP, L"docs")))
-            win32_draw(hwnd, mp_active());
-
+        win32_draw(hwnd, mp_active());
         return 0;
 
     case WM_SIZE:
@@ -1125,8 +1106,6 @@ long CALLBACK WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
             mpdm_hset_s(v, L"y", MPDM_I(r.top));
             mpdm_hset_s(v, L"w", MPDM_I(r.right - r.left));
             mpdm_hset_s(v, L"h", MPDM_I(r.bottom - r.top));
-
-            mp_load_save_state("w");
         }
 
         if (!mp_exit_requested)
@@ -1182,27 +1161,26 @@ static mpdm_t win32_drv_clip_to_sys(mpdm_t a, mpdm_t ctxt)
     /* convert the clipboard to DOS text */
     d = mpdm_hget_s(MP, L"clipboard");
 
-    if (mpdm_size(d) == 0)
-        return NULL;
+    if (mpdm_size(d)) {
+        v = mpdm_ref(mpdm_join_s(d, L"\r\n"));
+        ptr = mpdm_wcstombs(v->data, &s);
 
-    v = mpdm_ref(mpdm_join_s(d, L"\r\n"));
-    ptr = mpdm_wcstombs(v->data, &s);
+        /* allocates a handle and copies */
+        hclp = GlobalAlloc(GHND, s + 1);
+        clpptr = (char *) GlobalLock(hclp);
+        memcpy(clpptr, ptr, s);
+        clpptr[s] = '\0';
+        GlobalUnlock(hclp);
 
-    /* allocates a handle and copies */
-    hclp = GlobalAlloc(GHND, s + 1);
-    clpptr = (char *) GlobalLock(hclp);
-    memcpy(clpptr, ptr, s);
-    clpptr[s] = '\0';
-    GlobalUnlock(hclp);
+        free(ptr);
 
-    free(ptr);
+        OpenClipboard(NULL);
+        EmptyClipboard();
+        SetClipboardData(CF_TEXT, hclp);
+        CloseClipboard();
 
-    OpenClipboard(NULL);
-    EmptyClipboard();
-    SetClipboardData(CF_TEXT, hclp);
-    CloseClipboard();
-
-    mpdm_unref(v);
+        mpdm_unref(v);
+    }
 
     return NULL;
 }
@@ -1830,22 +1808,22 @@ static mpdm_t win32_drv_startup(mpdm_t a, mpdm_t ctxt)
 
     RegisterClassW(&wc);
 
-    mpdm_t st = mp_load_save_state("r");
-    if ((st = mpdm_hget_s(st, L"window")) == NULL) {
-        st = mpdm_hset_s(mpdm_hget_s(MP, L"state"), L"window", MPDM_H(0));
-        mpdm_hset_s(st, L"x", MPDM_I(10));
-        mpdm_hset_s(st, L"y", MPDM_I(10));
-        mpdm_hset_s(st, L"w", MPDM_I(600));
-        mpdm_hset_s(st, L"h", MPDM_I(400));
+    v = mpdm_hget_s(MP, L"state");
+    if ((v = mpdm_hget_s(v, L"window")) == NULL) {
+        v = mpdm_hset_s(mpdm_hget_s(MP, L"state"), L"window", MPDM_H(0));
+        mpdm_hset_s(v, L"x", MPDM_I(10));
+        mpdm_hset_s(v, L"y", MPDM_I(10));
+        mpdm_hset_s(v, L"w", MPDM_I(600));
+        mpdm_hset_s(v, L"h", MPDM_I(400));
     }
 
     /* create the window */
     hwnd = CreateWindowW(L"minimumprofit5.x", L"mp " VERSION,
                          WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_VSCROLL,
-                         mpdm_ival(mpdm_hget_s(st, L"x")),
-                         mpdm_ival(mpdm_hget_s(st, L"y")),
-                         mpdm_ival(mpdm_hget_s(st, L"w")),
-                         mpdm_ival(mpdm_hget_s(st, L"h")),
+                         mpdm_ival(mpdm_hget_s(v, L"x")),
+                         mpdm_ival(mpdm_hget_s(v, L"y")),
+                         mpdm_ival(mpdm_hget_s(v, L"w")),
+                         mpdm_ival(mpdm_hget_s(v, L"h")),
                          NULL, NULL, hinst, NULL);
 
     ShowWindow(hwnd, SW_SHOW);
