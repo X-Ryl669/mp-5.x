@@ -141,6 +141,8 @@ innosetup: mp-5.exe mp-5c.exe
 	(DIR=`pwd` ; cd $(MPDM) ; make installdoc DOCDIR=$$DIR/doc)
 	(DIR=`pwd` ; cd $(MPSL) ; make installdoc DOCDIR=$$DIR/doc)
 	iscc /O. /Fmp-$(VERSION) mp.iss
+	cp mp-5.exe mp-$(VERSION)-portable.exe
+	cp mp-5c.exe mp-$(VERSION)-portable-c.exe
 
 install: $(INSTALL_MSG) installdoc $(INSTALLMO)
 	install -Dm 755 $(APPNAME) $(PREFIX)/bin/$(APPNAME)
