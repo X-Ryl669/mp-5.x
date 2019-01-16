@@ -55,6 +55,8 @@ CHAR_INFO *buf = NULL;
 
 /** code **/
 
+static void win32c_clrscr(void);
+
 static void update_window_size(void)
 {
     mpdm_t v;
@@ -72,6 +74,7 @@ static void update_window_size(void)
     mpdm_hset_s(v, L"ty", MPDM_I(ty));
 
     buf = realloc(buf, tx * ty * sizeof(CHAR_INFO));
+    win32c_clrscr();
 }
 
 static void build_colors(void)
@@ -389,7 +392,7 @@ static void win32c_clrscr(void)
 }
 
 
-static void win32c_dump(void)
+static void win32c_draw(void)
 {
     COORD sz = { tx, ty };
     COORD pos = { 0, 0 };
@@ -454,7 +457,7 @@ static mpdm_t tui_attr(mpdm_t a, mpdm_t ctxt)
 static mpdm_t tui_refresh(mpdm_t a, mpdm_t ctxt)
 /* TUI: refresh the screen */
 {
-    win32c_dump();
+    win32c_draw();
     return NULL;
 }
 
@@ -580,8 +583,8 @@ int win32_drv_detect(int *argc, char ***argv)
 
         mpdm_t drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
 
-        mpdm_hset_s(drv, L"id",         MPDM_LS(L"win32c"));
-        mpdm_hset_s(drv, L"startup",    MPDM_X(win32c_drv_startup));
+        mpdm_hset_s(drv, L"id",      MPDM_LS(L"win32c"));
+        mpdm_hset_s(drv, L"startup", MPDM_X(win32c_drv_startup));
 
         ret = 1;
     }
