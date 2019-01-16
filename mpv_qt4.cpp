@@ -335,8 +335,10 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
                 /* has history; fill it */
                 h = mp_get_history(h);
 
-                for (i = mpdm_size(h) - 1; i >= 0; i--)
+                for (i = 0; i < mpdm_size(h); i++)
                     qc->addItem(v_to_qstring(mpdm_aget(h, i)));
+
+                qc->setCurrentIndex(mpdm_size(h) - 1);
             }
 
             /* select all the editable field */
