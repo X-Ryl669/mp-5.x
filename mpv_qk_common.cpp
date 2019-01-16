@@ -53,7 +53,6 @@ public:
     QTabBar *file_tabs;
 
     QTimer *timer;
-    mpdm_t timer_func;
 
     QPixmap *pixmap;
     int ls_width;
@@ -275,7 +274,6 @@ MPArea::MPArea(QWidget *parent) : QWidget(parent)
 
     ignore_scrollbar_signal = 0;
     mouse_down = 0;
-    timer_func = NULL;
 
     font_width = font_height = -1;
 }
@@ -1067,8 +1065,12 @@ void MPArea::from_menu(QAction * action)
 
 void MPArea::from_timer(void)
 {
-    mpdm_void(mpdm_exec(timer_func, NULL, NULL));
-    update();
+    mpdm_t v;
+
+    if ((v = mpdm_hget_s(MP, L"timer_func"))) {
+        mpdm_void(mpdm_exec(v, NULL, NULL));
+        update();
+    }
 }
 
 

@@ -491,11 +491,11 @@ static mpdm_t qt4_drv_timer(mpdm_t a, mpdm_t ctxt)
     int msecs = mpdm_ival(mpdm_aget(a, 0));
     mpdm_t func = mpdm_aget(a, 1);
 
-    mpdm_set(&window->area->timer_func, func);
+    window->area->timer->stop();
 
-    if (window->area->timer_func == NULL)
-        window->area->timer->stop();
-    else
+    mpdm_hset_s(MP, L"timer_func", func);
+
+    if (msecs)
         window->area->timer->start(msecs);
 
     return NULL;
