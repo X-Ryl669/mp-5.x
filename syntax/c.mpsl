@@ -17,11 +17,11 @@ sub mp.c_gather_help(word)
         local ok = 0;
 
         /* test if this file is relevant to C */
-		foreach (ext, mp.syntax.c.filenames) {
-			if (regex(fn, ext)) {
+        foreach (ext, mp.syntax.c.filenames) {
+            if (regex(fn, ext)) {
                 ok = 1;
                 break;
-			}
+            }
         }
 
         if (ok && (f = open(fn, "r")) != NULL) {

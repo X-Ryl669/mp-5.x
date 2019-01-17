@@ -57,7 +57,7 @@ sub mp.save_session()
    -2, error saving; or 0, session correctly saved */
 {
     local fh, filenames;
-	
+
     filenames = [];
 
     /* no named files? exit doing nothing */
@@ -67,7 +67,7 @@ sub mp.save_session()
     if ((fh = open(mp.session_file(), "w")) == NULL) {
         return -2;
     }
-	
+
     foreach (doc, mp.docs) {
         if (doc.name ne L("<unnamed>"))
             write (fh,
@@ -109,7 +109,7 @@ sub mp.load_session()
 
         if (stat(data[0]) != NULL) {
             doc = mp.open(data[0]);
-			
+
             doc->set_y(data[2])->set_x(data[1]);
 
             /* if it has the 'a' flag, set as active */
@@ -120,7 +120,7 @@ sub mp.load_session()
 
     if (active != -1)
         mp.active_i = active;
-	
+
     close(fh);
 
     return 0;

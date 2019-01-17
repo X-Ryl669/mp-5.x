@@ -940,7 +940,7 @@ static void dropped_files(HDROP hDrop)
 
 
 #ifndef WM_MOUSEWHEEL
-#define WM_MOUSEWHEEL			0x020A
+#define WM_MOUSEWHEEL           0x020A
 #endif
 
 long CALLBACK WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
@@ -1296,8 +1296,8 @@ static LPWORD lpwAlign(LPWORD lpIn)
 }
 
 
-#define LABEL_ID	1000
-#define CTRL_ID		2000
+#define LABEL_ID    1000
+#define CTRL_ID     2000
 
 BOOL CALLBACK formDlgProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 /* mp.drv.form() dialog proc */

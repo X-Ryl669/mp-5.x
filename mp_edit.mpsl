@@ -48,7 +48,7 @@ mp_doc.actions['unindent_block']    = sub (d) { d->store_undo()->unindent_block(
 mp_doc.actions['insert_page_break'] = sub (d) { d->store_undo()->insert("\x{000c}"); };
 mp_doc.actions['insert_m_dash']     = sub (d) { d->store_undo()->insert("\x{2014}"); };
 
-mp_doc.actions['delete_left']	= sub (d) {
+mp_doc.actions['delete_left']   = sub (d) {
     if (d.txt.x + d.txt.y)
         d->store_undo()->move_left()->delete_char();
 
@@ -111,7 +111,7 @@ mp_doc.actions['word_wrap_paragraph'] = sub (d) {
     return d;
 };
 
-mp.actions['line_options']	= sub {
+mp.actions['line_options']  = sub {
     /* convert special characters on end of line */
     local lt = mp.backslash_codes(mp.config.eol, 1);
 
@@ -167,25 +167,25 @@ mp.actions['line_options']	= sub {
     }
 };
 
-mp.actions['tab_options']	= sub {
-	local t = mp.form( [
-		{ 'label'	=> L("Tab size") ~ ':',
-		  'type'	=> 'text',
-		  'value'	=> mp.config.tab_size,
-		  'history'	=> 'tabsize' },
-		{ 'label'	=> L("Convert tabs to spaces") ~ ':',
-		  'type'	=> 'checkbox',
-		  'value'	=> mp.config.tabs_as_spaces },
-		{ 'label'	=> L("Use previous line for tab columns") ~ ':',
-		  'type' 	=> 'checkbox',
-		  'value'	=> mp.config.dynamic_tabs }
-	] );
+mp.actions['tab_options']   = sub {
+    local t = mp.form( [
+        { 'label'   => L("Tab size") ~ ':',
+          'type'    => 'text',
+          'value'   => mp.config.tab_size,
+          'history' => 'tabsize' },
+        { 'label'   => L("Convert tabs to spaces") ~ ':',
+          'type'    => 'checkbox',
+          'value'   => mp.config.tabs_as_spaces },
+        { 'label'   => L("Use previous line for tab columns") ~ ':',
+          'type'    => 'checkbox',
+          'value'   => mp.config.dynamic_tabs }
+    ] );
 
-	if (t != NULL) {
-		mp.config.tab_size       = t[0];
-		mp.config.tabs_as_spaces = t[1];
-		mp.config.dynamic_tabs   = t[2];
-	}
+    if (t != NULL) {
+        mp.config.tab_size       = t[0];
+        mp.config.tabs_as_spaces = t[1];
+        mp.config.dynamic_tabs   = t[2];
+    }
 };
 
 mp.actions['toggle_insert'] = sub {
@@ -267,14 +267,14 @@ sub mp_doc.indent_block(doc, insert_tab)
             you were indenting a block including the very last line in the file */
         while (times >= 0) {
             doc->set_x(0)->insert_tab()->move_down();
-		
+        
             times--;
         }
-	
+    
         doc->set_y(startY)->set_x(0)->mark();
-	
+    
         doc->set_y(endY)->move_eol()->mark();
-	
+    
         doc->set_y(currentY);
         if (!currentX) doc->set_x(0);
     }
@@ -314,14 +314,14 @@ sub mp_doc.unindent_block(doc, insert_real_tab)
             you were unindenting a block including the very last line in the file */
         while (times >= 0) {
             doc->unindent_line()->move_down();
-		
+
             times--;
         }
-	
+
         doc->set_y(startY)->set_x(0)->mark();
-	
+
         doc->set_y(endY)->move_eol()->mark();
-	
+
         doc->set_y(currentY);
         if (!currentX) doc->set_x(0);
     }
@@ -785,9 +785,9 @@ sub mp_doc.unindent_line(d)
 /* Unindent the current line by 1 tab or the indent size */
 {
     local l = split(d.txt.lines[d.txt.y]);
-	
+
     d->set_x(0);
-	
+
     if (cmp(l[0], "\t") == 0) {
         d->delete_char();
     }
@@ -800,7 +800,7 @@ sub mp_doc.unindent_line(d)
             else {
                 break;
             }
-			
+
             i++;
         }
     }

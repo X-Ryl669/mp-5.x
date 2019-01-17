@@ -3,7 +3,7 @@
     Minimum Profit 5.x
     A Programmer's Text Editor
 
-    Copyright (C) 1991-2018 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2019 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -201,7 +201,7 @@ global mp = {
                 'undo', 'redo', '-',
                 'cut_mark', 'copy_mark', 'paste_mark', 'delete_mark',
                 'delete_line', 'cut_lines_with_string', '-',
-                'mark',	'mark_vertical', 'unmark', 'mark_all', '-',
+                'mark', 'mark_vertical', 'unmark', 'mark_all', '-',
                 'insert_template', '-',
                 'exec_command', 'filter_selection', '-',
                 'exec_action', 'eval', 'eval_doc'
@@ -371,8 +371,8 @@ global mp_doc = new(mp_base, {
  */
 sub mp.redraw()
 {
-	/* just increment the redraw trigger */
-	mp.redraw_counter++;
+    /* just increment the redraw trigger */
+    mp.redraw_counter++;
 }
 
 
@@ -504,13 +504,13 @@ sub mp.backslash_codes(s, d)
 sub mp.long_op(func, a1, a2, a3, a4)
 /* executes a potentially long function */
 {
-	local r;
+    local r;
 
-	mp.busy(1);
-	r = func(a1, a2, a3, a4);
-	mp.busy(0);
+    mp.busy(1);
+    r = func(a1, a2, a3, a4);
+    mp.busy(0);
 
-	return r;
+    return r;
 }
 
 
@@ -526,7 +526,7 @@ sub mp.menu_label(action)
 {
     local l = NULL;
 
-	/* if action is '-', it's a menu separator */
+    /* if action is '-', it's a menu separator */
     if (action ne '-') {
         l = L(mp.actdesc[action]) || action;
 
@@ -538,15 +538,15 @@ sub mp.menu_label(action)
             l = l ~ ' [' ~ join(ks, ', ') ~ ']';
     }
 
-	return l;
+    return l;
 }
 
 
 sub mp.trim(str, max)
 /* trims the string to the last max characters, adding ellipsis if done */
 {
-	local v = regex(str, '/.{' ~ max ~ '}$/');
-	return v && '...' ~ v || str;
+    local v = regex(str, '/.{' ~ max ~ '}$/');
+    return v && '...' ~ v || str;
 }
 
 
@@ -560,26 +560,26 @@ sub mp.get_doc_names(max)
 sub mp.usage()
 /* set mp.exit_message with an usage message (--help) */
 {
-	mp.exit_message = 
-	sprintf(L(
-		"Minimum Profit %s - Programmer Text Editor\n"\
-		"Copyright (C) Angel Ortega <angel@triptico.com> et al.\n"\
-		"This software is covered by the GPL license. NO WARRANTY.\n"\
-		"\n"\
-		"Usage: mp-5 [options] [files...]\n"\
-		"\n"\
-		"Options:\n"\
-		"\n"\
-		" -t {tag}           Edits the file where tag is defined\n"\
-		" -e {mpsl_code}     Executes MPSL code\n"\
-		" -f {mpsl_script}   Executes MPSL script file\n"\
-		" -d {directory}     Set current directory\n"\
-		" -x {file}          Open file in the hexadecimal viewer\n"\
-		" -txt               Use text mode instead of GUI\n"\
-		" +NNN               Moves to line number NNN of last file\n"\
-		"\n"\
-		"Homepage: http://triptico.com/software/mp.html\n"
-	), mp.VERSION);
+    mp.exit_message = 
+    sprintf(L(
+        "Minimum Profit %s - Programmer Text Editor\n"\
+        "Copyright (C) Angel Ortega <angel@triptico.com> et al.\n"\
+        "This software is covered by the GPL license. NO WARRANTY.\n"\
+        "\n"\
+        "Usage: mp-5 [options] [files...]\n"\
+        "\n"\
+        "Options:\n"\
+        "\n"\
+        " -t {tag}           Edits the file where tag is defined\n"\
+        " -e {mpsl_code}     Executes MPSL code\n"\
+        " -f {mpsl_script}   Executes MPSL script file\n"\
+        " -d {directory}     Set current directory\n"\
+        " -x {file}          Open file in the hexadecimal viewer\n"\
+        " -txt               Use text mode instead of GUI\n"\
+        " +NNN               Moves to line number NNN of last file\n"\
+        "\n"\
+        "Homepage: http://triptico.com/software/mp.html\n"
+    ), mp.VERSION);
 }
 
 
@@ -668,31 +668,31 @@ sub mp.process_cmdline()
 sub mp.load_profile()
 /* loads ~/.mp.mpsl */
 {
-	/* if /etc/mp.mpsl exists, execute it */
-	if (stat('/etc/mp.mpsl') != NULL) {
-		eval( sub {
-			local INC = [ '/etc' ];
-			load('mp.mpsl');
-		});
-	}
+    /* if /etc/mp.mpsl exists, execute it */
+    if (stat('/etc/mp.mpsl') != NULL) {
+        eval( sub {
+            local INC = [ '/etc' ];
+            load('mp.mpsl');
+        });
+    }
 
-	/* if ~/.mp.mpsl exists, execute it */
-	if (ERROR == NULL && stat(HOMEDIR ~ '.mp.mpsl') != NULL) {
-		eval( sub {
-			local INC = [ HOMEDIR ];
-			load(".mp.mpsl");
-		});
-	}
+    /* if ~/.mp.mpsl exists, execute it */
+    if (ERROR == NULL && stat(HOMEDIR ~ '.mp.mpsl') != NULL) {
+        eval( sub {
+            local INC = [ HOMEDIR ];
+            load(".mp.mpsl");
+        });
+    }
 
-	/* errors? show in a message */
-	if (ERROR != NULL) {
-		mp.message = {
-			'timeout'	=> time() + 20,
-			'string'	=> ERROR
-		};
+    /* errors? show in a message */
+    if (ERROR != NULL) {
+        mp.message = {
+            'timeout'   => time() + 20,
+            'string'    => ERROR
+        };
 
-		ERROR = NULL;
-	}
+        ERROR = NULL;
+    }
 }
 
 
@@ -707,11 +707,11 @@ sub mp.assert_version(found, minimal, package)
 /* asserts that 'found' version of 'package' is at least 'minimal',
    or generate a warning otherwise */
 {
-	if (cmp(mp.normalize_version(found),
-		mp.normalize_version(minimal)) < 0) {
-		mp.alert(sprintf(L("WARNING: %s version found is %s, but %s is needed"),
-				package, found, minimal));
-	}
+    if (cmp(mp.normalize_version(found),
+        mp.normalize_version(minimal)) < 0) {
+        mp.alert(sprintf(L("WARNING: %s version found is %s, but %s is needed"),
+                package, found, minimal));
+    }
 }
 
 

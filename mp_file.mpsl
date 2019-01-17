@@ -27,7 +27,7 @@
 
 /** editor actions **/
 
-mp.actions['new']	= sub {
+mp.actions['new']   = sub {
     local d = mp.find_file_by_name(L("<unnamed>"));
 
     if (d != -1) {
@@ -87,12 +87,12 @@ mp_doc.actions['export_as_rtf'] = sub (d, filename) {
 };
 
 
-mp.actions['close']	= sub (d) {
+mp.actions['close'] = sub (d) {
     if (d->query_close() != 0)
         mp.close();
 };
 
-mp.actions['exit']	= sub {
+mp.actions['exit']  = sub {
     if (mp.config.auto_sessions)
         mp.save_session();
 
@@ -173,7 +173,7 @@ mp_doc.actions['revert'] = sub (d) {
     return nd;
 };
 
-mp.actions['open_config_file']	= sub {
+mp.actions['open_config_file']  = sub {
     mp.open(HOMEDIR ~ ".mp.mpsl");
 };
 
@@ -347,7 +347,7 @@ mp_doc.actions['open_under_cursor'] = sub (d) {
     return d;
 };
 
-mp.actions['hex_view']	= sub (doc, filename) {
+mp.actions['hex_view']  = sub (doc, filename) {
     local d = NULL;
 
     if (filename == NULL)
@@ -547,7 +547,7 @@ sub mp_doc.save(doc)
         doc.mtime = s[9];
     }
     
-	return ret;
+    return ret;
 }
 
 
@@ -718,7 +718,7 @@ sub mp.open(filename, password)
         ERRNO = NULL;
 
         d = mp.add(new(mp_doc, { name: filename }));
-	}
+    }
     else
     if (s[13] != NULL) {
         local r;
@@ -808,5 +808,5 @@ sub mp.open(filename, password)
             d->set_x(x - 1);
     }
 
-	return d;
+    return d;
 }

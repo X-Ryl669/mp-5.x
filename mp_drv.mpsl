@@ -25,7 +25,7 @@
 
 /** editor actions **/
 
-mp.actions['menu']	= sub (d) { mp_drv.menu(); };
+mp.actions['menu']  = sub (d) { mp_drv.menu(); };
 
 /** default key bindings **/
 
@@ -37,7 +37,7 @@ mp.keycodes['mouse-menu']   = 'menu';
 
 /** action descriptions **/
 
-mp.actdesc['menu']			= LL("Menu");
+mp.actdesc['menu']          = LL("Menu");
 
 /** default UI functions (dummy) **/
 
@@ -51,11 +51,11 @@ sub mp_drv.suspend()            { return NULL; }
 
 /** driver wrappers **/
 
-sub mp.update_ui()			{ mp_drv.update_ui(); }
-sub mp.alert(msg)			{ mp_drv.alert(msg); }
-sub mp.confirm(msg)			{ mp_drv.confirm(msg); }
-sub mp.openfile(prompt)		{ mp_drv.openfile(prompt); }
-sub mp.savefile(prompt)		{ mp_drv.savefile(prompt); }
-sub mp.form(widgets)		{ mp_drv.form(widgets); }
-sub mp.timer(msecs,func)	{ mp_drv.timer(msecs,func); }
-sub mp.busy(onoff)			{ mp_drv.busy(onoff); }
+sub mp.update_ui()          { mp_drv.update_ui(); }
+sub mp.alert(msg)           { mp_drv.alert(msg); }
+sub mp.confirm(msg)         { mp_drv.confirm(msg); }
+sub mp.openfile(prompt)     { mp_drv.openfile(prompt); }
+sub mp.savefile(prompt)     { mp_drv.savefile(prompt); }
+sub mp.form(widgets)        { mp_drv.form(widgets); }
+sub mp.timer(msecs,func)    { mp_drv.timer(msecs,func); }
+sub mp.busy(onoff)          { mp_drv.busy(onoff); }
