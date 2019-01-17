@@ -142,7 +142,7 @@ mp_doc.actions['seek_next_char'] = sub (d) { d->seek_prev_or_next_char(mp_doc.se
 mp_doc.actions['seek_prev_char'] = sub (d) { d->seek_prev_or_next_char(mp_doc.search_back); };
 mp_doc.actions['seek_matching']  = sub (d) { d->seek_matching(); };
 
-mp.actions['grep']	= sub {
+mp.actions['grep']  = sub {
     local r = mp.form(
         [
             {
@@ -197,21 +197,47 @@ mp.actions['grep']	= sub {
     return d;
 };
 
-mp_doc.actions['replace_tabs_with_spaces'] = sub (d) {
-    d->store_undo();
+
+sub mp.apply_func_to_all_lines(d, func) {
+    local cnt = 0;
+    local lines = [];
+
     d->busy(1);
-    d.txt.lines = d.txt.lines->map(sub (e) { mp.replace_tabs_with_spaces(e); });
-    d.txt.mod++;
+
+    /* iterates all lines, counting and storing the different ones */
+    foreach (l, d.txt.lines) {
+        local nl = func(l);
+
+        if (l ne nl) {
+            cnt++;
+            lines->push(nl);
+        }
+        else
+            lines->push(l);
+    }
+
     d->busy(0);
+
+    if (cnt) {
+        d->store_undo();
+        d.txt.lines = lines;
+        d.txt.mod++;
+    }
+
+    mp.message = {
+        timeout:    time() + 4,
+        string:     sprintf(L("%d lines replaced"), cnt)
+    };
+}
+
+
+mp_doc.actions['replace_tabs_with_spaces'] = sub (d) {
+    mp.apply_func_to_all_lines(d, mp.replace_tabs_with_spaces);
 };
 
 
 mp_doc.actions['replace_spaces_with_tabs'] = sub (d) {
-    d->store_undo();
-    d->busy(1);
-    d.txt.lines = d.txt.lines->map(sub (e) { mp.replace_spaces_with_tabs(e); });
-    d.txt.mod++;
-    d->busy(0);
+    mp.apply_func_to_all_lines(d, mp.replace_spaces_with_tabs);
 };
 
 
