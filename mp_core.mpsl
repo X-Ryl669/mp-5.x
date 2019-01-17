@@ -210,7 +210,7 @@ global mp = {
         [
             LL("&Search"), [
                 'seek', 'seek_next', 'seek_prev', 'replace', '-',
-                'replace_tabs_with_spaces', '-',
+                'replace_tabs_with_spaces', 'replace_spaces_with_tabs', '-',
                 'complete', '-',
                 'grep'
             ]

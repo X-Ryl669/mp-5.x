@@ -11,6 +11,7 @@ Minimum Profit Release Notes
  - New features:
    - New action `insert_m_dash', bound by default to `alt-minus'.
    - New action `replace_tabs_with_spaces'.
+   - New action `replace_spaces_with_tabs'.
 
 5.2.15
 ------

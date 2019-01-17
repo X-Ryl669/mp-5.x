@@ -5,7 +5,7 @@
 
     Search and replace.
 
-    Copyright (C) 1991-2017 Angel Ortega <angel@triptico.com> et al.
+    Copyright (C) 1991-2019 Angel Ortega <angel@triptico.com> et al.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -206,6 +206,15 @@ mp_doc.actions['replace_tabs_with_spaces'] = sub (d) {
 };
 
 
+mp_doc.actions['replace_spaces_with_tabs'] = sub (d) {
+    d->store_undo();
+    d->busy(1);
+    d.txt.lines = d.txt.lines->map(sub (e) { mp.replace_spaces_with_tabs(e); });
+    d.txt.mod++;
+    d->busy(0);
+};
+
+
 /** default key bindings **/
 
 mp_doc.keycodes['f3']               = 'seek_next';
@@ -227,6 +236,8 @@ mp.actdesc['seek_prev_char']           = LL("Move to previous instance of curren
 mp.actdesc['seek_matching']            = LL("Move to the matching bracket");
 mp.actdesc['grep']                     = LL("Grep (find inside) files...");
 mp.actdesc['replace_tabs_with_spaces'] = LL("Replace tabs with spaces");
+mp.actdesc['replace_spaces_with_tabs'] = LL("Replace spaces with tabs");
+
 /** code **/
 
 /**
@@ -571,4 +582,20 @@ sub mp.replace_tabs_with_spaces(line) {
     r = r ~ shift(l);
 
     return r;
+}
+
+
+sub mp.replace_spaces_with_tabs(line) {
+    local r = [];
+    local s = '';
+    local ts = mp.config.tab_size;
+
+    while ((s = line->slice(0, ts)) && size(s) == ts) {
+        r->push(s->sregex("/ +$/", "\t"));
+        line = line->slice(ts);
+    }
+
+    r->push(s);
+
+    return r->join();
 }
