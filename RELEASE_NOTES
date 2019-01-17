@@ -10,6 +10,7 @@ Minimum Profit Release Notes
    - Some MPSL code is loaded on demand.
  - New features:
    - New action `insert_m_dash', bound by default to `alt-minus'.
+   - New action `replace_tabs_with_spaces'.
 
 5.2.15
 ------

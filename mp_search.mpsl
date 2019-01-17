@@ -197,6 +197,15 @@ mp.actions['grep']	= sub {
     return d;
 };
 
+mp_doc.actions['replace_tabs_with_spaces'] = sub (d) {
+    d->store_undo();
+    d->busy(1);
+    d.txt.lines = d.txt.lines->map(sub (e) { mp.replace_tabs_with_spaces(e); });
+    d.txt.mod++;
+    d->busy(0);
+};
+
+
 /** default key bindings **/
 
 mp_doc.keycodes['f3']               = 'seek_next';
@@ -209,15 +218,15 @@ mp_doc.keycodes['ctrl-j']           = 'seek_matching';
 
 /** action descriptions **/
 
-mp.actdesc['seek']              = LL("Search text...");
-mp.actdesc['seek_next']         = LL("Search next");
-mp.actdesc['seek_prev']         = LL("Search previous");
-mp.actdesc['replace']           = LL("Replace...");
-mp.actdesc['seek_next_char']    = LL("Move to next instance of current char");
-mp.actdesc['seek_prev_char']    = LL("Move to previous instance of current char");
-mp.actdesc['seek_matching']     = LL("Move to the matching bracket");
-mp.actdesc['grep']              = LL("Grep (find inside) files...");
-
+mp.actdesc['seek']                     = LL("Search text...");
+mp.actdesc['seek_next']                = LL("Search next");
+mp.actdesc['seek_prev']                = LL("Search previous");
+mp.actdesc['replace']                  = LL("Replace...");
+mp.actdesc['seek_next_char']           = LL("Move to next instance of current char");
+mp.actdesc['seek_prev_char']           = LL("Move to previous instance of current char");
+mp.actdesc['seek_matching']            = LL("Move to the matching bracket");
+mp.actdesc['grep']                     = LL("Grep (find inside) files...");
+mp.actdesc['replace_tabs_with_spaces'] = LL("Replace tabs with spaces");
 /** code **/
 
 /**
@@ -544,6 +553,22 @@ sub mp.grep(rx, spec, base, rec, r)
             }
         }
     }
+
+    return r;
+}
+
+
+sub mp.replace_tabs_with_spaces(line) {
+    local r = '';
+    local l = line->split("\t");
+    local s = [1 .. mp.config.tab_size]->map(sub{' ';})->join();
+
+    while (size(l) > 1) {
+        r = r ~ shift(l);
+        r = r ~ s->slice(size(r) % size(s));
+    }
+
+    r = r ~ shift(l);
 
     return r;
 }
