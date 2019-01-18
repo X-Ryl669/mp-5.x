@@ -730,10 +730,9 @@ sub mp.load_state()
     local f;
 
     if ((f = open(HOMEDIR ~ ".mp_state.json", "r")) != NULL) {
-        local l;
         local j = [];
 
-        while ((l = f->read()))
+        foreach (l, f)
             j->push(l);
 
         f->close();
