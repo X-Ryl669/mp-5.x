@@ -738,12 +738,7 @@ sub mp.load_state()
 
 sub mp.save_state()
 {
-    local f;
-
-    if ((f = open(HOMEDIR ~ ".mp_state.json", "w")) != NULL) {
-        f->write(fmt("%j", mp.state));
-        f->close();
-    }
+    open(HOMEDIR ~ ".mp_state.json", "w")->write(fmt("%j", mp.state))->close();
 }
 
 
