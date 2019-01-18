@@ -727,18 +727,12 @@ sub mp.test_versions()
 
 sub mp.load_state()
 {
-    local f;
+    local j = open(HOMEDIR ~ ".mp_state.json", "r")->map()->join();
 
-    if ((f = open(HOMEDIR ~ ".mp_state.json", "r")) != NULL) {
-        local j = [];
+    if (j)
+        j = (j = j->sscanf("%j")->pop())->is_hash() && j || NULL;
 
-        foreach (l, f)
-            j->push(l);
-
-        f->close();
-
-        mp.state = j->join()->sscanf("%j")->pop();
-    }
+    mp.state = j || {};
 }
 
 
