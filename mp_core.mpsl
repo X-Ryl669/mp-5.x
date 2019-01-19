@@ -707,8 +707,7 @@ sub mp.assert_version(found, minimal, package)
 /* asserts that 'found' version of 'package' is at least 'minimal',
    or generate a warning otherwise */
 {
-    if (cmp(mp.normalize_version(found),
-        mp.normalize_version(minimal)) < 0) {
+    if (found < minimal) {
         mp.alert(sprintf(L("WARNING: %s version found is %s, but %s is needed"),
                 package, found, minimal));
     }
@@ -718,10 +717,8 @@ sub mp.assert_version(found, minimal, package)
 sub mp.test_versions()
 /* tests component versions */
 {
-    local mpdm = MPDM();
-
-    mp.assert_version(mpdm.version, '2.1.8', 'MPDM');
-    mp.assert_version(MPSL.VERSION, '2.2.5', 'MPSL');
+    mp.assert_version(MPDM.version, 2.20, 'MPDM');
+    mp.assert_version(MPSL.VERSION, 2.25, 'MPSL');
 }
 
 
