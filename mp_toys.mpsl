@@ -298,12 +298,12 @@ global mp_pipes = new(mp_base, {
 
             pipes->init();
 
-            foreach (n, wy + 1) {
+            foreach (line, n, game_map) {
                 local l0 = [];
                 local l1 = [];
 
-                foreach (p, m, game_map[n]) {
-                    local s = pieces[p].shape;
+                foreach (piece, m, line) {
+                    local s = pieces[piece].shape;
                     local c;
 
                     if (n == y && m == x)
