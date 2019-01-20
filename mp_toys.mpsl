@@ -318,6 +318,9 @@ global mp_pipes = new(mp_base, {
                 push(out, l0, l1);
             }
 
+            /* add two more empty lines */
+            push(out, [], []);
+
             if (state eq 'WON') {
                 out[0] = [
                     mp.colors.cursor.attr,
