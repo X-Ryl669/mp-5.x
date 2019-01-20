@@ -667,7 +667,7 @@ sub mp.close()
         hdel(mp.state.files, l.name);
     else
     if (!regex(l.name, '/^<'))
-        mp.state.files[l.name] = { x: l.txt.x, y: l.txt.y, vy: l.txt.vy };
+        mp.state.files[l.name] = { x: l.txt.x, y: l.txt.y, vy: l.txt.vy, t: time() };
 
     /* delete from the list */
     adel(mp.docs, mp.active_i);
