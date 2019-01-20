@@ -302,8 +302,7 @@ global mp_pipes = new(mp_base, {
                 local l0 = [];
                 local l1 = [];
 
-                foreach (m, wx) {
-                    local p = game_map[n][m];
+                foreach (p, m, game_map[n]) {
                     local s = pieces[p].shape;
                     local c;
 
