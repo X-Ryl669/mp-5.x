@@ -207,16 +207,14 @@ global mp_pipes = new(mp_base, {
 
                 sx = random(wx);
 
-                game_map = map([1 .. wy - 1],
-                    sub {map([1 .. wx], sub { random(size(pieces) - 3); });}
-                );
+                game_map = map(wy - 1, sub {map(wx, sub { random(size(pieces) - 3); });});
 
                 /* add first line */
-                ins(game_map, map([1 .. wx], sub { 6; }), 0);
+                ins(game_map, map(wx, sub { 6; }), 0);
                 game_map[0][sx] = 7;
 
                 /* add last line */
-                push(game_map, map([1 .. wx], sub { 6; }));
+                push(game_map, map(wx, sub { 6; }));
                 game_map[wy][5] = 8;
                 game_map[wy][wx - 5] = 8;
 
