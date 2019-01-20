@@ -190,8 +190,8 @@ static void ansi_build_colors(void)
 {
     mpdm_t colors;
     mpdm_t color_names;
-    mpdm_t k, v;
-    int n, i;
+    mpdm_t v;
+    int n, c;
 
     /* gets the color definitions and attribute names */
     colors      = mpdm_hget_s(MP, L"colors");
@@ -200,8 +200,8 @@ static void ansi_build_colors(void)
     n = mpdm_hsize(colors);
 
     /* loop the colors */
-    n = i = 0;
-    while (mpdm_iterator(colors, &i, &k, &v)) {
+    n = c = 0;
+    while (mpdm_iterator(colors, &c, &v, NULL)) {
         mpdm_t w = mpdm_hget_s(v, L"text");
         int c0, c1, cf = 0;
 

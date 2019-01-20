@@ -81,8 +81,8 @@ static void build_colors(void)
 {
     mpdm_t colors;
     mpdm_t color_names;
-    mpdm_t k, v;
-    int n, i;
+    mpdm_t v, i;
+    int n, c;
 
     /* gets the color definitions and attribute names */
     colors      = mpdm_hget_s(MP, L"colors");
@@ -94,14 +94,14 @@ static void build_colors(void)
     win32c_attrs = realloc(win32c_attrs, sizeof(WORD) * n);
 
     /* loop the colors */
-    n = i = 0;
-    while (mpdm_iterator(colors, &i, &k, &v)) {
+    n = c = 0;
+    while (mpdm_iterator(colors, &c, &v, &i)) {
         mpdm_t w = mpdm_hget_s(v, L"text");
         int c0, c1;
     	WORD cp = 0;
 
         /* store the 'normal' attribute */
-        if (wcscmp(mpdm_string(k), L"normal") == 0)
+        if (wcscmp(mpdm_string(i), L"normal") == 0)
             normal_attr = n;
 
         /* store the attr */
