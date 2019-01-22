@@ -266,7 +266,7 @@ global mp_pipes = new(mp_base, {
         },
         verify:    sub (pipes) {
             /* reset attributes */
-            attr = map([0 .. wy], sub { [];});
+            attr = map(wy + 1, sub { [];});
 
             /* the water input is blue */
             attr[0][sx] = water_color;
