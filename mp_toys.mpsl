@@ -181,17 +181,20 @@ global mp_maze = new(mp_base, {
 /** pipes **/
 
 global mp_pipes = new(mp_base, {
-        name:       '<pipes>',
-        x:          0,
-        y:          1,
-        tx:         -1,
-        ty:         -1,
-        wx:         -1,
-        wy:         -1,
-        sx:         -1,
-        state:      'RST',
-        game_map:   NULL,
-        attr:       NULL,
+        name:         '<pipes>',
+        x:            0,
+        y:            1,
+        tx:           -1,
+        ty:           -1,
+        wx:           -1,
+        wy:           -1,
+        sx:           -1,
+        state:        'RST',
+        game_map:     NULL,
+        attr:         NULL,
+        water_color:  mp.colors.quotes.attr,
+        dry_color:    mp.colors.normal.attr,
+        cursor_color: mp.colors.cursor.attr,
 
         get_status: sub (pipes) {
             L("Pipes - carry water from top to bottom by turning the pipes");
@@ -266,7 +269,7 @@ global mp_pipes = new(mp_base, {
             attr = map([0 .. wy], sub { [];});
 
             /* the water input is blue */
-            attr[0][sx] = mp.colors.quotes.attr;
+            attr[0][sx] = water_color;
 
             /* calculate the path */
             local px = sx;
@@ -277,7 +280,7 @@ global mp_pipes = new(mp_base, {
             /* while there is a valid path */
             while ((p = pieces[game_map[py][px]]) && (c = p.out[c]) && dir[c]) {
                 /* mark as valid path */
-                attr[py][px] = mp.colors.quotes.attr;
+                attr[py][px] = water_color;
 
                 /* move in new direction */
                 px += dir[c][0];
@@ -285,7 +288,7 @@ global mp_pipes = new(mp_base, {
             }
 
             if (c eq 'WIN') {
-                attr[py][px] = mp.colors.quotes.attr;
+                attr[py][px] = water_color;
                 state = 'WON';
             }
 
@@ -305,9 +308,9 @@ global mp_pipes = new(mp_base, {
                     local c;
 
                     if (n == y && m == x)
-                        c = mp.colors.cursor.attr;
+                        c = cursor_color;
                     else
-                        c = attr[n][m] || mp.colors.normal.attr;
+                        c = attr[n][m] || dry_color;
 
                     push(l0, c, s[0]);
                     push(l1, c, s[1]);
