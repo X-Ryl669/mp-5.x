@@ -55,15 +55,7 @@ global mp_maze = new(mp_base, {
                     ty--;
 
                 /* init */
-                game_map = map(
-                    [1 .. ty],
-                    sub {
-                        map(
-                            [1 .. tx],
-                            sub { brick; }
-                        );
-                    }
-                );
+                game_map = map(ty, sub { map(tx, sub { brick; }); });
 
                 /* build */
                 x = 1;
@@ -161,7 +153,7 @@ global mp_maze = new(mp_base, {
             maze->init();
 
             local c = mp.colors.normal.attr;
-            local out = map(game_map, sub(e) {[c, join(e)];});
+            local out = map(game_map, sub(e) { [c, join(e)]; });
 
             if (state eq 'WON') {
                 out[0] = [
