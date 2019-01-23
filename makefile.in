@@ -1,5 +1,3 @@
-# -*- Mode: sh
-
 all: $(TARGET) $(MORE_TARGETS) $(BUILDMO)
 
 PROJ=mp
@@ -16,8 +14,6 @@ G_AND_MP_DOCS=doc/mp_api.html
 OBJS=mp_core.o $(DRV_OBJS) $(MORE_OBJS)
 
 DIST_TARGET=/tmp/$(PROJ)-$(VERSION)
-
-##################################################################
 
 version:
 	@echo $(VERSION)
@@ -66,8 +62,8 @@ mp-5c.exe: mp_core.o $(MORE_OBJS) mpv_win32c.o mp_res.o $(MPDM)/libmpdm.a $(MPSL
 
 clean:
 	rm -f $(TARGET) $(OBJS) mp*.tar *.o *.moc tags *.tar.gz *.exe *.zip .installer.c *.1 *.asc
-	(cd $(MPDM) ; make clean)
-	(cd $(MPSL) ; make clean)
+	$(MAKE) -C $(MPDM) clean
+	$(MAKE) -C $(MPSL) clean
 
 distclean: clean
 	rm -f config.h config.cflags config.ldflags \
@@ -77,8 +73,8 @@ docsclean:
 	rm -f $(MP_DOCCER_DOCS) doc/*.html
 
 realclean: distclean
-	(cd $(MPDM) ; make realclean)
-	(cd $(MPSL) ; make realclean)
+	$(MAKE) -C $(MPDM) realclean
+	$(MAKE) -C $(MPSL) realclean
 
 realdistclean: realclean
 
@@ -115,25 +111,6 @@ distcopy: distclean docs
 dist: distcopy po/minimum-profit.pot build-mo
 	(cd /tmp ; $(TAR) czf - $(PROJ)-$(VERSION)/* ) > $(PROJ)-$(VERSION).tar.gz ; \
 	rm -rf $(DIST_TARGET)
-
-midnight:
-	$(MAKE) distcopy DIST_TARGET=/tmp/mp-midnight
-	(cd /tmp ; $(TAR) czf - mp-midnight/* ) > mp-midnight.tar.gz ; \
-	rm -rf /tmp/mp-midnight
-
-win32dist: mp-5.exe
-	mkdir -p win32
-	mkdir -p win32/doc
-	i586-mingw32msvc-strip $(APPNAME)
-	install $(APPNAME) win32
-	install mp_*.mpsl win32
-	(DIR=`pwd` ; cd $(MPDM) ; make installdoc DOCDIR=$$DIR/win32/doc)
-	(DIR=`pwd` ; cd $(MPSL) ; make installdoc DOCDIR=$$DIR/win32/doc)
-	install $(DOCS) win32/doc
-	(cd win32 ; aovwinstall mp-5 "Minimum Profit $(VERSION)" * doc/*)
-	i586-mingw32msvc-strip win32/installer.exe
-	mv win32/installer.exe mp-$(VERSION).exe
-	rm -rf win32
 
 innosetup: mp-5.exe mp-5c.exe docs
 	rm -f *.dll
