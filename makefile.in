@@ -26,7 +26,9 @@ version:
 	$(CC) $(CFLAGS) -I. `cat config.cflags` -c $<
 
 dep:
-	gcc -MM *.c `cat config.cflags` > makefile.depend
+	gcc `cat config.cflags` -MM *.c | \
+		sed -e 's;$(MPDM)/;$$(MPDM)/;g' \
+			-e 's;$(MPSL)/;$$(MPSL)/;g' > makefile.depend
 
 mp.tar: *.mpsl lang/*.mpsl syntax/*.mpsl
 	$(TAR) cvf $@ *.mpsl lang/*.mpsl syntax/*.mpsl
