@@ -29,48 +29,25 @@
 
 /** hexadecimal viewer object **/
 
-sub join_by_attr(line)
-{
-    local r = [ line->shift(), line->shift() ];
-
-    while (line->size()) {
-        local a = line->shift();
-        local s = line->shift();
-
-        if (r[-2] == a)
-            r[-1] = r[-1] ~ s;
-        else
-            push(r, a, s);
-    }
-
-    return r;
-}
-
-
 global mp_hex_view = new(mp_base, {
         name:           '<hex view>',
         offset:         0,
         bpl:            8,
-        data:           [],
+        data:           '',
         f_offset:       0,
         f_size:         0,
+        fd:             NULL,
 
         get_status: sub (hex) {
             sprintf("HEX %s - 0x%06x (%d)", name, offset, offset);
         },
         init:       sub (hex) {
-            local f;
-
-            if ((f = open(name, "rb")) == NULL)
+            if ((fd = open(name, "rb")) == NULL)
                 hex = NULL;
-            else
-                close(f);
 
             return hex;
         },
         keypress:   sub (hex, keycode) {
-            local f = open(name, "rb");
-
             if (keycode eq 'cursor-down')
                 offset += bpl;
             else
@@ -92,17 +69,15 @@ global mp_hex_view = new(mp_base, {
             if (offset < 0)
                 offset = 0;
 
-            fseek(f, 0, 2);
-            if (offset >= ftell(f))
-                offset = ftell(f);
-
-            close(f);
+            fseek(fd, 0, 2);
+            if (offset >= ftell(fd))
+                offset = ftell(fd);
 
             return hex;
         },
         render:     sub (hex) {
             local out = [];
-            local f, o;
+            local o;
 
             /* calculate bytes per line */
             bpl = 100;
@@ -113,8 +88,7 @@ global mp_hex_view = new(mp_base, {
             /* round offset */
             offset = sprintf("%d", offset / bpl) * bpl;
 
-            f = open(name, "rb");
-            fseek(f, offset, 0);
+            fseek(fd, offset, 0);
 
             o = offset;
 
@@ -128,13 +102,13 @@ global mp_hex_view = new(mp_base, {
                 ];
                 ov = [
                     mp.colors.word1.attr,
-                    sprintf(" %06X |", ftell(f))
+                    sprintf(" %06X |", ftell(fd))
                 ];
 
                 for (n = 0; n < bpl; n++) {
                     local a = 0;
 
-                    if ((c = getchar(f)) == NULL)
+                    if ((c = getchar(fd)) == NULL)
                         break;
 
                     if (o >= f_offset && o < f_offset + f_size)
@@ -165,7 +139,7 @@ global mp_hex_view = new(mp_base, {
                     n++;
                 }
 
-                push(out, ov->join(nv)->join(av)->join_by_attr());
+                push(out, ov->join(nv)->join(av));
 
                 if (c == NULL)
                     break;
@@ -174,31 +148,26 @@ global mp_hex_view = new(mp_base, {
             while (size(out) < mp.window.ty)
                 push(out, []);
 
-            close(f);
-
             return out;
         },
         actions:    {
-            seek_next:  sub (d) {
-                local f = open(d.name, "rb");
-                fseek(f, d.f_offset + 1);
+            seek_next:  sub (hex) {
+                fseek(hex.fd, hex.f_offset + 1);
 
                 mp.busy(1);
-                local found = mp_c.search_hex(f, d.data);
+                local found = mp_c.search_hex(hex.fd, hex.data);
                 mp.busy(0);
 
                 if (found) {
-                    d.f_offset  = ftell(f);
-                    d.f_size    = d.data->size() / 2;
-                    d.offset    = d.f_offset;
+                    hex.f_offset  = ftell(hex.fd);
+                    hex.f_size    = hex.data->size() / 2;
+                    hex.offset    = hex.f_offset;
                 }
                 else
                     mp.alert(L("Not found."));
-
-                close(f);
             },
 
-            seek:       sub (d) {
+            seek:       sub (hex) {
                 local t = mp.form(
                     [
                         {
@@ -210,9 +179,9 @@ global mp_hex_view = new(mp_base, {
                 );
 
                 if (t != NULL) {
-                    d.data = t[0];
-                    d.f_offset = d.offset - 1;
-                    d.actions.seek_next(d);
+                    hex.data = t[0];
+                    hex.f_offset = hex.offset - 1;
+                    hex->actions.seek_next();
                 }
             }
         },
