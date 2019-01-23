@@ -4,8 +4,7 @@ all: $(TARGET) $(MORE_TARGETS) $(BUILDMO)
 
 PROJ=mp
 
-ADD_DOCS=AUTHORS README COPYING RELEASE_NOTES \
-	mp_templates.sample doc/mp_function_reference.html
+ADD_DOCS=AUTHORS README COPYING RELEASE_NOTES mp_templates.sample
 GRUTATXT_DOCS=doc/mp_index.html doc/mp_cookbook.html doc/mp_internals.html \
 	doc/mp_configuration.html doc/mp_data_model.html \
 	doc/mp_man.html doc/mp_interactive_dialog_boxes.html \
