@@ -1,4 +1,8 @@
-all: $(TARGET) $(MORE_TARGETS) $(BUILDMO)
+all: LIBS $(TARGET) $(MORE_TARGETS) $(BUILDMO)
+
+LIBS:
+	$(MAKE) -C $(MPDM) libmpdm.a
+	$(MAKE) -C $(MPSL) libmpsl.a
 
 PROJ=mp
 
