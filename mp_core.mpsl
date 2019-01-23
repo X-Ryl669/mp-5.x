@@ -321,20 +321,20 @@ mp.colors.documentation.gui = [ 0xc397d8, 0x000000 ];
 mp.colors.selection.gui     = [ 0xd54e53, 0x000000 ];
 */
 
-/* Minimum Profit Dark */
+/* Minimum Profit Classic */
 /*
-mp.colors.normal.gui        = [ 0xf0f0f0, 0x1b1b1b ];
+mp.colors.normal.gui        = [ 0x000000, 0xffffff ];
 mp.colors.cursor.gui        = mp.colors.normal.gui;
-mp.colors.selection.gui     = [ 0xf2777a, 0x000000 ];
-mp.colors.comments.gui      = [ 0x00cc77, 0x1b1b1b ];
-mp.colors.documentation.gui = [ 0x8888ff, 0x1b1b1b ];
-mp.colors.quotes.gui        = [ 0x629FCF, 0x1b1b1b ];
+mp.colors.selection.gui     = [ 0xff0000, 0xffffff ];
+mp.colors.comments.gui      = [ 0x00cc77, 0xffffff ];
+mp.colors.documentation.gui = [ 0x8888ff, 0xffffff ];
+mp.colors.quotes.gui        = [ 0x0000ff, 0xffffff ];
 mp.colors.matching.gui      = [ 0x000000, 0xffff00 ];
-mp.colors.word1.gui         = [ 0x00aa00, 0x1b1b1b ];
-mp.colors.word2.gui         = [ 0xff6666, 0x1b1b1b ];
-mp.colors.word3.gui         = [ 0xe0e0e0, 0x1b1b1b ];
-mp.colors.tag.gui           = [ 0x8888ff, 0x1b1b1b ];
-mp.colors.spell.gui         = [ 0xff8888, 0x1b1b1b ];
+mp.colors.word1.gui         = [ 0x00aa00, 0xffffff ];
+mp.colors.word2.gui         = [ 0xff6666, 0xffffff ];
+mp.colors.word3.gui         = [ 0x000088, 0xffffff ];
+mp.colors.tag.gui           = [ 0x8888ff, 0xffffff ];
+mp.colors.spell.gui         = [ 0xff8888, 0xffffff ];
 mp.colors.search.gui        = [ 0x000000, 0x00cc77 ];
 */
 
@@ -353,7 +353,6 @@ mp.colors.word3.gui         = [ 0xe0e0e0, 0x1b1b1b ];
 mp.colors.tag.gui           = [ 0x8888ff, 0x1b1b1b ];
 mp.colors.spell.gui         = [ 0xff8888, 0x1b1b1b ];
 mp.colors.search.gui        = [ 0x000000, 0x00cc77 ];
-
 
 /** MP base class **/
 
