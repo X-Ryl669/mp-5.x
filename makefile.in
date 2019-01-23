@@ -123,7 +123,6 @@ install: $(INSTALL_MSG) installdoc $(INSTALLMO)
 	[ -f mp-dist.tar ] && ./mkinstalldirs $(PREFIX)/share/$(APPNAME) && install -m 644 mp-dist.tar $(PREFIX)/share/$(APPNAME) || true
 	./mkinstalldirs $(PREFIX)/share/man/man1
 	[ -f $(APPNAME).1 ] && install -m 644 $(APPNAME).1 $(PREFIX)/share/man/man1/$(APPNAME).1 || true
-	( cd $(MPSL) ; make install )
 
 installdoc:
 	./mkinstalldirs $(PREFIX)/share/doc/$(APPNAME)
@@ -138,7 +137,6 @@ uninstall: $(UNINSTALLMO)
 	rm -rf $(PREFIX)/share/$(APPNAME)
 	rm -rf $(PREFIX)/share/doc/$(APPNAME)
 	rm -f $(PREFIX)/share/man/man1/$(APPNAME).1
-	rm -f $(PREFIX)/bin/mpsl
 
 po/minimum-profit.pot:
 	xgettext -o $@ --language=C --keyword=L --keyword=LL mp*.c *.mpsl
