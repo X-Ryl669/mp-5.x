@@ -90,8 +90,24 @@ int ls_x, ls_y, ls_w, ls_h;
 
 /** support functions **/
 
-#define L(m) (m)
+#define L(m) (translate_mbs(m))
 #define LL(m) (m)
+
+static char *translate_mbs(char *from)
+{
+    mpdm_t h, v, w;
+
+    if ((h = mpdm_hget_s(mpdm_root(), L"__I18N_MBS__")) == NULL)
+        h = mpdm_hset_s(mpdm_root(), L"__I18N_MBS__", MPDM_H(0));
+
+    v = mpdm_gettext(MPDM_MBS(from));
+
+    if ((w = mpdm_hget(h, v)) == NULL)
+        w = mpdm_hset(h, v, MPDM_2MBS(mpdm_string(v)));
+
+    return (char *)w->data;
+}
+
 
 static char *wcs_to_utf8(const wchar_t * wptr)
 /* converts a wcs to utf-8 */
