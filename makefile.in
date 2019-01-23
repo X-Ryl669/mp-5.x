@@ -25,12 +25,6 @@ version:
 .c.o:
 	$(CC) $(CFLAGS) -I. `cat config.cflags` -c $<
 
-$(MPDM)/libmpdm.a:
-	( cd $(MPDM); $(MAKE) )
-
-$(MPSL)/libmpsl.a: $(MPDM)/libmpdm.a
-	( cd $(MPSL); $(MAKE) )
-
 dep:
 	gcc -MM *.c `cat config.cflags` > makefile.depend
 
