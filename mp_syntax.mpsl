@@ -80,7 +80,7 @@ sub mp_doc.actions.section_list(d) {
             local r = mp.form(
                 [
                     {
-                        label:  L("Section list"),
+                        label:  L("Section list") ~ ':',
                         type:   'list',
                         list:   map(l, sub (e) { e[0]; }),
                         value:  pos

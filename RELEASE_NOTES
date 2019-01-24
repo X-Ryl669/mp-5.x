@@ -1,8 +1,8 @@
 Minimum Profit Release Notes
 ============================
 
-5.3.0-dev
-----------
+5.3.0
+-----
 
  - Architectural changes:
    - MPSL code is no longer deployed as separate files, but
@@ -12,6 +12,8 @@ Minimum Profit Release Notes
    - New action `insert_m_dash', bound by default to `alt-minus'.
    - New action `replace_tabs_with_spaces'.
    - New action `replace_spaces_with_tabs'.
+ - Other changes:
+   - Versioning have changed from x.x.x to x.yyy.
 
 5.2.15
 ------

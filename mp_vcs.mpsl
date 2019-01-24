@@ -112,7 +112,7 @@ sub mp.vcs_form()
         local t = mp.form(
             [
                 {
-                    label:  sprintf(L("Available %s commands"), v.id),
+                    label:  sprintf(L("Available %s commands"), v.id) ~ ':',
                     type:   'list',
                     list:   l,
                     value:  mp.vcs_target
