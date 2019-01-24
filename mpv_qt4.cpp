@@ -328,8 +328,6 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
             if (t != NULL)
                 qc->setEditText(v_to_qstring(t));
 
-            qlist[n] = qc;
-
             if ((h = mpdm_hget_s(w, L"history")) != NULL) {
                 int i;
 
@@ -353,8 +351,6 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
 
             qe->setEchoMode(QLineEdit::Password);
 
-            qlist[n] = qe;
-
             qw = qe;
         }
         else
@@ -363,8 +359,6 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
 
             if (mpdm_ival(t))
                 qc->setCheckState(Qt::Checked);
-
-            qlist[n] = qc;
 
             qw = qc;
         }
@@ -384,10 +378,10 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
 
             qlw->setCurrentRow(mpdm_ival(t));
 
-            qlist[n] = qlw;
-
             qw = qlw;
         }
+
+        qlist[n] = qw;
 
         if (mpdm_size(widget_list) == 1) {
             fl->addRow(ql);
