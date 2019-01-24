@@ -2138,7 +2138,10 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
             if (label)
                 gtk_grid_attach(GTK_GRID(table), label, 0, n, 1, 1);
 
-            gtk_grid_attach(GTK_GRID(table), widget, 1, n, 1, 1);
+            if (mpdm_size(form_args) == 1)
+                gtk_grid_attach(GTK_GRID(table), widget, 0, n + 1, 1, 1);
+            else
+                gtk_grid_attach(GTK_GRID(table), widget, 1, n, 1, 1);
 #endif
         }
     }
