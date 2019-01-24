@@ -1592,19 +1592,38 @@ static mpdm_t win32_drv_form(mpdm_t a, mpdm_t ctxt)
             inc = 14;
         }
 
-        /* label control */
-        lpw = build_control(lpw, 0, y,
+        if (mpdm_size(form_args) == 1) {
+            /* label control */
+            lpw = build_control(lpw, spacing, y,
+                            dialog_width - spacing * 2,
+                            line_height,
+                            LABEL_ID + n, 0x0082,
+                            WS_CHILD | WS_VISIBLE | SS_LEFT);
+
+            /* the control */
+            lpw = build_control(lpw, spacing, y + line_height,
+                            dialog_width - spacing * 2,
+                            inc * line_height * sz,
+                            CTRL_ID + n, w_class,
+                            style);
+
+            inc++;
+        }
+        else {
+            /* label control */
+            lpw = build_control(lpw, 0, y,
                             label_width,
                             line_height,
                             LABEL_ID + n, 0x0082,
                             WS_CHILD | WS_VISIBLE | SS_RIGHT);
 
-        /* the control */
-        lpw = build_control(lpw, spacing + label_width, y,
+            /* the control */
+            lpw = build_control(lpw, spacing + label_width, y,
                             dialog_width - label_width - spacing * 2,
                             inc * line_height * sz,
                             CTRL_ID + n, w_class,
                             style);
+        }
 
         /* next position */
         y += inc * line_height;
