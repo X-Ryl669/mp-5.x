@@ -565,9 +565,6 @@ static void draw_scrollbar(void)
 
     gtk_range_set_adjustment(GTK_RANGE(scrollbar), adjustment);
 
-    gtk_adjustment_changed(adjustment);
-    gtk_adjustment_value_changed(adjustment);
-
     /* reattach again */
     g_signal_connect(G_OBJECT(gtk_range_get_adjustment(GTK_RANGE(scrollbar))),
                      "value_changed", G_CALLBACK(value_changed), NULL);
