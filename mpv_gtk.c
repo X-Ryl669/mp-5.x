@@ -1972,6 +1972,7 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
     for (n = 0; n < mpdm_size(form_args); n++) {
         mpdm_t w = mpdm_aget(form_args, n);
         GtkWidget *widget = NULL;
+        GtkWidget *label = NULL;
         wchar_t *type;
         char *ptr;
         mpdm_t t;
@@ -1980,22 +1981,16 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
         type = mpdm_string(mpdm_hget_s(w, L"type"));
 
         if ((t = mpdm_hget_s(w, L"label")) != NULL) {
-            GtkWidget *label;
-
             ptr = v_to_utf8(mpdm_gettext(t));
             label = gtk_label_new(ptr);
 
 #if CONFOPT_GTK == 2
             gtk_misc_set_alignment(GTK_MISC(label), 0, .5);
-
-            gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, n, n + 1);
 #endif
 
 #if CONFOPT_GTK == 3
             gtk_label_set_xalign(GTK_LABEL(label), 0.0);
             gtk_label_set_yalign(GTK_LABEL(label), 0.5);
-
-            gtk_grid_attach(GTK_GRID(table), label, 0, n, 1, 1);
 #endif
 
             g_free(ptr);
@@ -2133,10 +2128,16 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
             form_widgets[n] = widget;
 
 #if CONFOPT_GTK == 2
+            if (label)
+                gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, n, n + 1);
+
             gtk_table_attach_defaults(GTK_TABLE(table), widget, col, 2, n, n + 1);
 #endif
 
 #if CONFOPT_GTK == 3
+            if (label)
+                gtk_grid_attach(GTK_GRID(table), label, 0, n, 1, 1);
+
             gtk_grid_attach(GTK_GRID(table), widget, 1, n, 1, 1);
 #endif
         }
