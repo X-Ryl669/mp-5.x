@@ -249,6 +249,8 @@ static void gtk_build_colors(void)
     /* loop the colors */
     n = c = 0;
     while (mpdm_iterator(colors, &c, &v, &i)) {
+        int ink, paper;
+
         mpdm_t w = mpdm_hget_s(v, L"gui");
 
         /* store the 'normal' attribute */
@@ -258,20 +260,23 @@ static void gtk_build_colors(void)
         /* store the attr */
         mpdm_hset_s(v, L"attr", MPDM_I(n));
 
-        build_color(&inks[n],   mpdm_ival(mpdm_aget(w, 0)));
-        build_color(&papers[n], mpdm_ival(mpdm_aget(w, 1)));
+        ink   = mpdm_ival(mpdm_aget(w, 0));
+        paper = mpdm_ival(mpdm_aget(w, 1));
 
         /* flags */
         w = mpdm_hget_s(v, L"flags");
         underlines[n] = mpdm_seek_s(w, L"underline", 1) != -1 ? 1 : 0;
 
         if (mpdm_seek_s(w, L"reverse", 1) != -1) {
-            GdkColor t;
+            int t;
 
-            t = inks[n];
-            inks[n] = papers[n];
-            papers[n] = t;
+            t = ink;
+            ink = paper;
+            paper = t;
         }
+
+        build_color(&inks[n],   ink);
+        build_color(&papers[n], paper);
 
         n++;
     }
