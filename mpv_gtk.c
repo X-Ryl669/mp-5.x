@@ -1988,9 +1988,7 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
 #if CONFOPT_GTK == 2
             gtk_misc_set_alignment(GTK_MISC(label), 0, .5);
 
-            gtk_table_attach_defaults(GTK_TABLE(table), label, 0,
-                                      wcscmp(type, L"label") == 0 ? 2 : 1,
-                                      n, n + 1);
+            gtk_table_attach_defaults(GTK_TABLE(table), label, 0, 1, n, n + 1);
 #endif
 
 #if CONFOPT_GTK == 3
