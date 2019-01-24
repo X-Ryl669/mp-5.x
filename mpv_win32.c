@@ -1475,7 +1475,7 @@ static void build_form_data(mpdm_t widget_list)
 
 
 LPWORD static build_control(LPWORD lpw, int x, int y,
-                            int cx, int cy, int id, int class, int style)
+                            int cx, int cy, int id, int w_class, int style)
 /* fills a control structure in a hand-made dialog template */
 {
     LPDLGITEMTEMPLATE lpdit;
@@ -1491,7 +1491,7 @@ LPWORD static build_control(LPWORD lpw, int x, int y,
 
     lpw    = (LPWORD) (lpdit + 1);
     *lpw++ = 0xFFFF;
-    *lpw++ = class;
+    *lpw++ = w_class;
 
     /* no text (will be set on dialog setup) */
     *lpw++ = 0;
@@ -1551,20 +1551,22 @@ static mpdm_t win32_drv_form(mpdm_t a, mpdm_t ctxt)
     for (n = p = 0; n < mpdm_size(form_args); n++) {
         mpdm_t w = mpdm_aget(form_args, n);
         wchar_t *type;
-        int class;
+        int w_class;
         int style;
         int inc = 1;
         int sz = 1;
 
         /* label control */
-        lpw = build_control(lpw, 0, 5 + p * il,
-                            lbl * 3, 20, LABEL_ID + n, 0x0082,
+        lpw = build_control(lpw,
+                            0, 5 + p * il,
+                            lbl * 3, 20,
+                            LABEL_ID + n, 0x0082,
                             WS_CHILD | WS_VISIBLE | SS_RIGHT);
 
         type = mpdm_string(mpdm_hget_s(w, L"type"));
 
         if (wcscmp(type, L"text") == 0) {
-            class = 0x0085;
+            w_class = 0x0085;
             style = WS_CHILD | WS_VISIBLE | WS_TABSTOP |
                 CBS_DROPDOWN | CBS_AUTOHSCROLL | WS_VSCROLL;
 
@@ -1573,17 +1575,17 @@ static mpdm_t win32_drv_form(mpdm_t a, mpdm_t ctxt)
         }
         else
         if (wcscmp(type, L"password") == 0) {
-            class = 0x0081;
+            w_class = 0x0081;
             style = WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP;
         }
         else
         if (wcscmp(type, L"checkbox") == 0) {
-            class = 0x0080;
+            w_class = 0x0080;
             style = WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX | WS_TABSTOP;
         }
         else
         if (wcscmp(type, L"list") == 0) {
-            class = 0x0083;
+            w_class = 0x0083;
             style = WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER |
                 LBS_NOINTEGRALHEIGHT | WS_VSCROLL |
                 LBS_NOTIFY | LBS_USETABSTOPS;
@@ -1593,9 +1595,10 @@ static mpdm_t win32_drv_form(mpdm_t a, mpdm_t ctxt)
         }
 
         /* the control */
-        lpw = build_control(lpw, 10 + lbl * 3, 5 + p * il,
-                            245 - lbl * 3, inc * il * sz, CTRL_ID + n,
-                            class, style);
+        lpw = build_control(lpw,
+                            10 + lbl * 3, 5 + p * il,
+                            245 - lbl * 3, inc * il * sz,
+                            CTRL_ID + n, w_class, style);
 
         /* next position */
         p += inc;
@@ -1605,16 +1608,18 @@ static mpdm_t win32_drv_form(mpdm_t a, mpdm_t ctxt)
     lpdt->cy = 30 + p * il;
 
     /* OK */
-    lpw = build_control(lpw, 170, 10 + p * il, 40, 15, IDOK,
-                        0x0080,
-                        WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON |
-                        WS_TABSTOP);
+    lpw = build_control(lpw,
+                        170, 10 + p * il,
+                        40, 15,
+                        IDOK, 0x0080,
+                        WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON | WS_TABSTOP);
 
     /* Cancel */
-    lpw = build_control(lpw, 215, 10 + p * il, 40, 15, IDCANCEL,
-                        0x0080,
-                        WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON |
-                        WS_TABSTOP);
+    lpw = build_control(lpw,
+                        215, 10 + p * il,
+                        40, 15,
+                        IDCANCEL, 0x0080,
+                        WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON | WS_TABSTOP);
 
     GlobalUnlock(hgbl);
     n = DialogBoxIndirect(hinst, (LPDLGTEMPLATE) hgbl,
