@@ -1526,12 +1526,11 @@ static mpdm_t win32_drv_form(mpdm_t a, mpdm_t ctxt)
     hgbl = GlobalAlloc(GMEM_ZEROINIT, 4096);
     lpdt = (LPDLGTEMPLATE) GlobalLock(hgbl);
 
-    lpdt->style =
-        WS_POPUP | WS_BORDER | WS_SYSMENU | DS_MODALFRAME | WS_CAPTION;
-    lpdt->cdit = (2 * mpdm_size(form_args)) + 2;
-    lpdt->x    = 20;
-    lpdt->y    = 20;
-    lpdt->cx   = 260;
+    lpdt->style = WS_POPUP | WS_BORDER | WS_SYSMENU | DS_MODALFRAME | WS_CAPTION;
+    lpdt->cdit  = (2 * mpdm_size(form_args)) + 2;
+    lpdt->x     = 20;
+    lpdt->y     = 20;
+    lpdt->cx    = 260;
 
     lpw    = (LPWORD) (lpdt + 1);
     *lpw++ = 0;                 /* No menu */
@@ -1555,13 +1554,6 @@ static mpdm_t win32_drv_form(mpdm_t a, mpdm_t ctxt)
         int style;
         int inc = 1;
         int sz = 1;
-
-        /* label control */
-        lpw = build_control(lpw,
-                            0, 5 + p * il,
-                            lbl * 3, 20,
-                            LABEL_ID + n, 0x0082,
-                            WS_CHILD | WS_VISIBLE | SS_RIGHT);
 
         type = mpdm_string(mpdm_hget_s(w, L"type"));
 
@@ -1591,14 +1583,22 @@ static mpdm_t win32_drv_form(mpdm_t a, mpdm_t ctxt)
                 LBS_NOTIFY | LBS_USETABSTOPS;
 
             /* height */
-            inc = 5;
+            inc = 14;
         }
+
+        /* label control */
+        lpw = build_control(lpw,
+                            0, 5 + p * il,
+                            lbl * 3, 20,
+                            LABEL_ID + n, 0x0082,
+                            WS_CHILD | WS_VISIBLE | SS_RIGHT);
 
         /* the control */
         lpw = build_control(lpw,
                             10 + lbl * 3, 5 + p * il,
                             245 - lbl * 3, inc * il * sz,
-                            CTRL_ID + n, w_class, style);
+                            CTRL_ID + n, w_class,
+                            style);
 
         /* next position */
         p += inc;
