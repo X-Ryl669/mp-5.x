@@ -1512,9 +1512,12 @@ static mpdm_t win32_drv_form(mpdm_t a, mpdm_t ctxt)
     HGLOBAL hgbl;
     LPDLGTEMPLATE lpdt;
     LPWORD lpw;
-    int n, p;
-    int il = 10;
-    int lbl = 0;
+    int n, y;
+    int line_height = 12;
+    int label_width = 0;
+    int dialog_width = 260;
+    int button_width = 40;
+    int spacing = 5;
 
     /* first argument: list of widgets */
     build_form_data(mpdm_aget(a, 0));
@@ -1530,7 +1533,7 @@ static mpdm_t win32_drv_form(mpdm_t a, mpdm_t ctxt)
     lpdt->cdit  = (2 * mpdm_size(form_args)) + 2;
     lpdt->x     = 20;
     lpdt->y     = 20;
-    lpdt->cx    = 260;
+    lpdt->cx    = dialog_width;
 
     lpw    = (LPWORD) (lpdt + 1);
     *lpw++ = 0;                 /* No menu */
@@ -1542,12 +1545,15 @@ static mpdm_t win32_drv_form(mpdm_t a, mpdm_t ctxt)
         mpdm_t w = mpdm_aget(form_args, n);
         int l = mpdm_size(mpdm_hget_s(w, L"label"));
 
-        if (lbl < l)
-            lbl = l;
+        if (label_width < l)
+            label_width = l;
     }
 
+    y = line_height / 2;
+    label_width *= 3;
+
     /* second pass: create the dialog controls */
-    for (n = p = 0; n < mpdm_size(form_args); n++) {
+    for (n = 0; n < mpdm_size(form_args); n++) {
         mpdm_t w = mpdm_aget(form_args, n);
         wchar_t *type;
         int w_class;
@@ -1587,37 +1593,37 @@ static mpdm_t win32_drv_form(mpdm_t a, mpdm_t ctxt)
         }
 
         /* label control */
-        lpw = build_control(lpw,
-                            0, 5 + p * il,
-                            lbl * 3, 20,
+        lpw = build_control(lpw, 0, y,
+                            label_width,
+                            line_height,
                             LABEL_ID + n, 0x0082,
                             WS_CHILD | WS_VISIBLE | SS_RIGHT);
 
         /* the control */
-        lpw = build_control(lpw,
-                            10 + lbl * 3, 5 + p * il,
-                            245 - lbl * 3, inc * il * sz,
+        lpw = build_control(lpw, spacing + label_width, y,
+                            dialog_width - label_width - spacing * 2,
+                            inc * line_height * sz,
                             CTRL_ID + n, w_class,
                             style);
 
         /* next position */
-        p += inc;
+        y += inc * line_height;
     }
 
     /* set total height */
-    lpdt->cy = 30 + p * il;
+    lpdt->cy = line_height * 2 + y;
+
+    y += line_height / 2;
 
     /* OK */
-    lpw = build_control(lpw,
-                        170, 10 + p * il,
-                        40, 15,
+    lpw = build_control(lpw, dialog_width - button_width * 2 - spacing * 2, y,
+                        button_width, line_height,
                         IDOK, 0x0080,
                         WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON | WS_TABSTOP);
 
     /* Cancel */
-    lpw = build_control(lpw,
-                        215, 10 + p * il,
-                        40, 15,
+    lpw = build_control(lpw, dialog_width - button_width - spacing, y,
+                        button_width, line_height,
                         IDCANCEL, 0x0080,
                         WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON | WS_TABSTOP);
 
