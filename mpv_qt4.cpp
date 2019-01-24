@@ -307,6 +307,7 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
         wchar_t *type;
         mpdm_t t;
         QLabel *ql = new QLabel("");
+        QWidget *qw = NULL;
 
         type = mpdm_string(mpdm_hget_s(w, L"type"));
 
@@ -344,7 +345,7 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
             /* select all the editable field */
             qc->lineEdit()->selectAll();
 
-            fl->addRow(ql, qc);
+            qw = qc;
         }
         else
         if (wcscmp(type, L"password") == 0) {
@@ -354,7 +355,7 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
 
             qlist[n] = qe;
 
-            fl->addRow(ql, qe);
+            qw = qe;
         }
         else
         if (wcscmp(type, L"checkbox") == 0) {
@@ -365,7 +366,7 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
 
             qlist[n] = qc;
 
-            fl->addRow(ql, qc);
+            qw = qc;
         }
         else
         if (wcscmp(type, L"list") == 0) {
@@ -385,8 +386,15 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
 
             qlist[n] = qlw;
 
-            fl->addRow(ql, qlw);
+            qw = qlw;
         }
+
+        if (mpdm_size(widget_list) == 1) {
+            fl->addRow(ql);
+            fl->addRow(qw);
+        }
+        else
+            fl->addRow(ql, qw);
 
         if (n == 0)
             qlist[n]->setFocus(Qt::OtherFocusReason);
