@@ -1955,10 +1955,19 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
     content_area = gtk_dialog_get_content_area(GTK_DIALOG(dlg));
     gtk_box_set_spacing(GTK_BOX(content_area), 2);
 
+#if CONFOPT_GTK == 2
     table = gtk_table_new(mpdm_size(a), 2, FALSE);
-    gtk_container_set_border_width(GTK_CONTAINER(table), 5);
     gtk_table_set_col_spacings(GTK_TABLE(table), 12);
     gtk_table_set_row_spacings(GTK_TABLE(table), 6);
+#endif
+
+#if CONFOPT_GTK == 3
+    table = gtk_grid_new();
+    gtk_grid_set_column_spacing(GTK_GRID(table), 12);
+    gtk_grid_set_row_spacing(GTK_GRID(table), 6);
+#endif
+
+    gtk_container_set_border_width(GTK_CONTAINER(table), 5);
 
     for (n = 0; n < mpdm_size(form_args); n++) {
         mpdm_t w = mpdm_aget(form_args, n);
@@ -1975,17 +1984,21 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
 
             ptr = v_to_utf8(mpdm_gettext(t));
             label = gtk_label_new(ptr);
+
 #if CONFOPT_GTK == 2
             gtk_misc_set_alignment(GTK_MISC(label), 0, .5);
-#endif
-#if CONFOPT_GTK == 3
-            gtk_label_set_xalign(GTK_LABEL(label), 0.0);
-            gtk_label_set_yalign(GTK_LABEL(label), 0.5);
-#endif
 
             gtk_table_attach_defaults(GTK_TABLE(table), label, 0,
                                       wcscmp(type, L"label") == 0 ? 2 : 1,
                                       n, n + 1);
+#endif
+
+#if CONFOPT_GTK == 3
+            gtk_label_set_xalign(GTK_LABEL(label), 0.0);
+            gtk_label_set_yalign(GTK_LABEL(label), 0.5);
+
+            gtk_grid_attach(GTK_GRID(table), label, 0, n, 1, 1);
+#endif
 
             g_free(ptr);
 
@@ -2004,6 +2017,7 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
             gtk_combo_set_case_sensitive(GTK_COMBO(widget), TRUE);
             gtk_entry_set_activates_default(GTK_ENTRY(GTK_COMBO(widget)->entry), TRUE);
 #endif
+
 #if CONFOPT_GTK == 3
             widget = gtk_combo_box_text_new_with_entry();
             gtk_entry_set_activates_default(
@@ -2119,7 +2133,14 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
 
         if (widget != NULL) {
             form_widgets[n] = widget;
+
+#if CONFOPT_GTK == 2
             gtk_table_attach_defaults(GTK_TABLE(table), widget, col, 2, n, n + 1);
+#endif
+
+#if CONFOPT_GTK == 3
+            gtk_grid_attach(GTK_GRID(table), widget, 1, n, 1, 1);
+#endif
         }
     }
 
