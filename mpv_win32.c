@@ -1611,11 +1611,11 @@ static mpdm_t win32_drv_form(mpdm_t a, mpdm_t ctxt)
         }
         else {
             /* label control */
-            lpw = build_control(lpw, 0, y,
+            lpw = build_control(lpw, spacing, y,
                             label_width,
                             line_height,
                             LABEL_ID + n, 0x0082,
-                            WS_CHILD | WS_VISIBLE | SS_RIGHT);
+                            WS_CHILD | WS_VISIBLE | SS_LEFT);
 
             /* the control */
             lpw = build_control(lpw, spacing + label_width, y,
