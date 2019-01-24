@@ -173,7 +173,7 @@ static void update_window_size(void)
 }
 
 
-static void gtk_build_fonts(void)
+static void build_fonts(void)
 /* builds the fonts */
 {
     char tmp[128];
@@ -236,7 +236,7 @@ static void build_color(GdkColor * gdkcolor, int rgb)
 }
 
 
-static void gtk_build_colors(void)
+static void build_colors(void)
 /* builds the colors */
 {
     mpdm_t colors;
@@ -337,7 +337,7 @@ static void build_submenu(GtkWidget * menu, mpdm_t labels)
 }
 
 
-static void gtk_build_menu(void)
+static void build_menu(void)
 /* builds the menu */
 {
     int n;
@@ -589,7 +589,7 @@ static void gtk_drv_render(mpdm_t doc, int optimize)
 
     /* no gc? create it */
     if (font == NULL)
-        gtk_build_fonts();
+        build_fonts();
 
     d = mp_draw(doc, optimize);
 
@@ -2369,9 +2369,9 @@ static mpdm_t gtk_drv_openfolder(mpdm_t a, mpdm_t ctxt)
 
 static mpdm_t gtk_drv_update_ui(mpdm_t a, mpdm_t ctxt)
 {
-    gtk_build_fonts();
-    gtk_build_colors();
-    gtk_build_menu();
+    build_fonts();
+    build_colors();
+    build_menu();
 
     redraw();
 
@@ -2552,7 +2552,7 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
 #endif
     gtk_container_add(GTK_CONTAINER(window), vbox);
 
-    gtk_build_menu();
+    build_menu();
 
 #if CONFOPT_GTK == 2
     hbox = gtk_hbox_new(FALSE, 0);
@@ -2678,7 +2678,7 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
     gtk_window_set_icon(GTK_WINDOW(window), pixmap);
 #endif
 
-    gtk_build_colors();
+    build_colors();
 
     if ((v = mpdm_hget_s(MP, L"config")) != NULL &&
         mpdm_ival(mpdm_hget_s(v, L"maximize")) > 0)
