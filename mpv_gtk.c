@@ -67,6 +67,14 @@ static GdkColor inks[MAX_COLORS];
 static GdkColor papers[MAX_COLORS];
 static int underlines[MAX_COLORS];
 
+//#if CONFOPT_GTK == 2
+static GdkColor normal_paper;
+//#endif
+
+//#if CONFOPT_GTK == 3
+//static GdkRGBA normal_paper;
+//#endif
+
 /* true if the selection is ours */
 static int got_selection = 0;
 
@@ -280,6 +288,8 @@ static void build_colors(void)
 
         n++;
     }
+
+    normal_paper = papers[normal_attr];
 }
 
 
@@ -687,7 +697,7 @@ static void gtk_drv_render(mpdm_t doc, int optimize)
         free(str);
 
         /* draw the background */
-        gdk_cairo_set_source_color(cr, &papers[normal_attr]);
+        gdk_cairo_set_source_color(cr, &normal_paper);
         cairo_rectangle(cr, 0, n * font_height, gr.width, gr.height);
         cairo_fill(cr);
 
