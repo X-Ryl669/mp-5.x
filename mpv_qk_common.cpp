@@ -119,7 +119,6 @@ static void qk_build_colors(void)
 
     /* gets the color definitions and attribute names */
     colors = mpdm_hget_s(MP, L"colors");
-    n = mpdm_hsize(colors);
 
     /* loop the colors */
     n = c = 0;

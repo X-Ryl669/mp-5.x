@@ -66,9 +66,10 @@ int status_height = 16;
 int is_wm_keydown = 0;
 
 /* colors */
-static COLORREF *inks = NULL;
-static COLORREF *papers = NULL;
-int *underlines = NULL;
+#define MAX_COLORS 100
+static COLORREF inks[MAX_COLORS];
+static COLORREF papers[MAX_COLORS];
+int underlines[MAX_COLORS];
 HBRUSH bgbrush;
 
 /* code for the 'normal' attribute */
@@ -180,12 +181,6 @@ static void build_colors(void)
 
     /* gets the color definitions and attribute names */
     colors = mpdm_hget_s(MP, L"colors");
-    n = mpdm_hsize(colors);
-
-    /* redim the structures */
-    inks = realloc(inks, sizeof(COLORREF) * n);
-    papers = realloc(papers, sizeof(COLORREF) * n);
-    underlines = realloc(underlines, sizeof(int) * n);
 
     /* loop the colors */
     n = c = 0;

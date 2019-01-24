@@ -42,7 +42,7 @@
 #include "mp.h"
 
 
-#define MAX_COLORS 1000
+#define MAX_COLORS 100
 char ansi_attrs[MAX_COLORS][32];
 
 
@@ -196,8 +196,6 @@ static void ansi_build_colors(void)
     /* gets the color definitions and attribute names */
     colors      = mpdm_hget_s(MP, L"colors");
     color_names = mpdm_hget_s(MP, L"color_names");
-
-    n = mpdm_hsize(colors);
 
     /* loop the colors */
     n = c = 0;

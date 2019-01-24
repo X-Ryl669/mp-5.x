@@ -46,7 +46,8 @@ int cy;
 int tx;
 int ty;
 
-WORD *win32c_attrs = NULL;
+#define MAX_COLORS 100
+WORD win32c_attrs[MAX_COLORS];
 int normal_attr = 0;
 int last_attr;
 
@@ -87,11 +88,6 @@ static void build_colors(void)
     /* gets the color definitions and attribute names */
     colors      = mpdm_hget_s(MP, L"colors");
     color_names = mpdm_hget_s(MP, L"color_names");
-
-    n = mpdm_hsize(colors);
-
-    /* redim the structures */
-    win32c_attrs = realloc(win32c_attrs, sizeof(WORD) * n);
 
     /* loop the colors */
     n = c = 0;
