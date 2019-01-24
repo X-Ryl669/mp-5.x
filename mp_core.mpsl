@@ -732,7 +732,9 @@ sub mp.load_profile()
 sub mp.normalize_version(vs)
 /* converts a version string to something usable with cmp() */
 {
-    vs->sregex('/-.+$/')->split('.')->map(sub(e) { sprintf("%03d", e); });
+    local l = vs->sregex('/-.+$/')->split('.');
+
+    return l[0] ~ '.' ~  l[1] ~ l[2];
 }
 
 

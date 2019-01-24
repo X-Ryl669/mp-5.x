@@ -244,8 +244,8 @@ mp.actions.check_for_updates = sub {
         while ((l = read(f)) != NULL) {
             l = mp.chomp(l);
 
-            if (regex(l, "/^[0-9]+\.[0-9]+\.[0-9]+$/")) {
-                st = cmp(mp.normalize_version(l), mp.normalize_version(mp.VERSION));
+            if (regex(l, "/^[0-9]+\.[0-9]+[\.]?[0-9]+$/")) {
+                st = mp.normalize_version(l) - mp.normalize_version(mp.VERSION);
 
                 if (st <= 0)
                     break;
