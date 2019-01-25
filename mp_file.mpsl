@@ -190,9 +190,9 @@ mp_doc.actions['exec_command'] = sub (d, cmd) {
         local t = mp.form(
             [
                 {
-                    'label' => L("System command") ~ ':',
-                    'type' => 'text',
-                    'history' => 'system'
+                    label:      L("System command") ~ ':',
+                    type:       'text',
+                    history:    'system'
                 }
             ]
         );
@@ -235,11 +235,9 @@ mp_doc.actions['exec_command'] = sub (d, cmd) {
                 local previous = mp.config.auto_indent;
                 mp.config.auto_indent = NULL;
 
-                while ((l = read(p)) != NULL) {
-                    d->insert(mp.chomp(l));
-                    d->insert_newline();
-                }
-                
+                foreach (l, p)
+                    d->insert(mp.chomp(l))->insert_newline();
+
                 mp.config.auto_indent = previous;
 
                 pclose(p);
