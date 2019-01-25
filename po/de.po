@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Minimum Profit\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-01-11 06:09+0100\n"
-"PO-Revision-Date: 2006-05-28 13:19+0100\n"
+"PO-Revision-Date: 2019-01-25 11:55+0100\n"
 "Last-Translator: Ronny Steiner <Post@SIRSteiner.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -107,9 +107,6 @@ msgstr "Fehler: Kann Datei '%s' nicht erstellen!"
 
 msgid "File has changed. Save changes?"
 msgstr "Die Datei wurde geändert. Änderungen speichern?"
-
-msgid "System command:"
-msgstr "System-Kommando:"
 
 msgid "<Output of \"%s\">"
 msgstr "<Ausgabe von \"%s\">"
@@ -667,9 +664,6 @@ msgstr ""
 msgid "Save file as"
 msgstr ""
 
-msgid "Error saving file: %s"
-msgstr ""
-
 #: mp_file.mpsl:109 mp_file.mpsl:354
 msgid "File to open"
 msgstr ""
@@ -680,7 +674,7 @@ msgstr ""
 
 #: mp_misc.mpsl:50 mp_misc.mpsl:66
 msgid "Error: "
-msgstr ""
+msgstr "Fehler: "
 
 #: mp_misc.mpsl:55
 msgid "Exit value:\n"
@@ -723,7 +717,7 @@ msgid "File(s) not found."
 msgstr ""
 
 msgid "Grep"
-msgstr ""
+msgstr "Grep-Suche"
 
 #: mp_search.mpsl:258
 msgid "Search previous"
@@ -732,12 +726,12 @@ msgstr ""
 #: mp_syntax.mpsl:45
 #, c-format
 msgid "No help for '%s'."
-msgstr ""
+msgstr "Keine Hilfe zu '%s'."
 
 #: mp_syntax.mpsl:49
 #, c-format
 msgid "<help on '%s'>"
-msgstr ""
+msgstr "<Hilfe zu '%s'>"
 
 #: mp_syntax.mpsl:144
 msgid "Help on word over cursor"
@@ -757,7 +751,7 @@ msgstr ""
 
 #: mp_tags.mpsl:165
 msgid "Tag not found."
-msgstr ""
+msgstr "Tag nicht gefunden!"
 
 #: mp_tags.mpsl:179
 msgid "Select tag"
@@ -773,7 +767,7 @@ msgstr ""
 
 #: mp_edit.mpsl:172
 msgid "Tab size"
-msgstr ""
+msgstr "Tabulatorbreite"
 
 #: mp_edit.mpsl:176
 msgid "Convert tabs to spaces"
@@ -787,15 +781,9 @@ msgstr ""
 msgid "Tab options..."
 msgstr ""
 
-msgid "File has changed. Are you sure?"
-msgstr ""
-
 #: mp_file.mpsl:193 mp_file.mpsl:261
 msgid "System command"
-msgstr ""
-
-msgid "Error writing command '%s'"
-msgstr ""
+msgstr "System-Kommando"
 
 #: mp_file.mpsl:249
 #, c-format
@@ -804,9 +792,6 @@ msgstr ""
 
 #: mp_file.mpsl:404
 msgid "Revert"
-msgstr ""
-
-msgid "Encoding (utf-8, iso8859-1, etc.; empty, current locale)"
 msgstr ""
 
 #: mp_misc.mpsl:137
@@ -834,32 +819,6 @@ msgstr ""
 msgid "Please, wait..."
 msgstr ""
 
-msgid ""
-"\n"
-"Minimum Profit %s - Programmer Text Editor\n"
-"\n"
-"Components: MPDM %s, MPSL %s\n"
-"\n"
-"Copyright (C) 1991-2009 Angel Ortega <angel@triptico.com>\n"
-"\n"
-"This program is free software; you can redistribute it and/or\n"
-"modify it under the terms of the GNU General Public License\n"
-"as published by the Free Software Foundation; either version 2\n"
-"of the License, or (at your option) any later version.\n"
-"\n"
-"This program is distributed in the hope that it will be useful,\n"
-"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
-"See the GNU General Public License for more details.\n"
-"\n"
-"You should have received a copy of the GNU General Public License\n"
-"along with this program; if not, write to the Free Software Foundation,\n"
-"Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.\n"
-"\n"
-"Home page: http://www.triptico.com/software/mp.html\n"
-"Mailing list: mp-subscribe@lists.triptico.com\n"
-msgstr ""
-
 #: mp_file.mpsl:222
 #, c-format
 msgid "Error writing to command '%s'"
@@ -875,12 +834,6 @@ msgstr ""
 
 #: mp_tags.mpsl:219
 msgid "Select"
-msgstr ""
-
-msgid "No session file was found to load"
-msgstr ""
-
-msgid "Could not be found and was not opened"
 msgstr ""
 
 #: mp_session.mpsl:43
@@ -933,18 +886,6 @@ msgstr ""
 msgid "Close all"
 msgstr ""
 
-msgid "No Makefile targets found."
-msgstr ""
-
-msgid "Makefile target"
-msgstr ""
-
-msgid "No errors nor warnings found."
-msgstr ""
-
-msgid "Errors and Warnings"
-msgstr ""
-
 #: mp_build.mpsl:69
 msgid "Build project..."
 msgstr ""
@@ -985,12 +926,6 @@ msgstr ""
 msgid "Number of letters at the start or end"
 msgstr ""
 
-msgid "Maximum distance"
-msgstr ""
-
-msgid "Search repeated words..."
-msgstr ""
-
 #: mp_writing.mpsl:78
 msgid "Search repeated word"
 msgstr ""
@@ -1027,75 +962,8 @@ msgstr ""
 msgid "Open dropped files"
 msgstr ""
 
-msgid ""
-"Minimum Profit %s - Programmer Text Editor\n"
-"Copyright (C) Angel Ortega <angel@triptico.com>\n"
-"This software is covered by the GPL license. NO WARRANTY.\n"
-"\n"
-"Usage: mp-5 [options] [files...]\n"
-"\n"
-"Options:\n"
-"\n"
-" -t {tag}           Edits the file where tag is defined\n"
-" -e {mpsl_code}     Executes MPSL code\n"
-" -f {mpsl_script}   Executes MPSL script file\n"
-" -d {directory}     Set current directory\n"
-" -x {file}          Open file in the hexadecimal viewer\n"
-" +NNN               Moves to line number NNN of last file\n"
-"\n"
-"Homepage: http://triptico.com/software/mp.html\n"
-"Mailing list: mp-subscribe@lists.triptico.com\n"
-msgstr ""
-
 #: mp_edit.mpsl:179
 msgid "Use previous line for tab columns"
-msgstr ""
-
-msgid ""
-"\n"
-"Minimum Profit %s - Programmer Text Editor\n"
-"\n"
-"Components: MPDM %s, MPSL %s\n"
-"\n"
-"Copyright (C) 1991-2010 Angel Ortega <angel@triptico.com>\n"
-"\n"
-"This program is free software; you can redistribute it and/or\n"
-"modify it under the terms of the GNU General Public License\n"
-"as published by the Free Software Foundation; either version 2\n"
-"of the License, or (at your option) any later version.\n"
-"\n"
-"This program is distributed in the hope that it will be useful,\n"
-"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
-"See the GNU General Public License for more details.\n"
-"\n"
-"You should have received a copy of the GNU General Public License\n"
-"along with this program; if not, write to the Free Software Foundation,\n"
-"Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.\n"
-"\n"
-"Home page: http://www.triptico.com/software/mp.html\n"
-"Mailing list: mp-subscribe@lists.triptico.com\n"
-msgstr ""
-
-msgid ""
-"Minimum Profit %s - Programmer Text Editor\n"
-"Copyright (C) Angel Ortega <angel@triptico.com>\n"
-"This software is covered by the GPL license. NO WARRANTY.\n"
-"\n"
-"Usage: mp-5 [options] [files...]\n"
-"\n"
-"Options:\n"
-"\n"
-" -t {tag}           Edits the file where tag is defined\n"
-" -e {mpsl_code}     Executes MPSL code\n"
-" -f {mpsl_script}   Executes MPSL script file\n"
-" -d {directory}     Set current directory\n"
-" -x {file}          Open file in the hexadecimal viewer\n"
-" -txt               Use text mode instead of GUI\n"
-" +NNN               Moves to line number NNN of last file\n"
-"\n"
-"Homepage: http://triptico.com/software/mp.html\n"
-"Mailing list: mp-subscribe@lists.triptico.com\n"
 msgstr ""
 
 #: mp_misc.mpsl:296
@@ -1142,97 +1010,12 @@ msgstr ""
 msgid "Unindent block"
 msgstr ""
 
-msgid ""
-"\n"
-"Minimum Profit %s - Programmer Text Editor\n"
-"\n"
-"Components: MPDM %s, MPSL %s\n"
-"\n"
-"Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com>\n"
-"\n"
-"This program is free software; you can redistribute it and/or\n"
-"modify it under the terms of the GNU General Public License\n"
-"as published by the Free Software Foundation; either version 2\n"
-"of the License, or (at your option) any later version.\n"
-"\n"
-"This program is distributed in the hope that it will be useful,\n"
-"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
-"See the GNU General Public License for more details.\n"
-"\n"
-"You should have received a copy of the GNU General Public License\n"
-"along with this program; if not, write to the Free Software Foundation,\n"
-"Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.\n"
-"\n"
-"Home page: http://www.triptico.com/software/mp.html\n"
-"Mailing list: mp-subscribe@lists.triptico.com\n"
-msgstr ""
-
 #: mp_templates.mpsl:81
 msgid "Template file to edit"
 msgstr ""
 
 #: mp_edit.mpsl:147
 msgid "'Smart' move to beginning of line"
-msgstr ""
-
-msgid ""
-"Minimum Profit %s (%s) - Programmer Text Editor\n"
-"\n"
-"Components: MPDM %s, MPSL %s\n"
-"\n"
-"Copyright (C) 1991-2011 Angel Ortega <angel@triptico.com> and others\n"
-"\n"
-"This program is free software; you can redistribute it and/or\n"
-"modify it under the terms of the GNU General Public License\n"
-"as published by the Free Software Foundation; either version 2\n"
-"of the License, or (at your option) any later version.\n"
-"\n"
-"This program is distributed in the hope that it will be useful,\n"
-"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
-"See the GNU General Public License for more details.\n"
-"\n"
-"You should have received a copy of the GNU General Public License\n"
-"along with this program; if not, write to the Free Software Foundation,\n"
-"Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.\n"
-"\n"
-"Home page: http://triptico.com/software/mp.html\n"
-"Mailing list: mp-subscribe@lists.triptico.com\n"
-msgstr ""
-
-msgid "Gathered information on %s:"
-msgstr ""
-
-msgid "File was changed externally. Reload?"
-msgstr ""
-
-msgid ""
-"Minimum Profit %s (%s) - Programmer Text Editor\n"
-"\n"
-"Components: MPDM %s, MPSL %s\n"
-"\n"
-"Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com> and others\n"
-"\n"
-"This program is free software; you can redistribute it and/or\n"
-"modify it under the terms of the GNU General Public License\n"
-"as published by the Free Software Foundation; either version 2\n"
-"of the License, or (at your option) any later version.\n"
-"\n"
-"This program is distributed in the hope that it will be useful,\n"
-"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
-"See the GNU General Public License for more details.\n"
-"\n"
-"You should have received a copy of the GNU General Public License\n"
-"along with this program; if not, write to the Free Software Foundation,\n"
-"Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.\n"
-"\n"
-"Home page: http://triptico.com/software/mp.html\n"
-"Mailing list: mp-subscribe@lists.triptico.com\n"
-msgstr ""
-
-msgid "You won!"
 msgstr ""
 
 #: mp_vcs.mpsl:107
@@ -1294,9 +1077,6 @@ msgstr ""
 msgid "Bad password for file '%s'"
 msgstr ""
 
-msgid "Error opening file '%s': %s"
-msgstr ""
-
 #: mp_syntax.mpsl:146
 msgid "Move one section up"
 msgstr ""
@@ -1327,7 +1107,7 @@ msgstr ""
 #: mp_file.mpsl:472
 #, c-format
 msgid "'%s' has changed. Save changes?"
-msgstr ""
+msgstr "Datei '%s' wurde geändert. Änderungen speichern?"
 
 #: mp_file.mpsl:131
 #, c-format
@@ -1421,26 +1201,6 @@ msgstr ""
 msgid "Error executing '%s'"
 msgstr ""
 
-msgid ""
-"Minimum Profit %s - Programmer Text Editor\n"
-"Copyright (C) Angel Ortega <angel@triptico.com>\n"
-"This software is covered by the GPL license. NO WARRANTY.\n"
-"\n"
-"Usage: mp-5 [options] [files...]\n"
-"\n"
-"Options:\n"
-"\n"
-" -t {tag}           Edits the file where tag is defined\n"
-" -e {mpsl_code}     Executes MPSL code\n"
-" -f {mpsl_script}   Executes MPSL script file\n"
-" -d {directory}     Set current directory\n"
-" -x {file}          Open file in the hexadecimal viewer\n"
-" -txt               Use text mode instead of GUI\n"
-" +NNN               Moves to line number NNN of last file\n"
-"\n"
-"Homepage: http://triptico.com/software/mp.html\n"
-msgstr ""
-
 #: mp_edit.mpsl:152
 msgid "Show line numbers"
 msgstr ""
@@ -1453,30 +1213,6 @@ msgstr ""
 msgid "Hex string to seek"
 msgstr ""
 
-msgid ""
-"Minimum Profit %s (%s) - Programmer Text Editor\n"
-"\n"
-"Components: MPDM %s, MPSL %s\n"
-"\n"
-"Copyright (C) 1991-2014 Angel Ortega <angel@triptico.com> and others\n"
-"\n"
-"This program is free software; you can redistribute it and/or\n"
-"modify it under the terms of the GNU General Public License\n"
-"as published by the Free Software Foundation; either version 2\n"
-"of the License, or (at your option) any later version.\n"
-"\n"
-"This program is distributed in the hope that it will be useful,\n"
-"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
-"See the GNU General Public License for more details.\n"
-"\n"
-"You should have received a copy of the GNU General Public License\n"
-"along with this program; if not, write to the Free Software Foundation,\n"
-"Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.\n"
-"\n"
-"Home page: http://triptico.com/software/mp.html\n"
-msgstr ""
-
 #: mp_clipboard.mpsl:97
 msgid "Mark selection block"
 msgstr ""
@@ -1487,30 +1223,6 @@ msgstr ""
 
 #: mp_file.mpsl:402
 msgid "Suspend"
-msgstr ""
-
-msgid ""
-"Minimum Profit %s (%s) - Programmer Text Editor\n"
-"\n"
-"Components: MPDM %s, MPSL %s\n"
-"\n"
-"Copyright (C) 1991-2017 Angel Ortega <angel@triptico.com> et al.\n"
-"\n"
-"This program is free software; you can redistribute it and/or\n"
-"modify it under the terms of the GNU General Public License\n"
-"as published by the Free Software Foundation; either version 2\n"
-"of the License, or (at your option) any later version.\n"
-"\n"
-"This program is distributed in the hope that it will be useful,\n"
-"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
-"See the GNU General Public License for more details.\n"
-"\n"
-"You should have received a copy of the GNU General Public License\n"
-"along with this program; if not, write to the Free Software Foundation,\n"
-"Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.\n"
-"\n"
-"Home page: http://triptico.com/software/mp.html\n"
 msgstr ""
 
 #: mp_move.mpsl:167
@@ -1557,30 +1269,6 @@ msgstr ""
 
 #: mp_file.mpsl:397
 msgid "Export as RTF..."
-msgstr ""
-
-msgid ""
-"Minimum Profit %s (%s) - Programmer Text Editor\n"
-"\n"
-"Components: MPDM %s, MPSL %s\n"
-"\n"
-"Copyright (C) 1991-2018 Angel Ortega <angel@triptico.com> et al.\n"
-"\n"
-"This program is free software; you can redistribute it and/or\n"
-"modify it under the terms of the GNU General Public License\n"
-"as published by the Free Software Foundation; either version 2\n"
-"of the License, or (at your option) any later version.\n"
-"\n"
-"This program is distributed in the hope that it will be useful,\n"
-"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
-"See the GNU General Public License for more details.\n"
-"\n"
-"You should have received a copy of the GNU General Public License\n"
-"along with this program; if not, write to the Free Software Foundation,\n"
-"Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.\n"
-"\n"
-"Home page: http://triptico.com/software/mp.html\n"
 msgstr ""
 
 #: mp_move.mpsl:172

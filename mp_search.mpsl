@@ -525,7 +525,7 @@ sub mp_doc.seek_prev_or_next_char(doc, func)
 
     /* search for it (mp.search() or mp.search_back()) */
     local t = mp.last_search;
-    doc->func('\' ~ w[1]);
+    doc->func("\\" ~ w[1]);
     mp.last_search = t;
 
     /* move back */

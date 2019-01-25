@@ -1,6 +1,6 @@
 /* Built by po2mpsl - Don't modify, change the .po file instead */
 __I18N__ = {
-	"" => "Project-Id-Version: Minimum Profit\nReport-Msgid-Bugs-To: \nPOT-Creation-Date: 2006-01-11 06:09+0100\nPO-Revision-Date: 2006-05-28 13:19+0100\nLast-Translator: Ronny Steiner <Post@SIRSteiner.de>\nLanguage-Team: \nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\n",
+	"" => "Project-Id-Version: Minimum Profit\nReport-Msgid-Bugs-To: \nPOT-Creation-Date: 2006-01-11 06:09+0100\nPO-Revision-Date: 2019-01-25 11:55+0100\nLast-Translator: Ronny Steiner <Post@SIRSteiner.de>\nLanguage-Team: \nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\n",
 	"&File" => "&Datei",
 	"&Edit" => "&Bearbeiten",
 	"&Search" => "&Suchen",
@@ -21,7 +21,6 @@ __I18N__ = {
 	"File '%s' not found." => "Fehler: Datei '%s' nicht gefunden!",
 	"Can't create file '%s'." => "Fehler: Kann Datei '%s' nicht erstellen!",
 	"File has changed. Save changes?" => "Die Datei wurde ge\x{00e4}ndert. \x{00c4}nderungen speichern?",
-	"System command:" => "System-Kommando:",
 	"<Output of \"%s\">" => "<Ausgabe von \"%s\">",
 	"Error executing command." => "Fehler beim Ausf\x{00fc}hren des Kommandos!",
 	"Open documents" => "Dokumente \x{00f6}ffnen",
@@ -147,5 +146,14 @@ __I18N__ = {
 	"Delete char over cursor" => "Zeichen \x{00fc}ber dem Kursor l\x{00f6}schen",
 	"Delete to the end of word" => "L\x{00f6}schen bis zum Ende des Wortes",
 	"Grep (find inside) files..." => "Grep-Suche in Dateien...",
+	"Passwords don't match." => "Fehler: Passwort falsch!",
+	"Error: " => "Fehler: ",
+	"Grep" => "Grep-Suche",
+	"No help for '%s'." => "Keine Hilfe zu '%s'.",
+	"<help on '%s'>" => "<Hilfe zu '%s'>",
+	"Tag not found." => "Tag nicht gefunden!",
+	"Tab size" => "Tabulatorbreite",
+	"System command" => "System-Kommando",
+	"'%s' has changed. Save changes?" => "Datei '%s' wurde ge\x{00e4}ndert. \x{00c4}nderungen speichern?",
 	"-" => "-"
 };
