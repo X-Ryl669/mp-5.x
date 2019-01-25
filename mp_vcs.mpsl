@@ -40,6 +40,8 @@ mp.vcs = {
             "git add '%s'"      => NULL,
             'git log'           => { unique_log: 1 },
             "git log '%s'"      => { unique_log: 1 },
+            'git log -p'        => { unique_log: 1, diff: 1 },
+            "git log -p '%s'"   => { unique_log: 1, diff: 1 },
             'git diff'          => { unique_log: 1, diff: 1 },
             "git diff '%s'"     => { unique_log: 1, diff: 1 },
             'git status'        => NULL,
@@ -88,51 +90,53 @@ mp.vcs = {
 
 sub mp.vcs_form()
 {
-    local v = NULL;
+    local vcs = NULL;
 
     /* find which VCS apply to current directory */
     foreach (n, mp.vcs) {
-        foreach (d, n.check) {
-            if (stat(d) != NULL) {
-                v = n;
+        foreach (dir, n.check) {
+            if (stat(dir) != NULL) {
+                vcs = n;
                 break;
             }
         }
 
-        if (v != NULL)
+        if (vcs != NULL)
             break;
     }
 
-    if (v == NULL)
+    if (vcs == NULL)
         mp.alert(L("This directory is not under a supported version control system"));
     else {
-        local l = sort(keys(v.opts))->
-            map(sub (e) { sprintf(e, regex(mp.active.name, '/[^\/\\]+$/')); });
+        local opts = keys(vcs.opts)->sort();
+        local cmd_list = opts->map(sub (e) {
+                            sprintf(e, regex(mp.active.name, '/[^\/\\]+$/'));
+                         });
 
-        local t = mp.form(
+        local form = mp.form(
             [
                 {
-                    label:  sprintf(L("Available %s commands"), v.id) ~ ':',
+                    label:  sprintf(L("Available %s commands"), vcs.id) ~ ':',
                     type:   'list',
-                    list:   l,
+                    list:   cmd_list,
                     value:  mp.vcs_target
                 }
             ]
         );
 
-        if (t != NULL) {
-            mp.vcs_target = t[0];
+        if (form != NULL) {
+            mp.vcs_target = form[0];
 
-            local opts  = v.opts[l[mp.vcs_target]];
-            local cmd   = l[mp.vcs_target];
+            local opt = vcs.opts[opts[mp.vcs_target]];
+            local cmd = cmd_list[mp.vcs_target];
 
-            if (opts.commit_cmd) {
+            if (opt.commit_cmd) {
                 /* create a commit message editor document */
                 local msg = new(mp_doc_vcs);
 
                 msg.vcs = {
-                    commit_cmd: opts.commit_cmd,
-                    log_name:   sprintf(L("<%s output>"), v.id)
+                    commit_cmd: opt.commit_cmd,
+                    log_name:   sprintf(L("<%s output>"), vcs.id)
                 };
 
                 mp.add(msg);
@@ -141,14 +145,14 @@ sub mp.vcs_form()
                 local log;
 
                 /* unique log for this command? */
-                if (opts.unique_log) {
-                    log = mp.open(sprintf(L("<%s output>"), cmd));
-                    log.txt.lines   = [ '' ];
-                    log.txt.y       = 0;
+                if (opt.unique_log) {
+                    log           = mp.open(sprintf(L("<%s output>"), cmd));
+                    log.txt.lines = [ '' ];
+                    log.txt.y     = 0;
                 }
                 else {
                     /* common log */
-                    log = mp.open(sprintf(L("<%s output>"), v.id));
+                    log = mp.open(sprintf(L("<%s output>"), vcs.id));
 
                     log->move_eof();
                     log->insert(cmd ~ ":\n\n");
@@ -156,8 +160,8 @@ sub mp.vcs_form()
 
                 log->actions.exec_command(cmd);
 
-                if (opts.unique_log) {
-                    if (opts.diff)
+                if (opt.unique_log) {
+                    if (opt.diff)
                         log.syntax = mp.get_syntax("diff");
 
                     log->move_bof();
