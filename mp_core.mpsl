@@ -186,14 +186,13 @@ global mp = {
     menu:       [
         [
             LL("&File"), [
-                'new', 'open', 'save', 'save_as', 'close', 'revert',
-                'open_under_cursor', 'export_as_rtf',
-                '-', 'open_folder',
-                '-', 'hex_view',
-                '-', 'set_password',
-                '-', 'open_config_file', 'open_templates_file',
-                '-', 'sync',
-                '-', 'suspend', 'exit'
+                'new', 'open', 'open_under_cursor', 'revert', '-',
+                'save', 'save_as', 'sync', 'export_as_rtf', '-',
+                'open_folder', 'hex_view', '-',
+                'set_password', '-',
+                'open_config_file', 'open_templates_file', '-',
+                'close', '-',
+                'suspend', 'exit'
             ]
         ],
         [
