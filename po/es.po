@@ -329,12 +329,12 @@ msgid "Save file as"
 msgstr "Guardar fichero como"
 
 #: mp_file.mpsl:109 mp_file.mpsl:354
-msgid "File to open:"
-msgstr "Fichero a abrir:"
+msgid "File to open"
+msgstr "Fichero a abrir"
 
 #: mp_misc.mpsl:34
-msgid "Code to execute:"
-msgstr "Código a ejecutar:"
+msgid "Code to execute"
+msgstr "Código a ejecutar"
 
 #: mp_misc.mpsl:50 mp_misc.mpsl:66
 msgid "Error: "
@@ -373,8 +373,8 @@ msgid "Mouse wheel down"
 msgstr "Rueda del ratón abajo"
 
 #: mp_search.mpsl:123
-msgid "Global replace:"
-msgstr "Reemplazo global:"
+msgid "Global replace"
+msgstr "Reemplazo global"
 
 #: mp_search.mpsl:177
 msgid "File(s) not found."
@@ -403,8 +403,8 @@ msgid "No matching symbol found."
 msgstr "No coincide ningún símbolo."
 
 #: mp_tags.mpsl:77
-msgid "Select symbol:"
-msgstr "Seleccionar símbolo:"
+msgid "Select symbol"
+msgstr "Seleccionar símbolo"
 
 #: mp_tags.mpsl:90
 msgid "Symbol completion..."
@@ -415,12 +415,12 @@ msgid "Tag not found."
 msgstr "Tag no encontrado."
 
 #: mp_tags.mpsl:179
-msgid "Select tag:"
-msgstr "Seleccionar tag:"
+msgid "Select tag"
+msgstr "Seleccionar tag"
 
 #: mp_templates.mpsl:40
-msgid "Template to insert:"
-msgstr "Plantilla a insertar:"
+msgid "Template to insert"
+msgstr "Plantilla a insertar"
 
 #: mp_edit.mpsl:132
 msgid "Line termination"
@@ -490,8 +490,8 @@ msgid "Complete..."
 msgstr "Completar..."
 
 #: mp_tags.mpsl:219
-msgid "Select:"
-msgstr "Seleccionar:"
+msgid "Select"
+msgstr "Seleccionar"
 
 #: mp_session.mpsl:43
 msgid "Load session"
@@ -590,20 +590,20 @@ msgid "Search repeated word"
 msgstr "Buscar palabra repetida"
 
 #: mp_search.mpsl:159
-msgid "Base directory (empty, current):"
-msgstr "Directorio base (vacío, actual):"
+msgid "Base directory (empty, current)"
+msgstr "Directorio base (vacío, actual)"
 
 #: mp_search.mpsl:164
 msgid "Recursive?"
 msgstr "¿Con recursividad?"
 
 #: mp_writing.mpsl:42
-msgid "Number of letters at the start or end:"
-msgstr "Número de letras al principio o final:"
+msgid "Number of letters at the start or end"
+msgstr "Número de letras al principio o final"
 
 #: mp_writing.mpsl:48
-msgid "Maximum distance between words:"
-msgstr "Distancia máxima entre palabras:"
+msgid "Maximum distance between words"
+msgstr "Distancia máxima entre palabras"
 
 #: mp_writing.mpsl:77
 msgid "Repeated words options..."
@@ -646,16 +646,16 @@ msgid "Mark all"
 msgstr "Marcar todo"
 
 #: mp_misc.mpsl:105
-msgid "Select action to execute:"
-msgstr "Seleccione acción a ejecutar:"
+msgid "Select action to execute"
+msgstr "Seleccione acción a ejecutar"
 
 #: mp_misc.mpsl:295
 msgid "Execute action on document..."
 msgstr "Ejecutar acción sobre el documento..."
 
 #: mp_clipboard.mpsl:59
-msgid "Cut lines containing:"
-msgstr "Cortar líneas que contengan:"
+msgid "Cut lines containing"
+msgstr "Cortar líneas que contengan"
 
 #: mp_clipboard.mpsl:106
 msgid "Cut lines containing a string..."
@@ -674,15 +674,15 @@ msgid "Unindent block"
 msgstr "Desindentar bloque"
 
 #: mp_templates.mpsl:81
-msgid "Template file to edit:"
-msgstr "Fichero de plantillas a editar:"
+msgid "Template file to edit"
+msgstr "Fichero de plantillas a editar"
 
 #: mp_edit.mpsl:147
-msgid "'Smart' move to beginning of line:"
-msgstr "Saltar al principio de la línea 'inteligente':"
+msgid "'Smart' move to beginning of line"
+msgstr "Saltar al principio de la línea 'inteligente'"
 
-msgid "Gathered information on %s:"
-msgstr "Información recopilada sobre %s:"
+msgid "Gathered information on %s"
+msgstr "Información recopilada sobre %s"
 
 msgid "You won!"
 msgstr "¡Has ganado!"
@@ -874,16 +874,16 @@ msgid "Error executing '%s'"
 msgstr "Error al ejecutar '%s'"
 
 #: mp_edit.mpsl:152
-msgid "Show line numbers:"
-msgstr "Mostrar números de línea:"
+msgid "Show line numbers"
+msgstr "Mostrar números de línea"
 
 #: mp_hex.mpsl:196
 msgid "Not found."
 msgstr "No encontrado."
 
 #: mp_hex.mpsl:205
-msgid "Hex string to seek:"
-msgstr "Cadena hexadecimal a buscar:"
+msgid "Hex string to seek"
+msgstr "Cadena hexadecimal a buscar"
 
 #: mp_clipboard.mpsl:97
 msgid "Mark selection block"

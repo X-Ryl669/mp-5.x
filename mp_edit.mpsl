@@ -144,12 +144,12 @@ mp.actions['line_options']  = sub {
                 type:       'checkbox'
             },
             {
-                label:      L("'Smart' move to beginning of line:"),
+                label:      L("'Smart' move to beginning of line") ~ ':',
                 value:      mp.config.smart_bol,
                 type:       'checkbox'
             },
             {
-                label:      L("Show line numbers:"),
+                label:      L("Show line numbers") ~ ':',
                 value:      mp.config.show_line_numbers,
                 type:       'checkbox'
             }

@@ -39,13 +39,13 @@ mp.actions['repeated_words_options'] = sub {
     local r = mp.form(
         [
             {
-                label:      L("Number of letters at the start or end:"),
+                label:      L("Number of letters at the start or end") ~ ':',
                 type:       'text',
                 value:      mp.config.rw_num_chars,
                 history:    'num_char'
             },
             {
-                label:      L("Maximum distance between words:"),
+                label:      L("Maximum distance between words") ~ ':',
                 type:       'text',
                 value:      mp.config.rw_max_dist,
                 history:    'max_dist'

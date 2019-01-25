@@ -56,7 +56,7 @@ mp_doc.actions ~= {
             local r = mp.form(
                 [
                     {
-                        'label'   => L("Cut lines containing:"),
+                        'label'   => L("Cut lines containing") ~ ':',
                         'type'    => 'text',
                         'history' => 'cut_lines_with_string'
                     }

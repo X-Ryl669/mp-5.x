@@ -120,7 +120,7 @@ mp_doc.actions['replace'] = sub (d) {
                 'value'     => mp.config.case_sensitive_search
             },
             {
-                'label'     => L("Global replace:"),
+                'label'     => L("Global replace") ~ ':',
                 'type'      => 'checkbox',
                 'value'     => mp.config.global_replace
             }
@@ -156,7 +156,7 @@ mp.actions['grep']  = sub {
                 'history'   => 'grep'
             },
             {
-                'label'     => L("Base directory (empty, current):"),
+                'label'     => L("Base directory (empty, current)") ~ ':',
                 'type'      => 'text',
                 'history'   => 'grep_base'
             },

@@ -31,7 +31,7 @@ mp.actions['eval']  = sub {
     local t = mp.form(
         [
             {
-                label:      L("Code to execute:"),
+                label:      L("Code to execute") ~ ':',
                 type:       'text',
                 history:    'eval'
             }
@@ -102,7 +102,7 @@ mp_doc.actions['exec_action'] = sub {
     local r = mp.form(
         [
             {
-                label:  L("Select action to execute:"),
+                label:  L("Select action to execute") ~ ':',
                 type:   'list',
                 list:   l
             }

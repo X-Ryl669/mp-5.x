@@ -171,7 +171,7 @@ global mp_hex_view = new(mp_base, {
                 local t = mp.form(
                     [
                         {
-                            label:   L("Hex string to seek:"),
+                            label:   L("Hex string to seek") ~ ':',
                             type:    'text',
                             history: 'search-hex'
                         }

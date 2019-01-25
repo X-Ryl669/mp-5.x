@@ -106,7 +106,7 @@ mp.actions['suspend'] = sub {
 
 mp.actions['open'] = sub (d, filename) {
     if (filename == NULL)
-        filename = mp.openfile(L("File to open:"));
+        filename = mp.openfile(L("File to open") ~ ':');
 
     if (filename != NULL && filename ne "") {
         if (mp.long_op(mp.open, filename) == NULL) {
@@ -351,7 +351,7 @@ mp.actions['hex_view']  = sub (doc, filename) {
     local d = NULL;
 
     if (filename == NULL)
-        filename = mp.openfile(L("File to open:"));
+        filename = mp.openfile(L("File to open") ~ ':');
 
     if (filename != NULL && filename ne "") {
         /* load on demand */

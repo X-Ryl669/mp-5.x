@@ -648,11 +648,11 @@ msgid "Error saving file: %s"
 msgstr ""
 
 #: mp_file.mpsl:109 mp_file.mpsl:354
-msgid "File to open:"
+msgid "File to open"
 msgstr ""
 
 #: mp_misc.mpsl:34
-msgid "Code to execute:"
+msgid "Code to execute"
 msgstr ""
 
 #: mp_misc.mpsl:50 mp_misc.mpsl:66
@@ -692,7 +692,7 @@ msgid "Mouse wheel down"
 msgstr ""
 
 #: mp_search.mpsl:123
-msgid "Global replace:"
+msgid "Global replace"
 msgstr ""
 
 #: mp_search.mpsl:177
@@ -725,7 +725,7 @@ msgid "No matching symbol found."
 msgstr ""
 
 #: mp_tags.mpsl:77
-msgid "Select symbol:"
+msgid "Select symbol"
 msgstr ""
 
 #: mp_tags.mpsl:90
@@ -737,11 +737,11 @@ msgid "Tag not found."
 msgstr ""
 
 #: mp_tags.mpsl:179
-msgid "Select tag:"
+msgid "Select tag"
 msgstr ""
 
 #: mp_templates.mpsl:40
-msgid "Template to insert:"
+msgid "Template to insert"
 msgstr ""
 
 #: mp_edit.mpsl:132
@@ -850,7 +850,7 @@ msgid "Complete..."
 msgstr ""
 
 #: mp_tags.mpsl:219
-msgid "Select:"
+msgid "Select"
 msgstr ""
 
 msgid "No session file was found to load"
@@ -971,7 +971,7 @@ msgid "Search repeated word"
 msgstr ""
 
 #: mp_search.mpsl:159
-msgid "Base directory (empty, current):"
+msgid "Base directory (empty, current)"
 msgstr ""
 
 #: mp_search.mpsl:164
@@ -979,11 +979,11 @@ msgid "Recursive?"
 msgstr ""
 
 #: mp_writing.mpsl:42
-msgid "Number of letters at the start or end:"
+msgid "Number of letters at the start or end"
 msgstr ""
 
 #: mp_writing.mpsl:48
-msgid "Maximum distance between words:"
+msgid "Maximum distance between words"
 msgstr ""
 
 #: mp_writing.mpsl:77
@@ -1094,7 +1094,7 @@ msgid "Mark all"
 msgstr ""
 
 #: mp_misc.mpsl:105
-msgid "Select action to execute:"
+msgid "Select action to execute"
 msgstr ""
 
 #: mp_misc.mpsl:295
@@ -1102,7 +1102,7 @@ msgid "Execute action on document..."
 msgstr ""
 
 #: mp_clipboard.mpsl:59
-msgid "Cut lines containing:"
+msgid "Cut lines containing"
 msgstr ""
 
 #: mp_clipboard.mpsl:106
@@ -1148,11 +1148,11 @@ msgid ""
 msgstr ""
 
 #: mp_templates.mpsl:81
-msgid "Template file to edit:"
+msgid "Template file to edit"
 msgstr ""
 
 #: mp_edit.mpsl:147
-msgid "'Smart' move to beginning of line:"
+msgid "'Smart' move to beginning of line"
 msgstr ""
 
 msgid ""
@@ -1421,7 +1421,7 @@ msgid ""
 msgstr ""
 
 #: mp_edit.mpsl:152
-msgid "Show line numbers:"
+msgid "Show line numbers"
 msgstr ""
 
 #: mp_hex.mpsl:196
@@ -1429,7 +1429,7 @@ msgid "Not found."
 msgstr ""
 
 #: mp_hex.mpsl:205
-msgid "Hex string to seek:"
+msgid "Hex string to seek"
 msgstr ""
 
 msgid ""

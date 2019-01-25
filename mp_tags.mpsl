@@ -74,7 +74,7 @@ mp_doc.actions['complete_symbol'] = sub(d) {
 
     mp.long_op(mp.load_tags, 1);
 
-    if (!d->complete(keys(mp.tags), L("Select symbol:")))
+    if (!d->complete(keys(mp.tags), L("Select symbol") ~ ':'))
         mp.alert(L("No matching symbol found."));
 };
 
@@ -176,7 +176,7 @@ sub mp.open_tag(tag)
         local r = mp.form(
             [
                 {
-                    label:  L("Select tag:"),
+                    label:  L("Select tag") ~ ':',
                     type:   'list',
                     list:   l
                 }
@@ -216,7 +216,7 @@ sub mp_doc.complete(d, list, label)
         local r = mp.form(
             [
                 {
-                    label:  label || L("Select:"),
+                    label:  label || L("Select") ~ ':',
                     type:   'list',
                     list:   l
                 }
