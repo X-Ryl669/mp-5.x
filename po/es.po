@@ -22,7 +22,7 @@ msgstr "Palabra clave (de nuevo)"
 msgid "Line to go to"
 msgstr "Número de línea"
 
-#: mp_core.mpsl:379 mp_file.mpsl:31 mp_file.mpsl:526 mp_session.mpsl:64
+#: mp_core.mpsl:378 mp_file.mpsl:31 mp_file.mpsl:526 mp_session.mpsl:64
 #: mp_session.mpsl:72
 msgid "<unnamed>"
 msgstr "<sin nombre>"
@@ -64,11 +64,11 @@ msgstr "Word wrap en columna (0, ninguno)"
 msgid " [ENTER]"
 msgstr " [ENTER]"
 
-#: mpv_gtk.c:2038 mp_tui.mpsl:354
+#: mpv_gtk.c:1918 mp_tui.mpsl:354
 msgid "Yes"
 msgstr "Sí"
 
-#: mpv_gtk.c:2039 mp_tui.mpsl:355
+#: mpv_gtk.c:1919 mp_tui.mpsl:355
 msgid "No"
 msgstr "No"
 
@@ -501,7 +501,7 @@ msgstr "Cargar sesión"
 msgid "Save session"
 msgstr "Guardar sesión"
 
-#: mp_core.mpsl:443
+#: mp_core.mpsl:442
 #, c-format
 msgid "Unknown action '%s'"
 msgstr "Acción '%s' desconocida"
@@ -521,12 +521,12 @@ msgstr "Nuevo archivo '%s'"
 msgid "%d replaces"
 msgstr "%d reemplazos"
 
-#: mp_core.mpsl:655
+#: mp_core.mpsl:654
 #, c-format
 msgid "Cannot open '%s'"
 msgstr "Imposible abrir '%s'"
 
-#: mp_core.mpsl:745
+#: mp_core.mpsl:746
 #, c-format
 msgid "WARNING: %s version found is %s, but %s is needed"
 msgstr "ADVERTENCIA: La versión de %s es la %s, pero se necesita la %s"
@@ -877,11 +877,11 @@ msgstr "Error al ejecutar '%s'"
 msgid "Show line numbers"
 msgstr "Mostrar números de línea"
 
-#: mp_hex.mpsl:196
+#: mp_hex.mpsl:167
 msgid "Not found."
 msgstr "No encontrado."
 
-#: mp_hex.mpsl:205
+#: mp_hex.mpsl:174
 msgid "Hex string to seek"
 msgstr "Cadena hexadecimal a buscar"
 
@@ -909,7 +909,7 @@ msgstr "La búsqueda empezó desde arriba"
 msgid "Move to the matching bracket"
 msgstr "Mover el cursor hasta el paréntesis opuesto"
 
-#: mp_core.mpsl:599
+#: mp_core.mpsl:598
 #, c-format
 msgid ""
 "Minimum Profit %s - Programmer Text Editor\n"
@@ -977,12 +977,12 @@ msgstr "Insertar salto de página (FF)"
 msgid "Insert m-dash character"
 msgstr "Insertar raya"
 
-#: mpv_gtk.c:2040 mpv_gtk.c:2069 mpv_gtk.c:2283 mpv_gtk.c:2292 mpv_gtk.c:2293
-#: mpv_gtk.c:2302
+#: mpv_gtk.c:1920 mpv_gtk.c:1949 mpv_gtk.c:2186 mpv_gtk.c:2195 mpv_gtk.c:2196
+#: mpv_gtk.c:2205
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: mpv_gtk.c:2070 mpv_gtk.c:2285 mpv_gtk.c:2293 mpv_gtk.c:2304
+#: mpv_gtk.c:1950 mpv_gtk.c:2188 mpv_gtk.c:2196 mpv_gtk.c:2207
 msgid "OK"
 msgstr "Aceptar"
 
@@ -1033,3 +1033,7 @@ msgstr "Reemplazar espacios por tabuladores"
 #, c-format
 msgid "Maze - help %s to find the treasure. As always, the X marks the spot."
 msgstr "Laberinto - Ayuda a %s a encontrar el tesoro. La X marca el punto."
+
+#: mp_core.mpsl:582
+msgid "..."
+msgstr ""

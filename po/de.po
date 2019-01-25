@@ -91,7 +91,7 @@ msgstr "Fehler beim Ausführen der benutzerdefinierten Funktion!"
 msgid "Line to go to"
 msgstr "Gehe zu Zeil"
 
-#: mp_core.mpsl:379 mp_file.mpsl:31 mp_file.mpsl:526 mp_session.mpsl:64
+#: mp_core.mpsl:378 mp_file.mpsl:31 mp_file.mpsl:526 mp_session.mpsl:64
 #: mp_session.mpsl:72
 msgid "<unnamed>"
 msgstr "<unbenannt>"
@@ -108,7 +108,6 @@ msgstr "Fehler: Kann Datei '%s' nicht erstellen!"
 msgid "File has changed. Save changes?"
 msgstr "Die Datei wurde geändert. Änderungen speichern?"
 
-#: mp_file.mpsl:193 mp_file.mpsl:261
 msgid "System command:"
 msgstr "System-Kommando:"
 
@@ -243,20 +242,20 @@ msgstr ""
 "Modi für die Syntax-Hervorhebung:\n"
 "\t"
 
-#: mpv_gtk.c:2038 mp_tui.mpsl:354
+#: mpv_gtk.c:1918 mp_tui.mpsl:354
 msgid "Yes"
 msgstr "Ja"
 
-#: mpv_gtk.c:2039 mp_tui.mpsl:355
+#: mpv_gtk.c:1919 mp_tui.mpsl:355
 msgid "No"
 msgstr "Nein"
 
-#: mpv_gtk.c:2070 mpv_gtk.c:2285 mpv_gtk.c:2293 mpv_gtk.c:2304
+#: mpv_gtk.c:1950 mpv_gtk.c:2188 mpv_gtk.c:2196 mpv_gtk.c:2207
 msgid "OK"
 msgstr "Übernehmen"
 
-#: mpv_gtk.c:2040 mpv_gtk.c:2069 mpv_gtk.c:2283 mpv_gtk.c:2292 mpv_gtk.c:2293
-#: mpv_gtk.c:2302
+#: mpv_gtk.c:1920 mpv_gtk.c:1949 mpv_gtk.c:2186 mpv_gtk.c:2195 mpv_gtk.c:2196
+#: mpv_gtk.c:2205
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -634,7 +633,7 @@ msgstr "Grep-Suche in Dateien..."
 
 #: mp_crypt.mpsl:85
 msgid "Passwords don't match."
-msgstr ""
+msgstr "Fehler: Passwort falsch!"
 
 #: mp_edit.mpsl:88
 msgid "Word wrapping must be set"
@@ -791,6 +790,7 @@ msgstr ""
 msgid "File has changed. Are you sure?"
 msgstr ""
 
+#: mp_file.mpsl:193 mp_file.mpsl:261
 msgid "System command"
 msgstr ""
 
@@ -891,7 +891,7 @@ msgstr ""
 msgid "Save session"
 msgstr ""
 
-#: mp_core.mpsl:443
+#: mp_core.mpsl:442
 #, c-format
 msgid "Unknown action '%s'"
 msgstr ""
@@ -911,12 +911,12 @@ msgstr ""
 msgid "%d replaces"
 msgstr ""
 
-#: mp_core.mpsl:655
+#: mp_core.mpsl:654
 #, c-format
 msgid "Cannot open '%s'"
 msgstr ""
 
-#: mp_core.mpsl:745
+#: mp_core.mpsl:746
 #, c-format
 msgid "WARNING: %s version found is %s, but %s is needed"
 msgstr ""
@@ -981,6 +981,7 @@ msgstr ""
 msgid "Ignore last misspelled word"
 msgstr ""
 
+#: mp_writing.mpsl:42
 msgid "Number of letters at the start or end"
 msgstr ""
 
@@ -1000,10 +1001,6 @@ msgstr ""
 
 #: mp_search.mpsl:164
 msgid "Recursive?"
-msgstr ""
-
-#: mp_writing.mpsl:42
-msgid "Number of letters at the start or end"
 msgstr ""
 
 #: mp_writing.mpsl:48
@@ -1448,11 +1445,11 @@ msgstr ""
 msgid "Show line numbers"
 msgstr ""
 
-#: mp_hex.mpsl:196
+#: mp_hex.mpsl:167
 msgid "Not found."
 msgstr ""
 
-#: mp_hex.mpsl:205
+#: mp_hex.mpsl:174
 msgid "Hex string to seek"
 msgstr ""
 
@@ -1528,7 +1525,7 @@ msgstr ""
 msgid "Move to the matching bracket"
 msgstr ""
 
-#: mp_core.mpsl:599
+#: mp_core.mpsl:598
 #, c-format
 msgid ""
 "Minimum Profit %s - Programmer Text Editor\n"
@@ -1648,4 +1645,8 @@ msgstr ""
 #: mp_toys.mpsl:44
 #, c-format
 msgid "Maze - help %s to find the treasure. As always, the X marks the spot."
+msgstr ""
+
+#: mp_core.mpsl:582
+msgid "..."
 msgstr ""

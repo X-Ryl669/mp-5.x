@@ -579,7 +579,7 @@ sub mp.trim(str, max)
 /* trims the string to the last max characters, adding ellipsis if done */
 {
     local v = regex(str, '/.{' ~ max ~ '}$/');
-    return v && '...' ~ v || str;
+    return v && L("...") ~ v || str;
 }
 
 
