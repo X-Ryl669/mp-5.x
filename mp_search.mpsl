@@ -37,7 +37,7 @@ mp_doc.actions['seek'] = sub (d) {
     local t = mp.form(
         [
             {
-                label:   L("Text to seek:"),
+                label:   L("Text to seek") ~ ':',
                 type:    'text',
                 history: 'search'
             },
@@ -105,12 +105,12 @@ mp_doc.actions['replace'] = sub (d) {
     local r = mp.form(
         [
             {
-                'label'     => L("Replace text:"),
+                'label'     => L("Replace text") ~ ':',
                 'type'      => 'text',
                 'history'   => 'search'
             },
             {
-                'label'     => L("Replace with:"),
+                'label'     => L("Replace with") ~ ':',
                 'type'      => 'text',
                 'history'   => 'replace'
             },
@@ -146,12 +146,12 @@ mp.actions['grep']  = sub {
     local r = mp.form(
         [
             {
-                'label'     => L("Text to seek:"),
+                'label'     => L("Text to seek" ~ ':'),
                 'type'      => 'text',
                 'history'   => 'search'
             },
             {
-                'label'     => L("Files to grep (empty, all):"),
+                'label'     => L("Files to grep (empty, all)") ~ ':',
                 'type'      => 'text',
                 'history'   => 'grep'
             },

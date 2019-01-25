@@ -32,8 +32,8 @@ msgid "System command"
 msgstr "Comando del sistema"
 
 #: mp_search.mpsl:40 mp_search.mpsl:149
-msgid "Text to seek:"
-msgstr "Texto a buscar:"
+msgid "Text to seek"
+msgstr "Texto a buscar"
 
 #: mp_search.mpsl:70 mp_search.mpsl:91 mp_search.mpsl:180 mp_spell.mpsl:34
 #: mp_writing.mpsl:67
@@ -41,24 +41,24 @@ msgid "Text not found."
 msgstr "Texto no encontrado."
 
 #: mp_search.mpsl:108
-msgid "Replace text:"
-msgstr "Texto a reemplazar:"
+msgid "Replace text"
+msgstr "Texto a reemplazar"
 
 #: mp_search.mpsl:113
-msgid "Replace with:"
-msgstr "Reemplazar con:"
+msgid "Replace with"
+msgstr "Reemplazar con"
 
 #: mp_search.mpsl:154
-msgid "Files to grep (empty, all):"
-msgstr "Ficheros en los que buscar (vacío, todos):"
+msgid "Files to grep (empty, all)"
+msgstr "Ficheros en los que buscar (vacío, todos)"
 
 #: mp_tags.mpsl:40
-msgid "Tag to seek:"
-msgstr "Tag a buscar:"
+msgid "Tag to seek"
+msgstr "Tag a buscar"
 
 #: mp_edit.mpsl:121
-msgid "Word wrap on column (0, no word wrap):"
-msgstr "Word wrap en columna (0, ninguno):"
+msgid "Word wrap on column (0, no word wrap)"
+msgstr "Word wrap en columna (0, ninguno)"
 
 #: mp_tui.mpsl:452
 msgid " [ENTER]"
@@ -325,8 +325,8 @@ msgid "Word-wrap a paragraph"
 msgstr "Recortar por palabras un párrafo"
 
 #: mp_file.mpsl:49
-msgid "Save file as:"
-msgstr "Guardar fichero como:"
+msgid "Save file as"
+msgstr "Guardar fichero como"
 
 #: mp_file.mpsl:109 mp_file.mpsl:354
 msgid "File to open:"

@@ -123,8 +123,8 @@ msgid "Select template"
 msgstr "Välj mall"
 
 #: mp_search.mpsl:40 mp_search.mpsl:149
-msgid "Text to seek:"
-msgstr "Söktext:"
+msgid "Text to seek"
+msgstr "Söktext"
 
 #: mp_search.mpsl:70 mp_search.mpsl:91 mp_search.mpsl:180 mp_spell.mpsl:34
 #: mp_writing.mpsl:67
@@ -132,30 +132,30 @@ msgid "Text not found."
 msgstr "Texten hittades inte."
 
 #: mp_search.mpsl:108
-msgid "Replace text:"
-msgstr "Ersätt text:"
+msgid "Replace text"
+msgstr "Ersätt text"
 
 #: mp_search.mpsl:113
-msgid "Replace with:"
-msgstr "Ersätt med:"
+msgid "Replace with"
+msgstr "Ersätt med"
 
 msgid "To end of file?"
 msgstr "Till filens slut?"
 
 #: mp_search.mpsl:154
-msgid "Files to grep (empty, all):"
-msgstr "Filer att grep:a (tom, alla)"
+msgid "Files to grep (empty, all)"
+msgstr "Filer att grep (tom, alla)"
 
 msgid "grep"
 msgstr "grep"
 
 #: mp_tags.mpsl:40
-msgid "Tag to seek:"
-msgstr "Tagg-namn att söka:"
+msgid "Tag to seek"
+msgstr "Tagg-namn att söka"
 
 #: mp_edit.mpsl:121
-msgid "Word wrap on column (0, no word wrap):"
-msgstr "Radbrytning vid kolumn (0, ingen radbrytning):"
+msgid "Word wrap on column (0, no word wrap)"
+msgstr "Radbrytning vid kolumn (0, ingen radbrytning)"
 
 msgid "Tab size:"
 msgstr "Tabbstorlek:"
@@ -658,7 +658,7 @@ msgid "Word-wrap a paragraph"
 msgstr ""
 
 #: mp_file.mpsl:49
-msgid "Save file as:"
+msgid "Save file as"
 msgstr ""
 
 msgid "Error saving file: %s"

@@ -46,7 +46,7 @@ mp.actions['prev'] = sub { mp.prev(); };
 mp_doc.actions['save_as'] = sub (d, newname) {
 
     if (newname == NULL)
-        newname = mp.savefile(L("Save file as:"));
+        newname = mp.savefile(L("Save file as") ~ ':');
 
     if (newname != NULL) {
         /* store new name */

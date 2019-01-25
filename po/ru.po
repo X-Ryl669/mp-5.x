@@ -121,8 +121,8 @@ msgid "Select template"
 msgstr "Выбор шаблона"
 
 #: mp_search.mpsl:40 mp_search.mpsl:149
-msgid "Text to seek:"
-msgstr "Искать текст:"
+msgid "Text to seek"
+msgstr "Искать текст"
 
 #: mp_search.mpsl:70 mp_search.mpsl:91 mp_search.mpsl:180 mp_spell.mpsl:34
 #: mp_writing.mpsl:67
@@ -130,30 +130,30 @@ msgid "Text not found."
 msgstr "Текст не найден."
 
 #: mp_search.mpsl:108
-msgid "Replace text:"
-msgstr "Заменить текст:"
+msgid "Replace text"
+msgstr "Заменить текст"
 
 #: mp_search.mpsl:113
-msgid "Replace with:"
-msgstr "Заменить на:"
+msgid "Replace with"
+msgstr "Заменить на"
 
 msgid "To end of file?"
 msgstr "До конца файла?"
 
 #: mp_search.mpsl:154
-msgid "Files to grep (empty, all):"
-msgstr "Файлы для поиска (пусто = все):"
+msgid "Files to grep (empty, all)"
+msgstr "Файлы для поиска (пусто = все)"
 
 msgid "grep"
 msgstr ""
 
 #: mp_tags.mpsl:40
-msgid "Tag to seek:"
-msgstr "Искать тэг:"
+msgid "Tag to seek"
+msgstr "Искать тэг"
 
 #: mp_edit.mpsl:121
-msgid "Word wrap on column (0, no word wrap):"
-msgstr "Перенос строк на столбце (0 = нет переноса):"
+msgid "Word wrap on column (0, no word wrap)"
+msgstr "Перенос строк на столбце (0 = нет переноса)"
 
 msgid "Tab size:"
 msgstr "Ширина табуляции:"
@@ -659,8 +659,8 @@ msgid "Word-wrap a paragraph"
 msgstr ""
 
 #: mp_file.mpsl:49
-msgid "Save file as:"
-msgstr "Сохранить файл как:"
+msgid "Save file as"
+msgstr "Сохранить файл как"
 
 msgid "Error saving file: %s"
 msgstr "Ошибка сохранения файла: %s"

@@ -89,7 +89,7 @@ msgstr "Fehler beim Ausführen der benutzerdefinierten Funktion!"
 
 #: mp_move.mpsl:52
 msgid "Line to go to"
-msgstr "Gehe zu Zeil:"
+msgstr "Gehe zu Zeil"
 
 #: mp_core.mpsl:379 mp_file.mpsl:31 mp_file.mpsl:526 mp_session.mpsl:64
 #: mp_session.mpsl:72
@@ -128,8 +128,8 @@ msgid "Select template"
 msgstr "Wähle eine Vorlage"
 
 #: mp_search.mpsl:40 mp_search.mpsl:149
-msgid "Text to seek:"
-msgstr "Zu suchender Text:"
+msgid "Text to seek"
+msgstr "Zu suchender Text"
 
 #: mp_search.mpsl:70 mp_search.mpsl:91 mp_search.mpsl:180 mp_spell.mpsl:34
 #: mp_writing.mpsl:67
@@ -137,30 +137,30 @@ msgid "Text not found."
 msgstr "Text nicht gefunden!"
 
 #: mp_search.mpsl:108
-msgid "Replace text:"
-msgstr "Zu ersetzender Text:"
+msgid "Replace text"
+msgstr "Zu ersetzender Text"
 
 #: mp_search.mpsl:113
-msgid "Replace with:"
-msgstr "Ersetzen durch:"
+msgid "Replace with"
+msgstr "Ersetzen durch"
 
 msgid "To end of file?"
 msgstr "Bis zum Dateiende?"
 
 #: mp_search.mpsl:154
-msgid "Files to grep (empty, all):"
-msgstr "Zu durchsuchende Dateien (leer=alle):"
+msgid "Files to grep (empty, all)"
+msgstr "Zu durchsuchende Dateien (leer=alle)"
 
 msgid "grep"
 msgstr "Grep-Suche"
 
 #: mp_tags.mpsl:40
-msgid "Tag to seek:"
-msgstr "Zu suchender Tag:"
+msgid "Tag to seek"
+msgstr "Zu suchender Tag"
 
 #: mp_edit.mpsl:121
-msgid "Word wrap on column (0, no word wrap):"
-msgstr "Zeilenumbruch bei Spalte (0=kein Zeilenumbruch):"
+msgid "Word wrap on column (0, no word wrap)"
+msgstr "Zeilenumbruch bei Spalte (0=kein Zeilenumbruch)"
 
 msgid "Tab size:"
 msgstr "Tabulatorbreite:"
@@ -665,7 +665,7 @@ msgid "Word-wrap a paragraph"
 msgstr ""
 
 #: mp_file.mpsl:49
-msgid "Save file as:"
+msgid "Save file as"
 msgstr ""
 
 msgid "Error saving file: %s"
