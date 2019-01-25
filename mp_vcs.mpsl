@@ -136,10 +136,12 @@ sub mp.vcs_form()
                 /* create a commit message editor document */
                 local msg = new(mp_doc_vcs);
 
+                /* don't store these files in the mp.state */
+                msg.no_state = 1;
+
                 msg.vcs = {
                     commit_cmd: opt.commit_cmd,
-                    log_name:   sprintf(L("<%s output>"), vcs.id),
-                    no_state:   1
+                    log_name:   sprintf(L("<%s output>"), vcs.id)
                 };
 
                 mp.add(msg);
