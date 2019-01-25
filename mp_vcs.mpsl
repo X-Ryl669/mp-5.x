@@ -57,16 +57,18 @@ mp.vcs = {
         id:     'SVN',
         check:  [ '.svn', '../.svn', '../../.svn', '../../../.svn' ],
         opts:   {
-            'svn diff'          => { unique_log: 1, diff: 1 },
-            'svn status'        => NULL,
-            'svn log'           => { unique_log: 1 },
-            "svn diff '%s'"     => NULL,
-            "svn log '%s'"      => { unique_log: 1 },
-            "svn add '%s'"      => NULL,
-            "svn annotate '%s'" => { unique_log: 1 },
-            "svn update"        => NULL,
-            "svn revert '%s'"   => NULL,
-            "svn commit"        => { commit_cmd: "svn commit -F '%s'" }
+            'svn diff'            => { unique_log: 1, diff: 1 },
+            'svn status'          => NULL,
+            'svn log'             => { unique_log: 1 },
+            'svn log --diff'      => { unique_log: 1, diff: 1 },
+            "svn diff '%s'"       => { unique_log: 1, diff: 1 },
+            "svn log '%s'"        => { unique_log: 1 },
+            "svn log '%s' --diff" => { unique_log: 1, diff: 1 },
+            "svn add '%s'"        => NULL,
+            "svn annotate '%s'"   => { unique_log: 1 },
+            "svn update"          => NULL,
+            "svn revert '%s'"     => NULL,
+            "svn commit"          => { commit_cmd: "svn commit -F '%s'" }
         }
     },
     mercurial: {
@@ -76,7 +78,7 @@ mp.vcs = {
             'hg diff'          => { unique_log: 1, diff: 1 },
             'hg status'        => NULL,
             'hg log'           => { unique_log: 1 },
-            "hg diff '%s'"     => NULL,
+            "hg diff '%s'"     => { unique_log: 1, diff: 1 },
             "hg log '%s'"      => { unique_log: 1 },
             "hg add '%s'"      => NULL,
             "hg push"          => NULL,
