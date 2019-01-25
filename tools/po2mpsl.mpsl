@@ -1,8 +1,8 @@
 /*
 
-	Parses .po files and dumps MPSL code.
+    Parses .po files and dumps MPSL code.
 
-	Angel Ortega <angel@triptico.com>
+    Angel Ortega <angel@triptico.com>
 
 */
 
@@ -24,70 +24,70 @@ sub convert_po_line(line)
 
 sub parse_po_file(pofile)
 {
-	local f;
-	local r = [];
+    local f;
+    local r = [];
 
-	/* only UTF-8 po files are supported */
-	encoding('UTF-8');
+    /* only UTF-8 po files are supported */
+    encoding('UTF-8');
 
-	if ((f = open(pofile, "r")) != NULL) {
+    if ((f = open(pofile, "r")) != NULL) {
 
-		local l;
-		local i = 0;
-		local v = [];
+        local l;
+        local i = 0;
+        local v = [];
 
-		while ((l = read(f)) != NULL) {
+        while ((l = read(f)) != NULL) {
 
-			l = mp.chomp(l);
+            l = mp.chomp(l);
 
-			local s = regex(l, [ '/^(msgid|msgstr)*/', '/\s*\".*\"$/' ]);
-			s[1] = convert_po_line(s[1]);
+            local s = regex(l, [ '/^(msgid|msgstr)*/', '/\s*\".*\"$/' ]);
+            s[1] = convert_po_line(s[1]);
 
-			if (s[0] eq 'msgid') {
-				i = 0;
-				push(v, [[], []]);
-			}
-			else
-			if (s[0] eq 'msgstr') {
-				i = 1;
-			}
+            if (s[0] eq 'msgid') {
+                i = 0;
+                push(v, [[], []]);
+            }
+            else
+            if (s[0] eq 'msgstr') {
+                i = 1;
+            }
 
-			if (s[1]) {
-				push(v[-1][i], s[1]);
-			}
-		}
+            if (s[1]) {
+                push(v[-1][i], s[1]);
+            }
+        }
 
-		push(r, "/* Built by po2mpsl - Don't modify, change the .po file instead */");
-		push(r, "__I18N__ = {");
+        push(r, "/* Built by po2mpsl - Don't modify, change the .po file instead */");
+        push(r, "__I18N__ = {");
 
-		foreach (l, v) {
-			if (size(l[1]))
-				push(r,	"\t\"" ~ join(l[0]) ~ "\" => \"" ~ join(l[1]) ~ "\",");
-		}
+        foreach (l, v) {
+            if (size(l[1]))
+                push(r, "\t\"" ~ join(l[0]) ~ "\" => \"" ~ join(l[1]) ~ "\",");
+        }
 
-		push(r, "\t\"-\" => \"-\"\n};\n");
+        push(r, "\t\"-\" => \"-\"\n};\n");
 
-		close(f);
-	}
+        close(f);
+    }
 
-	/* back to default encoding */
-	encoding();
+    /* back to default encoding */
+    encoding();
 
-	return join(r, "\n");
+    return join(r, "\n");
 }
 
 /* main */
 
 foreach (f, glob('po/*.po')) { /**/
-	local output = parse_po_file(f);
+    local output = parse_po_file(f);
 
-	/* strip extension and path */
-	f = shift(split(f, '.po'));
-	f = pop(split(f, '/'));
+    /* strip extension and path */
+    f = shift(split(f, '.po'));
+    f = pop(split(f, '/'));
 
-	local o = open('lang/' ~ f ~ '.mpsl', 'w');
-	write(o, output);
-	close(o);
+    local o = open('lang/' ~ f ~ '.mpsl', 'w');
+    write(o, output);
+    close(o);
 }
 
 mp.exit();
