@@ -661,9 +661,7 @@ sub mp.close()
 
     /* store in the state of files */
     local l = mp.active();
-    if (l.txt.x == 0 && l.txt.y == 0)
-        hdel(mp.state.files, l.name);
-    else
+
     if (!regex(l.name, '/^<'))
         mp.state.files[l.name] = { x: l.txt.x, y: l.txt.y, vy: l.txt.vy, t: time() };
 
