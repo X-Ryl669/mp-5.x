@@ -11,11 +11,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: mp_crypt.mpsl:74 mp_file.mpsl:119
-msgid "Password:"
-msgstr "Password:"
+msgid "Password"
+msgstr "Password"
 
 #: mp_crypt.mpsl:78
-msgid "Password (again):"
+msgid "Password (again)"
 msgstr "Password (ancora)"
 
 msgid "Error: Passwords mismatch."
@@ -31,8 +31,8 @@ msgid "Unlinked functions"
 msgstr "Funzione morta"
 
 #: mp_move.mpsl:52
-msgid "Line to go to:"
-msgstr "Numero riga:"
+msgid "Line to go to"
+msgstr "Numero riga"
 
 #: mp_core.mpsl:379 mp_file.mpsl:31 mp_file.mpsl:526 mp_session.mpsl:64
 #: mp_session.mpsl:72
@@ -52,8 +52,8 @@ msgid "File has changed. Save changes?"
 msgstr "Il file e' cambiato. Salvare i cambiamenti?"
 
 #: mp_file.mpsl:193 mp_file.mpsl:261
-msgid "System command:"
-msgstr "Esegui:"
+msgid "System command"
+msgstr "Esegui"
 
 msgid "Error executing command."
 msgstr "Errore eseguendo il comando."

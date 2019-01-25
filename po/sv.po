@@ -60,12 +60,12 @@ msgstr ""
 "\n"
 
 #: mp_crypt.mpsl:74 mp_file.mpsl:119
-msgid "Password:"
-msgstr "Lösenord:"
+msgid "Password"
+msgstr "Lösenord"
 
 #: mp_crypt.mpsl:78
-msgid "Password (again):"
-msgstr "Lösenord (igen):"
+msgid "Password (again)"
+msgstr "Lösenord (igen)"
 
 msgid "Error: Passwords mismatch."
 msgstr "Fel: Lösenorden matchar inte"
@@ -83,8 +83,8 @@ msgid "Error executing user defined function"
 msgstr "Fel vid exekvering av definerad funktion"
 
 #: mp_move.mpsl:52
-msgid "Line to go to:"
-msgstr "Rad att gå till:"
+msgid "Line to go to"
+msgstr "Rad att gå till"
 
 #: mp_core.mpsl:379 mp_file.mpsl:31 mp_file.mpsl:526 mp_session.mpsl:64
 #: mp_session.mpsl:72
@@ -104,8 +104,8 @@ msgid "File has changed. Save changes?"
 msgstr "Filen har ändrats. Spara ändringar?"
 
 #: mp_file.mpsl:193 mp_file.mpsl:261
-msgid "System command:"
-msgstr "Systemkommando:"
+msgid "System command"
+msgstr "Systemkommando"
 
 msgid "<Output of \"%s\">"
 msgstr "<Utdata av \"%s\">"

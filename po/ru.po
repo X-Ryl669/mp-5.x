@@ -55,12 +55,12 @@ msgid ""
 msgstr ""
 
 #: mp_crypt.mpsl:74 mp_file.mpsl:119
-msgid "Password:"
-msgstr "Пароль:"
+msgid "Password"
+msgstr "Пароль"
 
 #: mp_crypt.mpsl:78
-msgid "Password (again):"
-msgstr "Пароль (еще раз):"
+msgid "Password (again)"
+msgstr "Пароль (еще раз)"
 
 msgid "Error: Passwords mismatch."
 msgstr "Ошибка: Пароли не совпадают."
@@ -78,8 +78,8 @@ msgid "Error executing user defined function"
 msgstr "Ошибка при выполнении функции пользователя"
 
 #: mp_move.mpsl:52
-msgid "Line to go to:"
-msgstr "Перейти на строку:"
+msgid "Line to go to"
+msgstr "Перейти на строку"
 
 #: mp_core.mpsl:379 mp_file.mpsl:31 mp_file.mpsl:526 mp_session.mpsl:64
 #: mp_session.mpsl:72
@@ -99,8 +99,8 @@ msgid "File has changed. Save changes?"
 msgstr "Файл изменен. Сохранить?"
 
 #: mp_file.mpsl:193 mp_file.mpsl:261
-msgid "System command:"
-msgstr "Системная команда:"
+msgid "System command"
+msgstr "Системная команда"
 
 msgid "<Output of \"%s\">"
 msgstr "<Вывод \"%s\">"

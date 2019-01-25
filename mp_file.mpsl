@@ -116,7 +116,7 @@ mp.actions['open'] = sub (d, filename) {
                     [
                         {
                             type: 'password',
-                            label: L("Password:")
+                            label: L("Password") ~ ':'
                         }
                     ]
                 );
@@ -190,7 +190,7 @@ mp_doc.actions['exec_command'] = sub (d, cmd) {
         local t = mp.form(
             [
                 {
-                    'label' => L("System command:"),
+                    'label' => L("System command") ~ ':',
                     'type' => 'text',
                     'history' => 'system'
                 }

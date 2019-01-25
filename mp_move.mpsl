@@ -49,7 +49,7 @@ mp_doc.actions['goto'] = sub (d, line) {
         local t = mp.form(
             [
                 {
-                    'label'     => L("Line to go to:"),
+                    'label'     => L("Line to go to") ~ ':',
                     'type'      => 'text',
                     'history'   => 'goto'
                 }

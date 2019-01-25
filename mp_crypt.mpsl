@@ -5,7 +5,7 @@
 
     Encrypting functions.
 
-    Copyright (C) 1991-2012 Angel Ortega <angel@triptico.com>
+    Copyright (C) 1991-2019 Angel Ortega <angel@triptico.com>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -71,11 +71,11 @@ mp_doc.actions['set_password'] = sub(d) {
         [
             {
                 type:   'password',
-                label:  L("Password:")
+                label:  L("Password") ~ ':'
             },
             {
                 type:   'password',
-                label:  L("Password (again):")
+                label:  L("Password (again)") ~ ':'
             }
         ]
     );

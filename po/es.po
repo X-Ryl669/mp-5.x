@@ -11,16 +11,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: mp_crypt.mpsl:74 mp_file.mpsl:119
-msgid "Password:"
-msgstr "Palabra clave:"
+msgid "Password"
+msgstr "Palabra clave"
 
 #: mp_crypt.mpsl:78
-msgid "Password (again):"
-msgstr "Palabra clave (de nuevo):"
+msgid "Password (again)"
+msgstr "Palabra clave (de nuevo)"
 
 #: mp_move.mpsl:52
-msgid "Line to go to:"
-msgstr "Número de línea:"
+msgid "Line to go to"
+msgstr "Número de línea"
 
 #: mp_core.mpsl:379 mp_file.mpsl:31 mp_file.mpsl:526 mp_session.mpsl:64
 #: mp_session.mpsl:72
@@ -28,8 +28,8 @@ msgid "<unnamed>"
 msgstr "<sin nombre>"
 
 #: mp_file.mpsl:193 mp_file.mpsl:261
-msgid "System command:"
-msgstr "Comando del sistema:"
+msgid "System command"
+msgstr "Comando del sistema"
 
 #: mp_search.mpsl:40 mp_search.mpsl:149
 msgid "Text to seek:"

@@ -65,12 +65,12 @@ msgstr ""
 "\n"
 
 #: mp_crypt.mpsl:74 mp_file.mpsl:119
-msgid "Password:"
-msgstr "Passwort:"
+msgid "Password"
+msgstr "Passwort"
 
 #: mp_crypt.mpsl:78
-msgid "Password (again):"
-msgstr "Passwort wiederholen:"
+msgid "Password (again)"
+msgstr "Passwort wiederholen"
 
 msgid "Error: Passwords mismatch."
 msgstr "Fehler: Passwort falsch!"
@@ -88,8 +88,8 @@ msgid "Error executing user defined function"
 msgstr "Fehler beim Ausführen der benutzerdefinierten Funktion!"
 
 #: mp_move.mpsl:52
-msgid "Line to go to:"
-msgstr "Gehe zu Zeile:"
+msgid "Line to go to"
+msgstr "Gehe zu Zeil:"
 
 #: mp_core.mpsl:379 mp_file.mpsl:31 mp_file.mpsl:526 mp_session.mpsl:64
 #: mp_session.mpsl:72
