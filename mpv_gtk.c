@@ -332,7 +332,7 @@ static void build_submenu(GtkWidget * menu, mpdm_t labels)
 
         /* if the action is a separator... */
         if (*((wchar_t *) v->data) == L'-')
-            menu_item = gtk_menu_item_new();
+            menu_item = gtk_separator_menu_item_new();
         else {
             char *ptr;
 
