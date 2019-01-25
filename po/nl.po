@@ -34,7 +34,7 @@ msgstr ""
 msgid "Line to go to"
 msgstr "Naar regelnummer"
 
-#: mp_core.mpsl:378 mp_file.mpsl:31 mp_file.mpsl:526 mp_session.mpsl:64
+#: mp_core.mpsl:378 mp_file.mpsl:31 mp_file.mpsl:524 mp_session.mpsl:64
 #: mp_session.mpsl:72
 msgid "<unnamed>"
 msgstr "<nieuw bestand>"
@@ -51,7 +51,7 @@ msgstr "Kan bestand '%s' niet aanmaken."
 msgid "File has changed. Save changes?"
 msgstr "Bestand veranderd. Wijzigingen Opslaan?"
 
-#: mp_file.mpsl:193 mp_file.mpsl:261
+#: mp_file.mpsl:193 mp_file.mpsl:259
 msgid "System command"
 msgstr "Systeem commando"
 
@@ -317,34 +317,34 @@ msgstr "Vervang..."
 msgid "Replace in all..."
 msgstr "Vervang in hele tekst..."
 
-#: mp_file.mpsl:398
+#: mp_file.mpsl:396
 msgid "Next"
 msgstr "Volgend bestand"
 
-#: mp_file.mpsl:394
+#: mp_file.mpsl:392
 msgid "New"
 msgstr "Nieuw"
 
-#: mp_file.mpsl:400
+#: mp_file.mpsl:398
 msgid "Open..."
 msgstr "Open..."
 
 msgid "Reopen..."
 msgstr "Heropen..."
 
-#: mp_file.mpsl:395
+#: mp_file.mpsl:393
 msgid "Save..."
 msgstr "Opslaan..."
 
-#: mp_file.mpsl:396
+#: mp_file.mpsl:394
 msgid "Save as..."
 msgstr "Opslaan als..."
 
-#: mp_file.mpsl:403
+#: mp_file.mpsl:401
 msgid "Close"
 msgstr "Sluiten"
 
-#: mp_file.mpsl:412
+#: mp_file.mpsl:410
 msgid "Open file under cursor"
 msgstr "Open bestand onder de aanwijzer"
 
@@ -380,7 +380,7 @@ msgstr "Geavanceerder zoeken"
 msgid "Help for word under cursor"
 msgstr "Hulp voor woord onder de aanwijzer"
 
-#: mp_file.mpsl:410
+#: mp_file.mpsl:408
 msgid "Run system command..."
 msgstr "Voor systeem commando uit..."
 
@@ -403,7 +403,7 @@ msgstr "Maak markering af..."
 msgid "Edit templates file"
 msgstr "Bewerk templates bestand"
 
-#: mp_file.mpsl:408
+#: mp_file.mpsl:406
 msgid "Edit configuration file"
 msgstr "Bewerk configuratie bestand"
 
@@ -421,7 +421,7 @@ msgstr "Menu"
 msgid "About..."
 msgstr "Over..."
 
-#: mp_file.mpsl:401
+#: mp_file.mpsl:399
 msgid "Exit"
 msgstr "Afsluiten"
 
@@ -442,7 +442,7 @@ msgstr "Gebruik muis om aan te wijzen"
 msgid "Execute editor function..."
 msgstr "Voor editor functies uit..."
 
-#: mp_file.mpsl:409
+#: mp_file.mpsl:407
 msgid "Save modified texts"
 msgstr "Bewaar gewijzigde teksten"
 
@@ -531,7 +531,7 @@ msgstr ""
 msgid "Jump to matching bracket"
 msgstr ""
 
-#: mp_file.mpsl:399
+#: mp_file.mpsl:397
 msgid "Previous"
 msgstr ""
 
@@ -647,7 +647,7 @@ msgstr ""
 msgid "Error saving file: %s"
 msgstr ""
 
-#: mp_file.mpsl:109 mp_file.mpsl:354
+#: mp_file.mpsl:109 mp_file.mpsl:352
 msgid "File to open"
 msgstr ""
 
@@ -770,12 +770,12 @@ msgstr ""
 msgid "Error writing command '%s'"
 msgstr ""
 
-#: mp_file.mpsl:249
+#: mp_file.mpsl:247
 #, c-format
 msgid "Error reading from command '%s'"
 msgstr ""
 
-#: mp_file.mpsl:404
+#: mp_file.mpsl:402
 msgid "Revert"
 msgstr ""
 
@@ -874,7 +874,7 @@ msgstr ""
 msgid "Unbound keystroke '%s'"
 msgstr ""
 
-#: mp_file.mpsl:715
+#: mp_file.mpsl:713
 #, c-format
 msgid "New file '%s'"
 msgstr ""
@@ -902,7 +902,7 @@ msgstr ""
 msgid "Mark end of lines"
 msgstr ""
 
-#: mp_file.mpsl:405
+#: mp_file.mpsl:403
 msgid "Close all"
 msgstr ""
 
@@ -922,7 +922,7 @@ msgstr ""
 msgid "Build project..."
 msgstr ""
 
-#: mp_file.mpsl:458
+#: mp_file.mpsl:456
 msgid "Read-only document"
 msgstr ""
 
@@ -992,11 +992,11 @@ msgstr ""
 msgid "Keep original end of lines"
 msgstr ""
 
-#: mp_file.mpsl:413
+#: mp_file.mpsl:411
 msgid "Hexadecimal viewer..."
 msgstr ""
 
-#: mp_file.mpsl:414
+#: mp_file.mpsl:412
 msgid "Open dropped files"
 msgstr ""
 
@@ -1079,7 +1079,7 @@ msgstr ""
 msgid "Toggle insert/overwrite mode"
 msgstr ""
 
-#: mp_file.mpsl:411
+#: mp_file.mpsl:409
 msgid "Filter selection through system command..."
 msgstr ""
 
@@ -1292,12 +1292,12 @@ msgstr ""
 msgid "'%s' has changed. Are you sure?"
 msgstr ""
 
-#: mp_file.mpsl:432
+#: mp_file.mpsl:430
 #, c-format
 msgid "'%s' was changed externally. Reload?"
 msgstr ""
 
-#: mp_file.mpsl:472
+#: mp_file.mpsl:470
 #, c-format
 msgid "'%s' has changed. Save changes?"
 msgstr ""
@@ -1323,7 +1323,7 @@ msgstr ""
 msgid "Folder to open"
 msgstr ""
 
-#: mp_file.mpsl:406
+#: mp_file.mpsl:404
 msgid "Open folder..."
 msgstr ""
 
@@ -1458,7 +1458,7 @@ msgstr ""
 msgid "Mark vertical selection block"
 msgstr ""
 
-#: mp_file.mpsl:402
+#: mp_file.mpsl:400
 msgid "Suspend"
 msgstr ""
 
@@ -1528,7 +1528,7 @@ msgstr ""
 msgid "RTF file name"
 msgstr ""
 
-#: mp_file.mpsl:397
+#: mp_file.mpsl:395
 msgid "Export as RTF..."
 msgstr ""
 

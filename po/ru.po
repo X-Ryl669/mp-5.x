@@ -81,7 +81,7 @@ msgstr "Ошибка при выполнении функции пользова
 msgid "Line to go to"
 msgstr "Перейти на строку"
 
-#: mp_core.mpsl:378 mp_file.mpsl:31 mp_file.mpsl:526 mp_session.mpsl:64
+#: mp_core.mpsl:378 mp_file.mpsl:31 mp_file.mpsl:524 mp_session.mpsl:64
 #: mp_session.mpsl:72
 msgid "<unnamed>"
 msgstr "<безымянный>"
@@ -353,7 +353,7 @@ msgstr "Сортировать строки"
 msgid "Suspend application"
 msgstr "Приостановить приложение"
 
-#: mp_file.mpsl:409
+#: mp_file.mpsl:407
 msgid "Save modified texts"
 msgstr "Сохранить измененные тексты"
 
@@ -380,7 +380,7 @@ msgstr "Показать лог"
 msgid "Break hardlinks on write"
 msgstr "Разрушать жесткие ссылки при записи"
 
-#: mp_file.mpsl:396
+#: mp_file.mpsl:394
 msgid "Save as..."
 msgstr "Сохранить как..."
 
@@ -391,7 +391,7 @@ msgstr "Заменить..."
 msgid "Replace in all..."
 msgstr "Заменить везде..."
 
-#: mp_file.mpsl:395
+#: mp_file.mpsl:393
 msgid "Save..."
 msgstr "Сохранить..."
 
@@ -410,18 +410,18 @@ msgstr "Вставить блок"
 msgid "Play macro"
 msgstr "Воспроизвести макрос"
 
-#: mp_file.mpsl:399
+#: mp_file.mpsl:397
 msgid "Previous"
 msgstr "Предыдущий"
 
 msgid "Reopen..."
 msgstr "Открыть еще раз..."
 
-#: mp_file.mpsl:398
+#: mp_file.mpsl:396
 msgid "Next"
 msgstr "Следующий"
 
-#: mp_file.mpsl:400
+#: mp_file.mpsl:398
 msgid "Open..."
 msgstr "Открыть..."
 
@@ -433,7 +433,7 @@ msgstr "Следующее слово"
 msgid "Word right"
 msgstr "Предыдущее слово"
 
-#: mp_file.mpsl:394
+#: mp_file.mpsl:392
 msgid "New"
 msgstr "Создать"
 
@@ -457,7 +457,7 @@ msgstr "Перейти назад к такому же символу"
 msgid "Character right"
 msgstr "Следующий символ"
 
-#: mp_file.mpsl:412
+#: mp_file.mpsl:410
 msgid "Open file under cursor"
 msgstr "Открыть файл под курсором"
 
@@ -554,7 +554,7 @@ msgstr "Заменить начертание буквы, если A-Z или a-
 msgid "Flip word case"
 msgstr "Заменить начертание слова"
 
-#: mp_file.mpsl:410
+#: mp_file.mpsl:408
 msgid "Run system command..."
 msgstr "Выполнить системную команду..."
 
@@ -565,7 +565,7 @@ msgstr "Выполнить функцию редактора..."
 msgid "Document list"
 msgstr "Список документов"
 
-#: mp_file.mpsl:408
+#: mp_file.mpsl:406
 msgid "Edit configuration file"
 msgstr "Редактировать конфигурационный файл"
 
@@ -573,7 +573,7 @@ msgstr "Редактировать конфигурационный файл"
 msgid "Edit templates file"
 msgstr "Редактировать файл шаблонов"
 
-#: mp_file.mpsl:401
+#: mp_file.mpsl:399
 msgid "Exit"
 msgstr "Выход"
 
@@ -605,7 +605,7 @@ msgstr "Вырезать блок"
 msgid "About..."
 msgstr "О программе..."
 
-#: mp_file.mpsl:403
+#: mp_file.mpsl:401
 msgid "Close"
 msgstr "Закрыть"
 
@@ -661,7 +661,7 @@ msgstr "Сохранить файл как"
 msgid "Error saving file: %s"
 msgstr "Ошибка сохранения файла: %s"
 
-#: mp_file.mpsl:109 mp_file.mpsl:354
+#: mp_file.mpsl:109 mp_file.mpsl:352
 msgid "File to open"
 msgstr "Открыть файл"
 
@@ -781,19 +781,19 @@ msgstr "Опции табудяции"
 msgid "File has changed. Are you sure?"
 msgstr "Файл был изменен. Вы уверены?"
 
-#: mp_file.mpsl:193 mp_file.mpsl:261
+#: mp_file.mpsl:193 mp_file.mpsl:259
 msgid "System command"
 msgstr "Системные комманды"
 
 msgid "Error writing command '%s'"
 msgstr "Ошибка записи комманды '%s'"
 
-#: mp_file.mpsl:249
+#: mp_file.mpsl:247
 #, c-format
 msgid "Error reading from command '%s'"
 msgstr "Ошибка чтения комманды '%s'"
 
-#: mp_file.mpsl:404
+#: mp_file.mpsl:402
 msgid "Revert"
 msgstr "Возвратиться"
 
@@ -866,7 +866,7 @@ msgstr "Неизвестное действие '%s'"
 msgid "Unbound keystroke '%s'"
 msgstr "Неизвестное сочетание '%s'"
 
-#: mp_file.mpsl:715
+#: mp_file.mpsl:713
 #, c-format
 msgid "New file '%s'"
 msgstr "Новый файл '%s'"
@@ -894,7 +894,7 @@ msgstr "Выделить используя мышь"
 msgid "Mark end of lines"
 msgstr "Помечать конец строки"
 
-#: mp_file.mpsl:405
+#: mp_file.mpsl:403
 msgid "Close all"
 msgstr "Закрыть все"
 
@@ -918,7 +918,7 @@ msgstr "Собрать проект..."
 msgid "Mark vertical block"
 msgstr "Выделить вертикальный блок"
 
-#: mp_file.mpsl:458
+#: mp_file.mpsl:456
 msgid "Read-only document"
 msgstr "Документ только для чтения"
 
@@ -930,11 +930,11 @@ msgstr ""
 msgid "Keep original end of lines"
 msgstr ""
 
-#: mp_file.mpsl:413
+#: mp_file.mpsl:411
 msgid "Hexadecimal viewer..."
 msgstr ""
 
-#: mp_file.mpsl:414
+#: mp_file.mpsl:412
 msgid "Open dropped files"
 msgstr ""
 
@@ -1091,7 +1091,7 @@ msgstr ""
 msgid "Toggle insert/overwrite mode"
 msgstr ""
 
-#: mp_file.mpsl:411
+#: mp_file.mpsl:409
 msgid "Filter selection through system command..."
 msgstr ""
 
@@ -1304,12 +1304,12 @@ msgstr ""
 msgid "'%s' has changed. Are you sure?"
 msgstr ""
 
-#: mp_file.mpsl:432
+#: mp_file.mpsl:430
 #, c-format
 msgid "'%s' was changed externally. Reload?"
 msgstr ""
 
-#: mp_file.mpsl:472
+#: mp_file.mpsl:470
 #, c-format
 msgid "'%s' has changed. Save changes?"
 msgstr ""
@@ -1335,7 +1335,7 @@ msgstr ""
 msgid "Folder to open"
 msgstr ""
 
-#: mp_file.mpsl:406
+#: mp_file.mpsl:404
 msgid "Open folder..."
 msgstr ""
 
@@ -1470,7 +1470,7 @@ msgstr ""
 msgid "Mark vertical selection block"
 msgstr ""
 
-#: mp_file.mpsl:402
+#: mp_file.mpsl:400
 msgid "Suspend"
 msgstr ""
 
@@ -1540,7 +1540,7 @@ msgstr ""
 msgid "RTF file name"
 msgstr ""
 
-#: mp_file.mpsl:397
+#: mp_file.mpsl:395
 msgid "Export as RTF..."
 msgstr ""
 
