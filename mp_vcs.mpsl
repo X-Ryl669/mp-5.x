@@ -138,7 +138,8 @@ sub mp.vcs_form()
 
                 msg.vcs = {
                     commit_cmd: opt.commit_cmd,
-                    log_name:   sprintf(L("<%s output>"), vcs.id)
+                    log_name:   sprintf(L("<%s output>"), vcs.id),
+                    no_state:   1
                 };
 
                 mp.add(msg);

@@ -662,8 +662,11 @@ sub mp.close()
     /* store in the state of files */
     local l = mp.active();
 
-    if (!regex(l.name, '/^<'))
-        mp.state.files[l.name] = { x: l.txt.x, y: l.txt.y, vy: l.txt.vy, t: time() };
+    mp.state.files[l.name] = { x: l.txt.x, y: l.txt.y, vy: l.txt.vy, t: time() };
+
+    /* if the file is specially marked as no_state, delete it */
+    if (regex(l.name, '/^<') || l.no_state)
+        hdel(mp.state.files, l.name);
 
     /* delete from the list */
     adel(mp.docs, mp.active_i);
