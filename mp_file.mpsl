@@ -35,7 +35,7 @@ mp.actions['new']   = sub {
         d = mp.active();
     }
     else
-        d = mp.add(new(mp_doc));
+        d = mp.add(new(mp_doc, { is_new: 1 }));
 
     return d;
 };
@@ -572,7 +572,8 @@ sub mp_doc.save(doc)
         }
 
         s = stat(doc.name);
-        doc.mtime = s[9];
+        doc.mtime  = s[9];
+        doc.is_new = 0;
     }
     
     return ret;
@@ -695,7 +696,7 @@ sub mp.close()
     mp.state.files[l.name] = { x: l.txt.x, y: l.txt.y, vy: l.txt.vy, t: time() };
 
     /* if the file is specially marked as no_state, delete it */
-    if (regex(l.name, '/^<') || l.no_state)
+    if (regex(l.name, '/^<') || l.no_state || l.is_new)
         hdel(mp.state.files, l.name);
 
     /* delete from the list */
@@ -746,7 +747,7 @@ sub mp.open(filename, password)
 
         ERRNO = NULL;
 
-        d = mp.add(new(mp_doc, { name: filename }));
+        d = mp.add(new(mp_doc, { name: filename, is_new: 1 }));
     }
     else
     if (s[13] != NULL) {
