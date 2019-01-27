@@ -34,7 +34,7 @@ msgstr "Funzione morta"
 msgid "Line to go to"
 msgstr "Numero riga"
 
-#: mp_core.mpsl:378 mp_file.mpsl:31 mp_file.mpsl:524 mp_session.mpsl:64
+#: mp_core.mpsl:377 mp_file.mpsl:31 mp_file.mpsl:554 mp_session.mpsl:64
 #: mp_session.mpsl:72
 msgid "<unnamed>"
 msgstr "<Senza nome>"
@@ -51,7 +51,7 @@ msgstr "Impossibile scrivere '%s'."
 msgid "File has changed. Save changes?"
 msgstr "Il file e' cambiato. Salvare i cambiamenti?"
 
-#: mp_file.mpsl:193 mp_file.mpsl:259
+#: mp_file.mpsl:222 mp_file.mpsl:288
 msgid "System command"
 msgstr "Esegui"
 
@@ -188,19 +188,19 @@ msgstr ""
 msgid "&File"
 msgstr "&Archivio"
 
-#: mp_core.mpsl:200
+#: mp_core.mpsl:199
 msgid "&Edit"
 msgstr "&Edita"
 
-#: mp_core.mpsl:211
+#: mp_core.mpsl:210
 msgid "&Search"
 msgstr "&Cerca"
 
-#: mp_core.mpsl:219
+#: mp_core.mpsl:218
 msgid "&Go to"
 msgstr "&Vai A"
 
-#: mp_core.mpsl:246
+#: mp_core.mpsl:245
 msgid "&Options"
 msgstr "&Opzioni"
 
@@ -315,34 +315,34 @@ msgstr "Sostituisci..."
 msgid "Replace in all..."
 msgstr "Sostituisci tutti..."
 
-#: mp_file.mpsl:396
+#: mp_file.mpsl:425
 msgid "Next"
 msgstr "Prossimo"
 
-#: mp_file.mpsl:392
+#: mp_file.mpsl:421
 msgid "New"
 msgstr "Nuovo"
 
-#: mp_file.mpsl:398
+#: mp_file.mpsl:427
 msgid "Open..."
 msgstr "Apri..."
 
 msgid "Reopen..."
 msgstr "Riapri..."
 
-#: mp_file.mpsl:393
+#: mp_file.mpsl:422
 msgid "Save..."
 msgstr "Salva..."
 
-#: mp_file.mpsl:394
+#: mp_file.mpsl:423
 msgid "Save as..."
 msgstr "Salva come..."
 
-#: mp_file.mpsl:401
+#: mp_file.mpsl:430
 msgid "Close"
 msgstr "Chiudere"
 
-#: mp_file.mpsl:410
+#: mp_file.mpsl:439
 msgid "Open file under cursor"
 msgstr "Apri il file sotto il cursore"
 
@@ -378,7 +378,7 @@ msgstr ""
 msgid "Help for word under cursor"
 msgstr "Aiuto x la parola sotto il cursore"
 
-#: mp_file.mpsl:408
+#: mp_file.mpsl:437
 msgid "Run system command..."
 msgstr "Esegui comando di sistema..."
 
@@ -401,7 +401,7 @@ msgstr "Completa tag..."
 msgid "Edit templates file"
 msgstr "Modifica file dei moduli"
 
-#: mp_file.mpsl:406
+#: mp_file.mpsl:435
 msgid "Edit configuration file"
 msgstr "Modifica il file di configurazione"
 
@@ -419,7 +419,7 @@ msgstr "Menu"
 msgid "About..."
 msgstr "Circa..."
 
-#: mp_file.mpsl:399
+#: mp_file.mpsl:428
 msgid "Exit"
 msgstr "Esci"
 
@@ -440,7 +440,7 @@ msgstr "Posiziona il cursore col mouse"
 msgid "Execute editor function..."
 msgstr "Esegui funzione dell'editor..."
 
-#: mp_file.mpsl:407
+#: mp_file.mpsl:436
 msgid "Save modified texts"
 msgstr "Salva il testo modificato"
 
@@ -529,7 +529,7 @@ msgstr "Seleziona l'ultima ricerca effettuata"
 msgid "Jump to matching bracket"
 msgstr "Salta alla parentesi corrispondente"
 
-#: mp_file.mpsl:397
+#: mp_file.mpsl:426
 msgid "Previous"
 msgstr "Precedente"
 
@@ -645,7 +645,7 @@ msgstr ""
 msgid "Error saving file: %s"
 msgstr ""
 
-#: mp_file.mpsl:109 mp_file.mpsl:352
+#: mp_file.mpsl:109 mp_file.mpsl:381
 msgid "File to open"
 msgstr ""
 
@@ -768,12 +768,12 @@ msgstr ""
 msgid "Error writing command '%s'"
 msgstr ""
 
-#: mp_file.mpsl:247
+#: mp_file.mpsl:276
 #, c-format
 msgid "Error reading from command '%s'"
 msgstr ""
 
-#: mp_file.mpsl:402
+#: mp_file.mpsl:431
 msgid "Revert"
 msgstr ""
 
@@ -831,7 +831,7 @@ msgid ""
 "Mailing list: mp-subscribe@lists.triptico.com\n"
 msgstr ""
 
-#: mp_file.mpsl:222
+#: mp_file.mpsl:251
 #, c-format
 msgid "Error writing to command '%s'"
 msgstr ""
@@ -862,7 +862,7 @@ msgstr ""
 msgid "Save session"
 msgstr ""
 
-#: mp_core.mpsl:442
+#: mp_core.mpsl:441
 #, c-format
 msgid "Unknown action '%s'"
 msgstr ""
@@ -872,7 +872,7 @@ msgstr ""
 msgid "Unbound keystroke '%s'"
 msgstr ""
 
-#: mp_file.mpsl:713
+#: mp_file.mpsl:744
 #, c-format
 msgid "New file '%s'"
 msgstr ""
@@ -882,12 +882,12 @@ msgstr ""
 msgid "%d replaces"
 msgstr ""
 
-#: mp_core.mpsl:654
+#: mp_core.mpsl:653
 #, c-format
 msgid "Cannot open '%s'"
 msgstr ""
 
-#: mp_core.mpsl:746
+#: mp_core.mpsl:745
 #, c-format
 msgid "WARNING: %s version found is %s, but %s is needed"
 msgstr ""
@@ -900,7 +900,7 @@ msgstr ""
 msgid "Mark end of lines"
 msgstr ""
 
-#: mp_file.mpsl:403
+#: mp_file.mpsl:432
 msgid "Close all"
 msgstr ""
 
@@ -920,7 +920,7 @@ msgstr ""
 msgid "Build project..."
 msgstr ""
 
-#: mp_file.mpsl:456
+#: mp_file.mpsl:486
 msgid "Read-only document"
 msgstr ""
 
@@ -990,11 +990,11 @@ msgstr ""
 msgid "Keep original end of lines"
 msgstr ""
 
-#: mp_file.mpsl:411
+#: mp_file.mpsl:440
 msgid "Hexadecimal viewer..."
 msgstr ""
 
-#: mp_file.mpsl:412
+#: mp_file.mpsl:441
 msgid "Open dropped files"
 msgstr ""
 
@@ -1077,7 +1077,7 @@ msgstr ""
 msgid "Toggle insert/overwrite mode"
 msgstr ""
 
-#: mp_file.mpsl:409
+#: mp_file.mpsl:438
 msgid "Filter selection through system command..."
 msgstr ""
 
@@ -1206,16 +1206,16 @@ msgstr ""
 msgid "You won!"
 msgstr ""
 
-#: mp_vcs.mpsl:107
+#: mp_vcs.mpsl:111
 msgid "This directory is not under a supported version control system"
 msgstr ""
 
-#: mp_vcs.mpsl:115
+#: mp_vcs.mpsl:121
 #, c-format
 msgid "Available %s commands"
 msgstr ""
 
-#: mp_vcs.mpsl:135 mp_vcs.mpsl:145 mp_vcs.mpsl:151
+#: mp_vcs.mpsl:144 mp_vcs.mpsl:154 mp_vcs.mpsl:160
 #, c-format
 msgid "<%s output>"
 msgstr ""
@@ -1252,11 +1252,11 @@ msgstr ""
 msgid "Check for updates..."
 msgstr ""
 
-#: mp_core.mpsl:228
+#: mp_core.mpsl:227
 msgid "&Project"
 msgstr ""
 
-#: mp_core.mpsl:236
+#: mp_core.mpsl:235
 msgid "&Writing"
 msgstr ""
 
@@ -1285,17 +1285,17 @@ msgstr ""
 msgid "Error saving '%s': %s"
 msgstr ""
 
-#: mp_file.mpsl:152
+#: mp_file.mpsl:181
 #, c-format
 msgid "'%s' has changed. Are you sure?"
 msgstr ""
 
-#: mp_file.mpsl:430
+#: mp_file.mpsl:460
 #, c-format
 msgid "'%s' was changed externally. Reload?"
 msgstr ""
 
-#: mp_file.mpsl:470
+#: mp_file.mpsl:500
 #, c-format
 msgid "'%s' has changed. Save changes?"
 msgstr ""
@@ -1317,11 +1317,11 @@ msgstr ""
 msgid "You have a development version newer than any stable release."
 msgstr ""
 
-#: mp_file.mpsl:142
+#: mp_file.mpsl:171
 msgid "Folder to open"
 msgstr ""
 
-#: mp_file.mpsl:404
+#: mp_file.mpsl:433
 msgid "Open folder..."
 msgstr ""
 
@@ -1456,7 +1456,7 @@ msgstr ""
 msgid "Mark vertical selection block"
 msgstr ""
 
-#: mp_file.mpsl:400
+#: mp_file.mpsl:429
 msgid "Suspend"
 msgstr ""
 
@@ -1496,7 +1496,7 @@ msgstr ""
 msgid "Move to the matching bracket"
 msgstr ""
 
-#: mp_core.mpsl:598
+#: mp_core.mpsl:597
 #, c-format
 msgid ""
 "Minimum Profit %s - Programmer Text Editor\n"
@@ -1526,7 +1526,7 @@ msgstr ""
 msgid "RTF file name"
 msgstr ""
 
-#: mp_file.mpsl:395
+#: mp_file.mpsl:424
 msgid "Export as RTF..."
 msgstr ""
 
@@ -1618,6 +1618,14 @@ msgstr ""
 msgid "Maze - help %s to find the treasure. As always, the X marks the spot."
 msgstr ""
 
-#: mp_core.mpsl:582
+#: mp_core.mpsl:581
 msgid "..."
+msgstr ""
+
+#: mp_file.mpsl:155
+msgid "Recent files"
+msgstr ""
+
+#: mp_file.mpsl:442
+msgid "Open recent files..."
 msgstr ""

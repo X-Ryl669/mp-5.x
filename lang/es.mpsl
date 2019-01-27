@@ -235,5 +235,7 @@ __I18N__ = {
 	"Replace tabs with spaces" => "Reemplazar tabuladores por espacios",
 	"Replace spaces with tabs" => "Reemplazar espacios por tabuladores",
 	"Maze - help %s to find the treasure. As always, the X marks the spot." => "Laberinto - Ayuda a %s a encontrar el tesoro. La X marca el punto.",
+	"Recent files" => "Archivos recientes",
+	"Open recent files..." => "Abrir archivos recientes...",
 	"-" => "-"
 };

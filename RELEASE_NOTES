@@ -12,6 +12,8 @@ Minimum Profit Release Notes
    - New action `insert_m_dash', bound by default to `alt-minus'.
    - New action `replace_tabs_with_spaces'.
    - New action `replace_spaces_with_tabs'.
+   - New action `open_recent', to pick the file to open from
+     the previosly opened ones.
  - Other changes:
    - Versioning have changed from x.x.x to x.yyy.
    - The coloring theme for GUI drivers has changed to something

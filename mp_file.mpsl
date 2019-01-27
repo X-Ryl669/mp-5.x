@@ -136,6 +136,35 @@ mp.actions['open'] = sub (d, filename) {
     return filename;
 };
 
+
+mp.actions['open_recent'] = sub (d) {
+    /* create the list of filenames... */
+    local filenames = mp.state.files->keys()->
+        /* delete all those not having a timestamp... */
+        grep(sub (i, v) { exists(mp.state.files[v], 't'); })->
+
+        /* sort by timestamp... */
+        sort(sub (a, b) { cmp(mp.state.files[b].t, mp.state.files[a].t); })->
+
+        /* and add a timestamp for humans */
+        map(sub (v) { v ~ sprintf(" -- (%t{%Y-%m-%d %H:%M:%S})", mp.state.files[v].t); });
+
+    local form = mp.form(
+        [
+            {
+                label:  L("Recent files") ~ ':',
+                type:   'list',
+                list:   filenames
+            }
+        ]
+    );
+
+    if (form != NULL) {
+        mp.actions.open(d, filenames[form[0]]->split(" ")->shift());
+    }
+};
+
+
 mp.actions['open_folder'] = sub {
     local f;
 
@@ -410,6 +439,7 @@ mp.actdesc['filter_selection']   = LL("Filter selection through system command..
 mp.actdesc['open_under_cursor']  = LL("Open file under cursor");
 mp.actdesc['hex_view']           = LL("Hexadecimal viewer...");
 mp.actdesc['open_dropped_files'] = LL("Open dropped files");
+mp.actdesc['open_recent']        = LL("Open recent files...");
 
 /** code **/
 
