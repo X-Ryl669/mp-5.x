@@ -27,7 +27,7 @@
 
 /** mp_doc commit subclass **/
 
-global mp_doc_vcs = new(mp_doc, { name: '.COMMIT_MESSAGE' });
+global mp_doc_vcs = new(mp_doc, { name: '.COMMIT_MESSAGE', no_state: 1 });
 
 
 /** data **/
@@ -135,9 +135,6 @@ sub mp.vcs_form()
             if (opt.commit_cmd) {
                 /* create a commit message editor document */
                 local msg = new(mp_doc_vcs);
-
-                /* don't store these files in the mp.state */
-                msg.no_state = 1;
 
                 msg.vcs = {
                     commit_cmd: opt.commit_cmd,
