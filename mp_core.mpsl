@@ -564,7 +564,7 @@ sub mp.menu_label(action)
 
         /* search this action in mp_doc and global keycodes */
         local ks = (mp_doc.keycodes ~ mp.keycodes)->
-            grep(sub(k, v) { v eq action; })->keys();
+            grep(sub(v) { v eq action; })->keys();
 
         if (size(ks))
             l = l ~ ' [' ~ join(ks, ', ') ~ ']';
