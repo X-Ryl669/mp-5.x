@@ -302,7 +302,7 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
     QWidget *form = new QWidget();
     QFormLayout *fl = new QFormLayout();
 
-    for (n = 0; n < mpdm_size(widget_list); n++) {
+    for (n = 0; n < (int) mpdm_size(widget_list); n++) {
         mpdm_t w = mpdm_aget(widget_list, n);
         wchar_t *type;
         mpdm_t t;
@@ -334,7 +334,7 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
                 /* has history; fill it */
                 h = mp_get_history(h);
 
-                for (i = 0; i < mpdm_size(h); i++)
+                for (i = 0; i < (int) mpdm_size(h); i++)
                     qc->addItem(v_to_qstring(mpdm_aget(h, i)));
 
                 qc->setCurrentIndex(mpdm_size(h) - 1);
@@ -374,7 +374,7 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
 
             mpdm_t l = mpdm_hget_s(w, L"list");
 
-            for (i = 0; i < mpdm_size(l); i++)
+            for (i = 0; i < (int) mpdm_size(l); i++)
                 qlw->addItem(v_to_qstring(mpdm_aget(l, i)));
 
             qlw->setCurrentRow(mpdm_ival(t));
@@ -407,7 +407,7 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
         r = MPDM_A(mpdm_size(widget_list));
 
         /* fill the return values */
-        for (n = 0; n < mpdm_size(widget_list); n++) {
+        for (n = 0; n < (int) mpdm_size(widget_list); n++) {
             mpdm_t w = mpdm_aget(widget_list, n);
             mpdm_t v = NULL;
             wchar_t *type;

@@ -214,7 +214,7 @@ static void qk_build_menu(MENUBAR_CLASS *menubar)
 
     menubar->clear();
 
-    for (n = 0; n < mpdm_size(m); n++) {
+    for (n = 0; n < (int) mpdm_size(m); n++) {
         mpdm_t mi;
         mpdm_t v;
         int i;
@@ -228,7 +228,7 @@ static void qk_build_menu(MENUBAR_CLASS *menubar)
         /* get the items */
         v = mpdm_aget(mi, 1);
 
-        for (i = 0; i < mpdm_size(v); i++) {
+        for (i = 0; i < (int) mpdm_size(v); i++) {
             wchar_t *wptr;
             mpdm_t w = mpdm_aget(v, i);
 
@@ -350,7 +350,7 @@ void MPArea::draw_filetabs(void)
             file_tabs->removeTab(0);
 
         /* create the new ones */
-        for (n = 0; n < mpdm_size(names); n++)
+        for (n = 0; n < (int) mpdm_size(names); n++)
             file_tabs->addTab(v_to_qstring(mpdm_aget(names, n)));
 
         /* store for the next time */
@@ -409,12 +409,12 @@ void MPArea::paintEvent(QPaintEvent *)
 
     mpdm_ref(w);
 
-    for (n = 0; n < mpdm_size(w); n++) {
+    for (n = 0; n < (int) mpdm_size(w); n++) {
         mpdm_t l = mpdm_aget(w, n);
         int x = 0;
 
         if (l != NULL) {
-            for (m = 0; m < mpdm_size(l); m++) {
+            for (m = 0; m < (int) mpdm_size(l); m++) {
                 int attr;
                 mpdm_t s;
 
@@ -1003,7 +1003,7 @@ void MPArea::dropEvent(QDropEvent *event)
     /* split the list of files */
     v = mpdm_split_s(v, L"\n");
 
-    for (n = 0; n < mpdm_size(v); n++) {
+    for (n = 0; n < (int) mpdm_size(v); n++) {
         wchar_t *ptr;
         mpdm_t w = mpdm_aget(v, n);
 
