@@ -54,6 +54,8 @@ sub mp.c_gather_help(word)
 
                     /* add up to the end of the struct */
                     while ((l = read(f)) != NULL) {
+                        l = mp.chomp(l);
+
                         n++;
                         push(h, l);
 
@@ -65,6 +67,7 @@ sub mp.c_gather_help(word)
                 if (regex(l, "/^\/\*\*$/")) {
                     /* mp_doccer help: is it for this word? */
                     l = read(f);
+                    l = mp.chomp(l);
                     n++;
 
                     if (regex(l, "/ \* " ~ word ~ " - /")) {
@@ -73,6 +76,8 @@ sub mp.c_gather_help(word)
 
                         while ((l = read(f)) != NULL) {
                             n++;
+                            l = mp.chomp(l);
+
                             if (regex(l, "/^\{/"))
                                 break;
 
