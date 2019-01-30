@@ -354,7 +354,7 @@ void MPArea::draw_filetabs(void)
             file_tabs->addTab(v_to_qstring(mpdm_aget(names, n)));
 
         /* store for the next time */
-        mpdm_set(&prev, names);
+        mpdm_store(&prev, names);
     }
 
     mpdm_unref(names);

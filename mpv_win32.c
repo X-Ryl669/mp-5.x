@@ -314,7 +314,7 @@ static void draw_filetabs(void)
         }
 
         /* store for the next time */
-        mpdm_set(&prev, names);
+        mpdm_store(&prev, names);
     }
 
     mpdm_unref(names);

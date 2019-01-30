@@ -257,7 +257,7 @@ static int drw_prepare(mpdm_t doc)
 
     drw_1.word_color_func = mpdm_hget_s(MP, L"word_color_func");
 
-    mpdm_set(&drw_1.txt, txt);
+    mpdm_store(&drw_1.txt, txt);
 
     drw_2.x = x;
     drw_2.y = y;
@@ -324,7 +324,7 @@ static int drw_prepare(mpdm_t doc)
     drw_2.size--;
 
     /* now create a value */
-    mpdm_set(&drw_2.v, MPDM_ENS(drw_2.ptr, drw_2.size));
+    mpdm_store(&drw_2.v, MPDM_ENS(drw_2.ptr, drw_2.size));
 
     /* alloc and init space for the attributes */
     drw_2.attrs = realloc(drw_2.attrs, drw_2.size + 1);
@@ -909,7 +909,7 @@ static mpdm_t drw_optimize_array(mpdm_t a, int optimize)
         mpdm_unrefnd(r);
     }
 
-    mpdm_set(&drw_2.old, a);
+    mpdm_store(&drw_2.old, a);
 
     mpdm_unref(a);
 
@@ -996,7 +996,7 @@ mpdm_t mp_draw(mpdm_t doc, int optimize)
 
     if (doc != d) {
         optimize = 0;
-        mpdm_set(&d, doc);
+        mpdm_store(&d, doc);
     }
 
     if ((f = mpdm_hget_s(doc, L"render")) != NULL) {

@@ -715,7 +715,7 @@ static mpdm_t ncursesw_drv_timer(mpdm_t a, mpdm_t ctxt)
 
     timer_msecs = mpdm_ival(mpdm_aget(a, 0));
 
-    mpdm_set(&timer_func, func);
+    mpdm_store(&timer_func, func);
 
     return NULL;
 }
