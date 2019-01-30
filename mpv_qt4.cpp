@@ -368,9 +368,6 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
             QListWidget *qlw = new QListWidget();
             qlw->setMinimumWidth(480);
 
-            /* use a monospaced font */
-            qlw->setFont(QFont(QString("Mono")));
-
             mpdm_t l = mpdm_hget_s(w, L"list");
 
             for (i = 0; i < mpdm_size(l); i++)
