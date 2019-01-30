@@ -117,7 +117,7 @@ mp_doc.actions['exec_action'] = sub {
 };
 
 mp.actions['encoding']  = sub {
-    local l = EMBEDDED_ENCODINGS->hmap(sub (k, v) { [v, k]; })->keys()->sort();
+    local l = EMBEDDED_ENCODINGS->hmap(sub (v, i) { [v, i]; })->keys()->sort();
     ins(l, L("<current locale>"), 0);
 
     local t = mp.form(
