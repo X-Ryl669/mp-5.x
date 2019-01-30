@@ -11,13 +11,17 @@
 sub mp.c_gather_help(word)
 {
     local h = [];
+    local filenames = [
+        '/\.c$/i', '/\.h$/i', '/\.l$/i', '/\.y$/i', '/\.d$/i', '/\.hh$/i',
+        '/\.cpp$/i', '/\.hpp$/i', '/\.c++$/i', '/\.cxx$/i', '/\.xpm$/i'
+    ];
 
     foreach (fn, glob()) {
         local f;
         local ok = 0;
 
         /* test if this file is relevant to C */
-        foreach (ext, mp.syntax.c.filenames) {
+        foreach (ext, filenames) {
             if (regex(fn, ext)) {
                 ok = 1;
                 break;
