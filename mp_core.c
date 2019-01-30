@@ -76,7 +76,7 @@ static struct {
     int visible;                /* offset to the first visible character */
     int cursor;                 /* offset to cursor */
     wchar_t *ptr;               /* pointer to joined data */
-    int size;                   /* size of joined data */
+    size_t size;                /* size of joined data */
     int matchparen_offset;      /* offset to matched paren */
     int matchparen_o_attr;      /* original attribute there */
     int cursor_o_attr;          /* original attribute under cursor */
@@ -276,7 +276,7 @@ static int drw_prepare(mpdm_t doc)
 
     if (n) {
         char tmp[32];
-        sprintf(tmp, " %d ", mpdm_size(lines));
+        sprintf(tmp, " %d ", (int) mpdm_size(lines));
         drw_1.xoffset = strlen(tmp);
     }
     else
