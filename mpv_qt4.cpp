@@ -366,7 +366,11 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
         if (wcscmp(type, L"list") == 0) {
             int i;
             QListWidget *qlw = new QListWidget();
-            qlw->setMinimumWidth(480);
+            qlw->setMinimumWidth(500);
+
+            /* if it's the only widget, make it tall */
+            if (mpdm_size(widget_list) == 1)
+                qlw->setMinimumHeight(400);
 
             mpdm_t l = mpdm_hget_s(w, L"list");
 
