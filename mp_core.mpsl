@@ -761,7 +761,7 @@ sub mp.load_state()
     local j = open(HOMEDIR ~ ".mp_state.json", "r")->map()->join();
 
     if (j)
-        j = (j = j->sscanf("%j")->pop())->is_hash() && j || NULL;
+        j = (j = j->sscanf("%j")->shift())->is_hash() && j || NULL;
 
     mp.state = j || {};
 }
