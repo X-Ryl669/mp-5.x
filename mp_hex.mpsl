@@ -39,11 +39,13 @@ global mp_hex_view = new(mp_base, {
         fd:             NULL,
 
         get_status: sub (hex) {
-            sprintf("HEX %s - 0x%06x (%d)", name, offset, offset);
+            sprintf("%s - 0x%06x (%d)", name, offset, offset);
         },
         init:       sub (hex) {
             if ((fd = open(name, "rb")) == NULL)
                 hex = NULL;
+
+            name = sprintf(L("<hex view of %s>"), name);
 
             return hex;
         },

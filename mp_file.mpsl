@@ -385,7 +385,7 @@ mp.actions['hex_view']  = sub (doc, filename) {
         if (mp_hex_view == NULL)
             load("mp_hex.mpsl");
 
-        d = new(mp_hex_view, { name: filename})->init();
+        d = new(mp_hex_view, { name: filename })->init();
 
         if (d == NULL)
             mp.alert(sprintf("Error opening '%s': %s",
