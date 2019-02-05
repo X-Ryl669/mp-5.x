@@ -1156,7 +1156,7 @@ static mpdm_t win32_drv_clip_to_sys(mpdm_t a, mpdm_t ctxt)
     mpdm_t d, v;
     char *ptr;
     char *clpptr;
-    int s;
+    size_t s;
 
     /* convert the clipboard to DOS text */
     d = mpdm_hget_s(MP, L"clipboard");
