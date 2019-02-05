@@ -194,6 +194,15 @@ mp.actions['pipes'] = sub {
 };
 
 
+mp.actions['maze'] = sub {
+    /* load toys on demand */
+    if (mp_maze == NULL)
+        load("mp_toys.mpsl");
+
+    mp.add(new(mp_maze));
+};
+
+
 mp.actions['vcs'] = sub {
     /* load vcs code on demand */
     if (mp_doc_vcs == NULL)
@@ -301,6 +310,7 @@ mp.actdesc['zoom_out']          = LL("Smaller font");
 mp.actdesc['about']             = LL("About...");
 mp.actdesc['check_for_updates'] = LL("Check for updates...");
 mp.actdesc['pipes']             = LL("Play \"Pipes\"");
+mp.actdesc['maze']              = LL("Play \"Maze\"");
 mp.actdesc['vcs']               = LL("Version Control...");
 
 

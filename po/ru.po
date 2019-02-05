@@ -233,20 +233,20 @@ msgstr ""
 "  -nt, --no-transparent   Отключить прозрачный режим (eterm, aterm, и.т.п.)\n"
 "                         "
 
-#: mpv_gtk.c:1918 mp_tui.mpsl:354
+#: mpv_gtk.c:1919 mp_tui.mpsl:354
 msgid "Yes"
 msgstr "Да"
 
-#: mpv_gtk.c:1919 mp_tui.mpsl:355
+#: mpv_gtk.c:1920 mp_tui.mpsl:355
 msgid "No"
 msgstr "Нет"
 
-#: mpv_gtk.c:1950 mpv_gtk.c:2188 mpv_gtk.c:2196 mpv_gtk.c:2207
+#: mpv_gtk.c:1951 mpv_gtk.c:2189 mpv_gtk.c:2197 mpv_gtk.c:2208
 msgid "OK"
 msgstr "ОК"
 
-#: mpv_gtk.c:1920 mpv_gtk.c:1949 mpv_gtk.c:2186 mpv_gtk.c:2195 mpv_gtk.c:2196
-#: mpv_gtk.c:2205
+#: mpv_gtk.c:1921 mpv_gtk.c:1950 mpv_gtk.c:2187 mpv_gtk.c:2196 mpv_gtk.c:2197
+#: mpv_gtk.c:2206
 msgid "Cancel"
 msgstr "Отмена"
 
@@ -601,7 +601,7 @@ msgstr "Копировать блок"
 msgid "Cut block"
 msgstr "Вырезать блок"
 
-#: mp_misc.mpsl:301
+#: mp_misc.mpsl:310
 msgid "About..."
 msgstr "О программе..."
 
@@ -677,19 +677,19 @@ msgstr "Ошибка: "
 msgid "Exit value:\n"
 msgstr "Код выхода:\n"
 
-#: mp_misc.mpsl:293
+#: mp_misc.mpsl:302
 msgid "Execute MPSL code..."
 msgstr "Выполнить MPSL код"
 
-#: mp_misc.mpsl:294
+#: mp_misc.mpsl:303
 msgid "Execute document as MPSL"
 msgstr "Выполнить как MPSL"
 
-#: mp_misc.mpsl:299
+#: mp_misc.mpsl:308
 msgid "Bigger font"
 msgstr "Увеличить шрифт"
 
-#: mp_misc.mpsl:300
+#: mp_misc.mpsl:309
 msgid "Smaller font"
 msgstr "Уменьшить шрифт"
 
@@ -809,7 +809,7 @@ msgstr "Не правильная кодировка "
 msgid "Lines: %d Words: %d"
 msgstr "Строк: %d Слов: %d"
 
-#: mp_misc.mpsl:298
+#: mp_misc.mpsl:307
 msgid "Set charset encoding..."
 msgstr "Установить кодировку"
 
@@ -866,7 +866,7 @@ msgstr "Неизвестное действие '%s'"
 msgid "Unbound keystroke '%s'"
 msgstr "Неизвестное сочетание '%s'"
 
-#: mp_file.mpsl:744
+#: mp_file.mpsl:745
 #, c-format
 msgid "New file '%s'"
 msgstr "Новый файл '%s'"
@@ -1083,7 +1083,7 @@ msgid ""
 "Mailing list: mp-subscribe@lists.triptico.com\n"
 msgstr ""
 
-#: mp_misc.mpsl:296
+#: mp_misc.mpsl:305
 msgid "Insert next item"
 msgstr ""
 
@@ -1103,7 +1103,7 @@ msgstr ""
 msgid "Select action to execute"
 msgstr ""
 
-#: mp_misc.mpsl:295
+#: mp_misc.mpsl:304
 msgid "Execute action on document..."
 msgstr ""
 
@@ -1229,16 +1229,16 @@ msgstr ""
 msgid "Available %s commands"
 msgstr ""
 
-#: mp_vcs.mpsl:144 mp_vcs.mpsl:154 mp_vcs.mpsl:160
+#: mp_vcs.mpsl:141 mp_vcs.mpsl:151 mp_vcs.mpsl:157
 #, c-format
 msgid "<%s output>"
 msgstr ""
 
-#: mp_misc.mpsl:304
+#: mp_misc.mpsl:314
 msgid "Version Control..."
 msgstr ""
 
-#: mp_misc.mpsl:303
+#: mp_misc.mpsl:312
 msgid "Play \"Pipes\""
 msgstr ""
 
@@ -1246,23 +1246,23 @@ msgstr ""
 msgid "You won! Press any key."
 msgstr ""
 
-#: mp_misc.mpsl:263
+#: mp_misc.mpsl:272
 msgid "You already have the latest version."
 msgstr ""
 
-#: mp_misc.mpsl:267
+#: mp_misc.mpsl:276
 msgid "There are new versions available:"
 msgstr ""
 
-#: mp_misc.mpsl:268
+#: mp_misc.mpsl:277
 msgid "Update Minimum Profit from http://triptico.com/software/mp.html"
 msgstr ""
 
-#: mp_misc.mpsl:272
+#: mp_misc.mpsl:281
 msgid "Cannot connect -- please try later."
 msgstr ""
 
-#: mp_misc.mpsl:302
+#: mp_misc.mpsl:311
 msgid "Check for updates..."
 msgstr ""
 
@@ -1327,7 +1327,7 @@ msgstr ""
 msgid "Available encodings"
 msgstr ""
 
-#: mp_misc.mpsl:261
+#: mp_misc.mpsl:270
 msgid "You have a development version newer than any stable release."
 msgstr ""
 
@@ -1389,7 +1389,7 @@ msgstr ""
 msgid "# deleted '%s'"
 msgstr ""
 
-#: mp_misc.mpsl:297
+#: mp_misc.mpsl:306
 msgid "Insert time stamp"
 msgstr ""
 
@@ -1430,11 +1430,11 @@ msgstr ""
 msgid "Show line numbers"
 msgstr ""
 
-#: mp_hex.mpsl:167
+#: mp_hex.mpsl:169
 msgid "Not found."
 msgstr ""
 
-#: mp_hex.mpsl:174
+#: mp_hex.mpsl:176
 msgid "Hex string to seek"
 msgstr ""
 
@@ -1642,4 +1642,13 @@ msgstr ""
 
 #: mp_file.mpsl:442
 msgid "Open recent files..."
+msgstr ""
+
+#: mp_hex.mpsl:48
+#, c-format
+msgid "<hex view of %s>"
+msgstr ""
+
+#: mp_misc.mpsl:313
+msgid "Play \"Maze\""
 msgstr ""

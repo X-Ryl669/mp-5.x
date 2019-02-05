@@ -237,5 +237,6 @@ __I18N__ = {
 	"Maze - help %s to find the treasure. As always, the X marks the spot." => "Laberinto - Ayuda a %s a encontrar el tesoro. La X marca el punto.",
 	"Recent files" => "Archivos recientes",
 	"Open recent files..." => "Abrir archivos recientes...",
+	"Play \"Maze\"" => "Jugar a \"Laberinto\"",
 	"-" => "-"
 };

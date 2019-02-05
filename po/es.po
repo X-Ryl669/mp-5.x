@@ -64,11 +64,11 @@ msgstr "Word wrap en columna (0, ninguno)"
 msgid " [ENTER]"
 msgstr " [ENTER]"
 
-#: mpv_gtk.c:1918 mp_tui.mpsl:354
+#: mpv_gtk.c:1919 mp_tui.mpsl:354
 msgid "Yes"
 msgstr "Sí"
 
-#: mpv_gtk.c:1919 mp_tui.mpsl:355
+#: mpv_gtk.c:1920 mp_tui.mpsl:355
 msgid "No"
 msgstr "No"
 
@@ -252,7 +252,7 @@ msgstr "Editar fichero de configuración"
 msgid "Menu"
 msgstr "Menú"
 
-#: mp_misc.mpsl:301
+#: mp_misc.mpsl:310
 msgid "About..."
 msgstr "Acerca de..."
 
@@ -344,19 +344,19 @@ msgstr "Error: "
 msgid "Exit value:\n"
 msgstr "Valor de salida:\n"
 
-#: mp_misc.mpsl:293
+#: mp_misc.mpsl:302
 msgid "Execute MPSL code..."
 msgstr "Executar código MPSL..."
 
-#: mp_misc.mpsl:294
+#: mp_misc.mpsl:303
 msgid "Execute document as MPSL"
 msgstr "Ejecutar documento como MPSL"
 
-#: mp_misc.mpsl:299
+#: mp_misc.mpsl:308
 msgid "Bigger font"
 msgstr "Tipo de letra más grande"
 
-#: mp_misc.mpsl:300
+#: mp_misc.mpsl:309
 msgid "Smaller font"
 msgstr "Tipo de letra más pequeño"
 
@@ -460,7 +460,7 @@ msgstr "Codificación no válida "
 msgid "Lines: %d Words: %d"
 msgstr "Lineas: %d Palabras: %d"
 
-#: mp_misc.mpsl:298
+#: mp_misc.mpsl:307
 msgid "Set charset encoding..."
 msgstr "Codificación..."
 
@@ -511,7 +511,7 @@ msgstr "Acción '%s' desconocida"
 msgid "Unbound keystroke '%s'"
 msgstr "Tecla '%s' sin asociar"
 
-#: mp_file.mpsl:744
+#: mp_file.mpsl:745
 #, c-format
 msgid "New file '%s'"
 msgstr "Nuevo archivo '%s'"
@@ -629,7 +629,7 @@ msgstr "Abrir ficheros arrastrados"
 msgid "Use previous line for tab columns"
 msgstr "Usar la línea anterior para las columnas de tabulación"
 
-#: mp_misc.mpsl:296
+#: mp_misc.mpsl:305
 msgid "Insert next item"
 msgstr "Insertar nuevo elemento"
 
@@ -649,7 +649,7 @@ msgstr "Marcar todo"
 msgid "Select action to execute"
 msgstr "Seleccione acción a ejecutar"
 
-#: mp_misc.mpsl:295
+#: mp_misc.mpsl:304
 msgid "Execute action on document..."
 msgstr "Ejecutar acción sobre el documento..."
 
@@ -696,16 +696,16 @@ msgstr "Este directorio no está bajo control de versiones."
 msgid "Available %s commands"
 msgstr "Comandos %s disponibles"
 
-#: mp_vcs.mpsl:144 mp_vcs.mpsl:154 mp_vcs.mpsl:160
+#: mp_vcs.mpsl:141 mp_vcs.mpsl:151 mp_vcs.mpsl:157
 #, c-format
 msgid "<%s output>"
 msgstr "<salida de %s>"
 
-#: mp_misc.mpsl:304
+#: mp_misc.mpsl:314
 msgid "Version Control..."
 msgstr "Control de Versiones..."
 
-#: mp_misc.mpsl:303
+#: mp_misc.mpsl:312
 msgid "Play \"Pipes\""
 msgstr "Jugar a \"Tuberías\""
 
@@ -713,23 +713,23 @@ msgstr "Jugar a \"Tuberías\""
 msgid "You won! Press any key."
 msgstr "¡Has ganado! Pulsa una tecla."
 
-#: mp_misc.mpsl:263
+#: mp_misc.mpsl:272
 msgid "You already have the latest version."
 msgstr "Ya tienes la última versión."
 
-#: mp_misc.mpsl:267
+#: mp_misc.mpsl:276
 msgid "There are new versions available:"
 msgstr "Hay nuevas versiones disponibles:"
 
-#: mp_misc.mpsl:268
+#: mp_misc.mpsl:277
 msgid "Update Minimum Profit from http://triptico.com/software/mp.html"
 msgstr "Actualiza Minimum Profit desde http://triptico.com/software/mp.html"
 
-#: mp_misc.mpsl:272
+#: mp_misc.mpsl:281
 msgid "Cannot connect -- please try later."
 msgstr "Imposible conectar. Inténtalo más tarde."
 
-#: mp_misc.mpsl:302
+#: mp_misc.mpsl:311
 msgid "Check for updates..."
 msgstr "Comprobar actualizaciones..."
 
@@ -794,7 +794,7 @@ msgstr "<idioma por defecto>"
 msgid "Available encodings"
 msgstr "Codificaciones disponibles"
 
-#: mp_misc.mpsl:261
+#: mp_misc.mpsl:270
 msgid "You have a development version newer than any stable release."
 msgstr "Tienes una versión de desarrollo posterior a las estables."
 
@@ -856,7 +856,7 @@ msgstr "# error al borrar '%s' (%s)"
 msgid "# deleted '%s'"
 msgstr "# borrado '%s'"
 
-#: mp_misc.mpsl:297
+#: mp_misc.mpsl:306
 msgid "Insert time stamp"
 msgstr "Insertar marca de tiempo"
 
@@ -877,11 +877,11 @@ msgstr "Error al ejecutar '%s'"
 msgid "Show line numbers"
 msgstr "Mostrar números de línea"
 
-#: mp_hex.mpsl:167
+#: mp_hex.mpsl:169
 msgid "Not found."
 msgstr "No encontrado."
 
-#: mp_hex.mpsl:174
+#: mp_hex.mpsl:176
 msgid "Hex string to seek"
 msgstr "Cadena hexadecimal a buscar"
 
@@ -977,12 +977,12 @@ msgstr "Insertar salto de página (FF)"
 msgid "Insert m-dash character"
 msgstr "Insertar raya"
 
-#: mpv_gtk.c:1920 mpv_gtk.c:1949 mpv_gtk.c:2186 mpv_gtk.c:2195 mpv_gtk.c:2196
-#: mpv_gtk.c:2205
+#: mpv_gtk.c:1921 mpv_gtk.c:1950 mpv_gtk.c:2187 mpv_gtk.c:2196 mpv_gtk.c:2197
+#: mpv_gtk.c:2206
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: mpv_gtk.c:1950 mpv_gtk.c:2188 mpv_gtk.c:2196 mpv_gtk.c:2207
+#: mpv_gtk.c:1951 mpv_gtk.c:2189 mpv_gtk.c:2197 mpv_gtk.c:2208
 msgid "OK"
 msgstr "Aceptar"
 
@@ -1045,3 +1045,12 @@ msgstr "Archivos recientes"
 #: mp_file.mpsl:442
 msgid "Open recent files..."
 msgstr "Abrir archivos recientes..."
+
+#: mp_hex.mpsl:48
+#, c-format
+msgid "<hex view of %s>"
+msgstr ""
+
+#: mp_misc.mpsl:313
+msgid "Play \"Maze\""
+msgstr "Jugar a \"Laberinto\""
