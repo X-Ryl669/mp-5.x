@@ -9,7 +9,7 @@
                     "if", "then", "else",
                     "program", "function", "procedure", "const", "var", "type",
                     "for", "to", "downto", "do", "begin", "end", "of",
-                    "repeat", "until"
+                    "repeat", "until", "while", "in", "case"
                 ]
             )
         ],
@@ -17,7 +17,7 @@
             mp.syn_token_list(
                 [
                     "char", "byte", "record", "integer", "boolean", "array",
-                    "and", "or", "div", "with", "not"
+                    "and", "or", "div", "with", "not", "string", "file"
                 ]
             )
         ],
