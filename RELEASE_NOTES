@@ -5,6 +5,8 @@ Minimum Profit Release Notes
 -----
 
  - Architectural changes:
+   - Major refactoring; old code pruned and cleaned, memory
+     management improved.
    - MPSL code is no longer deployed as separate files, but
      embedded in a tar file or inside the program binary itself.
    - Some MPSL code is loaded on demand.
