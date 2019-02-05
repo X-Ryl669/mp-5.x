@@ -46,9 +46,6 @@ Pending Enhancements
  * 1225: Add a regex (or similar) filter for lines. Lines matching it
    (or not) won't appear on screen.
  * 1279: Add a new visual wrap mode.
- * 1280: Study a way to convert MP to a "portable" application, i.e.
-   to be formed by just the executable with all MPSL code embedded
-   (mainly aimed towards MS Windows).
 
 Closed
 ------
@@ -395,5 +392,8 @@ Closed
  * 1285: Fix KDE build (Thu, 26 Jun 2014 11:35:25 +0000).
  * 1109: Add jump to matching paren (Fixed by X-Ryl669; Thu,
    21 dec 2017 15:17:53 +0100).
+ * 1280: Study a way to convert MP to a "portable" application, i.e.
+   to be formed by just the executable with all MPSL code embedded
+   (mainly aimed towards MS Windows) (Tue, 05 Feb 2019 08:14:36 +0100).
 
 Email bugs to angel@triptico.com
