@@ -412,7 +412,7 @@ static void drw_multiline_regex(mpdm_t a, int attr)
 
         /* if the regex is an array, it's a pair of
            'match from this' / 'match until this' */
-        if (r->flags & MPDM_MULTIPLE) {
+        if (mpdm_type(r) == MPDM_TYPE_ARRAY) {
             mpdm_t rs = mpdm_aget(r, 0);
             mpdm_t re = mpdm_aget(r, 1);
 
@@ -439,7 +439,7 @@ static void drw_multiline_regex(mpdm_t a, int attr)
             }
         }
         else {
-            /* it's a scalar */
+            /* must be a scalar */
 
             if (*mpdm_string(r) == L'%') {
                 /* it's a sscanf() expression */
