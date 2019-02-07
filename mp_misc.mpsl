@@ -326,6 +326,8 @@ sub dump(v)
     d.txt.mod   = 0;
     d.read_only = 1;
     d.syntax    = mp.get_syntax("mpsl");
+
+    return NULL;
 }
 
 
