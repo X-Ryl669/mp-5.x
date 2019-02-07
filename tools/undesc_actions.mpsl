@@ -2,5 +2,5 @@
 
 foreach(a, keys(mp.actions)) {
 	if (!exists(mp.actdesc, a))
-		print("mp.actdesc['", a, "'] = LL('');\n");
+		print("mp.actdesc['", a, "'] = LL('');");
 }
