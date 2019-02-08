@@ -44,15 +44,20 @@ mp.actions['eval']  = sub {
         if (! regex(t, '/;\s*$/'))
             t = t ~ ';';
 
+        local d = mp.open("<dump>");
+        d->move_eof()->insert("> " ~ t ~ "\n");
+
         t = eval(t);
 
         if (ERROR != NULL) {
-            mp.alert(L("Error: ") ~ ERROR);
+            d->insert(L("Error: ") ~ ERROR ~ "\n");
             ERROR = NULL;
         }
         else
-        if (t != NULL)
             dump(t);
+
+        d->insert("-----------------------\n");
+        d.txt.mod = 0;
     }
 };
 
