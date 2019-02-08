@@ -350,6 +350,14 @@ static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
             k = MPDM_MBS(str);
     }
 
+    /* esc+letter? alt-letter */
+    if (str[0] == '\033' && str[1] && str[2] == '\0') {
+        char tmp[16];
+
+        sprintf(tmp, "alt-%c", str[1]);
+        k = MPDM_MBS(tmp);
+    }
+
     /* still nothing? search the table of keys */
     if (k == NULL && f == NULL) {
         int n;
