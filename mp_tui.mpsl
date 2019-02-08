@@ -419,7 +419,7 @@ sub mp.tui.draw(doc)
     mp.tui.addstr(mp.build_status_line());
 
     /* draw the 'menu' hint */
-    local t = "ctrl-a: " ~ L("Menu");
+    local t = "ctrl-space: " ~ L("Menu");
     mp.tui.move(mp.window.tx - size(t), mp.window.ty - 1);
     mp.tui.addstr(t);
 
