@@ -354,7 +354,7 @@ sub mp_doc.break_line(doc, col)
     w = splice(c, NULL, col, -1);
 
     /* set first part as current line */
-    txt.lines[txt.y] = w[0];
+    txt.lines[txt.y] = w;
 
     /* move to next line */
     txt.y++;
@@ -457,7 +457,7 @@ sub mp_doc.delete_char(doc)
         doc->join_line();
     else {
         local w = splice(txt.lines[txt.y], NULL, txt.x, 1);
-        txt.lines[txt.y] = w[0];
+        txt.lines[txt.y] = w;
     }
 
     txt.mod++;
@@ -481,7 +481,7 @@ sub mp_doc.delete_range(doc, bx, by, ex, ey, v)
         /* block is just one line; delete the middle part */
         w = splice(txt.lines[by], NULL, bx, ex - bx);
 
-        txt.lines[by] = w[0];
+        txt.lines[by] = w;
     }
     else {
         /* block has more than one line */
@@ -492,12 +492,12 @@ sub mp_doc.delete_range(doc, bx, by, ex, ey, v)
 
             /* delete from the beginning to the end of the first line */
             w = splice(txt.lines[by], NULL, bx, -1);
-            txt.lines[by] = w[0];
+            txt.lines[by] = w;
 
             /* delete from the beginning of the last line to
                the end of the block */
             w = splice(txt.lines[ey], NULL, 0, ex);
-            txt.lines[ey] = w[0];
+            txt.lines[ey] = w;
 
             /* collapse the lines in between */
             collapse(txt.lines, by + 1, ey - by - 1);
@@ -509,7 +509,7 @@ sub mp_doc.delete_range(doc, bx, by, ex, ey, v)
             /* delete using vertical selection block */
             while (by <= ey) {
                 w = splice(txt.lines[by], NULL, bx, ex - bx);
-                txt.lines[by] = w[0];
+                txt.lines[by] = w;
                 by++;
             }
         }
@@ -531,7 +531,7 @@ sub mp_doc.insert_string(doc, str)
 
     /* splice and change */
     w = splice(txt.lines[txt.y], str, txt.x, mp.config.insert && size(str) || 0);
-    txt.lines[txt.y] = w[0];
+    txt.lines[txt.y] = w;
 
     /* move right */
     txt.x += size(str);
@@ -656,7 +656,7 @@ sub mp_doc.insert_tab(doc)
         while (y > 0) {
             local l = splice(doc.txt.lines[--y], NULL, 0, doc.txt.x);
 
-            if (l[0]) {
+            if (l) {
                 doc->insert(regex(l[0], "/^[^ \t]*[ \t]*/")->sregex("/[^ \t]/g", ' '));
                 return doc;
             }

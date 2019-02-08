@@ -115,12 +115,10 @@ sub mp.tui.readline(prompt, history, default, flags)
         if (k eq 'backspace' && x > 0) {
             x--;
             r = splice(r, NULL, x, 1);
-            r = r[0];
         }
         else
         if(k eq 'delete') {
             r = splice(r, NULL, x, 1);
-            r = r[0];
         }
         else
         if (k eq 'ctrl-u') {
@@ -130,13 +128,11 @@ sub mp.tui.readline(prompt, history, default, flags)
         else
         if (k eq 'ctrl-v' && size(mp.clipboard)) {
             r = splice(r, mp.clipboard[0], x, 0);
-            r = r[0];
             x = x + size(mp.clipboard[0]);
         }
         else
         if (k eq 'ctrl-k') {
             r = splice(r, NULL, x, -1);
-            r = r[0];
         }
         else
         if (k eq 'cursor-up' && size(h)) {
@@ -169,7 +165,6 @@ sub mp.tui.readline(prompt, history, default, flags)
         else
         if (k eq 'insert-raw-string') {
             r = splice(r, mp.raw_string, x, 0);
-            r = r[0];
             x++;
         }
         else
@@ -211,7 +206,6 @@ sub mp.tui.readline(prompt, history, default, flags)
         else
         if (size(k) == 1) {
             r = splice(r, k, x, 0);
-            r = r[0];
             x++;
         }
     }

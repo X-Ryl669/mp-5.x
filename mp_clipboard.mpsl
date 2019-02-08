@@ -342,7 +342,7 @@ sub mp_doc.paste(doc)
 			
             /* insert this line of the clipboard */
             w = splice(txt.lines[txt.y], mp.clipboard[i++], txt.x, 0);
-            txt.lines[txt.y++] = w[0];
+            txt.lines[txt.y++] = w;
         }
         txt.y--;
         txt.mod++;
