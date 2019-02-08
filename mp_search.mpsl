@@ -181,7 +181,7 @@ mp.actions['grep']  = sub {
         else {
             local l = mp.open(t);
 
-            l.txt.lines = [];
+            l.txt.lines = [ '' ];
             l->move_bof();
 
             foreach (e, r)
@@ -193,8 +193,6 @@ mp.actions['grep']  = sub {
             l.read_only = 1;
         }
     }
-
-    return d;
 };
 
 
