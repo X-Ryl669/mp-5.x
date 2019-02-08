@@ -341,7 +341,7 @@ sub mp_doc.unindent_block(doc, insert_real_tab)
 sub mp_doc.break_line(doc, col)
 {
     local txt = doc.txt;
-    local c, w;
+    local c, l1, l2;
 
     /* if col is NULL, set it to be the x cursor */
     if (col == NULL)
@@ -350,11 +350,12 @@ sub mp_doc.break_line(doc, col)
     /* gets line where cursor is */
     c = txt.lines[txt.y];
 
-    /* deletes from col to the end of line */
-    w = splice(c, NULL, col, -1);
+    /* split line in to */
+    l1 = slice(c, 0, col);
+    l2 = slice(c, col, -1);
 
     /* set first part as current line */
-    txt.lines[txt.y] = w;
+    txt.lines[txt.y] = l1;
 
     /* move to next line */
     txt.y++;
@@ -375,17 +376,17 @@ sub mp_doc.break_line(doc, col)
         i = sregex(i, "/[^\t]/g", " ");
 
         /* delete any blank in the new line */
-        w[1] = sregex(w[1], "/^[ \t]*/");
+        l2 = sregex(l2, "/^[ \t]*/");
 
         /* concatenate */
-        w[1] = i ~ w[1];
+        l2 = i ~ l2;
 
         /* the x position is further the length of that */
         txt.x += size(i);
     }
 
     /* put second part there (or an empty string if NULL) */
-    txt.lines[txt.y] = w[1] || '';
+    txt.lines[txt.y] = l2 || '';
 
     txt.mod++;
 
@@ -657,7 +658,7 @@ sub mp_doc.insert_tab(doc)
             local l = splice(doc.txt.lines[--y], NULL, 0, doc.txt.x);
 
             if (l) {
-                doc->insert(regex(l[0], "/^[^ \t]*[ \t]*/")->sregex("/[^ \t]/g", ' '));
+                doc->insert(regex(l, "/^[^ \t]*[ \t]*/")->sregex("/[^ \t]/g", ' '));
                 return doc;
             }
         }
