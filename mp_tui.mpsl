@@ -85,8 +85,7 @@ sub mp.tui.readline(prompt, history, default, flags)
             if (x >= c[2])
                 v = x - c[2];
 
-            s = splice(s, NULL, v, c[2]);
-            s = s[1];
+            s = slice(s, v, c[2]);
         }
 
         /* if it's a password, change everything to asterisks */

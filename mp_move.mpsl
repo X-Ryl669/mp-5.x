@@ -595,9 +595,8 @@ sub mp_doc.get_range(doc, bx, by, ex, ey, v)
 
         /* block is just one line; take the inside
            part and push it onto the clipboard */
-        w = splice(txt.lines[by], NULL, bx, ex - bx);
-
-        push(r, w[1]);
+        w = slice(txt.lines[by], bx, ex - bx);
+        push(r, w);
     }
     else {
         local w, n;
@@ -609,9 +608,9 @@ sub mp_doc.get_range(doc, bx, by, ex, ey, v)
             /* use normal selection block */
 
             /* take from the beginning to the end of the first line */
-            w = splice(txt.lines[n], NULL, bx, -1);
+            w = slice(txt.lines[n], bx, -1);
 
-            push(r, w[1] || '');
+            push(r, w || '');
             n++;
 
             /* take the central lines */
@@ -619,14 +618,14 @@ sub mp_doc.get_range(doc, bx, by, ex, ey, v)
                 push(r, txt.lines[n++]);
 
             /* take the last line */
-            w = splice(txt.lines[n], NULL, 0, ex);
-            push(r, w[1] || '');
+            w = slice(txt.lines[n], 0, ex);
+            push(r, w || '');
         }
         else {
             /* use vertical selection block */
             while (n <= ey) {
-                w = splice(txt.lines[n++], NULL, bx, ex - bx + 1);
-                local l = w[1];
+                w = slice(txt.lines[n++], bx, ex - bx + 1);
+                local l = w;
                 local p = ex - bx - size(l);
 
                 /* pad out to end of block line */

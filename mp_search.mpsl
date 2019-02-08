@@ -301,8 +301,7 @@ sub mp_doc.seek_matching(doc)
     local txt = doc.txt;
 
     /* get current char, it's the increment char */
-    local inc = splice(txt.lines[txt.y], NULL, txt.x, 1);
-    inc = inc[1];
+    local inc = slice(txt.lines[txt.y], txt.x, 1);
     local i = 1; local j = 0;
     local p = seek(matching_open, inc);
     if (p != -1)
@@ -518,14 +517,14 @@ sub mp_doc.seek_prev_or_next_char(doc, func)
     local txt = doc.txt;
 
     /* get current char */
-    local w = splice(txt.lines[txt.y], NULL, txt.x, 1);
+    local w = slice(txt.lines[txt.y], txt.x, 1);
 
     /* move one char right */
     doc->move_right();
 
     /* search for it (mp.search() or mp.search_back()) */
     local t = mp.last_search;
-    doc->func("\\" ~ w[1]);
+    doc->func("\\" ~ w);
     mp.last_search = t;
 
     /* move back */
