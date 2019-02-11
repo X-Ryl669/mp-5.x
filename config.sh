@@ -29,6 +29,9 @@ WITHOUT_MSGFMT=1
 
 WITH_EXTERNAL_TAR=0
 
+# store command line args for configuring the libraries
+CONF_ARGS="$*"
+
 # parse arguments
 while [ $# -gt 0 ] ; do
 
@@ -614,6 +617,7 @@ echo "TARGET=$TARGET" >> makefile.opts
 echo "DRV_OBJS=$DRV_OBJS" >> makefile.opts
 echo "MORE_OBJS=$MORE_OBJS" >> makefile.opts
 echo "MORE_TARGETS=$MORE_TARGETS" >> makefile.opts
+echo "CONF_ARGS=$CONF_ARGS" >> makefile.opts
 echo "CCLINK=$CCLINK" >> makefile.opts
 echo >> makefile.opts
 

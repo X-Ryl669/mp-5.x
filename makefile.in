@@ -1,4 +1,4 @@
-all: LIBS $(TARGET) $(MORE_TARGETS) $(BUILDMO)
+all: Makefile LIBS $(TARGET) $(MORE_TARGETS) $(BUILDMO)
 
 LIBS:
 	$(MAKE) -C $(MPDM) libmpdm.a
@@ -175,3 +175,5 @@ uninstall-mo:
 deb:
 	dpkg-buildpackage -rfakeroot -b -uc -us
 
+Makefile: VERSION makefile.in
+	./config.sh $(CONF_ARGS)
