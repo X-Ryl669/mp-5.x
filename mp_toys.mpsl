@@ -197,12 +197,13 @@ global mp_pipes = new(mp_base, {
                 ty = mp.window.ty;
 
                 /* convert to integers */
-                wx = sprintf('%d', ((tx - 2) / 3));
-                wy = sprintf('%d', (((ty - 1) / 2) - 1));
+                wx = integer((tx - 2) / 3);
+                wy = integer(((ty - 1) / 2) - 1);
 
                 sx = random(wx);
 
-                game_map = map(wy - 1, sub {map(wx, sub { random(size(pieces) - 3); });});
+                game_map = map(wy - 1,
+                           sub { map(wx, sub { random(size(pieces) - 3); }); });
 
                 /* add first line */
                 ins(game_map, map(wx, sub { 6; }), 0);
@@ -236,10 +237,10 @@ global mp_pipes = new(mp_base, {
             if (keycode eq 'enter')
                 toggle = 1;
             if (keycode eq 'mouse-left-button') {
-                local ty = sprintf("%d", mp.mouse_y / 2);
+                local ty = integer(mp.mouse_y / 2);
 
                 if (ty >= 1 && ty < wy) {
-                    local tx = sprintf("%d", mp.mouse_x / 3);
+                    local tx = integer(mp.mouse_x / 3);
 
                     if (tx >= 0 && tx < wx) {
                         x = tx; y = ty;
