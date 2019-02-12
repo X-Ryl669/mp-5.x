@@ -39,22 +39,24 @@ mp.actions['eval']  = sub {
     );
 
     if (t != NULL) {
-        t = t[0];
+        local x, r;
 
-        if (! regex(t, '/;\s*$/'))
-            t = t ~ ';';
+        x = t[0];
+
+        if (! regex(x, '/;\s*$/'))
+            x = x ~ ';';
+
+        r = eval(x);
 
         local d = mp.open("<dump>");
-        d->move_eof()->insert("> " ~ t ~ "\n");
-
-        t = eval(t);
+        d->move_eof()->insert("> " ~ x ~ "\n");
 
         if (ERROR != NULL) {
             d->insert(L("Error: ") ~ ERROR ~ "\n");
             ERROR = NULL;
         }
         else
-            dump(t);
+            dump(r);
 
         d->insert("-----------------------\n");
         d.txt.mod = 0;
