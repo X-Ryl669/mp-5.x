@@ -202,47 +202,55 @@ sub mp.open_tag(tag)
 sub mp_doc.complete(d, list, label)
 /* completes the current word given a list (uses GUI) */
 {
-    local l, a;
+    local ret = 0;
     local word = d->get_word();
 
-    /* takes all list elements starting with word */
-    if ((l = sort(grep(list, '/^' ~ word ~ '/'))) == NULL)
-        return 0;
+    if (word) {
+        local l, a;
 
-    if (size(l) == 1)
-        a = 0;
-    else {
-        /* more than one; ask user */
-        local r = mp.form(
-            [
-                {
-                    label:  label || L("Select") ~ ':',
-                    type:   'list',
-                    list:   l
-                }
-            ]
-        );
+        /* takes all list elements starting with word */
+        l = sort(grep(list, '/^' ~ word ~ '/'));
 
-        if (r == NULL)
-            return 1;
-        a = r[0];
+        if (size(l)) {
+            if (size(l) == 1)
+                a = 0;
+            else {
+                /* more than one; ask user */
+                local r = mp.form(
+                    [
+                        {
+                            label:  label || L("Select") ~ ':',
+                            type:   'list',
+                            list:   l
+                        }
+                    ]
+                );
+
+                if (r != NULL)
+                    a = r[0];
+            }
+
+            if (a != NULL) {
+                /* accepted; substitute current word */
+                d->store_undo();
+
+                /* split line by words to take the offset of current word */
+                local r = d->split_line_by_words();
+                local offset = r[1][r[2]];
+
+                /* substitute current word with newly selected word */
+                local w = splice(d.txt.lines[d.txt.y], l[a], offset, size(word));
+
+                /* change line and x cursor */
+                d.txt.lines[d.txt.y] = w;
+                d.txt.x = offset + size(l[a]);
+
+                d.txt.mod++;
+
+                ret = 1;
+            }
+        }
     }
 
-    /* accepted; substitute current word */
-    d->store_undo();
-
-    /* split line by words to take the offset of current word */
-    local r = d->split_line_by_words();
-    local offset = r[1][r[2]];
-
-    /* substitute current word with newly selected word */
-    local w = splice(d.txt.lines[d.txt.y], l[a], offset, size(word));
-
-    /* change line and x cursor */
-    d.txt.lines[d.txt.y] = w;
-    d.txt.x = offset + size(l[a]);
-
-    d.txt.mod++;
-
-    return 1;
+    return ret;
 }
