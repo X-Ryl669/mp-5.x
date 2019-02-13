@@ -377,7 +377,7 @@ sub mp.tui.confirm(msg, def, ypos)
 sub mp.tui.draw_scrollbar(doc)
 /* draws a vertical read-only scrollbar */
 {
-    local ty = mp.window.ty - 1;
+    local ty = mp.window.ty;
 
     /* draw scrollbar only if doc is longer than the window height */
     if (size(doc.txt.lines) > ty) {
@@ -596,8 +596,8 @@ sub mp_drv.menu()
 
         local pty = size(mo);
 
-        if (pty > mp.window.ty - 2)
-            pty = mp.window.ty - 2;
+        if (pty > mp.window.ty - 1)
+            pty = mp.window.ty - 1;
 
         mp.tui.refresh();
         mp.tui.attr(mp.colors.menu.attr);
