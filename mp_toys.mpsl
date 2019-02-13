@@ -162,6 +162,8 @@ global mp_maze = new(mp_base, {
             state = 'RST';
         }
 
+        push(out, []);
+
         return out;
     }
 });
