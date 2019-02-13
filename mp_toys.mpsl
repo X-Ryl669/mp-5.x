@@ -206,7 +206,7 @@ global mp_pipes = new(mp_base, {
             local rp = pieces->grep(sub (e) { e.next; });
 
             game_map = map(wy - 1,
-                       sub { map(wx, sub { rp[random(size(rp))]; }); });
+                       sub { map(wx, sub { random(rp); }); });
 
             /* add first line */
             ins(game_map, map(wx, sub { pieces[6]; }), 0);
