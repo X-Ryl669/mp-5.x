@@ -55,7 +55,7 @@ global mp_maze = new(mp_base, {
                     ty--;
 
                 /* init */
-                game_map = map(ty, sub { map(tx, sub { brick; }); });
+                game_map = map(ty, sub { map(tx, brick); });
 
                 /* build */
                 x = 1;
@@ -142,7 +142,7 @@ global mp_maze = new(mp_base, {
                 state = 'WON';
             }
             else
-            if (game_map[y][x] ne ' ') {
+            if (game_map[y][x] eq brick) {
                 y = py;
                 x = px;
             }
