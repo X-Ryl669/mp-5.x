@@ -198,15 +198,14 @@ global mp_pipes = new(mp_base, {
 
             /* convert to integers */
             wx = integer((tx - 2) / 3);
-            wy = integer(((ty - 1) / 2) - 1);
+            wy = integer((ty - 1) / 2);
 
             sx = random(wx);
 
             /* fill the map with only rotable pieces */
             local rp = pieces->grep(sub (e) { e.next; });
 
-            game_map = map(wy - 1,
-                       sub { map(wx, sub { random(rp); }); });
+            game_map = map(wy - 2, sub { map(wx, sub { random(rp); }); });
 
             /* add first line */
             ins(game_map, map(wx, sub { pieces[6]; }), 0);
@@ -214,8 +213,8 @@ global mp_pipes = new(mp_base, {
 
             /* add last line */
             push(game_map, map(wx, sub { pieces[6]; }));
-            game_map[wy][5]      = pieces[8];
-            game_map[wy][wx - 5] = pieces[8];
+            game_map[-1][5]      = pieces[8];
+            game_map[-1][wx - 5] = pieces[8];
 
             state = 'PLAY';
 
@@ -231,7 +230,7 @@ global mp_pipes = new(mp_base, {
 
         if (keycode eq 'cursor-up' && y > 1)
             y--;
-        if (keycode eq 'cursor-down'&& y < wy - 1)
+        if (keycode eq 'cursor-down'&& y < wy - 2)
             y++;
         if (keycode eq 'cursor-left' && x > 0)
             x--;
