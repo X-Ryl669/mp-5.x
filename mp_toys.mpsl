@@ -173,212 +173,211 @@ global mp_maze = new(mp_base, {
 /** pipes **/
 
 global mp_pipes = new(mp_base, {
-        name:         '<pipes>',
-        x:            0,
-        y:            1,
-        tx:           -1,
-        ty:           -1,
-        wx:           -1,
-        wy:           -1,
-        sx:           -1,
-        state:        'RST',
-        game_map:     NULL,
-        attr:         NULL,
-        water_color:  mp.colors.quotes.attr,
-        dry_color:    mp.colors.normal.attr,
-        cursor_color: mp.colors.cursor.attr,
+    name:         '<pipes>',
+    x:            0,
+    y:            1,
+    tx:           -1,
+    ty:           -1,
+    wx:           -1,
+    wy:           -1,
+    sx:           -1,
+    state:        'RST',
+    game_map:     NULL,
+    attr:         NULL,
+    water_color:  mp.colors.quotes.attr,
+    dry_color:    mp.colors.normal.attr,
+    cursor_color: mp.colors.cursor.attr,
 
-        get_status: sub (pipes) {
-            L("Pipes - carry water from top to bottom by turning the pipes");
-        },
-        init:       sub (pipes) {
-            if (state eq 'RST' || tx != mp.window.tx || ty != mp.window.ty) {
-                tx = mp.window.tx;
-                ty = mp.window.ty;
+    get_status: sub (pipes) {
+        L("Pipes - carry water from top to bottom by turning the pipes");
+    },
+    init: sub (pipes) {
+        if (state eq 'RST' || tx != mp.window.tx || ty != mp.window.ty) {
+            tx = mp.window.tx;
+            ty = mp.window.ty;
 
-                /* convert to integers */
-                wx = integer((tx - 2) / 3);
-                wy = integer(((ty - 1) / 2) - 1);
+            /* convert to integers */
+            wx = integer((tx - 2) / 3);
+            wy = integer(((ty - 1) / 2) - 1);
 
-                sx = random(wx);
+            sx = random(wx);
 
-                game_map = map(wy - 1,
-                           sub { map(wx, sub { random(size(pieces) - 3); }); });
+            game_map = map(wy - 1,
+                       sub { map(wx, sub { pieces[random(size(pieces) - 3)]; }); });
 
-                /* add first line */
-                ins(game_map, map(wx, sub { 6; }), 0);
-                game_map[0][sx] = 7;
+            /* add first line */
+            ins(game_map, map(wx, sub { pieces[6]; }), 0);
+            game_map[0][sx] = pieces[7];
 
-                /* add last line */
-                push(game_map, map(wx, sub { 6; }));
-                game_map[wy][5] = 8;
-                game_map[wy][wx - 5] = 8;
+            /* add last line */
+            push(game_map, map(wx, sub { pieces[6]; }));
+            game_map[wy][5]      = pieces[8];
+            game_map[wy][wx - 5] = pieces[8];
 
-                state = 'PLAY';
+            state = 'PLAY';
 
-                pipes->verify();
-            }
+            pipes->verify();
+        }
 
-            return pipes;
-        },
-        keypress:   sub (pipes, keycode) {
-            local toggle = 0;
+        return pipes;
+    },
+    keypress: sub (pipes, keycode) {
+        local toggle = 0;
 
-            pipes->init();
+        pipes->init();
 
-            if (keycode eq 'cursor-up' && y > 1)
-                y--;
-            if (keycode eq 'cursor-down'&& y < wy - 1)
-                y++;
-            if (keycode eq 'cursor-left' && x > 0)
-                x--;
-            if (keycode eq 'cursor-right' && x < wx - 1)
-                x++;
-            if (keycode eq 'enter')
-                toggle = 1;
-            if (keycode eq 'mouse-left-button') {
-                local ty = integer(mp.mouse_y / 2);
+        if (keycode eq 'cursor-up' && y > 1)
+            y--;
+        if (keycode eq 'cursor-down'&& y < wy - 1)
+            y++;
+        if (keycode eq 'cursor-left' && x > 0)
+            x--;
+        if (keycode eq 'cursor-right' && x < wx - 1)
+            x++;
+        if (keycode eq 'enter')
+            toggle = 1;
+        if (keycode eq 'mouse-left-button') {
+            local ty = integer(mp.mouse_y / 2);
 
-                if (ty >= 1 && ty < wy) {
-                    local tx = integer(mp.mouse_x / 3);
+            if (ty >= 1 && ty < wy) {
+                local tx = integer(mp.mouse_x / 3);
 
-                    if (tx >= 0 && tx < wx) {
-                        x = tx; y = ty;
-                        toggle = 1;
-                    }
+                if (tx >= 0 && tx < wx) {
+                    x = tx; y = ty;
+                    toggle = 1;
                 }
             }
+        }
 
-            if (toggle) {
-                local n = game_map[y][x];
-                game_map[y][x] = pieces[n].next;
-                pipes->verify();
+        if (toggle) {
+            local n = game_map[y][x];
+            game_map[y][x] = pieces[n.next];
+            pipes->verify();
+        }
+
+        return pipes;
+    },
+    verify: sub (pipes) {
+        /* reset attributes */
+        attr = map(wy + 1, sub { []; });
+
+        /* the water input is blue */
+        attr[0][sx] = water_color;
+
+        /* calculate the path */
+        local px = sx;
+        local py = 0;
+        local c = 'D'; /* downwards */
+        local p;
+
+        /* while there is a valid path */
+        while ((p = game_map[py][px]) && (c = p.out[c]) && dir[c]) {
+            /* mark as valid path */
+            attr[py][px] = water_color;
+
+            /* move in new direction */
+            px += dir[c][0];
+            py += dir[c][1];
+        }
+
+        if (c eq 'WIN') {
+            attr[py][px] = water_color;
+            state = 'WON';
+        }
+
+        return pipes;
+    },
+    render: sub (pipes) {
+        local out = [];
+
+        pipes->init();
+
+        foreach (line, n, game_map) {
+            local l0 = [];
+            local l1 = [];
+
+            foreach (piece, m, line) {
+                local s = piece.shape;
+                local c;
+
+                if (n == y && m == x)
+                    c = cursor_color;
+                else
+                    c = attr[n][m] || dry_color;
+
+                push(l0, c, s[0]);
+                push(l1, c, s[1]);
             }
 
-            return pipes;
+            push(out, l0, l1);
+        }
+
+        /* add two more empty lines */
+        push(out, [], []);
+
+        if (state eq 'WON') {
+            out[0] = [
+                mp.colors.cursor.attr,
+                L("You won! Press any key.")
+            ];
+
+            state = 'RST';
+        }
+
+        return out;
+    },
+
+    dir: {
+        U:  [ 0, -1 ],
+        R:  [ 1,  0 ],
+        D:  [ 0,  1 ],
+        L:  [-1,  0 ]
+    },
+    pieces: [
+        {
+            shape:  ["\x{2502} \x{2514}", "\x{2514}\x{2500}\x{2500}"],
+            out:    { D: 'R', L: 'U' },
+            next:   1
         },
-        verify:    sub (pipes) {
-            /* reset attributes */
-            attr = map(wy + 1, sub { [];});
-
-            /* the water input is blue */
-            attr[0][sx] = water_color;
-
-            /* calculate the path */
-            local px = sx;
-            local py = 0;
-            local c = 'D'; /* downwards */
-            local p;
-
-            /* while there is a valid path */
-            while ((p = pieces[game_map[py][px]]) && (c = p.out[c]) && dir[c]) {
-                /* mark as valid path */
-                attr[py][px] = water_color;
-
-                /* move in new direction */
-                px += dir[c][0];
-                py += dir[c][1];
-            }
-
-            if (c eq 'WIN') {
-                attr[py][px] = water_color;
-                state = 'WON';
-            }
-
-            return pipes;
+        {
+            shape:  ["\x{250c}\x{2500}\x{2500}", "\x{2502} \x{250c}"],
+            out:    { U: 'R', L: 'D' },
+            next:   2
         },
-        render:      sub (pipes) {
-            local out = [];
-
-            pipes->init();
-
-            foreach (line, n, game_map) {
-                local l0 = [];
-                local l1 = [];
-
-                foreach (piece, m, line) {
-                    local s = pieces[piece].shape;
-                    local c;
-
-                    if (n == y && m == x)
-                        c = cursor_color;
-                    else
-                        c = attr[n][m] || dry_color;
-
-                    push(l0, c, s[0]);
-                    push(l1, c, s[1]);
-                }
-
-                push(out, l0, l1);
-            }
-
-            /* add two more empty lines */
-            push(out, [], []);
-
-            if (state eq 'WON') {
-                out[0] = [
-                    mp.colors.cursor.attr,
-                    L("You won! Press any key.")
-                ];
-
-                state = 'RST';
-            }
-
-            return out;
+        {
+            shape:  ["\x{2500}\x{2500}\x{2510}", "\x{2510} \x{2502}"],
+            out:    { U: 'L', R: 'D' },
+            next:   3
         },
-
-        dir: {
-            U:  [ 0, -1],
-            R:  [ 1,  0],
-            D:  [ 0,  1],
-            L:  [-1,  0]
+        {
+            shape:  ["\x{2518} \x{2502}", "\x{2500}\x{2500}\x{2518}"],
+            out:    { R: 'U', D: 'L' },
+            next:   0
         },
-        pieces: [
-            {
-                shape:  ["\x{2502} \x{2514}", "\x{2514}\x{2500}\x{2500}"],
-                out:    { D: 'R', L: 'U' },
-                next:   1
-            },
-            {
-                shape:  ["\x{250c}\x{2500}\x{2500}", "\x{2502} \x{250c}"],
-                out:    { U: 'R', L: 'D' },
-                next:   2
-            },
-            {
-                shape:  ["\x{2500}\x{2500}\x{2510}", "\x{2510} \x{2502}"],
-                out:    { U: 'L', R: 'D' },
-                next:   3
-            },
-            {
-                shape:  ["\x{2518} \x{2502}", "\x{2500}\x{2500}\x{2518}"],
-                out:    { R: 'U', D: 'L' },
-                next:   0
-            },
-            {
-                shape:  ["\x{2502} \x{2502}", "\x{2502} \x{2502}"],
-                out:    { U: 'U', D: 'D' },
-                next:   5
-            },
-            {
-                shape:  ["\x{2500}\x{2500}\x{2500}", "\x{2500}\x{2500}\x{2500}"],
-                out:    { R: 'R', L: 'L' },
-                next:   4
-            },
-            { /* blank */
-                shape:  ["   ", "   "],
-                out:    {},
-                next:   6
-            },
-            { /* entry pipe */
-                shape:  ["\x{2502} \x{2502}", "\\ /"],
-                out:    { D: 'D' },
-                next:   7
-            },
-            { /* out pipe */
-                shape:  ["\x{2502} \x{2502}", "/ \\"],
-                out:    { D: 'WIN' },
-                next:   8
-            }
-        ]
-    }
-);
+        {
+            shape:  ["\x{2502} \x{2502}", "\x{2502} \x{2502}"],
+            out:    { U: 'U', D: 'D' },
+            next:   5
+        },
+        {
+            shape:  ["\x{2500}\x{2500}\x{2500}", "\x{2500}\x{2500}\x{2500}"],
+            out:    { R: 'R', L: 'L' },
+            next:   4
+        },
+        { /* blank */
+            shape:  ["   ", "   "],
+            out:    {},
+            next:   6
+        },
+        { /* entry pipe */
+            shape:  ["\x{2502} \x{2502}", "\\ /"],
+            out:    { D: 'D' },
+            next:   7
+        },
+        { /* out pipe */
+            shape:  ["\x{2502} \x{2502}", "/ \\"],
+            out:    { D: 'WIN' },
+            next:   8
+        }
+    ]
+});
