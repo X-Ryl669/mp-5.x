@@ -491,7 +491,7 @@ static mpdm_t win32c_doc_draw(mpdm_t args, mpdm_t ctxt)
 
         win32c_move(0, n, 0);
 
-        for (m = 0; m < mpdm_size(l) - 1; m++) {
+        for (m = 0; m < mpdm_size(l); m++) {
             int attr;
             mpdm_t s;
 
@@ -529,9 +529,6 @@ static void register_functions(void)
     mpdm_t tui;
 
     drv = mpdm_hget_s(mpdm_root(), L"mp_drv");
-
-
-//    mpdm_hset_s(drv, L"timer",      MPDM_X(ncursesw_drv_timer));
     mpdm_hset_s(drv, L"shutdown",   MPDM_X(win32c_drv_shutdown));
 
     /* execute tui */
