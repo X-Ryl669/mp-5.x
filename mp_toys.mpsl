@@ -195,9 +195,8 @@ global mp_pipes = new(mp_base, {
             tx = mp.window.tx;
             ty = mp.window.ty;
 
-            /* convert to integers */
-            wx = integer((tx - 2) / 3);
-            wy = integer((ty - 1) / 2);
+            wx = integer(tx / 3);
+            wy = integer(ty / 2);
 
             sx = random(wx);
 
