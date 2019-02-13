@@ -415,12 +415,12 @@ sub mp.tui.draw(doc)
 
     /* draw the status line */
     mp.tui.attr(mp.colors.normal.attr);
-    mp.tui.move(0, mp.window.ty - 1, 1);
+    mp.tui.move(0, mp.window.ty, 1);
     mp.tui.addstr(mp.build_status_line());
 
     /* draw the 'menu' hint */
     local t = "ctrl-space: " ~ L("Menu");
-    mp.tui.move(mp.window.tx - size(t), mp.window.ty - 1);
+    mp.tui.move(mp.window.tx - size(t), mp.window.ty);
     mp.tui.addstr(t);
 
     /* if a hardware cursor is desired, set it */

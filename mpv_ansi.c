@@ -149,7 +149,7 @@ static void ansi_sigwinch(int s)
 
     v = mpdm_hget_s(MP, L"window");
     mpdm_hset_s(v, L"tx", MPDM_I(tx));
-    mpdm_hset_s(v, L"ty", MPDM_I(ty));
+    mpdm_hset_s(v, L"ty", MPDM_I(ty - 1));
 
     /* (re)attach signal */
     signal(SIGWINCH, ansi_sigwinch);
