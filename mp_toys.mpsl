@@ -27,147 +27,144 @@
 
 /** maze **/
 
-/*mp.add(new(mp_maze));*/
-
 global mp_maze = new(mp_base, {
-        name:       '<maze>',
-        x:          0,
-        y:          0,
-        tx:         -1,
-        ty:         -1,
-        state:      'RST',
-        game_map:   NULL,
-        brick:      "\x{2592}",
-        hero:       "@",
+    name:       '<maze>',
+    x:          0,
+    y:          0,
+    tx:         -1,
+    ty:         -1,
+    state:      'RST',
+    game_map:   NULL,
+    brick:      "\x{2592}",
+    hero:       "@",
 
-        get_status: sub (maze) {
-            sprintf(L("Maze - help %s to find the treasure. As always, the X marks the spot."), hero);
-        },
-        init:       sub (maze) {
-            if (state eq 'RST' || tx != mp.window.tx || ty != mp.window.ty) {
-                tx = mp.window.tx;
-                ty = mp.window.ty;
+    get_status: sub (maze) {
+        sprintf(L("Maze - help %s to find the treasure. As always, the X marks the spot."), hero);
+    },
+    init: sub (maze) {
+        if (state eq 'RST' || tx != mp.window.tx || ty != mp.window.ty) {
+            tx = mp.window.tx;
+            ty = mp.window.ty;
 
-                /* ensure odd size */
-                if (!(tx & 1))
-                    tx--;
-                if (!(ty & 1))
-                    ty--;
+            /* ensure odd size */
+            if (!(tx & 1))
+                tx--;
+            if (!(ty & 1))
+                ty--;
 
-                /* init */
-                game_map = map(ty, sub { map(tx, brick); });
+            /* init */
+            game_map = map(ty, sub { map(tx, brick); });
 
-                /* build */
-                x = 1;
-                y = 1;
-                local stack = [];
+            /* build */
+            x = 1;
+            y = 1;
+            local stack = [];
 
-                for (;;) {
-                    local d = [];
+            for (;;) {
+                local d = [];
 
-                    /* clear */
-                    game_map[y][x] = ' ';
+                /* clear */
+                game_map[y][x] = ' ';
 
-                    foreach (t, [[0, -1], [1, 0], [0, 1], [-1, 0]]) {
-                        local ny = y + t[0] * 2;
-                        local nx = x + t[1] * 2;
+                foreach (t, [[0, -1], [1, 0], [0, 1], [-1, 0]]) {
+                    local ny = y + t[0] * 2;
+                    local nx = x + t[1] * 2;
 
-                        /* can space be opened in this direction?
-                           save as possible next position */
-                        if (nx > 0 && ny > 0 && game_map[ny][nx] eq brick)
-                            push(d, t);
-                    }
-
-                    if (size(d)) {
-                        /* more than one way? stack this position */
-                        if (size(d) > 1)
-                            push(stack, [y, x]);
-
-                        /* pick one direction at random and move there */
-                        local m = d[random(size(d))];
-
-                        y += m[0];
-                        x += m[1];
-
-                        game_map[y][x] = ' ';
-
-                        y += m[0];
-                        x += m[1];
-                    }
-                    else {
-                        /* no way from here; pop previous position */
-                        if ((d = pop(stack)) == NULL)
-                            break;
-
-                        y = d[0];
-                        x = d[1];
-                    }
+                    /* can space be opened in this direction?
+                       save as possible next position */
+                    if (nx > 0 && ny > 0 && game_map[ny][nx] eq brick)
+                        push(d, t);
                 }
 
-                /* pick treasure position */
-                x = 1 + random(tx / 2) * 2;
-                y = 1 + random(ty / 2) * 2;
+                if (size(d)) {
+                    /* more than one way? stack this position */
+                    if (size(d) > 1)
+                        push(stack, [y, x]);
 
-                game_map[y][x] = 'X';
+                    /* pick one direction at random and move there */
+                    local m = random(d);
 
-                /* pick hero position */
-                x = 1 + random(tx / 2) * 2;
-                y = 1 + random(ty / 2) * 2;
+                    y += m[0];
+                    x += m[1];
 
-                game_map[y][x] = hero;
+                    game_map[y][x] = ' ';
 
-                state = 'PLAY';
-                tx = mp.window.tx;
-                ty = mp.window.ty;
+                    y += m[0];
+                    x += m[1];
+                }
+                else {
+                    /* no way from here; pop previous position */
+                    if ((d = pop(stack)) == NULL)
+                        break;
+
+                    y = d[0];
+                    x = d[1];
+                }
             }
-        },
-        keypress:   sub (maze, keycode) {
-            maze->init();
 
-            local py = y;
-            local px = x;
+            /* pick treasure position */
+            x = 1 + random(tx / 2) * 2;
+            y = 1 + random(ty / 2) * 2;
 
-            game_map[y][x] = ' ';
+            game_map[y][x] = 'X';
 
-            if (keycode eq 'cursor-up')
-                y--;
-            if (keycode eq 'cursor-down')
-                y++;
-            if (keycode eq 'cursor-left')
-                x--;
-            if (keycode eq 'cursor-right')
-                x++;
-
-            if (game_map[y][x] eq 'X') {
-                state = 'WON';
-            }
-            else
-            if (game_map[y][x] eq brick) {
-                y = py;
-                x = px;
-            }
+            /* pick hero position */
+            x = 1 + random(tx / 2) * 2;
+            y = 1 + random(ty / 2) * 2;
 
             game_map[y][x] = hero;
-        },
-        render:     sub (maze) {
-            maze->init();
 
-            local c = mp.colors.normal.attr;
-            local out = map(game_map, sub(e) { [c, join(e)]; });
-
-            if (state eq 'WON') {
-                out[0] = [
-                    mp.colors.cursor.attr,
-                    L("You won! Press any key.")
-                ];
-
-                state = 'RST';
-            }
-
-            return out;
+            state = 'PLAY';
+            tx = mp.window.tx;
+            ty = mp.window.ty;
         }
+    },
+    keypress: sub (maze, keycode) {
+        maze->init();
+
+        local py = y;
+        local px = x;
+
+        game_map[y][x] = ' ';
+
+        if (keycode eq 'cursor-up')
+            y--;
+        if (keycode eq 'cursor-down')
+            y++;
+        if (keycode eq 'cursor-left')
+            x--;
+        if (keycode eq 'cursor-right')
+            x++;
+
+        if (game_map[y][x] eq 'X') {
+            state = 'WON';
+        }
+        else
+        if (game_map[y][x] eq brick) {
+            y = py;
+            x = px;
+        }
+
+        game_map[y][x] = hero;
+    },
+    render: sub (maze) {
+        maze->init();
+
+        local c = mp.colors.normal.attr;
+        local out = map(game_map, sub(e) { [c, join(e)]; });
+
+        if (state eq 'WON') {
+            out[0] = [
+                mp.colors.cursor.attr,
+                L("You won! Press any key.")
+            ];
+
+            state = 'RST';
+        }
+
+        return out;
     }
-);
+});
 
 
 /** pipes **/
