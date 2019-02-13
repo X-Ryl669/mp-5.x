@@ -202,8 +202,11 @@ global mp_pipes = new(mp_base, {
 
             sx = random(wx);
 
+            /* fill the map with only rotable pieces */
+            local rp = pieces->grep(sub (e) { e.next; });
+
             game_map = map(wy - 1,
-                       sub { map(wx, sub { pieces[random(size(pieces) - 3)]; }); });
+                       sub { map(wx, sub { rp[random(size(rp))]; }); });
 
             /* add first line */
             ins(game_map, map(wx, sub { pieces[6]; }), 0);
@@ -366,18 +369,15 @@ global mp_pipes = new(mp_base, {
         },
         { /* blank */
             shape:  ["   ", "   "],
-            out:    {},
-            next:   6
+            out:    {}
         },
         { /* entry pipe */
             shape:  ["\x{2502} \x{2502}", "\\ /"],
-            out:    { D: 'D' },
-            next:   7
+            out:    { D: 'D' }
         },
         { /* out pipe */
             shape:  ["\x{2502} \x{2502}", "/ \\"],
-            out:    { D: 'WIN' },
-            next:   8
+            out:    { D: 'WIN' }
         }
     ]
 });
