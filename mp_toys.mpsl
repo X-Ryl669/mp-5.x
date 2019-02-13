@@ -203,18 +203,18 @@ global mp_pipes = new(mp_base, {
             sx = random(wx);
 
             /* fill the map with only rotable pieces */
-            local rp = pieces->grep(sub (e) { e.next; });
+            local rp = pieces->map()->grep(sub (e) { e.next; });
 
             game_map = map(wy - 2, sub { map(wx, sub { random(rp); }); });
 
             /* add first line */
-            ins(game_map, map(wx, sub { pieces[6]; }), 0);
-            game_map[0][sx] = pieces[7];
+            ins(game_map, map(wx, sub { pieces['blank']; }), 0);
+            game_map[0][sx] = pieces['in_pipe'];
 
             /* add last line */
-            push(game_map, map(wx, sub { pieces[6]; }));
-            game_map[-1][5]      = pieces[8];
-            game_map[-1][wx - 5] = pieces[8];
+            push(game_map, map(wx, sub { pieces['blank']; }));
+            game_map[-1][5]      = pieces['out_pipe'];
+            game_map[-1][wx - 5] = pieces['out_pipe'];
 
             state = 'PLAY';
 
@@ -335,48 +335,48 @@ global mp_pipes = new(mp_base, {
         D:  [ 0,  1 ],
         L:  [-1,  0 ]
     },
-    pieces: [
-        {
+    pieces: {
+        left_up: {
             shape:  ["\x{2502} \x{2514}", "\x{2514}\x{2500}\x{2500}"],
             out:    { D: 'R', L: 'U' },
-            next:   1
+            next:   'up_right'
         },
-        {
+        up_right: {
             shape:  ["\x{250c}\x{2500}\x{2500}", "\x{2502} \x{250c}"],
             out:    { U: 'R', L: 'D' },
-            next:   2
+            next:   'right_down'
         },
-        {
+        right_down: {
             shape:  ["\x{2500}\x{2500}\x{2510}", "\x{2510} \x{2502}"],
             out:    { U: 'L', R: 'D' },
-            next:   3
+            next:   'down_left'
         },
-        {
+        down_left: {
             shape:  ["\x{2518} \x{2502}", "\x{2500}\x{2500}\x{2518}"],
             out:    { R: 'U', D: 'L' },
-            next:   0
+            next:   'left_up'
         },
-        {
+        up_down: {
             shape:  ["\x{2502} \x{2502}", "\x{2502} \x{2502}"],
             out:    { U: 'U', D: 'D' },
-            next:   5
+            next:   'left_right'
         },
-        {
+        left_right: {
             shape:  ["\x{2500}\x{2500}\x{2500}", "\x{2500}\x{2500}\x{2500}"],
             out:    { R: 'R', L: 'L' },
-            next:   4
+            next:   'up_down'
         },
-        { /* blank */
+        blank: {
             shape:  ["   ", "   "],
             out:    {}
         },
-        { /* entry pipe */
+        in_pipe: {
             shape:  ["\x{2502} \x{2502}", "\\ /"],
             out:    { D: 'D' }
         },
-        { /* out pipe */
+        out_pipe: {
             shape:  ["\x{2502} \x{2502}", "/ \\"],
             out:    { D: 'WIN' }
         }
-    ]
+    }
 });
