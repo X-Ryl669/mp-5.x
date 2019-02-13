@@ -105,7 +105,7 @@ static void update_window_size(void)
         /* store the 'window' size */
         v = mpdm_hget_s(MP, L"window");
         mpdm_hset_s(v, L"tx", MPDM_I(tx));
-        mpdm_hset_s(v, L"ty", MPDM_I(ty - 1));
+        mpdm_hset_s(v, L"ty", MPDM_I(ty));
     }
 }
 

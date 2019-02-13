@@ -72,7 +72,7 @@ static void update_window_size(void)
 
     v = mpdm_hget_s(MP, L"window");
     mpdm_hset_s(v, L"tx", MPDM_I(tx));
-    mpdm_hset_s(v, L"ty", MPDM_I(ty));
+    mpdm_hset_s(v, L"ty", MPDM_I(ty - 1));
 
     buf = realloc(buf, tx * ty * sizeof(CHAR_INFO));
     win32c_clrscr();
