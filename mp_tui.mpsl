@@ -229,7 +229,7 @@ sub mp.tui.list(prompt, data, pos)
     mp.tui.attr(mp.colors.normal.attr);
 
     vy = 0;
-    ty = mp.window.ty - 1;
+    ty = mp.window.ty;
 
     /* clipping regex */
     r = '/^.{1,' ~ (mp.window.tx) ~ '}/';
@@ -237,7 +237,7 @@ sub mp.tui.list(prompt, data, pos)
     if (pos == NULL)
         pos = 0;
 
-    while (1) {
+    for (;;) {
         local k, n, cp;
 
         /* limits for pos */
