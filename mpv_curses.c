@@ -4,7 +4,7 @@
 
     Curses driver.
 
-    Copyright (C) 1991-2017 Angel Ortega <angel@triptico.com> et al.
+    Copyright (C) 1991-2019 Angel Ortega <angel@triptico.com> et al.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License
@@ -48,7 +48,8 @@
 /** data **/
 
 /* the curses attributes */
-int *nc_attrs = NULL;
+#define MAX_COLORS 100
+int nc_attrs[MAX_COLORS];
 
 /* code for the 'normal' attribute */
 static int normal_attr = 0;
@@ -73,13 +74,13 @@ static void set_attr(void)
 }
 
 
-static void update_window_size(void)
+static void nc_update_window_size(void)
 {
     mpdm_t v;
 
     v = mpdm_hget_s(MP, L"window");
     mpdm_hset_s(v, L"tx", MPDM_I(COLS));
-    mpdm_hset_s(v, L"ty", MPDM_I(LINES));
+    mpdm_hset_s(v, L"ty", MPDM_I(LINES - 1));
 }
 
 
@@ -93,7 +94,7 @@ static void nc_sigwinch(int s)
     refresh();
 
     /* re-set dimensions */
-    update_window_size();
+    nc_update_window_size();
 
     /* reattach */
     signal(SIGWINCH, nc_sigwinch);
@@ -520,7 +521,7 @@ static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
         case KEY_RESIZE:
 
             /* handle ncurses resizing */
-            update_window_size();
+            nc_update_window_size();
             f = NULL;
 
             break;
@@ -635,14 +636,13 @@ static mpdm_t nc_doc_draw(mpdm_t args, mpdm_t ctxt)
 }
 
 
-static void build_colors(void)
+static void nc_build_colors(void)
 /* builds the colors */
 {
     mpdm_t colors;
     mpdm_t color_names;
-    mpdm_t l;
-    mpdm_t c;
-    int n, s;
+    mpdm_t v, i;
+    int n, c;
 
 #ifdef CONFOPT_TRANSPARENCY
     use_default_colors();
@@ -661,49 +661,41 @@ static void build_colors(void)
     colors      = mpdm_hget_s(MP, L"colors");
     color_names = mpdm_hget_s(MP, L"color_names");
 
-    l = mpdm_ref(mpdm_keys(colors));
-    s = mpdm_size(l);
-
-    /* redim the structures */
-    nc_attrs = realloc(nc_attrs, sizeof(int) * s);
-
     /* loop the colors */
-    for (n = 0; n < s && (c = mpdm_aget(l, n)) != NULL; n++) {
-        mpdm_t d = mpdm_hget(colors, c);
-        mpdm_t v = mpdm_hget_s(d, L"text");
+    n = c = 0;
+    while (mpdm_iterator(colors, &c, &v, &i)) {
+        mpdm_t w = mpdm_hget_s(v, L"text");
         int cp, c0, c1;
 
+        /* get color indexes */
+        if ((c0 = mpdm_seek(color_names, mpdm_aget(w, 0), 1)) == -1 ||
+            (c1 = mpdm_seek(color_names, mpdm_aget(w, 1), 1)) == -1)
+            continue;
+
         /* store the 'normal' attribute */
-        if (wcscmp(mpdm_string(c), L"normal") == 0)
+        if (wcscmp(mpdm_string(i), L"normal") == 0)
             normal_attr = n;
 
         /* store the attr */
-        mpdm_hset_s(d, L"attr", MPDM_I(n));
+        mpdm_hset_s(v, L"attr", MPDM_I(n));
 
-        /* get color indexes */
-        if ((c0 = mpdm_seek(color_names, mpdm_aget(v, 0), 1)) == -1 ||
-            (c1 = mpdm_seek(color_names, mpdm_aget(v, 1), 1)) == -1)
-            continue;
-
-        init_pair(n + 1, c0 - 1, c1 - 1);
-        cp = COLOR_PAIR(n + 1);
+        init_pair(n, c0 - 1, c1 - 1);
+        cp = COLOR_PAIR(n);
 
         /* flags */
-        v = mpdm_hget_s(d, L"flags");
-        if (mpdm_seek_s(v, L"reverse", 1) != -1)
+        w = mpdm_hget_s(v, L"flags");
+        if (mpdm_seek_s(w, L"reverse", 1) != -1)
             cp |= A_REVERSE;
-        if (mpdm_seek_s(v, L"bright", 1) != -1)
+        if (mpdm_seek_s(w, L"bright", 1) != -1)
             cp |= A_BOLD;
-        if (mpdm_seek_s(v, L"underline", 1) != -1)
+        if (mpdm_seek_s(w, L"underline", 1) != -1)
             cp |= A_UNDERLINE;
 
-        nc_attrs[n] = cp;
+        nc_attrs[n++] = cp;
     }
 
     /* set the background filler */
     wbkgdset(cw, ' ' | nc_attrs[normal_attr]);
-
-    mpdm_unref(l);
 }
 
 
@@ -867,9 +859,9 @@ static mpdm_t ncursesw_drv_startup(mpdm_t a)
     raw();
     noecho();
 
-    build_colors();
+    nc_build_colors();
 
-    update_window_size();
+    nc_update_window_size();
 
 #ifndef NCURSES_VERSION
     signal(SIGWINCH, nc_sigwinch);
