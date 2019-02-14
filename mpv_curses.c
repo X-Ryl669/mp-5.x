@@ -668,8 +668,8 @@ static void nc_build_colors(void)
         /* store the attr */
         mpdm_hset_s(v, L"attr", MPDM_I(n));
 
-        init_pair(n, c0 - 1, c1 - 1);
-        cp = COLOR_PAIR(n);
+        init_pair(n + 1, c0 - 1, c1 - 1);
+        cp = COLOR_PAIR(n + 1);
 
         /* flags */
         w = mpdm_hget_s(v, L"flags");
