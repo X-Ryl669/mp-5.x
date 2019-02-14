@@ -57,22 +57,11 @@ static int normal_attr = 0;
 /* current window */
 static WINDOW *cw = NULL;
 
-/* last attr set */
-static int last_attr = 0;
-
 /* timer function */
 static int timer_msecs = 0;
 static mpdm_t timer_func = NULL;
 
 /** code **/
-
-static void set_attr(void)
-/* set the current and fill attributes */
-{
-    wattrset(cw, nc_attrs[last_attr]);
-    wbkgdset(cw, ' ' | nc_attrs[last_attr]);
-}
-
 
 static void nc_update_window_size(void)
 {
@@ -154,7 +143,7 @@ static wchar_t *nc_getwch(void)
 
 #define ctrl(k) ((k) & 31)
 
-static mpdm_t nc_getkey(mpdm_t args, mpdm_t ctxt)
+static mpdm_t nc_tui_getkey(mpdm_t args, mpdm_t ctxt)
 /* reads a key and converts to an action */
 {
     static int shift = 0;
@@ -601,7 +590,7 @@ static mpdm_t nc_addwstr(mpdm_t str)
 }
 
 
-static mpdm_t nc_doc_draw(mpdm_t args, mpdm_t ctxt)
+static mpdm_t nc_tui_doc_draw(mpdm_t args, mpdm_t ctxt)
 /* draws the document part */
 {
     mpdm_t d;
@@ -745,14 +734,14 @@ static mpdm_t ncursesw_drv_suspend(mpdm_t a, mpdm_t ctxt)
 
 /** TUI **/
 
-static mpdm_t tui_addstr(mpdm_t a, mpdm_t ctxt)
+static mpdm_t nc_tui_addstr(mpdm_t a, mpdm_t ctxt)
 /* TUI: add a string */
 {
     return nc_addwstr(mpdm_aget(a, 0));
 }
 
 
-static mpdm_t tui_move(mpdm_t a, mpdm_t ctxt)
+static mpdm_t nc_tui_move(mpdm_t a, mpdm_t ctxt)
 /* TUI: move to a screen position */
 {
     /* curses' move() use y, x */
@@ -766,18 +755,19 @@ static mpdm_t tui_move(mpdm_t a, mpdm_t ctxt)
 }
 
 
-static mpdm_t tui_attr(mpdm_t a, mpdm_t ctxt)
+static mpdm_t nc_tui_attr(mpdm_t a, mpdm_t ctxt)
 /* TUI: set attribute for next string */
 {
-    last_attr = mpdm_ival(mpdm_aget(a, 0));
+    int attr = mpdm_ival(mpdm_aget(a, 0));
 
-    set_attr();
+    wattrset(cw, nc_attrs[attr]);
+    wbkgdset(cw, ' ' | nc_attrs[attr]);
 
     return NULL;
 }
 
 
-static mpdm_t tui_refresh(mpdm_t a, mpdm_t ctxt)
+static mpdm_t nc_tui_refresh(mpdm_t a, mpdm_t ctxt)
 /* TUI: refresh the screen */
 {
     wrefresh(cw);
@@ -785,7 +775,7 @@ static mpdm_t tui_refresh(mpdm_t a, mpdm_t ctxt)
 }
 
 
-static mpdm_t tui_getxy(mpdm_t a, mpdm_t ctxt)
+static mpdm_t nc_tui_getxy(mpdm_t a, mpdm_t ctxt)
 /* TUI: returns the x and y cursor position */
 {
     mpdm_t v;
@@ -805,7 +795,7 @@ static mpdm_t tui_getxy(mpdm_t a, mpdm_t ctxt)
 }
 
 
-static void register_functions(void)
+static void nc_register_functions(void)
 {
     mpdm_t drv;
     mpdm_t tui;
@@ -819,19 +809,19 @@ static void register_functions(void)
     /* execute tui */
     tui = mpsl_eval(MPDM_LS(L"load('mp_tui.mpsl');"), NULL, NULL);
 
-    mpdm_hset_s(tui, L"getkey",     MPDM_X(nc_getkey));
-    mpdm_hset_s(tui, L"addstr",     MPDM_X(tui_addstr));
-    mpdm_hset_s(tui, L"move",       MPDM_X(tui_move));
-    mpdm_hset_s(tui, L"attr",       MPDM_X(tui_attr));
-    mpdm_hset_s(tui, L"refresh",    MPDM_X(tui_refresh));
-    mpdm_hset_s(tui, L"getxy",      MPDM_X(tui_getxy));
-    mpdm_hset_s(tui, L"doc_draw",   MPDM_X(nc_doc_draw));
+    mpdm_hset_s(tui, L"getkey",     MPDM_X(nc_tui_getkey));
+    mpdm_hset_s(tui, L"addstr",     MPDM_X(nc_tui_addstr));
+    mpdm_hset_s(tui, L"move",       MPDM_X(nc_tui_move));
+    mpdm_hset_s(tui, L"attr",       MPDM_X(nc_tui_attr));
+    mpdm_hset_s(tui, L"refresh",    MPDM_X(nc_tui_refresh));
+    mpdm_hset_s(tui, L"getxy",      MPDM_X(nc_tui_getxy));
+    mpdm_hset_s(tui, L"doc_draw",   MPDM_X(nc_tui_doc_draw));
 }
 
 
 static mpdm_t ncursesw_drv_startup(mpdm_t a)
 {
-    register_functions();
+    nc_register_functions();
 
     cw = initscr();
     start_color();
