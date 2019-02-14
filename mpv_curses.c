@@ -54,9 +54,6 @@ int nc_attrs[MAX_COLORS];
 /* code for the 'normal' attribute */
 static int normal_attr = 0;
 
-/* current window */
-static WINDOW *cw = NULL;
-
 /* timer function */
 static int timer_msecs = 0;
 static mpdm_t timer_func = NULL;
@@ -122,7 +119,7 @@ static wchar_t *nc_getwch(void)
     }
 
     /* set to non-blocking */
-    nodelay(cw, 1);
+    nodelay(stdscr, 1);
 
     /* read all possible following characters */
     tmp[n++] = cc;
@@ -130,7 +127,7 @@ static wchar_t *nc_getwch(void)
         tmp[n++] = cc;
 
     /* sets input as blocking */
-    nodelay(cw, 0);
+    nodelay(stdscr, 0);
 
     tmp[n] = '\0';
     mbstowcs(c, tmp, n);
@@ -579,11 +576,11 @@ static mpdm_t nc_addwstr(mpdm_t str)
     char *cptr;
 
     cptr = mpdm_wcstombs(wptr, NULL);
-    waddstr(cw, cptr);
+    waddstr(stdscr, cptr);
     free(cptr);
 
 #else
-    waddwstr(cw, wptr);
+    waddwstr(stdscr, wptr);
 #endif                          /* CONFOPT_ADDWSTR */
 
     return NULL;
@@ -596,7 +593,7 @@ static mpdm_t nc_tui_doc_draw(mpdm_t args, mpdm_t ctxt)
     mpdm_t d;
     int n, m;
 
-    werase(cw);
+    werase(stdscr);
 
     d = mpdm_aget(args, 0);
     d = mpdm_ref(mp_draw(d, 0));
@@ -604,7 +601,7 @@ static mpdm_t nc_tui_doc_draw(mpdm_t args, mpdm_t ctxt)
     for (n = 0; n < mpdm_size(d); n++) {
         mpdm_t l = mpdm_aget(d, n);
 
-        wmove(cw, n, 0);
+        wmove(stdscr, n, 0);
 
         for (m = 0; m < mpdm_size(l); m++) {
             int attr;
@@ -614,7 +611,7 @@ static mpdm_t nc_tui_doc_draw(mpdm_t args, mpdm_t ctxt)
             attr = mpdm_ival(mpdm_aget(l, m++));
             s = mpdm_aget(l, m);
 
-            wattrset(cw, nc_attrs[attr]);
+            wattrset(stdscr, nc_attrs[attr]);
             nc_addwstr(s);
         }
     }
@@ -684,7 +681,7 @@ static void nc_build_colors(void)
     }
 
     /* set the background filler */
-    wbkgdset(cw, ' ' | nc_attrs[normal_attr]);
+    wbkgdset(stdscr, ' ' | nc_attrs[normal_attr]);
 }
 
 
@@ -727,7 +724,7 @@ static mpdm_t ncursesw_drv_suspend(mpdm_t a, mpdm_t ctxt)
     kill(getpid(), SIGSTOP);
 
     /* Ok, we're back, let's refresh the screen */
-    wrefresh(cw);
+    wrefresh(stdscr);
     
     return NULL;
 }
@@ -745,11 +742,11 @@ static mpdm_t nc_tui_move(mpdm_t a, mpdm_t ctxt)
 /* TUI: move to a screen position */
 {
     /* curses' move() use y, x */
-    wmove(cw, mpdm_ival(mpdm_aget(a, 1)), mpdm_ival(mpdm_aget(a, 0)));
+    wmove(stdscr, mpdm_ival(mpdm_aget(a, 1)), mpdm_ival(mpdm_aget(a, 0)));
 
     /* if third argument is not NULL, clear line */
     if (mpdm_aget(a, 2) != NULL)
-        wclrtoeol(cw);
+        wclrtoeol(stdscr);
 
     return NULL;
 }
@@ -760,8 +757,8 @@ static mpdm_t nc_tui_attr(mpdm_t a, mpdm_t ctxt)
 {
     int attr = mpdm_ival(mpdm_aget(a, 0));
 
-    wattrset(cw, nc_attrs[attr]);
-    wbkgdset(cw, ' ' | nc_attrs[attr]);
+    wattrset(stdscr, nc_attrs[attr]);
+    wbkgdset(stdscr, ' ' | nc_attrs[attr]);
 
     return NULL;
 }
@@ -770,7 +767,7 @@ static mpdm_t nc_tui_attr(mpdm_t a, mpdm_t ctxt)
 static mpdm_t nc_tui_refresh(mpdm_t a, mpdm_t ctxt)
 /* TUI: refresh the screen */
 {
-    wrefresh(cw);
+    wrefresh(stdscr);
     return NULL;
 }
 
@@ -781,7 +778,7 @@ static mpdm_t nc_tui_getxy(mpdm_t a, mpdm_t ctxt)
     mpdm_t v;
     int x, y;
 
-    getyx(cw, y, x);
+    getyx(stdscr, y, x);
 
     v = MPDM_A(2);
     mpdm_ref(v);
@@ -823,7 +820,7 @@ static mpdm_t ncursesw_drv_startup(mpdm_t a)
 {
     nc_register_functions();
 
-    cw = initscr();
+    initscr();
     start_color();
 
 #ifdef NCURSES_MOUSE_VERSION
