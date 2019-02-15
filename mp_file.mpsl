@@ -780,6 +780,10 @@ sub mp.open(filename, password)
                 }
             }
             else {
+                /* mp.crypt1_detect() called read(), so there
+                   is (possibly) and eol already detected */
+                local e = eol(f);
+
                 /* close file (needed for rewinding AND
                    possible encoding autodetection) */
                 close(f);
@@ -788,6 +792,9 @@ sub mp.open(filename, password)
                 f = open(filename, "rb");
                 d = mp.add(new(mp_doc, { name: filename }));
                 d.txt.lines = mp_c.plain_load(f);
+
+                /* store the detected eol or the default one */
+                d.eol = e || mp.config.eol;
             }
 
             close(f);
@@ -812,9 +819,6 @@ sub mp.open(filename, password)
 
             /* store the encoding */
             d.encoding = DETECTED_ENCODING || ENCODING || '';
-
-            /* always keep original EOL */
-            d.eol = mp.last_seen_eol;
 
             d->detect_syntax();
 
