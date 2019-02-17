@@ -563,6 +563,7 @@ sub mp.grep(rx, spec, base, rec, r)
             local l, n;
 
             /* file open; now grep */
+            n = 0;
             while (l = read(f)) {
                 l = mp.chomp(l);
 
