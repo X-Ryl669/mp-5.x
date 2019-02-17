@@ -383,8 +383,8 @@ sub mp.tui.draw_scrollbar(doc)
     if (size(doc.txt.lines) > ty) {
         local y1, y2, n;
 
-        y1 = sprintf("%d", (doc.txt.vy * ty) / size(doc.txt.lines));
-        y2 = sprintf("%d", ((doc.txt.vy + ty) * ty) / size(doc.txt.lines));
+        y1 = integer((doc.txt.vy * ty) / size(doc.txt.lines));
+        y2 = integer(((doc.txt.vy + ty) * ty) / size(doc.txt.lines));
 
         /* draw at least 1 line of "thumb" */
         if (y1 == y2)
