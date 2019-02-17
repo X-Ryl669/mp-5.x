@@ -1163,53 +1163,6 @@ mpdm_t mp_c_vpos2pos(mpdm_t args, mpdm_t ctxt)
 }
 
 
-mpdm_t mp_c_plain_load(mpdm_t args, mpdm_t ctxt)
-/* loads a plain file into an array (highly optimized one) */
-{
-    mpdm_t f = mpdm_aget(args, 0);
-    mpdm_t a;
-    mpdm_t v;
-    int chomped = 1;
-    int eol = 1;
-
-    a = MPDM_A(0);
-
-    /* clean last seen EOL */
-    mpdm_hset_s(MP, L"last_seen_eol", NULL);
-
-    /* NOTE: this code rewrites a value, which is *illegal*,
-       to avoid generating too much residual values */
-    while ((v = mpdm_read(f)) != NULL) {
-        wchar_t *ptr = (wchar_t *) v->data;
-        int size = v->size;
-
-        /* chomp */
-        if (size && ptr[size - 1] == L'\n') {
-            if (--size && ptr[size - 1] == L'\r') {
-                --size;
-                eol = 2;
-            }
-
-            ptr[size] = L'\0';
-            v->size = size;
-        }
-        else
-            chomped = 0;
-
-        mpdm_push(a, v);
-    }
-
-    /* if last line was chomped, add a last, empty one */
-    if (chomped)
-        mpdm_push(a, MPDM_LS(L""));
-
-    /* store the last seen EOL */
-    mpdm_hset_s(MP, L"last_seen_eol", MPDM_LS(eol == 2 ? L"\r\n" : L"\n"));
-
-    return a;
-}
-
-
 mpdm_t mp_c_search_hex(mpdm_t args, mpdm_t ctxt)
 /* search the hex string str in the file */
 {
@@ -1321,7 +1274,6 @@ void mp_startup(int argc, char *argv[])
     mpdm_hset_s(mp_c, L"vx2x",              MPDM_X(mp_c_vx2x));
     mpdm_hset_s(mp_c, L"vpos2pos",          MPDM_X(mp_c_vpos2pos));
     mpdm_hset_s(mp_c, L"exit",              MPDM_X(mp_c_exit));
-    mpdm_hset_s(mp_c, L"plain_load",        MPDM_X(mp_c_plain_load));
     mpdm_hset_s(mp_c, L"exit_requested",    MPDM_X(mp_c_exit_requested));
     mpdm_hset_s(mp_c, L"render",            MPDM_X(mp_c_render));
     mpdm_hset_s(mp_c, L"search_hex",        MPDM_X(mp_c_search_hex));

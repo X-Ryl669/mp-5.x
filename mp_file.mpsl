@@ -788,13 +788,18 @@ sub mp.open(filename, password)
                    possible encoding autodetection) */
                 close(f);
 
-                /* reopen and read */
+                /* reopen and read in auto-chomp mode */
+                AUTO_CHOMP = 1;
+
                 f = open(filename, "rb");
                 d = mp.add(new(mp_doc, { name: filename }));
-                d.txt.lines = mp_c.plain_load(f);
+
+                d.txt.lines = map(f);
 
                 /* store the detected eol or the default one */
                 d.eol = e || mp.config.eol;
+
+                AUTO_CHOMP = 0;
             }
 
             close(f);
