@@ -421,7 +421,7 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
                 v = mpdm_ref(qstring_to_v(ql->currentText()));
 
                 /* if it has history, add to it */
-                if (v && (h = mpdm_hget_s(w, L"history")) && mpdm_cmp_s(v, L"")) {
+                if (v && (h = mpdm_hget_s(w, L"history")) && mpdm_cmp_wcs(v, L"")) {
                     h = mp_get_history(h);
 
                     if (mpdm_cmp(v, mpdm_aget(h, -1)) != 0)

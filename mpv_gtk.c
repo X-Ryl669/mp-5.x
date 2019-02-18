@@ -1831,7 +1831,7 @@ static mpdm_t retrieve_form_data(mpdm_t form_args, GtkWidget **form_widgets)
             mpdm_ref(v);
 
             /* if it has history, fill it */
-            if (v && (h = mpdm_hget_s(w, L"history")) && mpdm_cmp_s(v, L"")) {
+            if (v && (h = mpdm_hget_s(w, L"history")) && mpdm_cmp_wcs(v, L"")) {
                 h = mp_get_history(h);
 
                 if (mpdm_cmp(v, mpdm_aget(h, -1)) != 0)

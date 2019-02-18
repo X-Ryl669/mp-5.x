@@ -1425,7 +1425,7 @@ BOOL CALLBACK formDlgProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
                 mpdm_aset(form_values, v, n);
 
                 /* if it has history, fill it */
-                if (v && (h = mpdm_hget_s(w, L"history")) && mpdm_cmp_s(v, L"")) {
+                if (v && (h = mpdm_hget_s(w, L"history")) && mpdm_cmp_wcs(v, L"")) {
                     h = mp_get_history(h);
 
                     if (mpdm_cmp(v, mpdm_aget(h, -1)) != 0)
