@@ -1648,7 +1648,7 @@ static void drag_data_received(GtkWidget *w, GdkDragContext *dc,
     v = mpdm_sregex(v, MPDM_S(L"!file://!g"), NULL, 0);
 
     /* split */
-    v = mpdm_split_s(v, L"\n");
+    v = mpdm_split_wcs(v, L"\n");
 
     /* drop last element, as it's an empty string */
     mpdm_adel(v, -1);
@@ -1743,7 +1743,7 @@ static void selection_received(GtkWidget *w, GtkSelectionData *sel, gpointer d)
         mpdm_t v = MPDM_MBS((char *)gtk_selection_data_get_data(sel));
 
         /* split and set as the clipboard */
-        mpdm_hset_s(MP, L"clipboard",          mpdm_split_s(v, L"\n"));
+        mpdm_hset_s(MP, L"clipboard",          mpdm_split_wcs(v, L"\n"));
         mpdm_hset_s(MP, L"clipboard_vertical", MPDM_I(0));
 
         /* wait no more for the selection */

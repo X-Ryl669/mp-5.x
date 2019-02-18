@@ -1001,7 +1001,7 @@ void MPArea::dropEvent(QDropEvent *event)
     mpdm_t l = MPDM_A(0);
 
     /* split the list of files */
-    v = mpdm_split_s(v, L"\n");
+    v = mpdm_split_wcs(v, L"\n");
 
     for (n = 0; n < (int) mpdm_size(v); n++) {
         wchar_t *ptr;
@@ -1100,7 +1100,7 @@ static mpdm_t qt4_drv_sys_to_clip(mpdm_t a, mpdm_t ctxt)
     QString qs = qc->text(QClipboard::Selection);
 
     /* split and set as the clipboard */
-    mpdm_hset_s(MP, L"clipboard", mpdm_split_s(qstring_to_v(qs), L"\n"));
+    mpdm_hset_s(MP, L"clipboard", mpdm_split_wcs(qstring_to_v(qs), L"\n"));
     mpdm_hset_s(MP, L"clipboard_vertical", MPDM_I(0));
 
     return NULL;

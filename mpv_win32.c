@@ -1201,7 +1201,7 @@ static mpdm_t win32_drv_sys_to_clip(mpdm_t a, mpdm_t ctxt)
 
         /* create a value and split */
         v = mpdm_ref(MPDM_MBS(ptr));
-        d = mpdm_ref(mpdm_split_s(v, L"\r\n"));
+        d = mpdm_ref(mpdm_split_wcs(v, L"\r\n"));
 
         /* and set as the clipboard */
         mpdm_hset_s(MP, L"clipboard", d);
