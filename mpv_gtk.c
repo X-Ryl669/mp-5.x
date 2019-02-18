@@ -1719,7 +1719,7 @@ static void selection_get(GtkWidget *w, GtkSelectionData *sel, guint info, guint
             char *ptr;
             size_t s;
 
-            d = mpdm_ref(mpdm_join_s(d, L"\n"));
+            d = mpdm_ref(mpdm_join_wcs(d, L"\n"));
 
             /* convert to current locale */
             ptr = mpdm_wcstombs(d->data, &s);

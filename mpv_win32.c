@@ -1162,7 +1162,7 @@ static mpdm_t win32_drv_clip_to_sys(mpdm_t a, mpdm_t ctxt)
     d = mpdm_hget_s(MP, L"clipboard");
 
     if (mpdm_size(d)) {
-        v = mpdm_ref(mpdm_join_s(d, L"\r\n"));
+        v = mpdm_ref(mpdm_join_wcs(d, L"\r\n"));
         ptr = mpdm_wcstombs(v->data, &s);
 
         /* allocates a handle and copies */
