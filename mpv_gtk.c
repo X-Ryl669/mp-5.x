@@ -635,7 +635,7 @@ static void gtk_drv_render(mpdm_t doc, int optimize)
         mpdm_t l = mpdm_aget(d, n);
         char *str = NULL;
         int u;
-        size_t p = 0;
+        int p = 0;
 
         if (l == NULL)
             continue;
@@ -1717,7 +1717,7 @@ static void selection_get(GtkWidget *w, GtkSelectionData *sel, guint info, guint
 
         if (mpdm_size(d)) {
             char *ptr;
-            size_t s;
+            int s;
 
             d = mpdm_ref(mpdm_join_wcs(d, L"\n"));
 

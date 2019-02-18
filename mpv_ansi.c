@@ -93,7 +93,7 @@ char *ansi_read_string(int fd)
 /* reads an ansi string, waiting in the first char */
 {
     static char *buf = NULL;
-    static size_t z = 32;
+    static int z = 32;
     int n = 0;
 
     if (buf == NULL)
