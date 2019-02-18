@@ -577,15 +577,20 @@ sub mp.menu_label(action)
 sub mp.trim(str, max)
 /* trims the string to the last max characters, adding ellipsis if done */
 {
-    local v = regex(str, '/.{' ~ max ~ '}$/');
-    return v && L("...") ~ v || str;
+    if (count(str) > max) {
+        local ell = L("...");
+        max -= count(ell);
+        str = ell + slice(str, -max, -1);
+    }
+
+    return str;
 }
 
 
 sub mp.get_doc_names(max)
 /* returns an array with the trimmed names of the documents */
 {
-    mp.docs->map(sub(e) {mp.trim(e->get_name(), (max || 24));});
+    mp.docs->map(sub(e) {mp.trim(e->get_name(), (max || 32));});
 }
 
 
