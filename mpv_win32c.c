@@ -532,7 +532,7 @@ static void register_functions(void)
     mpdm_hset_s(drv, L"shutdown",   MPDM_X(win32c_drv_shutdown));
 
     /* execute tui */
-    tui = mpsl_eval(MPDM_LS(L"load('mp_tui.mpsl');"), NULL, NULL);
+    tui = mpsl_eval(MPDM_S(L"load('mp_tui.mpsl');"), NULL, NULL);
 
     mpdm_hset_s(tui, L"getkey",     MPDM_X(win32c_getkey));
     mpdm_hset_s(tui, L"addstr",     MPDM_X(tui_addstr));
@@ -576,7 +576,7 @@ int win32_drv_detect(int *argc, char ***argv)
 
         mpdm_t drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
 
-        mpdm_hset_s(drv, L"id",      MPDM_LS(L"win32c"));
+        mpdm_hset_s(drv, L"id",      MPDM_S(L"win32c"));
         mpdm_hset_s(drv, L"startup", MPDM_X(win32c_drv_startup));
 
         ret = 1;

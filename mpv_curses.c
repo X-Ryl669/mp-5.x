@@ -804,7 +804,7 @@ static void nc_register_functions(void)
     mpdm_hset_s(drv, L"suspend",    MPDM_X(ncursesw_drv_suspend));
 
     /* execute tui */
-    tui = mpsl_eval(MPDM_LS(L"load('mp_tui.mpsl');"), NULL, NULL);
+    tui = mpsl_eval(MPDM_S(L"load('mp_tui.mpsl');"), NULL, NULL);
 
     mpdm_hset_s(tui, L"getkey",     MPDM_X(nc_tui_getkey));
     mpdm_hset_s(tui, L"addstr",     MPDM_X(nc_tui_addstr));
@@ -864,7 +864,7 @@ int ncursesw_drv_detect(int *argc, char ***argv)
 
     drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
 
-    mpdm_hset_s(drv, L"id",         MPDM_LS(L"curses"));
+    mpdm_hset_s(drv, L"id",         MPDM_S(L"curses"));
     mpdm_hset_s(drv, L"startup",    MPDM_X(ncursesw_drv_startup));
 
     return 1;

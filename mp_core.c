@@ -845,7 +845,7 @@ static mpdm_t drw_remap_to_array(void)
     mpdm_t fmt = NULL;
 
     if (drw_1.xoffset) {
-        fmt = mpdm_ref(mpdm_strcat(MPDM_LS(L" %"), mpdm_strcat_s(MPDM_I(drw_1.xoffset - 2), L"d ")));
+        fmt = mpdm_ref(mpdm_strcat(MPDM_S(L" %"), mpdm_strcat_s(MPDM_I(drw_1.xoffset - 2), L"d ")));
     }
 
     for (my = 0; my < drw_1.ty; my++) {
@@ -1311,7 +1311,7 @@ void mp_mpsl(void)
 {
     mpdm_t e;
 
-    mpsl_eval(MPDM_LS(L"load('mp_core.mpsl');"), NULL, NULL);
+    mpsl_eval(MPDM_S(L"load('mp_core.mpsl');"), NULL, NULL);
 
     if ((e = mpdm_hget_s(mpdm_root(), L"ERROR")) != NULL) {
         mpdm_write_wcs(stdout, mpdm_string(e));

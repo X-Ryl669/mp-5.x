@@ -928,7 +928,7 @@ static void dropped_files(HDROP hDrop)
 
     mpdm_unref(a);
 
-    mp_process_event(MPDM_LS(L"dropped-files"));
+    mp_process_event(MPDM_S(L"dropped-files"));
 
     redraw();
 }
@@ -1057,7 +1057,7 @@ long CALLBACK WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
             mpdm_hset_s(MP, L"mouse_to_x", MPDM_I(x));
             mpdm_hset_s(MP, L"mouse_to_y", MPDM_I(y));
 
-            mp_process_event(MPDM_LS(L"mouse-drag"));
+            mp_process_event(MPDM_S(L"mouse-drag"));
 
             redraw();
         }
@@ -1103,7 +1103,7 @@ long CALLBACK WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
         }
 
         if (!mp_exit_requested)
-            mp_process_event(MPDM_LS(L"close-window"));
+            mp_process_event(MPDM_S(L"close-window"));
 
         if (mp_exit_requested)
             DestroyWindow(hwnd);
@@ -1899,7 +1899,7 @@ int win32_drv_detect(int *argc, char ***argv)
 
         drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
 
-        mpdm_hset_s(drv, L"id",      MPDM_LS(L"win32"));
+        mpdm_hset_s(drv, L"id",      MPDM_S(L"win32"));
         mpdm_hset_s(drv, L"startup", MPDM_X(win32_drv_startup));
     }
 

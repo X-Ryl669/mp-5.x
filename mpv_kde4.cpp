@@ -119,7 +119,7 @@ MPWindow::MPWindow(QWidget * parent) : KMainWindow(parent)
 
 bool MPWindow::queryExit(void)
 {
-    mp_process_event(MPDM_LS(L"close-window"));
+    mp_process_event(MPDM_S(L"close-window"));
 
     this->saveAutoSaveSettings();
 
@@ -481,7 +481,7 @@ extern "C" int kde4_drv_detect(int *argc, char ***argv)
 
             drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
 
-            mpdm_hset_s(drv, L"id",      MPDM_LS(L"kde4"));
+            mpdm_hset_s(drv, L"id",      MPDM_S(L"kde4"));
             mpdm_hset_s(drv, L"startup", MPDM_X(kde4_drv_startup));
         }
         else

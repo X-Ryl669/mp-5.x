@@ -747,7 +747,7 @@ static void redraw(void)
 static gint delete_event(GtkWidget * w, GdkEvent * e, gpointer data)
 /* 'delete_event' handler */
 {
-    mp_process_event(MPDM_LS(L"close-window"));
+    mp_process_event(MPDM_S(L"close-window"));
 
     return mp_exit_requested ? FALSE : TRUE;
 }
@@ -1626,7 +1626,7 @@ static gint motion_notify_event(GtkWidget *w, GdkEventMotion *event, gpointer d)
         mpdm_hset_s(MP, L"mouse_to_x", MPDM_I(x));
         mpdm_hset_s(MP, L"mouse_to_y", MPDM_I(y));
 
-        mp_process_event(MPDM_LS(L"mouse-drag"));
+        mp_process_event(MPDM_S(L"mouse-drag"));
         gtk_drv_render(mp_active(), 1);
     }
 
@@ -1645,7 +1645,7 @@ static void drag_data_received(GtkWidget *w, GdkDragContext *dc,
     v = MPDM_MBS((char *)gtk_selection_data_get_text(data));
 
     /* strip URI crap */
-    v = mpdm_sregex(v, MPDM_LS(L"!file://!g"), NULL, 0);
+    v = mpdm_sregex(v, MPDM_S(L"!file://!g"), NULL, 0);
 
     /* split */
     v = mpdm_split_s(v, L"\n");
@@ -1655,7 +1655,7 @@ static void drag_data_received(GtkWidget *w, GdkDragContext *dc,
 
     mpdm_hset_s(MP, L"dropped_files", v);
 
-    mp_process_event(MPDM_LS(L"dropped-files"));
+    mp_process_event(MPDM_S(L"dropped-files"));
     gtk_drv_render(mp_active(), 1);
 
     gtk_drag_finish(dc, TRUE, TRUE, time);
@@ -2594,9 +2594,9 @@ int gtk_drv_detect(int *argc, char ***argv)
             drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
 
 #if CONFOPT_GTK == 3
-            mpdm_hset_s(drv, L"id", MPDM_LS(L"gtk3"));
+            mpdm_hset_s(drv, L"id", MPDM_S(L"gtk3"));
 #else
-            mpdm_hset_s(drv, L"id", MPDM_LS(L"gtk2"));
+            mpdm_hset_s(drv, L"id", MPDM_S(L"gtk2"));
 #endif
             mpdm_hset_s(drv, L"startup", MPDM_X(gtk_drv_startup));
         }

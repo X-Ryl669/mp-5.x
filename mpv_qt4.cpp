@@ -151,7 +151,7 @@ void MPWindow::save_settings(void)
 
 bool MPWindow::queryExit(void)
 {
-    mp_process_event(MPDM_LS(L"close-window"));
+    mp_process_event(MPDM_S(L"close-window"));
 
     return mp_exit_requested ? true : false;
 }
@@ -159,7 +159,7 @@ bool MPWindow::queryExit(void)
 
 void MPWindow::closeEvent(QCloseEvent *event)
 {
-    mp_process_event(MPDM_LS(L"close-window"));
+    mp_process_event(MPDM_S(L"close-window"));
 
     if (!mp_exit_requested)
         event->ignore();
@@ -563,7 +563,7 @@ extern "C" int qt4_drv_detect(int *argc, char ***argv)
             app = new QApplication(x11_display);
 
             drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
-            mpdm_hset_s(drv, L"id",      MPDM_LS(L"qt4"));
+            mpdm_hset_s(drv, L"id",      MPDM_S(L"qt4"));
             mpdm_hset_s(drv, L"startup", MPDM_X(qt4_drv_startup));
         }
         else
@@ -594,7 +594,7 @@ extern "C" int qt5_drv_detect(int *argc, char ***argv)
             app = new QApplication(*argc, *argv);
 
             drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
-            mpdm_hset_s(drv, L"id",      MPDM_LS(L"qt5"));
+            mpdm_hset_s(drv, L"id",      MPDM_S(L"qt5"));
             mpdm_hset_s(drv, L"startup", MPDM_X(qt4_drv_startup));
         }
         else

@@ -285,13 +285,13 @@ bool MPArea::event(QEvent *event)
         QKeyEvent *ke = (QKeyEvent *) event;
 
         if (ke->key() == Qt::Key_Tab) {
-            mp_process_event(MPDM_LS(L"tab"));
+            mp_process_event(MPDM_S(L"tab"));
             update();
             return true;
         }
         else
         if (ke->key() == Qt::Key_Backtab) {
-            mp_process_event(MPDM_LS(L"shift-tab"));
+            mp_process_event(MPDM_S(L"shift-tab"));
             update();
             return true;
         }
@@ -969,7 +969,7 @@ void MPArea::mouseMoveEvent(QMouseEvent *event)
         mpdm_hset_s(MP, L"mouse_to_x", MPDM_I(x));
         mpdm_hset_s(MP, L"mouse_to_y", MPDM_I(y));
 
-        mp_process_event(MPDM_LS(L"mouse-drag"));
+        mp_process_event(MPDM_S(L"mouse-drag"));
 
         update();
     }
@@ -1020,7 +1020,7 @@ void MPArea::dropEvent(QDropEvent *event)
     mpdm_hset_s(MP, L"dropped_files", l);
 
     event->acceptProposedAction();
-    mp_process_event(MPDM_LS(L"dropped-files"));
+    mp_process_event(MPDM_S(L"dropped-files"));
 
     update();
 }
