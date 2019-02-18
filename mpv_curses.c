@@ -670,11 +670,11 @@ static void nc_build_colors(void)
 
         /* flags */
         w = mpdm_hget_s(v, L"flags");
-        if (mpdm_seek_s(w, L"reverse", 1) != -1)
+        if (mpdm_seek_wcs(w, L"reverse", 1) != -1)
             cp |= A_REVERSE;
-        if (mpdm_seek_s(w, L"bright", 1) != -1)
+        if (mpdm_seek_wcs(w, L"bright", 1) != -1)
             cp |= A_BOLD;
-        if (mpdm_seek_s(w, L"underline", 1) != -1)
+        if (mpdm_seek_wcs(w, L"underline", 1) != -1)
             cp |= A_UNDERLINE;
 
         nc_attrs[n++] = cp;

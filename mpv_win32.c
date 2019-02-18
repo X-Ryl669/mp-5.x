@@ -203,9 +203,9 @@ static void build_colors(void)
         /* flags */
         w = mpdm_hget_s(v, L"flags");
 
-        underlines[n] = mpdm_seek_s(w, L"underline", 1) != -1 ? 1 : 0;
+        underlines[n] = mpdm_seek_wcs(w, L"underline", 1) != -1 ? 1 : 0;
 
-        if (mpdm_seek_s(w, L"reverse", 1) != -1) {
+        if (mpdm_seek_wcs(w, L"reverse", 1) != -1) {
             COLORREF t;
 
             t = inks[n];

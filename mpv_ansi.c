@@ -216,11 +216,11 @@ static void ansi_build_colors(void)
 
         /* flags */
         w = mpdm_hget_s(v, L"flags");
-        if (mpdm_seek_s(w, L"reverse", 1) != -1)
+        if (mpdm_seek_wcs(w, L"reverse", 1) != -1)
             cf |= 0x01;
-        if (mpdm_seek_s(w, L"bright", 1) != -1)
+        if (mpdm_seek_wcs(w, L"bright", 1) != -1)
             cf |= 0x02;
-        if (mpdm_seek_s(w, L"underline", 1) != -1)
+        if (mpdm_seek_wcs(w, L"underline", 1) != -1)
             cf |= 0x04;
 
         sprintf(ansi_attrs[n], "\033[0;%s%s%s%d;%dm",

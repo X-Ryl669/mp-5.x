@@ -118,12 +118,12 @@ static void build_colors(void)
         /* flags */
         w = mpdm_hget_s(v, L"flags");
 
-        if (mpdm_seek_s(w, L"reverse", 1) != -1) {
+        if (mpdm_seek_wcs(w, L"reverse", 1) != -1) {
             int t = c0;
             c0 = c1;
             c1 = t;
         }
-        if (mpdm_seek_s(w, L"bright", 1) != -1)
+        if (mpdm_seek_wcs(w, L"bright", 1) != -1)
             cp |= FOREGROUND_INTENSITY;
 
         if ((c0 & 1)) cp |= FOREGROUND_RED;

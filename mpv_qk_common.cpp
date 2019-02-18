@@ -139,13 +139,13 @@ static void qk_build_colors(void)
         /* flags */
         w = mpdm_hget_s(v, L"flags");
 
-        if (mpdm_seek_s(w, L"reverse", 1) != -1) {
+        if (mpdm_seek_wcs(w, L"reverse", 1) != -1) {
             int t = rgbi;
             rgbi = rgbp;
             rgbp = t;
         }
 
-        underlines[n] = mpdm_seek_s(w, L"underline", 1) != -1 ? true : false;
+        underlines[n] = mpdm_seek_wcs(w, L"underline", 1) != -1 ? true : false;
 
         inks[n] = QPen(QColor::fromRgbF((float) ((rgbi & 0x00ff0000) >> 16) / 256.0,
                                         (float) ((rgbi & 0x0000ff00) >> 8)  / 256.0,
