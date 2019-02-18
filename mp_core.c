@@ -845,7 +845,7 @@ static mpdm_t drw_remap_to_array(void)
     mpdm_t fmt = NULL;
 
     if (drw_1.xoffset) {
-        fmt = mpdm_ref(mpdm_strcat(MPDM_S(L" %"), mpdm_strcat_s(MPDM_I(drw_1.xoffset - 2), L"d ")));
+        fmt = mpdm_ref(mpdm_strcat(MPDM_S(L" %"), mpdm_strcat_wcs(MPDM_I(drw_1.xoffset - 2), L"d ")));
     }
 
     for (my = 0; my < drw_1.ty; my++) {
