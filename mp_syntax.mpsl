@@ -279,22 +279,18 @@ sub mp_doc.help(doc, word)
  */
 sub mp_doc.section_list(doc)
 {
-    local r;
+    local r = NULL;
 
     if (doc.syntax.section) {
-        local n, l;
-
         r = [];
 
-        while ((l = doc.txt.lines[n]) != NULL) {
+        foreach (l, i, doc.txt.lines) {
             foreach (ex, doc.syntax.section) {
                 if (regex(l, ex)) {
-                    push(r, [ l, n ]);
+                    push(r, [l, i]);
                     break;
                 }
             }
-
-            n++;
         }
     }
 
