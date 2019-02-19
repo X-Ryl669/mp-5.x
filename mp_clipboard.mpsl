@@ -231,29 +231,18 @@ sub mp_doc.get_active_area(doc)
 
 
 /**
- * mp_doc.copy - Copies the selected block or a string to the clipboard
- * @doc: the source of the copy
+ * mp_doc.copy - Copies the selected block to the clipboard
+ * @doc: the document
  *
- * If @doc is a document, it copies to the clipboard the content of the
- * selected block, if one exists. If @doc is an array or scalar, it copies
- * that data directly into it.
+ * Copies to the clipboard the content of the selected block,
+ * if one exists.
  */
 sub mp_doc.copy(doc)
 {
-    if (is_hash(doc)) {
-        if (doc.txt.mark) {
-            mp.clipboard = doc->get_active_area();
-            mp.clipboard_vertical = doc.txt.mark.vertical;
+    if (doc.txt.mark) {
+        mp.clipboard = doc->get_active_area();
+        mp.clipboard_vertical = doc.txt.mark.vertical;
 
-            mp_drv.clip_to_sys();
-        }
-    }
-    else {
-        if (!is_array(doc))
-            doc = split(doc, "\n");
-
-        mp.clipboard = doc;
-        mp.clipboard_vertical = 0;
         mp_drv.clip_to_sys();
     }
 
