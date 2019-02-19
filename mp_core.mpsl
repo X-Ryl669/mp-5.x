@@ -463,7 +463,7 @@ sub mp.process_event(k)
         /* get the action asociated to the keycode */
         if (a != NULL) {
             /* if it's a hash, store for further testing */
-            if (is_hash(a))
+            if (type(a) eq "object")
                 mp.keycodes_t = a;
             else {
                 /* if it's executable, run it */
