@@ -37,7 +37,7 @@ mp-dist.tar: *.mpsl lang/*.mpsl syntax/*.mpsl
 	$(TAR) cvf $@ *.mpsl lang/*.mpsl syntax/*.mpsl
 
 mp.tar.o: mp.tar
-	$(LD) -r -b binary $< -o $@
+	$(LD) -r -b binary mp.tar -o $@
 
 $(APPNAME): $(OBJS) $(MPDM)/libmpdm.a $(MPSL)/libmpsl.a
 	$(CCLINK) $(CFLAGS) $(OBJS) `cat config.ldflags` -o $@
