@@ -763,10 +763,17 @@ sub mp.test_versions()
 
 sub mp.load_state()
 {
+    /* read state file */
     local j = open(HOMEDIR ~ ".mp_state.json", "r")->map()->join();
 
-    if (j)
-        j = (j = j->sscanf("%j")->shift())->is_hash() && j || NULL;
+    if (j) {
+        /* parse as json and take the first scanned value */
+        j = j->sscanf("%j")->shift();
+
+        /* must be an object; otherwise, drop it */
+        if (type(j) ne "object")
+            j = NULL;
+    }
 
     mp.state = j || {};
 }
