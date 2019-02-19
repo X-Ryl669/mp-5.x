@@ -457,8 +457,7 @@ extern "C" int kde4_drv_detect(int *argc, char ***argv)
             KAboutData aboutData("mp", 0,
                          ki18n("Minimum Profit"), VERSION,
                          ki18n("A programmer's text editor"),
-                         KAboutData::License_GPL,
-                         ki18n("Copyright (c) 1991-2009 Angel Ortega"),
+                         ki18n("Angel Ortega et al."),
                          ki18n(""),
                          "http://triptico.com", "angel@triptico.com");
 
