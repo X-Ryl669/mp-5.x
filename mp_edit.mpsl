@@ -550,35 +550,33 @@ sub mp_doc.insert(doc, a)
     local s;
 
     /* if a is not an array, split it */
-    if (!is_array(a))
+    if (type(a) ne "array")
         a = split(a, "\n");
 
-    /* empty array? return */
-    if ((s = size(a)) == 0)
-        return doc;
+    if ((s = size(a))) {
+        /* paste first line into current position */
+        doc->insert_string(a[0]);
 
-    /* paste first line into current position */
-    doc->insert_string(a[0]);
+        /* more than just one line? */
+        if (s > 1) {
+            /* break current line in two */
+            doc->break_line();
 
-    /* more than just one line? */
-    if (s > 1) {
-        /* break current line in two */
-        doc->break_line();
+            /* insert last line */
+            doc->insert_string(a[s - 1]);
+        }
 
-        /* insert last line */
-        doc->insert_string(a[s - 1]);
-    }
+        /* more than two lines? */
+        if (s > 2) {
+            local n = 1;
 
-    /* more than two lines? */
-    if (s > 2) {
-        local n = 1;
+            /* open room */
+            expand(txt.lines, txt.y, s - 2);
 
-        /* open room */
-        expand(txt.lines, txt.y, s - 2);
-
-        /* transfer middle lines */
-        while (n < s - 1)
-            txt.lines[txt.y++] = a[n++];
+            /* transfer middle lines */
+            while (n < s - 1)
+                txt.lines[txt.y++] = a[n++];
+        }
     }
 
     return doc;
@@ -593,19 +591,18 @@ sub mp_doc.append(doc, a)
     doc->delete_mark();
 
     /* if a is not an array, split it */
-    if (!is_array(a))
+    if (type(a) ne "array")
         a = split(a, "\n");
 
-    /* empty array? return */
-    if ((s = size(a)) == 0)
-        return doc;
-    
-    /* append now */
-    local n = 0;
-    while (n < s) 
-        push(txt.lines, a[n++]);
+    if ((s = size(a))) {
+        /* append now */
+        local n = 0;
+        while (n < s)
+            push(txt.lines, a[n++]);
 
-    txt.mod++;
+        txt.mod++;
+    }
+
     return doc;
 }
 

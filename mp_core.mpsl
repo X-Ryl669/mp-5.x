@@ -471,7 +471,7 @@ sub mp.process_event(k)
                     a(doc);
                 else
                 /* if it's an array, process it sequentially */
-                if (is_array(a))
+                if (type(a) eq "array")
                     foreach(l, a)
                         mp.process_action(l);
                 else
