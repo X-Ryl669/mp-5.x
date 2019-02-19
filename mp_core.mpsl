@@ -815,19 +815,21 @@ local mp_modules = [
 foreach (m, mp_modules) {
     eval('load("mp_' ~ m ~ '.mpsl");');
 
-    if (ERROR != NULL)
+    if (ERROR != NULL) {
         mp.exit_message = mp.exit_message ~ ERROR ~ "\n";
+        break;
+    }
 }
-
-ERROR = NULL;
 
 /** main **/
 
-mp.load_profile();
-mp.load_state();
-mp_drv.startup();
-mp.process_cmdline();
-mp.test_versions();
-mp_drv.main_loop();
-mp_drv.shutdown();
-mp.save_state();
+if (ERROR == NULL) {
+    mp.load_profile();
+    mp.load_state();
+    mp_drv.startup();
+    mp.process_cmdline();
+    mp.test_versions();
+    mp_drv.main_loop();
+    mp_drv.shutdown();
+    mp.save_state();
+}
