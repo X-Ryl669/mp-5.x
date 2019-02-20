@@ -188,7 +188,7 @@ msgstr "N"
 msgid " [Y/N]"
 msgstr "[J/N]"
 
-#: mp_tui.mpsl:452
+#: mp_tui.mpsl:445
 msgid " [ENTER]"
 msgstr "[ENTER]"
 
@@ -239,11 +239,11 @@ msgstr ""
 "Modi für die Syntax-Hervorhebung:\n"
 "\t"
 
-#: mpv_gtk.c:1919 mp_tui.mpsl:354
+#: mpv_gtk.c:1919 mp_tui.mpsl:347
 msgid "Yes"
 msgstr "Ja"
 
-#: mpv_gtk.c:1920 mp_tui.mpsl:355
+#: mpv_gtk.c:1920 mp_tui.mpsl:348
 msgid "No"
 msgstr "Nein"
 
@@ -369,7 +369,7 @@ msgstr "Zeilenumbruch..."
 msgid "Show clipboard"
 msgstr "Zwischenablage zeigen"
 
-#: mp_search.mpsl:257
+#: mp_search.mpsl:255
 msgid "Search next"
 msgstr "Weitersuchen"
 
@@ -390,7 +390,7 @@ msgstr "Hardlinks beim Speichern trennen"
 msgid "Save as..."
 msgstr "Speichern unter..."
 
-#: mp_search.mpsl:259
+#: mp_search.mpsl:257
 msgid "Replace..."
 msgstr "Ersetzen..."
 
@@ -455,7 +455,7 @@ msgstr "Seite nach unten"
 msgid "Page up"
 msgstr "Seite nach oben"
 
-#: mp_search.mpsl:261
+#: mp_search.mpsl:259
 msgid "Move to previous instance of current char"
 msgstr "Zum vorherigen Vorkommen des aktuellen Buchstabens"
 
@@ -467,11 +467,11 @@ msgstr "Buchstabe nach rechts"
 msgid "Open file under cursor"
 msgstr "Datei über dem Kursor öffnen"
 
-#: mp_search.mpsl:256
+#: mp_search.mpsl:254
 msgid "Search text..."
 msgstr "Suchen..."
 
-#: mp_search.mpsl:260
+#: mp_search.mpsl:258
 msgid "Move to next instance of current char"
 msgstr "Zum nächsten Vorkommen des aktuellen Buchstabens"
 
@@ -498,7 +498,7 @@ msgstr "Zum Anfang der Zeile"
 msgid "Select last succesful search"
 msgstr "Letzte erfolgreiche Suche markieren"
 
-#: mp_drv.mpsl:40 mp_tui.mpsl:429
+#: mp_drv.mpsl:40 mp_tui.mpsl:422
 msgid "Menu"
 msgstr "Menü"
 
@@ -607,7 +607,7 @@ msgstr "Block kopieren"
 msgid "Cut block"
 msgstr "Block ausschneiden+kopieren"
 
-#: mp_misc.mpsl:310
+#: mp_misc.mpsl:315
 msgid "About..."
 msgstr "Über..."
 
@@ -624,7 +624,7 @@ msgstr "Zeichen über dem Kursor löschen"
 msgid "Delete to the end of word"
 msgstr "Löschen bis zum Ende des Wortes"
 
-#: mp_search.mpsl:263
+#: mp_search.mpsl:261
 msgid "Grep (find inside) files..."
 msgstr "Grep-Suche in Dateien..."
 
@@ -672,27 +672,26 @@ msgstr ""
 msgid "Code to execute"
 msgstr ""
 
-#: mp_misc.mpsl:50 mp_misc.mpsl:66
+#: mp_misc.mpsl:55 mp_misc.mpsl:73
 msgid "Error: "
 msgstr "Fehler: "
 
-#: mp_misc.mpsl:55
 msgid "Exit value:\n"
 msgstr ""
 
-#: mp_misc.mpsl:302
+#: mp_misc.mpsl:307
 msgid "Execute MPSL code..."
 msgstr ""
 
-#: mp_misc.mpsl:303
+#: mp_misc.mpsl:308
 msgid "Execute document as MPSL"
 msgstr ""
 
-#: mp_misc.mpsl:308
+#: mp_misc.mpsl:313
 msgid "Bigger font"
 msgstr ""
 
-#: mp_misc.mpsl:309
+#: mp_misc.mpsl:314
 msgid "Smaller font"
 msgstr ""
 
@@ -719,7 +718,7 @@ msgstr ""
 msgid "Grep"
 msgstr "Grep-Suche"
 
-#: mp_search.mpsl:258
+#: mp_search.mpsl:256
 msgid "Search previous"
 msgstr ""
 
@@ -794,7 +793,7 @@ msgstr ""
 msgid "Revert"
 msgstr ""
 
-#: mp_misc.mpsl:137
+#: mp_misc.mpsl:144
 msgid "Invalid encoding "
 msgstr ""
 
@@ -803,7 +802,7 @@ msgstr ""
 msgid "Lines: %d Words: %d"
 msgstr ""
 
-#: mp_misc.mpsl:307
+#: mp_misc.mpsl:312
 msgid "Set charset encoding..."
 msgstr ""
 
@@ -815,7 +814,7 @@ msgstr ""
 msgid "Toggle spellchecking"
 msgstr ""
 
-#: mp_tui.mpsl:746
+#: mp_tui.mpsl:739
 msgid "Please, wait..."
 msgstr ""
 
@@ -832,7 +831,7 @@ msgstr ""
 msgid "Complete..."
 msgstr ""
 
-#: mp_tags.mpsl:219
+#: mp_tags.mpsl:222
 msgid "Select"
 msgstr ""
 
@@ -849,7 +848,7 @@ msgstr ""
 msgid "Unknown action '%s'"
 msgstr ""
 
-#: mp_edit.mpsl:698
+#: mp_edit.mpsl:696
 #, c-format
 msgid "Unbound keystroke '%s'"
 msgstr ""
@@ -859,7 +858,7 @@ msgstr ""
 msgid "New file '%s'"
 msgstr ""
 
-#: mp_search.mpsl:508
+#: mp_search.mpsl:505
 #, c-format
 msgid "%d replaces"
 msgstr ""
@@ -966,7 +965,7 @@ msgstr ""
 msgid "Use previous line for tab columns"
 msgstr ""
 
-#: mp_misc.mpsl:305
+#: mp_misc.mpsl:310
 msgid "Insert next item"
 msgstr ""
 
@@ -982,11 +981,11 @@ msgstr ""
 msgid "Mark all"
 msgstr ""
 
-#: mp_misc.mpsl:105
+#: mp_misc.mpsl:112
 msgid "Select action to execute"
 msgstr ""
 
-#: mp_misc.mpsl:304
+#: mp_misc.mpsl:309
 msgid "Execute action on document..."
 msgstr ""
 
@@ -1032,35 +1031,35 @@ msgstr ""
 msgid "<%s output>"
 msgstr ""
 
-#: mp_misc.mpsl:314
+#: mp_misc.mpsl:319
 msgid "Version Control..."
 msgstr ""
 
-#: mp_misc.mpsl:312
+#: mp_misc.mpsl:317
 msgid "Play \"Pipes\""
 msgstr ""
 
-#: mp_toys.mpsl:161 mp_toys.mpsl:320
+#: mp_toys.mpsl:159 mp_toys.mpsl:321
 msgid "You won! Press any key."
 msgstr ""
 
-#: mp_misc.mpsl:272
+#: mp_misc.mpsl:277
 msgid "You already have the latest version."
 msgstr ""
 
-#: mp_misc.mpsl:276
+#: mp_misc.mpsl:281
 msgid "There are new versions available:"
 msgstr ""
 
-#: mp_misc.mpsl:277
+#: mp_misc.mpsl:282
 msgid "Update Minimum Profit from http://triptico.com/software/mp.html"
 msgstr ""
 
-#: mp_misc.mpsl:281
+#: mp_misc.mpsl:286
 msgid "Cannot connect -- please try later."
 msgstr ""
 
-#: mp_misc.mpsl:311
+#: mp_misc.mpsl:316
 msgid "Check for updates..."
 msgstr ""
 
@@ -1085,7 +1084,7 @@ msgstr ""
 msgid "Move one section down"
 msgstr ""
 
-#: mp_toys.mpsl:192
+#: mp_toys.mpsl:191
 msgid "Pipes - carry water from top to bottom by turning the pipes"
 msgstr ""
 
@@ -1114,15 +1113,15 @@ msgstr "Datei '%s' wurde geändert. Änderungen speichern?"
 msgid "Error opening '%s': %s"
 msgstr ""
 
-#: mp_misc.mpsl:121
+#: mp_misc.mpsl:128
 msgid "<current locale>"
 msgstr ""
 
-#: mp_misc.mpsl:126
+#: mp_misc.mpsl:133
 msgid "Available encodings"
 msgstr ""
 
-#: mp_misc.mpsl:270
+#: mp_misc.mpsl:275
 msgid "You have a development version newer than any stable release."
 msgstr ""
 
@@ -1184,7 +1183,7 @@ msgstr ""
 msgid "# deleted '%s'"
 msgstr ""
 
-#: mp_misc.mpsl:306
+#: mp_misc.mpsl:311
 msgid "Insert time stamp"
 msgstr ""
 
@@ -1233,29 +1232,8 @@ msgstr ""
 msgid "Search wrapped"
 msgstr ""
 
-#: mp_search.mpsl:262
+#: mp_search.mpsl:260
 msgid "Move to the matching bracket"
-msgstr ""
-
-#: mp_core.mpsl:597
-#, c-format
-msgid ""
-"Minimum Profit %s - Programmer Text Editor\n"
-"Copyright (C) Angel Ortega <angel@triptico.com> et al.\n"
-"\n"
-"Usage: mp-5 [options] [files...]\n"
-"\n"
-"Options:\n"
-"\n"
-" -t {tag}           Edits the file where tag is defined\n"
-" -e {mpsl_code}     Executes MPSL code\n"
-" -f {mpsl_script}   Executes MPSL script file\n"
-" -d {directory}     Set current directory\n"
-" -x {file}          Open file in the hexadecimal viewer\n"
-" -txt               Use text mode instead of GUI\n"
-" +NNN               Moves to line number NNN of last file\n"
-"\n"
-"Homepage: http://triptico.com/software/mp.html\n"
 msgstr ""
 
 #: mp_edit.mpsl:220
@@ -1290,46 +1268,20 @@ msgstr ""
 msgid "Insert raw string"
 msgstr ""
 
-#: mp_misc.mpsl:155
-#, c-format
-msgid ""
-"Minimum Profit %s (%s) - Programmer Text Editor\n"
-"\n"
-"Components: MPDM %s, MPSL %s\n"
-"\n"
-"Copyright (C) 1991-2019 Angel Ortega <angel@triptico.com> et al.\n"
-"\n"
-"This program is free software; you can redistribute it and/or\n"
-"modify it under the terms of the GNU General Public License\n"
-"as published by the Free Software Foundation; either version 2\n"
-"of the License, or (at your option) any later version.\n"
-"\n"
-"This program is distributed in the hope that it will be useful,\n"
-"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
-"See the GNU General Public License for more details.\n"
-"\n"
-"You should have received a copy of the GNU General Public License\n"
-"along with this program; if not, write to the Free Software Foundation,\n"
-"Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.\n"
-"\n"
-"Home page: http://triptico.com/software/mp.html\n"
-msgstr ""
-
-#: mp_search.mpsl:229
+#: mp_search.mpsl:227
 #, c-format
 msgid "%d lines replaced"
 msgstr ""
 
-#: mp_search.mpsl:264
+#: mp_search.mpsl:262
 msgid "Replace tabs with spaces"
 msgstr ""
 
-#: mp_search.mpsl:265
+#: mp_search.mpsl:263
 msgid "Replace spaces with tabs"
 msgstr ""
 
-#: mp_toys.mpsl:44
+#: mp_toys.mpsl:42
 #, c-format
 msgid "Maze - help %s to find the treasure. As always, the X marks the spot."
 msgstr ""
@@ -1351,6 +1303,31 @@ msgstr ""
 msgid "<hex view of %s>"
 msgstr ""
 
-#: mp_misc.mpsl:313
+#: mp_misc.mpsl:318
 msgid "Play \"Maze\""
+msgstr ""
+
+#: mp_core.mpsl:601 mp_misc.mpsl:162
+#, c-format
+msgid "Minimum Profit %s - Programmer Text Editor"
+msgstr ""
+
+#: mp_core.mpsl:603
+msgid ""
+"Usage: mp-5 [options] [files...]\n"
+"\n"
+"Options:\n"
+"\n"
+" -t {tag}           Edits the file where tag is defined\n"
+" -e {mpsl_code}     Executes MPSL code\n"
+" -f {mpsl_script}   Executes MPSL script file\n"
+" -d {directory}     Set current directory\n"
+" -x {file}          Open file in the hexadecimal viewer\n"
+" -txt               Use text mode instead of GUI\n"
+" +NNN               Moves to line number NNN of last file\n"
+msgstr ""
+
+#: mp_misc.mpsl:164
+#, c-format
+msgid "Components: driver %s, MPDM %s, MPSL %s"
 msgstr ""

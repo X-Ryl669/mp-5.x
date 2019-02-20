@@ -598,24 +598,20 @@ sub mp.usage()
 /* set mp.exit_message with an usage message (--help) */
 {
     mp.exit_message = 
-    sprintf(L(
-        "Minimum Profit %s - Programmer Text Editor\n"\
-        "Copyright (C) Angel Ortega <angel@triptico.com> et al.\n"\
-        "\n"\
-        "Usage: mp-5 [options] [files...]\n"\
-        "\n"\
-        "Options:\n"\
-        "\n"\
-        " -t {tag}           Edits the file where tag is defined\n"\
-        " -e {mpsl_code}     Executes MPSL code\n"\
-        " -f {mpsl_script}   Executes MPSL script file\n"\
-        " -d {directory}     Set current directory\n"\
-        " -x {file}          Open file in the hexadecimal viewer\n"\
-        " -txt               Use text mode instead of GUI\n"\
-        " +NNN               Moves to line number NNN of last file\n"\
-        "\n"\
-        "Homepage: http://triptico.com/software/mp.html\n"
-    ), mp.VERSION);
+        sprintf(L("Minimum Profit %s - Programmer Text Editor"), mp.VERSION) ~
+        "\nAngel Ortega <angel@triptico.com> et al.\n\n" ~
+        L("Usage: mp-5 [options] [files...]\n"\
+            "\n"\
+            "Options:\n"\
+            "\n"\
+            " -t {tag}           Edits the file where tag is defined\n"\
+            " -e {mpsl_code}     Executes MPSL code\n"\
+            " -f {mpsl_script}   Executes MPSL script file\n"\
+            " -d {directory}     Set current directory\n"\
+            " -x {file}          Open file in the hexadecimal viewer\n"\
+            " -txt               Use text mode instead of GUI\n"\
+            " +NNN               Moves to line number NNN of last file"\
+            "\n");
 }
 
 
