@@ -193,7 +193,7 @@ sub mp_doc.get_status(doc)
             '%O'    =>  sub { mp.config.insert && 'O' || ''; },
             '%s'    =>  sub { mp.active.syntax.name; },
             '%t'    =>  sub { mp.tags[mp.active()->get_word()].label; },
-            '%n'    =>  sub { mp.active.title || mp.active.name; },
+            '%n'    =>  sub { mp.trim(mp.active.title || mp.active.name, 50); },
             '%w'    =>  sub { mp.active()->word_count(); },
             '%e'    =>  sub { mp.active.encoding || ''; },
             '%u'    =>  sub { sprintf("%04X",
