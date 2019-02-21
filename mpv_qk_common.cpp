@@ -408,6 +408,7 @@ void MPArea::paintEvent(QPaintEvent *)
     painter.setBackgroundMode(Qt::OpaqueMode);
 
     mpdm_ref(w);
+    mpdm_push(w, MPDM_A(0));
 
     for (n = 0; n < (int) mpdm_size(w); n++) {
         mpdm_t l = mpdm_aget(w, n);
