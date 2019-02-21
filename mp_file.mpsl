@@ -585,11 +585,26 @@ sub mp_doc.export_as_rtf(doc, fn)
 {
     local ret = 0;
 
+    /* configurable data */
+    local ff = mp.config.rtf_font_face || "Times New Roman";
+    local fs = string((mp.config.rtf_font_size || 12) * 2);
+
     if ((f = open(fn, "wb"))) {
         local p = [];
 
-        f->write('{\rtf1\ansi \paperw11906\paperh16838 {\plain \fs24 \sa227', "\r\n");
+        f->write('{\rtf1\ansi\plain', "\r\n");
         f->write('{\*\generator Minimum Profit ', mp.VERSION, "}\r\n");
+
+        /* page size (a4) */
+        f->write('\paperw11906\paperh16838', "\r\n");
+
+        /* font table (font face) */
+        f->write('{\fonttbl{\f0\froman\fprq2\fcharset0 ', ff, ";}}\f0\r\n");
+
+        /* font size */
+        f->write('\fs', fs, "\r\n");
+
+        f->write('\sa227\sl480', "\r\n");
 
         foreach (l, doc.txt.lines) {
             if (l) {
@@ -630,7 +645,7 @@ sub mp_doc.export_as_rtf(doc, fn)
             }
         }
 
-        f->write(p->join(" \r\n"), "\\par\r\n}}\r\n");
+        f->write(p->join(" \r\n"), "\\par\r\n}\r\n");
 
         f->close();
     }
