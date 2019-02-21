@@ -440,7 +440,7 @@ void MPArea::paintEvent(QPaintEvent *)
 
             painter.setPen(*epen);
             painter.setBrush(papers[normal_attr]);
-            painter.drawRect(x, y + 1, ls_width - x, font_height);
+            painter.drawRect(x, y + 1, ls_width - x, font_height * 2);
         }
 
         y += font_height;
