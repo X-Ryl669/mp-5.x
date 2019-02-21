@@ -586,8 +586,11 @@ sub mp_doc.export_as_rtf(doc, fn)
     local ret = 0;
 
     /* configurable data */
-    local ff = mp.config.rtf_font_face || "Times New Roman";
-    local fs = string((mp.config.rtf_font_size || 12) * 2);
+    local ff  = mp.config.rtf_font_face || "Times New Roman";
+    local fs  = string((mp.config.rtf_font_size || 12) * 2);
+    local sa  = string(227);
+    local pi  = '\fi567';
+    local fpi = '\fi0';
 
     if ((f = open(fn, "wb"))) {
         local p = [];
@@ -604,16 +607,28 @@ sub mp_doc.export_as_rtf(doc, fn)
         /* font size */
         f->write('\fs', fs, "\r\n");
 
-        f->write('\sa227\sl480', "\r\n");
+        /* space after paragraph */
+        f->write('\sa', sa, "\r\n");
+
+        f->write('\sl480\slmult1', "\r\n");
+
+        /* justify */
+        if (mp.config.rtf_justify)
+            f->write('\qj', "\r\n");
 
         foreach (l, doc.txt.lines) {
             if (l) {
                 /* escape backslashes */
                 l = l->sregex("@\\\\@g", "\\\\\\");
 
+                /* convert space surrounded lines to centered */
+                if (l->regex("/^ [^ ]+ $/")) {
+                    l = '{\qc\fi0 ' ~ l->slice(1, -2) ~ '}';
+                }
+
                 /* convert space-leaded lines to line breaks */
                 if (l->regex("/^ /")) {
-                    l = l->slice(1, size(l) - 1) ~ "\\line";
+                    l = l->slice(1, -1) ~ '\line';
                 }
 
                 /* convert *text* to strong */
@@ -640,7 +655,7 @@ sub mp_doc.export_as_rtf(doc, fn)
                 p->push(l);
             }
             else {
-                f->write(p->join(" \r\n"), "\\par\r\n");
+                f->write(p->join(" \r\n"), "\\par", pi, "\r\n");
                 p = [];
             }
         }
