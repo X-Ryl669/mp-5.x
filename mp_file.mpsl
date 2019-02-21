@@ -580,17 +580,99 @@ sub mp_doc.save(doc)
 }
 
 
+sub mp_doc.parse_text_doc(doc)
+/* parses a document in sections */
+{
+    local tdoc = [];
+    local mode = 'first';
+    local data = [];
+
+    tdoc->push([mode, data]);
+
+    foreach (l, doc.txt.lines) {
+        local fl = 0;
+        local n_mode = NULL;
+
+        /** mode selection **/
+
+        /* space surrounded lines is centered */
+        if (l->regex("/^ .+ $/")) {
+            l = l->slice(1, -2);
+
+            if (mode != 'center')
+                n_mode = 'center';
+        }
+        else
+        /* space-leaded lines is verbatim */
+        if (l->regex("/^ /")) {
+            l = l->slice(1, -1);
+
+            if (mode != 'verbatim')
+                n_mode = 'verbatim';
+        }
+        else
+        /* page break */
+        if (l == "\x{000c}") {
+            l = "";
+            tdoc->push(['page', []]);
+            n_mode = 'first';
+        }
+        /* paragraph mode */
+        else {
+            if (l == "") {
+                if (mode == 'para' || mode == 'first')
+                    n_mode = 'para';
+                else
+                    n_mode = 'first';
+            }
+        }
+
+        if (n_mode) {
+            mode = n_mode;
+            data = [];
+
+            tdoc->push([mode, data]);
+        }
+
+        /* store line */
+        if (l != "")
+            data->push(l);
+    }
+
+    return tdoc;
+}
+
+
 sub mp_doc.export_as_rtf(doc, fn)
 /* exports a text as a very basic RTF file */
 {
     local ret = 0;
 
     /* configurable data */
-    local ff  = mp.config.rtf_font_face || "Times New Roman";
-    local fs  = string((mp.config.rtf_font_size || 12) * 2);
-    local sa  = string(227);
-    local pi  = '\fi567';
-    local fpi = '\fi0';
+    local tff = mp.config.rtf_font_face || "Times New Roman";
+    local tfs = string((mp.config.rtf_font_size || 12) * 2);
+    local mff = mp.config.rtf_mono_font_face || "Courier New";
+    local mfs = string((mp.config.rtf_mono_font_size || 10) * 2);
+    local ali = mp.config.rtf_justify && '\qj' || '';
+
+    local styles = {
+        first:      [
+            '\fi0',
+            " \r\n"
+        ],
+        para:       [
+            '',
+            " \r\n"
+        ],
+        verbatim:   [
+            '\f1\fs' + mfs + '\fi0\sa0\sl0\slmult0\ql',
+            "\\par\r\n"
+        ],
+        center:     [
+            '\fi0\sa0\sl0\slmult0\qc',
+            "\\par\r\n"
+        ]
+    };
 
     if ((f = open(fn, "wb"))) {
         local p = [];
@@ -601,67 +683,50 @@ sub mp_doc.export_as_rtf(doc, fn)
         /* page size (a4) */
         f->write('\paperw11906\paperh16838', "\r\n");
 
-        /* font table (font face) */
-        f->write('{\fonttbl{\f0\froman\fprq2\fcharset0 ', ff, ";}}\f0\r\n");
+        /* font table (font faces) */
+        f->write('{\fonttbl',
+            '{\f0\froman\fprq2\fcharset0 ', tff, ';}',
+            '{\f1\fmodern\fprq2\fcharset0 ', mff, ';}',
+            "}\r\n");
 
-        /* font size */
-        f->write('\fs', fs, "\r\n");
+        /* default style */
+        f->write('\f0\fs' + tfs + '\fi567\sa227\sl480\slmult1' + ali);
 
-        /* space after paragraph */
-        f->write('\sa', sa, "\r\n");
+        foreach (p, doc->parse_text_doc()) {
+            local mode = p[0];
+            local data = p[1]->map(sub (l) {
+                    /* convert *text* to strong */
+                    while (l->regex('/\*[a-zA-Z0-9 ,]+\*/')) {
+                        l = l->sregex('/\*/', '{\b ')->sregex('/\*/', '}');
+                    }
 
-        f->write('\sl480\slmult1', "\r\n");
+                    /* convert _text_ to emphasized */
+                    while (l->regex('/_[a-zA-Z0-9 ,]+_/')) {
+                        l = l->sregex('/_/', '{\i ')->sregex('/_/', '}');
+                    }
 
-        /* justify */
-        if (mp.config.rtf_justify)
-            f->write('\qj', "\r\n");
+                    /* convert non-ASCII characters to unicode */
+                    l = l->split()->map(sub (e) {
+                            ord(e) > 127 && sprintf("\\u%d?", ord(e)) || e;
+                        })->join();
 
-        foreach (l, doc.txt.lines) {
-            if (l) {
-                /* escape backslashes */
-                l = l->sregex("@\\\\@g", "\\\\\\");
-
-                /* convert space surrounded lines to centered */
-                if (l->regex("/^ [^ ]+ $/")) {
-                    l = '{\qc\fi0 ' ~ l->slice(1, -2) ~ '}';
+                    return l;
                 }
+            );
 
-                /* convert space-leaded lines to line breaks */
-                if (l->regex("/^ /")) {
-                    l = l->slice(1, -1) ~ '\line';
-                }
+            if (mode == 'page')
+                f->write('\page');
+            else
+            if (data->count()) {
+                local style = styles[mode];
 
-                /* convert *text* to strong */
-                while (l->regex('/\*[a-zA-Z0-9 ,]+\*/')) {
-                    l = l->sregex('/\*/', '{\b ')->sregex('/\*/', '}');
-                }
-
-                /* convert _text_ to emphasized */
-                while (l->regex('/_[a-zA-Z0-9 ,]+_/')) {
-                    l = l->sregex('/_/', '{\i ')->sregex('/_/', '}');
-                }
-
-                /* de-escape unicode characters */
-                l = l->sregex('/\\\\u/g', "\\u");
-
-                if (l eq "\x{000c}")
-                    l = '\page';
-
-                /* and now convert non-ASCII characters to unicode */
-                l = l->split()->map(sub (e) {
-                        ord(e) > 127 && sprintf("\\u%d?", ord(e)) || e;
-                    })->join();
-
-                p->push(l);
-            }
-            else {
-                f->write(p->join(" \r\n"), "\\par", pi, "\r\n");
-                p = [];
+                f->write("{", style[0], "\r\n",
+                    data->join(style[1]),
+                    "\n}\\par\r\n");
             }
         }
 
-        f->write(p->join(" \r\n"), "\\par\r\n}\r\n");
-
+        f->write("}\r\n");
         f->close();
     }
     else
