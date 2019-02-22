@@ -702,11 +702,11 @@ sub mp_doc.export_as_rtf(doc, fn)
                 f->write("\\page\r\n");
             else
             if (mode == 'first') {
-                f->write('{', "\r\n", data->join(" \r\n"), "\n}\\par\r\n");
+                f->write('\fi0', "\r\n", data->join(" \r\n"), "\n\\par\r\n");
             }
             else
             if (mode == 'para') {
-                f->write("{\\fi567\r\n", data->join(" \r\n"), "\n}\\par\r\n");
+                f->write('\fi567', "\r\n", data->join(" \r\n"), "\n\\par\r\n");
             }
             else
             if (mode == 'verbatim') {
