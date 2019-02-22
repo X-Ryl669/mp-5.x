@@ -701,44 +701,38 @@ sub mp_doc.export_as_rtf(doc, fn)
             if (mode == 'page')
                 f->write('\page');
             else
-            if (data->count()) {
-                f->write("{");
+            if (mode == 'first') {
+                f->write('{\fi0', "\r\n", data->join(" \r\n"), "\n}\\par\r\n");
+            }
+            else
+            if (mode == 'para') {
+                f->write("{\r\n", data->join(" \r\n"), "\n}\\par\r\n");
+            }
+            else
+            if (mode == 'verbatim') {
+                f->write('{\ql\f1', mfs, "\r\n");
+                local l = pop(data);
 
-                if (mode == 'first') {
-                    f->write('\fi0', "\r\n", data->join(" \r\n"));
-                }
-                else
-                if (mode == 'para') {
-                    f->write("\r\n", data->join(" \r\n"));
-                }
-                else
-                if (mode == 'verbatim') {
-                    f->write('\ql\f1', mfs, "\r\n");
-                    local l = pop(data);
-
-                    if (count(data)) {
-                        f->write('{', ls0, "\r\n");
-                        f->write(data->join("\\par\r\n"));
-                        f->write("}\\par\r\n");
-                    }
-
-                    f->write(l);
-                }
-                else
-                if (mode == 'center') {
-                    f->write('\qc\fi0', "\r\n");
-                    local l = pop(data);
-
-                    if (count(data)) {
-                        f->write('{', ls0, "\r\n");
-                        f->write(data->join("\\par\r\n"));
-                        f->write("}\\par\r\n");
-                    }
-
-                    f->write(l);
+                if (count(data)) {
+                    f->write('{', ls0, "\r\n");
+                    f->write(data->join("\\par\r\n"));
+                    f->write("}\\par\r\n");
                 }
 
-                f->write("\n}\\par\r\n");
+                f->write(l, "\n}\\par\r\n");
+            }
+            else
+            if (mode == 'center') {
+                f->write('{\qc\fi0', "\r\n");
+                local l = pop(data);
+
+                if (count(data)) {
+                    f->write('{', ls0, "\r\n");
+                    f->write(data->join("\\par\r\n"));
+                    f->write("}\\par\r\n");
+                }
+
+                f->write(l, "\n}\\par\r\n");
             }
         }
 
