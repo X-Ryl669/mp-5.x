@@ -580,18 +580,16 @@ sub mp_doc.save(doc)
 }
 
 
-sub mp_doc.parse_text_doc(doc)
-/* parses a document in sections */
+sub mp_doc.split_by_paragraph(doc)
+/* splits a text document by paragraph */
 {
     local tdoc = [];
-    local mode = 'first';
+    local mode = 'para';
     local data = [];
-
-    tdoc->push([mode, data]);
+    local pc = 0;
 
     foreach (l, doc.txt.lines) {
-        local fl = 0;
-        local n_mode = NULL;
+        local p_mode = mode;
 
         /** mode selection **/
 
@@ -599,39 +597,42 @@ sub mp_doc.parse_text_doc(doc)
         if (l->regex("/^ .+ $/")) {
             l = l->slice(1, -2);
 
-            if (mode != 'center')
-                n_mode = 'center';
+            mode = 'center';
         }
         else
         /* space-leaded lines is verbatim */
         if (l->regex("/^ /")) {
             l = l->slice(1, -1);
 
-            if (mode != 'verbatim')
-                n_mode = 'verbatim';
+            mode = 'verbatim';
         }
         else
         /* page break */
         if (l == "\x{000c}") {
-            l = "";
-            tdoc->push(['page', []]);
-            n_mode = 'first';
+            mode = 'page';
         }
-        /* paragraph mode */
+        /* default paragraph */
         else {
-            if (l == "") {
-                if (mode == 'para' || mode == 'first')
-                    n_mode = 'para';
-                else
-                    n_mode = 'first';
-            }
+            mode = 'para';
         }
 
-        if (n_mode) {
-            mode = n_mode;
-            data = [];
+        /* change of mode or paragraph break */
+        if (p_mode != mode || l == "") {
+            /* test for first vs. rest of default paragraphs */
+            if (p_mode == 'para') {
+                if (pc == 0)
+                    p_mode = 'first';
 
-            tdoc->push([mode, data]);
+                pc++;
+            }
+            else
+                pc = 0;
+
+            /* store previously saved data, if any */
+            if (count(data))
+                tdoc->push([p_mode, data]);
+
+            data = [];
         }
 
         /* store line */
@@ -675,7 +676,7 @@ sub mp_doc.export_as_rtf(doc, fn)
         /* default style */
         f->write('\f0' + tfs + '\fi567' + ls1 + ali + "\r\n");
 
-        foreach (p, doc->parse_text_doc()) {
+        foreach (p, doc->split_by_paragraph()) {
             local mode = p[0];
             local data = p[1]->map(sub (l) {
                     /* convert *text* to strong */
