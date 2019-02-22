@@ -650,29 +650,12 @@ sub mp_doc.export_as_rtf(doc, fn)
 
     /* configurable data */
     local tff = mp.config.rtf_font_face || "Times New Roman";
-    local tfs = string((mp.config.rtf_font_size || 12) * 2);
+    local tfs = '\fs' + string((mp.config.rtf_font_size || 12) * 2);
     local mff = mp.config.rtf_mono_font_face || "Courier New";
-    local mfs = string((mp.config.rtf_mono_font_size || 10) * 2);
+    local mfs = '\fs' + string((mp.config.rtf_mono_font_size || 10) * 2);
+    local ls0 = mp.config.rtf_line_style_0 || '\sa0\sl0\slmult0';
+    local ls1 = mp.config.rtf_line_style_1 || '\sa227\sl480\slmult1';
     local ali = mp.config.rtf_justify && '\qj' || '';
-
-    local styles = {
-        first:      [
-            '\fi0',
-            " \r\n"
-        ],
-        para:       [
-            '',
-            " \r\n"
-        ],
-        verbatim:   [
-            '\f1\fs' + mfs + '\fi0\sa0\sl0\slmult0\ql',
-            "\\par\r\n"
-        ],
-        center:     [
-            '\fi0\sa0\sl0\slmult0\qc',
-            "\\par\r\n"
-        ]
-    };
 
     if ((f = open(fn, "wb"))) {
         local p = [];
@@ -690,7 +673,7 @@ sub mp_doc.export_as_rtf(doc, fn)
             "}\r\n");
 
         /* default style */
-        f->write('\f0\fs' + tfs + '\fi567\sa227\sl480\slmult1' + ali);
+        f->write('\f0' + tfs + '\fi567' + ls1 + ali + "\r\n");
 
         foreach (p, doc->parse_text_doc()) {
             local mode = p[0];
@@ -718,11 +701,43 @@ sub mp_doc.export_as_rtf(doc, fn)
                 f->write('\page');
             else
             if (data->count()) {
-                local style = styles[mode];
+                f->write("{");
 
-                f->write("{", style[0], "\r\n",
-                    data->join(style[1]),
-                    "\n}\\par\r\n");
+                if (mode == 'first') {
+                    f->write('\fi0', "\r\n", data->join(" \r\n"));
+                }
+                else
+                if (mode == 'para') {
+                    f->write("\r\n", data->join(" \r\n"));
+                }
+                else
+                if (mode == 'verbatim') {
+                    f->write('\ql\f1', mfs, "\r\n");
+                    local l = pop(data);
+
+                    if (count(data)) {
+                        f->write('{', ls0, "\r\n");
+                        f->write(data->join("\\par\r\n"));
+                        f->write("}\\par\r\n");
+                    }
+
+                    f->write(l);
+                }
+                else
+                if (mode == 'center') {
+                    f->write('\qc\fi0', "\r\n");
+                    local l = pop(data);
+
+                    if (count(data)) {
+                        f->write('{', ls0, "\r\n");
+                        f->write(data->join("\\par\r\n"));
+                        f->write("}\\par\r\n");
+                    }
+
+                    f->write(l);
+                }
+
+                f->write("\n}\\par\r\n");
             }
         }
 
