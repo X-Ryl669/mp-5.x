@@ -674,7 +674,7 @@ sub mp_doc.export_as_rtf(doc, fn)
             "}\r\n");
 
         /* default style */
-        f->write('\f0' + tfs + '\fi567' + ls1 + ali + "\r\n");
+        f->write('\f0' + tfs + '\fi0' + ls1 + ali + "\r\n");
 
         foreach (p, doc->split_by_paragraph()) {
             local mode = p[0];
@@ -702,11 +702,11 @@ sub mp_doc.export_as_rtf(doc, fn)
                 f->write("\\page\r\n");
             else
             if (mode == 'first') {
-                f->write('{\fi0', "\r\n", data->join(" \r\n"), "\n}\\par\r\n");
+                f->write('{', "\r\n", data->join(" \r\n"), "\n}\\par\r\n");
             }
             else
             if (mode == 'para') {
-                f->write("{\r\n", data->join(" \r\n"), "\n}\\par\r\n");
+                f->write("{\\fi567\r\n", data->join(" \r\n"), "\n}\\par\r\n");
             }
             else
             if (mode == 'verbatim') {
@@ -717,7 +717,7 @@ sub mp_doc.export_as_rtf(doc, fn)
             }
             else
             if (mode == 'center') {
-                f->write('{\qc\fi0', "\r\n");
+                f->write('{\qc', "\r\n");
                 f->write('{', ls0, "\r\n");
                 f->write(data->join("\\par\r\n"));
                 f->write("\n}\\par\r\n}\r\n");
