@@ -25,6 +25,16 @@
 
 */
 
+/** RTF config tweaks **/
+
+mp.config.rtf_font_face      = 'Times New Roman';
+mp.config.rtf_font_size      = 12;
+mp.config.rtf_mono_font_face = 'Courier New';
+mp.config.rtf_mono_font_size = 10;
+mp.config.rtf_line_style_0   = '\sa0\sl0\slmult0';
+mp.config.rtf_line_style_1   = '\sa227\sl480\slmult1';
+mp.config.rtf_justify        = 0;
+
 /** editor actions **/
 
 mp.actions['new']   = sub {
@@ -650,12 +660,8 @@ sub mp_doc.export_as_rtf(doc, fn)
     local ret = 0;
 
     /* configurable data */
-    local tff = mp.config.rtf_font_face || "Times New Roman";
-    local tfs = '\fs' + string((mp.config.rtf_font_size || 12) * 2);
-    local mff = mp.config.rtf_mono_font_face || "Courier New";
-    local mfs = '\fs' + string((mp.config.rtf_mono_font_size || 10) * 2);
-    local ls0 = mp.config.rtf_line_style_0 || '\sa0\sl0\slmult0';
-    local ls1 = mp.config.rtf_line_style_1 || '\sa227\sl480\slmult1';
+    local tfs = '\fs' + string(mp.config.rtf_font_size * 2);
+    local mfs = '\fs' + string(mp.config.rtf_mono_font_size * 2);
     local ali = mp.config.rtf_justify && '\qj' || '';
 
     if ((f = open(fn, "wb"))) {
@@ -669,12 +675,12 @@ sub mp_doc.export_as_rtf(doc, fn)
 
         /* font table (font faces) */
         f->write('{\fonttbl',
-            '{\f0\froman\fprq2\fcharset0 ', tff, ';}',
-            '{\f1\fmodern\fprq2\fcharset0 ', mff, ';}',
+            '{\f0\froman\fprq2\fcharset0 ', mp.config.rtf_font_face, ';}',
+            '{\f1\fmodern\fprq2\fcharset0 ', mp.config.rtf_mono_font_face, ';}',
             "}\r\n");
 
         /* default style */
-        f->write('\f0' + tfs + '\fi0' + ls1 + ali + "\r\n");
+        f->write('\f0' + tfs + '\fi0' + mp.config.rtf_line_style_1 + ali + "\r\n");
 
         foreach (p, doc->split_by_paragraph()) {
             local mode = p[0];
@@ -711,7 +717,7 @@ sub mp_doc.export_as_rtf(doc, fn)
             else
             if (mode == 'verbatim') {
                 f->write('{\ql\f1', mfs, "\r\n");
-                f->write('{', ls0, "\r\n");
+                f->write('{', mp.config.rtf_line_style_0, "\r\n");
                 local l = pop(data);
                 f->write(data->map( sub (e) { e + "\\par\r\n"; } )->join());
                 f->write('}', l, "\n\\par\r\n}\r\n");
@@ -719,7 +725,7 @@ sub mp_doc.export_as_rtf(doc, fn)
             else
             if (mode == 'center') {
                 f->write('{\qc', "\r\n");
-                f->write('{', ls0, "\r\n");
+                f->write('{', mp.config.rtf_line_style_0, "\r\n");
                 local l = pop(data);
                 f->write(data->map( sub (e) { e + "\\par\r\n"; } )->join());
                 f->write('}', l, "\n\\par\r\n}\r\n");
