@@ -712,15 +712,17 @@ sub mp_doc.export_as_rtf(doc, fn)
             if (mode == 'verbatim') {
                 f->write('{\ql\f1', mfs, "\r\n");
                 f->write('{', ls0, "\r\n");
-                f->write(data->join("\\par\r\n"));
-                f->write("\n}\\par\r\n}\r\n");
+                local l = pop(data);
+                f->write(data->map( sub (e) { e + "\\par\r\n"; } )->join());
+                f->write('}', l, "\n\\par\r\n}\r\n");
             }
             else
             if (mode == 'center') {
                 f->write('{\qc', "\r\n");
                 f->write('{', ls0, "\r\n");
-                f->write(data->join("\\par\r\n"));
-                f->write("\n}\\par\r\n}\r\n");
+                local l = pop(data);
+                f->write(data->map( sub (e) { e + "\\par\r\n"; } )->join());
+                f->write('}', l, "\n\\par\r\n}\r\n");
             }
         }
 
