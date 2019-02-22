@@ -277,6 +277,13 @@ _Insert line_ (`enter')
 Inserts a new line. If the cursor is in the middle of a line,
 it's split in two.
 
+insert_m_dash
+-------------
+
+_Insert m-dash character_ (`alt-minus')
+
+Inserts an m-dash character.
+
 insert_next_item
 ----------------
 
@@ -289,6 +296,13 @@ Inserts a new numbered item into the text. Numbered items are as this way:
 
 Every time a new item is requested, the current document is scanned for the
 greatest number and the next one is inserted.
+
+insert_page_break
+-----------------
+
+_Insert page break character (FF)_
+
+Inserts a page break (form feed) character.
 
 insert_real_tab
 ---------------
@@ -391,6 +405,13 @@ mark_vertical
 _Mark vertical selection block_
 
 Marks a vertical block.
+
+maze
+----
+
+_Play "Maze"_
+
+Executes the "Maze" game.
 
 menu
 ----
@@ -577,6 +598,13 @@ _Open folder..._
 
 Opens a folder with the directory editor.
 
+open_recent
+-----------
+
+_Open recent files..._
+
+Shows a list of the recently open files to select one to reopen.
+
 open_templates_file
 -------------------
 
@@ -653,6 +681,22 @@ replace
 _Replace..._ (`ctrl-r')
 
 Shows the search and replace dialog box.
+
+replace_spaces_with_tabs
+------------------------
+
+_Replace spaces with tabs_
+
+Replaces all spaces in the document with real tabs (\t). The current
+tab size configuration is taken into account.
+
+replace_tabs_with_spaces
+------------------------
+
+_Replace tabs with spaces_
+
+Replaces all real tabs (\t) in the document with spaces. The current
+tab size configuration is taken into account.
 
 revert
 ------

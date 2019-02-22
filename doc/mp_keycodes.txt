@@ -6,7 +6,7 @@ Table with Minimum Profit's keycodes and their default assigned actions.
  +---------------------+------------------------+
  |             Keycode |                 Action |
  +---------------------+------------------------+
- |               alt-a |                 ctrl-a |
+ |               alt-a |                   menu |
  +---------------------+------------------------+
  |     alt-cursor-down |            scroll_down |
  +---------------------+------------------------+
@@ -22,7 +22,11 @@ Table with Minimum Profit's keycodes and their default assigned actions.
  +---------------------+------------------------+
  |            alt-home |              ctrl-home |
  +---------------------+------------------------+
- |           alt-space |                 ctrl-a |
+ |        alt-kp-minus |          insert_m_dash |
+ +---------------------+------------------------+
+ |           alt-minus |          insert_m_dash |
+ +---------------------+------------------------+
+ |           alt-space |                   menu |
  +---------------------+------------------------+
  |           backspace |            delete_left |
  +---------------------+------------------------+
@@ -151,6 +155,8 @@ Table with Minimum Profit's keycodes and their default assigned actions.
  |                home |               move_bol |
  +---------------------+------------------------+
  |              insert |          toggle_insert |
+ +---------------------+------------------------+
+ |   insert-raw-string |      insert_raw_string |
  +---------------------+------------------------+
  |          mouse-drag |        mouse_drag_mark |
  +---------------------+------------------------+
