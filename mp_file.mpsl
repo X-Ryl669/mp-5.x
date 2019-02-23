@@ -392,16 +392,24 @@ mp.actions['hex_view']  = sub (doc, filename) {
 
     if (filename != NULL && filename ne "") {
         /* load on demand */
-        if (mp_hex_view == NULL)
-            load("mp_hex.mpsl");
+        if (mp_hex_view == NULL) {
+            eval('load("mp_hex.mpsl");');
 
-        d = new(mp_hex_view, { name: filename })->init();
+            if (ERROR) {
+                mp.alert(ERROR);
+                ERROR = NULL;
+            }
+        }
 
-        if (d == NULL)
-            mp.alert(sprintf("Error opening '%s': %s",
-                        mp.trim(filename, 32), ERRNO));
-        else
-            mp.add(d);
+        if (mp_hex_view) {
+            d = new(mp_hex_view, { name: filename })->init();
+
+            if (d == NULL)
+                mp.alert(sprintf("Error opening '%s': %s",
+                            mp.trim(filename, 32), ERRNO));
+            else
+                mp.add(d);
+        }
     }
 
     return d;
@@ -911,12 +919,19 @@ sub mp.open(filename, password)
             ERRNO = NULL;
 
             /* load on demand */
-            if (mp_doc_dir == NULL)
-                load("mp_dir.mpsl");
+            if (mp_doc_dir == NULL) {
+                eval('load("mp_dir.mpsl");');
 
-            d = mp.add(new(mp_doc_dir, { name: filename }));
+                if (ERROR) {
+                    mp.alert(ERROR);
+                    ERROR = NULL;
+                }
+            }
 
-            d->setup();
+            if (mp_doc_dir) {
+                d = mp.add(new(mp_doc_dir, { name: filename }));
+                d->setup();
+            }
         }
 
         if (d) {

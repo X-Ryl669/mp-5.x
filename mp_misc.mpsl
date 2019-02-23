@@ -192,28 +192,48 @@ mp.actions['about'] = sub {
 
 mp.actions['pipes'] = sub {
     /* load toys on demand */
-    if (mp_pipes == NULL)
-        load("mp_toys.mpsl");
+    if (mp_pipes == NULL) {
+        eval('load("mp_toys.mpsl");');
+        if (ERROR) {
+            mp.alert(ERROR);
+            ERROR = NULL;
+        }
+    }
 
-    mp.add(new(mp_pipes));
+    if (mp_pipes)
+        mp.add(new(mp_pipes));
 };
 
 
 mp.actions['maze'] = sub {
     /* load toys on demand */
-    if (mp_maze == NULL)
-        load("mp_toys.mpsl");
+    if (mp_maze == NULL) {
+        eval('load("mp_toys.mpsl");');
 
-    mp.add(new(mp_maze));
+        if (ERROR) {
+            mp.alert(ERROR);
+            ERROR = NULL;
+        }
+    }
+
+    if (mp_maze)
+        mp.add(new(mp_maze));
 };
 
 
 mp.actions['vcs'] = sub {
     /* load vcs code on demand */
-    if (mp_doc_vcs == NULL)
-        load("mp_vcs.mpsl");
+    if (mp_doc_vcs == NULL) {
+        eval('load("mp_vcs.mpsl");');
 
-    mp.vcs_form();
+        if (ERROR) {
+            mp.alert(ERROR);
+            ERROR = NULL;
+        }
+    }
+
+    if (mp_doc_vcs)
+        mp.vcs_form();
 };
 
 
