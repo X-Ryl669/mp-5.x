@@ -114,6 +114,9 @@ sub mp_doc_dir.save(doc)
         }
     }
 
+    if (count(log.txt.lines) == 0)
+        log.txt.lines->push(L("# nothing changed."));
+
     mp.add(log);
     log.read_only = 1;
 
