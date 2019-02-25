@@ -53,7 +53,7 @@ sub mp_doc_dir.setup(doc)
     ]->map(sub(e) { '# ' ~ e;});
 
     for (n = 0; n < size(doc.dir_content); n++)
-        push(doc.txt.lines, sprintf("%d: %s", n + 1, doc.dir_content[n]));
+        push(doc.txt.lines, sprintf("%4d: %s", n + 1, doc.dir_content[n]));
 
     doc.txt.mod = 0;
 
@@ -75,7 +75,7 @@ sub mp_doc_dir.save(doc)
 
     /* rename changed files */
     foreach (l, doc.txt.lines) {
-        local p = l->sscanf("%d: %S");
+        local p = l->sscanf(" %d: %S");
         local n;
 
         if (size(p) == 2 && (n = p[0]) > 0 && p[1]) {
