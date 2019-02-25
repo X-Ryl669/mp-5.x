@@ -41,8 +41,7 @@ sub mp_doc_dir.setup(doc)
 
     /* get the directory content */
     doc.dir_content = glob(NULL, doc.name)->
-        grep("@[^/]$@")->
-        map(sub (e) { local l = split(e, '/'); e = l[-1]; });
+        grep("@[^/]$@")->map(sub (e) { e->split('/')->pop(); });
 
     doc.txt.lines = [
         L("Directory editor"),
@@ -80,8 +79,8 @@ sub mp_doc_dir.save(doc)
         local n;
 
         if (size(p) == 2 && (n = p[0]) > 0 && p[1]) {
-            local op = doc.dir_content[n - 1];
-            local np = p[1];
+            local op = doc.name + '/' + doc.dir_content[n - 1];
+            local np = doc.name + '/' + p[1];
 
             if (op ne np) {
                 local m;
@@ -103,6 +102,8 @@ sub mp_doc_dir.save(doc)
     foreach (l, doc.dir_content) {
         if (l != NULL) {
             local m;
+
+            l = doc.name + '/' + l;
 
             if (unlink(l) == -1)
                 m = sprintf(L("# error deleting '%s' (%s)"), l, ERRNO);
