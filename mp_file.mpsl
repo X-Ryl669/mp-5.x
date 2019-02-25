@@ -384,6 +384,26 @@ mp_doc.actions['open_under_cursor'] = sub (d) {
     return d;
 };
 
+
+sub mp.load_on_demand(sym, src)
+/* loads a source code file on demand and whines if it can't */
+{
+    local ok = bool(1);
+
+    if (sym == NULL) {
+        eval(sub { load(src); } );
+
+        if (ERROR) {
+            mp.alert(ERROR);
+            ERROR = NULL;
+            ok = !ok;
+        }
+    }
+
+    return ok;
+}
+
+
 mp.actions['hex_view']  = sub (doc, filename) {
     local d = NULL;
 
@@ -391,17 +411,7 @@ mp.actions['hex_view']  = sub (doc, filename) {
         filename = mp.openfile(L("File to open") ~ ':');
 
     if (filename != NULL && filename ne "") {
-        /* load on demand */
-        if (mp_hex_view == NULL) {
-            eval('load("mp_hex.mpsl");');
-
-            if (ERROR) {
-                mp.alert(ERROR);
-                ERROR = NULL;
-            }
-        }
-
-        if (mp_hex_view) {
+        if (mp.load_on_demand(mp_hex_view, "mp_hex.mpsl")) {
             d = new(mp_hex_view, { name: filename })->init();
 
             if (d == NULL)
@@ -918,17 +928,7 @@ sub mp.open(filename, password)
             /* it's a directory: show it */
             ERRNO = NULL;
 
-            /* load on demand */
-            if (mp_doc_dir == NULL) {
-                eval('load("mp_dir.mpsl");');
-
-                if (ERROR) {
-                    mp.alert(ERROR);
-                    ERROR = NULL;
-                }
-            }
-
-            if (mp_doc_dir) {
+            if (mp.load_on_demand(mp_doc_dir, "mp_dir.mpsl")) {
                 d = mp.add(new(mp_doc_dir, { name: filename }));
                 d->setup();
             }
