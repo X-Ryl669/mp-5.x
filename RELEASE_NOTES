@@ -1,6 +1,28 @@
 Minimum Profit Release Notes
 ============================
 
+5.31
+----
+
+ - Improvements:
+    - The RTF export function has been rewritten. The generated
+      markup is much better and shows OK in most of the
+      inconsistent, crappy world of the RTF reader
+      implementations.  Also, there are several configurable
+      options (see the `doc/mp_configuration.txt' document).
+ - Bug fixes:
+    - Many that I don't remember. Mostly they were new
+      bugs introduced by changes in MPDM and MPSL.
+    - Fixed Curses driver, broken some versions ago.
+ - New features:
+    - There is native encoding support for MSDOS 437 and 850
+      page codes.
+    - New Pascal syntax highlight (yes, Pascal, no kidding).
+      I've been digging in very old shit.
+    - The ANSI driver now accepts alt-letter keycodes.
+    - The execute MPSL code function always dumps its output
+      to the dump window.
+
 5.3.0
 -----
 
