@@ -1,8 +1,8 @@
 Minimum Profit README
 =====================
 
- Minimum Profit - Programmer Text Editor
- Copyright (C) 1991-2018 Angel Ortega <angel@triptico.com> et al.
+ Minimum Profit - A Text Editor
+ Angel Ortega <angel@triptico.com> et al.
  Home Page: http://triptico.com/software/mp.html
 
 Minimum Profit (mp) is a text editor for programmers. Among its features
@@ -34,6 +34,9 @@ are the following:
  - Multilingual.
  - Password-protected, encrypted text files (using the ARCFOUR algorithm).
  - It helps you abandon vi, emacs and other six-legged freaks definitely.
+
+This software has been released into the public domain. See file LICENSE
+for details.
 
 Compiling & Installing from source
 ----------------------------------

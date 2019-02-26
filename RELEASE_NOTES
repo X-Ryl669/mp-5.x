@@ -4,6 +4,7 @@ Minimum Profit Release Notes
 5.31
 ----
 
+ - License change: released into the public domain.
  - Improvements:
     - The RTF export function has been rewritten. The generated
       markup is much better and shows OK in most of the
