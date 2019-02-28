@@ -405,7 +405,7 @@ sub mp.tui.draw(doc)
 
     /* draw the 'menu' hint */
     local t = "ctrl-space: " ~ L("Menu");
-    mp.tui.move(mp.window.tx - size(t), mp.window.ty);
+    mp.tui.move(mp.window.tx - size(t) + 1, mp.window.ty);
     mp.tui.addstr(t);
 
     /* if a hardware cursor is desired, set it */
