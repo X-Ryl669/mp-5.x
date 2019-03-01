@@ -299,6 +299,8 @@ static void menu_item_callback(mpdm_t action)
     mp_process_action(action);
     redraw();
 
+    gtk_widget_hide(menu_bar);
+
     if (mp_exit_requested)
         gtk_main_quit();
 }
@@ -901,6 +903,10 @@ static gint key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data
     static GtkIMContext *im = NULL;
     static wchar_t im_char[2] = L"";
     wchar_t *ptr = NULL;
+
+    if (event->state & (GDK_MOD1_MASK)) {
+        gtk_widget_show(menu_bar);
+    }
 
     if (im == NULL) {
         im = gtk_im_multicontext_new();
@@ -2328,6 +2334,20 @@ static mpdm_t gtk_drv_shutdown(mpdm_t a, mpdm_t ctxt)
 }
 
 
+static mpdm_t gtk_drv_menu(void)
+{
+    if (gtk_widget_get_visible(menu_bar))
+        gtk_widget_hide(menu_bar);
+    else {
+        gtk_widget_show(menu_bar);
+        gtk_widget_set_can_focus(menu_bar, 1);
+        gtk_widget_grab_focus(menu_bar);
+    }
+
+    return NULL;
+}
+
+
 static void gtk_register_functions(void)
 {
     mpdm_t drv;
@@ -2346,6 +2366,7 @@ static void gtk_register_functions(void)
     mpdm_hset_s(drv, L"savefile",    MPDM_X(gtk_drv_savefile));
     mpdm_hset_s(drv, L"form",        MPDM_X(gtk_drv_form));
     mpdm_hset_s(drv, L"openfolder",  MPDM_X(gtk_drv_openfolder));
+//    mpdm_hset_s(drv, L"menu",        MPDM_X(gtk_drv_menu));
 }
 
 
