@@ -2366,7 +2366,7 @@ static void gtk_register_functions(void)
     mpdm_hset_s(drv, L"savefile",    MPDM_X(gtk_drv_savefile));
     mpdm_hset_s(drv, L"form",        MPDM_X(gtk_drv_form));
     mpdm_hset_s(drv, L"openfolder",  MPDM_X(gtk_drv_openfolder));
-//    mpdm_hset_s(drv, L"menu",        MPDM_X(gtk_drv_menu));
+    mpdm_hset_s(drv, L"menu",        MPDM_X(gtk_drv_menu));
 }
 
 
@@ -2581,6 +2581,8 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
     if ((v = mpdm_hget_s(MP, L"config")) != NULL &&
         mpdm_ival(mpdm_hget_s(v, L"maximize")) > 0)
         maximize = 1;
+
+    gtk_widget_hide(menu_bar);
 
     return NULL;
 }
