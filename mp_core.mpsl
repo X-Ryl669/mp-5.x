@@ -605,8 +605,6 @@ sub mp.process_cmdline()
 {
     local o, nl;
 
-    mp.load_tags();
-
     /* skip ARGV[0] */
     mp.binary_name = shift(ARGV);
 
