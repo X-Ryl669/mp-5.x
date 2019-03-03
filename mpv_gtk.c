@@ -904,10 +904,6 @@ static gint key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data
     static wchar_t im_char[2] = L"";
     wchar_t *ptr = NULL;
 
-    if (event->state & (GDK_MOD1_MASK)) {
-        gtk_widget_show(menu_bar);
-    }
-
     if (im == NULL) {
         im = gtk_im_multicontext_new();
         g_signal_connect(im, "commit", G_CALLBACK(im_commit), im_char);
@@ -1534,6 +1530,8 @@ static gint key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data
     if (ptr == NULL && im_char[0] != L'\0')
         ptr = im_char;
 
+    gtk_widget_hide(menu_bar);
+
     /* finally process */
     if (ptr != NULL)
         mp_process_event(MPDM_S(ptr));
@@ -1591,6 +1589,8 @@ static gint button_press_event(GtkWidget *w, GdkEventButton *event, gpointer d)
         mp_process_event(MPDM_S(ptr));
 
     redraw();
+
+    gtk_widget_hide(menu_bar);
 
     return 0;
 }
@@ -2336,13 +2336,8 @@ static mpdm_t gtk_drv_shutdown(mpdm_t a, mpdm_t ctxt)
 
 static mpdm_t gtk_drv_menu(void)
 {
-    if (gtk_widget_get_visible(menu_bar))
-        gtk_widget_hide(menu_bar);
-    else {
+    if (!gtk_widget_get_visible(menu_bar))
         gtk_widget_show(menu_bar);
-        gtk_widget_set_can_focus(menu_bar, 1);
-        gtk_widget_grab_focus(menu_bar);
-    }
 
     return NULL;
 }
