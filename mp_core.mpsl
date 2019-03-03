@@ -792,15 +792,19 @@ local mp_modules = [
     'writing'
 ];
 
-internal_errors = [];
-
 foreach (m, mp_modules) {
     eval('load("mp_' ~ m ~ '.mpsl");');
 
     if (ERROR != NULL) {
-/*        mp.exit_message = mp.exit_message ~ ERROR ~ "\n";
-        break;*/
-        internal_errors->push(ERROR);
+        local log = mp.open(L("<internal errors>"));
+        log->move_eof();
+        log->insert(ERROR + "\n");
+        log->move_bof();
+
+        log.txt.mod     = 0;
+        log.undo_q      = [];
+        log.read_only = 1;
+
         ERROR = NULL;
     }
 }
@@ -813,13 +817,6 @@ if (ERROR == NULL) {
     mp_drv.startup();
     mp.process_cmdline();
     mp.test_versions();
-
-    if (count(internal_errors)) {
-        local log = mp.open(L("<internal errors>"));
-        log.txt.lines = internal_errors;
-        log.read_only = 1;
-    }
-
     mp_drv.main_loop();
     mp_drv.shutdown();
     mp.save_state();
