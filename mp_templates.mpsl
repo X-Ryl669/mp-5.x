@@ -140,3 +140,5 @@ sub mp_doc.read_templates_file(d)
     /* returns keys(mp.templates), but in its original order */
     return n;
 }
+
+x
