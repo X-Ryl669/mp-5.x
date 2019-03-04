@@ -572,7 +572,7 @@ sub mp_doc.save(doc)
 
         /* if the document has a password, save it encrypted */
         if (doc.password)
-            mp.crypt1_save(f, doc.txt.lines, doc.password);
+            mp.crypt_save(f, doc.txt.lines, doc.password);
         else
             mp.save_th(f, doc);
     
@@ -872,19 +872,19 @@ sub mp.open(filename, password)
         f = open(filename, "rb");
 
         if (f != NULL) {
-            if (mp.crypt1_detect(f)) {
+            if (mp.crypt_detect(f)) {
                 ERRNO = NULL;
 
                 if (password != NULL && password ne '') {
                     /* and load the file */
                     d = mp.add(new(mp_doc, { name: filename }));
 
-                    d.txt.lines     = mp.crypt1_load(f, password);
+                    d.txt.lines     = mp.crypt_load(f, password);
                     d.password      = password;
                 }
             }
             else {
-                /* mp.crypt1_detect() called read(), so there
+                /* mp.crypt_detect() called read(), so there
                    is (possibly) and eol already detected */
                 local e = eol(f);
 

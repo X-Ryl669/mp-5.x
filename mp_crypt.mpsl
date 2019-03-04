@@ -95,8 +95,8 @@ mp.actdesc['set_password'] = LL("Password protect...");
 
 /** code **/
 
-sub mp.crypt1_load(fd, password)
-/* loads a crypt1 encrypted file into lines */
+sub mp.crypt_load(fd, password)
+/* loads an encrypted file into lines */
 {
     local c;
     local l = '';
@@ -132,8 +132,8 @@ sub mp.crypt1_load(fd, password)
 }
 
 
-sub mp.crypt1_save(fd, lines, password)
-/* saves the lines as a crypt1 encrypted file */
+sub mp.crypt_save(fd, lines, password)
+/* saves the lines as an encrypted file */
 {
     local nl = 0;
 
@@ -171,8 +171,8 @@ sub mp.crypt1_save(fd, lines, password)
 }
 
 
-sub mp.crypt1_detect(fd)
-/* detects if fd is an mpcrypt1-type file */
+sub mp.crypt_detect(fd)
+/* detects if fd is an mp encrypted file */
 {
     /* is it mpcrypt1\n followed by a 0? */
     if (read(fd) eq "mpcrypt1\n" && ord(getchar(fd)) == 0)
