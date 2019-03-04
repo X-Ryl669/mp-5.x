@@ -724,7 +724,7 @@ sub mp.assert_version(found, minimal, package)
 /* asserts that 'found' version of 'package' is at least 'minimal',
    or generate a warning otherwise */
 {
-    if (found < minimal) {
+    if (real(found) < real(minimal)) {
         mp.alert(sprintf(L("WARNING: %s version found is %s, but %s is needed"),
                 package, found, minimal));
     }
@@ -735,7 +735,7 @@ sub mp.test_versions()
 /* tests component versions */
 {
     mp.assert_version(MPDM.version, 2.42, 'MPDM');
-    mp.assert_version(MPSL.VERSION, 2.27, 'MPSL');
+    mp.assert_version(MPSL.VERSION, 2.28, 'MPSL');
 }
 
 
