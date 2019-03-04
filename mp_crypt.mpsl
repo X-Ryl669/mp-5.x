@@ -140,8 +140,8 @@ sub mp.crypt_load(fd, password, ver)
     push(lines, l);
 
     if (ver == 2) {
-        /* last two bytes are the crc */
-        if (crc != fd->getchar()->ord()->bitshl(8) + fd->getchar()->ord())
+        /* last 2 bytes are the crc16 */
+        if (bitor(ord(getchar(fd)) * 256, ord(getchar(fd))) != crc)
             lines = NULL;
     }
 
@@ -156,7 +156,7 @@ sub mp.crypt_save(fd, lines, password, ver)
 
     /* default version */
     if (ver != 1 && ver != 2)
-        ver = 1;
+        ver = 2;
 
     if (ver == 1)
         fd->write("mpcrypt1\n")->putchar("");
