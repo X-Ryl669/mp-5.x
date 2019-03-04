@@ -131,7 +131,7 @@ mp.actions['grep']  = sub {
     local r = mp.form(
         [
             {
-                'label'     => L("Text to seek" ~ ':'),
+                'label'     => L("Text to seek") ~ ':',
                 'type'      => 'text',
                 'history'   => 'search'
             },
