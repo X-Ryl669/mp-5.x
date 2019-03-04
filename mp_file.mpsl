@@ -572,7 +572,7 @@ sub mp_doc.save(doc)
 
         /* if the document has a password, save it encrypted */
         if (doc.password)
-            mp.crypt_save(f, doc.txt.lines, doc.password);
+            mp.crypt_save(f, doc.txt.lines, doc.password, doc.crypt_ver);
         else
             mp.save_th(f, doc);
     
@@ -885,6 +885,7 @@ sub mp.open(filename, password)
                         d = mp.add(new(mp_doc, { name: filename }));
                         d.txt.lines = lines;
                         d.password  = password;
+                        d.crypt_ver = ver;
                     }
                 }
             }
