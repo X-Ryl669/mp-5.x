@@ -95,7 +95,7 @@ mp.actdesc['set_password'] = LL("Password protect...");
 
 /** code **/
 
-sub mp.crypt_load(fd, password)
+sub mp.crypt_load(fd, password, ver)
 /* loads an encrypted file into lines */
 {
     local c;
@@ -132,7 +132,7 @@ sub mp.crypt_load(fd, password)
 }
 
 
-sub mp.crypt_save(fd, lines, password)
+sub mp.crypt_save(fd, lines, password, ver)
 /* saves the lines as an encrypted file */
 {
     local nl = 0;
@@ -172,12 +172,21 @@ sub mp.crypt_save(fd, lines, password)
 
 
 sub mp.crypt_detect(fd)
-/* detects if fd is an mp encrypted file */
+/* detects if fd is an mp encrypted file, returns version (or 0) */
 {
-    /* is it mpcrypt1\n followed by a 0? */
-    if (read(fd) eq "mpcrypt1\n" && ord(getchar(fd)) == 0)
-        return 1;
+    local ver = 0;
+    local sig1 = fd->read();
+    local sig2 = getchar(fd);
 
-    /* no; file must be reopen */
-    return 0;
+    /* is second signature a 0? */
+    if (ord(sig2) == 0) {
+        /* check first signature */
+        if (sig1 == "mpcrypt1\n")
+            ver = 1;
+        else
+        if (sig1 == "mpcrypt2\n")
+            ver = 2;
+    }
+
+    return ver;
 }
