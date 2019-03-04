@@ -406,7 +406,7 @@ sub mp.tui.draw(doc)
     mp.tui.addstr(mp.trim(mp.build_status_line(), mp.window.tx - size(t)));
 
     /* draw the 'menu' hint */
-    mp.tui.move(mp.window.tx - size(t) + 1, mp.window.ty);
+    mp.tui.move(mp.window.tx - size(t), mp.window.ty);
     mp.tui.addstr(t);
 
     /* if a hardware cursor is desired, set it */
