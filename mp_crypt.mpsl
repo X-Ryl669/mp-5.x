@@ -17,13 +17,13 @@ arcfour = {
     j:      0,
     S:      map(256),
     byte:   sub (a4) {
-        i = (i + 1) & 0xff;
-        j = (j + S[i]) & 0xff;
+        i = (i + 1)    % 256;
+        j = (j + S[i]) % 256;
 
         /* swap */
         local t = S[i]; S[i] = S[j]; S[j] = t;
 
-        return S[(S[i] + S[j]) & 0xff];
+        return S[(S[i] + S[j]) % 256];
     },
     init:   sub (a4, key) {
         /* split as an array of characters */
@@ -34,7 +34,7 @@ arcfour = {
         foreach (i, 256) {
             local t = S[i];
 
-            n = (n + t + ord(k[i % size(k)])) & 0xff;
+            n = (n + t + ord(k[i % size(k)])) % 256;
 
             S[i] = S[n];
             S[n] = t;
