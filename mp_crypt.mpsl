@@ -107,9 +107,13 @@ sub mp.crypt1_load(fd, password)
     /* init */
     local a4 = new(arcfour)->init(password);
 
+    local crc = 0xffff;
+
     while ((c = getchar(fd)) != NULL) {
         /* decrypt byte and concat */
         c = chr(ord(c) ^ a4->byte());
+
+        crc = crc->mp.crc16(ord(c));
 
         if (c eq "\n") {
             /* end of line; push it and restart */
@@ -122,6 +126,8 @@ sub mp.crypt1_load(fd, password)
 
     push(lines, l);
 
+/*    print(fmt("crc16: 0x%04x", crc));
+*/
     return lines;
 }
 
@@ -140,24 +146,27 @@ sub mp.crypt1_save(fd, lines, password)
     /* init */
     local a4 = new(arcfour)->init(password);
 
+    crc = 0xffff;
+
     /* loop the lines */
     foreach (l, lines) {
         /* write a line separator if it's not the first line */
         if (nl)
             l = "\n" ~ l;
 
-        /* split by chars */
-        local lc = split(l);
-
         /* write each char xoring with next crypto-byte */
-        foreach (c, lc)
+        foreach (c, split(l)) {
+            crc = crc->mp.crc16(ord(c));
             putchar(fd, chr(ord(c) ^ a4->byte()));
+        }
 
         nl++;
     }
 
     close(fd);
 
+/*    print(fmt("crc16: 0x%04x", crc));
+*/
     return nl;
 }
 
