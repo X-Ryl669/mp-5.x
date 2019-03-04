@@ -141,7 +141,7 @@ sub mp.crypt_load(fd, password, ver)
 
     if (ver == 2) {
         /* last 2 bytes are the crc16 */
-        if (bitor(ord(getchar(fd)) * 256, ord(getchar(fd))) != crc)
+        if (bitor(fd->getchar()->ord() * 256, fd->getchar()->ord()) != crc)
             lines = NULL;
     }
 
