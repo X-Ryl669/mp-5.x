@@ -233,6 +233,7 @@ mp_doc.keycodes['ctrl-r']           = 'replace';
 mp_doc.keycodes['ctrl-page-down']   = 'seek_next_char';
 mp_doc.keycodes['ctrl-page-up']     = 'seek_prev_char';
 mp_doc.keycodes['ctrl-j']           = 'seek_matching';
+mp_doc.keycodes['alt-g']            = 'grep';
 
 /** action descriptions **/
 
