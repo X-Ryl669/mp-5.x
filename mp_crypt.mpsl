@@ -129,6 +129,7 @@ sub mp.crypt_load(fd, password, ver)
     if (ver == 2) {
         /* last two bytes are the crc */
         /* ... */
+        1;
     }
 
     return lines;
