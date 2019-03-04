@@ -142,7 +142,7 @@ sub mp.crypt_save(fd, lines, password, ver)
 
     /* default version */
     if (ver != 1 && ver != 2)
-        ver = 2;
+        ver = 1;
 
     if (ver == 1)
         fd->write("mpcrypt1\n")->putchar("");
