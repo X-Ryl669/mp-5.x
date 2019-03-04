@@ -69,21 +69,21 @@ mp_doc.actions['set_password'] = sub(d) {
         [
             {
                 type:   'password',
-                label:  L("Password") ~ ':'
+                label:  L("Password") + ':'
             },
             {
                 type:   'password',
-                label:  L("Password (again)") ~ ':'
+                label:  L("Password (again)") + ':'
             }
         ]
     );
 
     if (r != NULL) {
-        if (r[0] ne r[1])
+        if (r[0] != r[1])
             mp.alert(L("Passwords don't match."));
         else {
-            d.password  = r[0];
-            d.txt.mod   = 1;
+            d.password = r[0];
+            d.txt.mod  = 1;
         }
     }
 };
@@ -101,6 +101,7 @@ sub mp.crypt_load(fd, password, ver)
     local c;
     local l = '';
     local lines = [];
+    local start, left;
 
     /* the signature has already been read */
 
@@ -109,27 +110,39 @@ sub mp.crypt_load(fd, password, ver)
 
     local crc = 0xffff;
 
-    while ((c = getchar(fd)) != NULL) {
+    /* calculate the bytes left */
+    start = ftell(fd);
+    fseek(fd, 0, 2);
+    left = ftell(fd) - start;
+    fseek(fd, start, 0);
+
+    /* if version 2, ignore last two bytes */
+    if (ver == 2)
+        left = left - 2;
+
+    while (left && (c = getchar(fd)) != NULL) {
         /* decrypt byte and concat */
         c = chr(ord(c) ^ a4->byte());
 
         crc = crc->mp.crc16(ord(c));
 
-        if (c eq "\n") {
+        if (c == "\n") {
             /* end of line; push it and restart */
             push(lines, l);
             l = '';
         }
         else
             l = l + c;
+
+        left = left - 1;
     }
 
     push(lines, l);
 
     if (ver == 2) {
         /* last two bytes are the crc */
-        /* ... */
-        1;
+        if (crc != fd->getchar()->ord()->bitshl(8) + fd->getchar()->ord())
+            lines = NULL;
     }
 
     return lines;
