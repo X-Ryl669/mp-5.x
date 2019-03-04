@@ -102,7 +102,7 @@ sub mp.crypt_load(fd, password, ver)
     local l = '';
     local lines = [];
 
-    /* the mpcrypt1\n\0 signature has already been read */
+    /* the signature has already been read */
 
     /* init */
     local a4 = new(arcfour)->init(password);
@@ -121,13 +121,16 @@ sub mp.crypt_load(fd, password, ver)
             l = '';
         }
         else
-            l = l ~ c;
+            l = l + c;
     }
 
     push(lines, l);
 
-/*    print(fmt("crc16: 0x%04x", crc));
-*/
+    if (ver == 2) {
+        /* last two bytes are the crc */
+        /* ... */
+    }
+
     return lines;
 }
 
@@ -137,11 +140,15 @@ sub mp.crypt_save(fd, lines, password, ver)
 {
     local nl = 0;
 
-    /* save first the signature */
-    write(fd, "mpcrypt1\n");
+    /* default version */
+    if (ver != 1 && ver != 2)
+        ver = 2;
 
-    /* write a \0 */
-    putchar(fd, "");
+    if (ver == 1)
+        fd->write("mpcrypt1\n")->putchar("");
+    else
+    if (ver == 2)
+        fd->write("mpcrypt2\n")->putchar("");
 
     /* init */
     local a4 = new(arcfour)->init(password);
@@ -152,7 +159,7 @@ sub mp.crypt_save(fd, lines, password, ver)
     foreach (l, lines) {
         /* write a line separator if it's not the first line */
         if (nl)
-            l = "\n" ~ l;
+            l = "\n" + l;
 
         /* write each char xoring with next crypto-byte */
         foreach (c, split(l)) {
@@ -163,10 +170,14 @@ sub mp.crypt_save(fd, lines, password, ver)
         nl++;
     }
 
+    if (ver == 2) {
+        /* store the 16bit crc */
+        fd->putchar(chr(crc->bitand(0xff00)->bitshr(8)));
+        fd->putchar(chr(crc->bitand(0x00ff)));
+    }
+
     close(fd);
 
-/*    print(fmt("crc16: 0x%04x", crc));
-*/
     return nl;
 }
 

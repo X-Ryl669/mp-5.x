@@ -886,8 +886,6 @@ sub mp.open(filename, password)
                         d.txt.lines = lines;
                         d.password  = password;
                     }
-                    else
-                        mp.alert(L("ERROR: wrong password"));
                 }
             }
             else {
