@@ -1,6 +1,22 @@
 Minimum Profit Release Notes
 ============================
 
+5.32
+----
+
+ - New features:
+    - There is a new version format (2) for encrypted files.
+      The cypher algorithm is the same, but includes a CRC, so
+      that it's possible to know if the content has been
+      correctly decrypted (i.e. the decryption password is
+      valid). New encrypted documents use version 2, but
+      version 1 documents are not automatically upgraded.
+      If you want to do it, open a version 1 document, hit ESC,
+      type `mp.active.crypt_ver = 2' and save it back.
+      *NOTE*: This encryption format, though it uses a known
+      algorithm, has not been audited by anyone remotely
+      versed in cryptography, so you are at your own risk.
+
 5.31
 ----
 
