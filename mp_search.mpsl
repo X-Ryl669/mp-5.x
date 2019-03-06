@@ -582,14 +582,14 @@ sub mp.grep(rx, spec, base, rec, r)
 sub mp.replace_tabs_with_spaces(line) {
     local r = '';
     local l = line->split("\t");
-    local s = [1 .. mp.config.tab_size]->map(sub{' ';})->join();
+    local s = mp.config.tab_size->map(' ')->join();
 
     while (size(l) > 1) {
-        r = r ~ shift(l);
-        r = r ~ s->slice(size(r) % size(s));
+        r = r + shift(l);
+        r = r + s->slice(size(r) % size(s), -1);
     }
 
-    r = r ~ shift(l);
+    r = r + shift(l);
 
     return r;
 }
