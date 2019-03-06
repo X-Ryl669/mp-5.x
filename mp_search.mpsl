@@ -602,7 +602,7 @@ sub mp.replace_spaces_with_tabs(line) {
 
     while ((s = line->slice(0, ts)) && size(s) == ts) {
         r->push(s->sregex("/ +$/", "\t"));
-        line = line->slice(ts);
+        line = line->slice(ts, -1);
     }
 
     r->push(s);
