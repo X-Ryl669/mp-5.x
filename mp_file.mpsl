@@ -906,6 +906,9 @@ sub mp.open(filename, password)
 
                 d.txt.lines = map(f);
 
+                if (count(d.txt.lines) == 0)
+                    d.txt.lines->push('');
+
                 /* store the detected eol or the default one */
                 d.eol = e || mp.config.eol;
 
