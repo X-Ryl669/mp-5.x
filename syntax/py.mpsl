@@ -37,7 +37,7 @@
             "/\<[0-9[:upper:]_]+\>/"                    /* all-caps words */
         ],
         'comments',         [ "/#.*$/m" ],
-        'documentation',    [ [ '/"""/m', '/"""$/m' ] ]
+        'documentation',    [ [ '/"""/m', '/"""$/m' ], [ "/'''/m", "/'''/m" ] ]
     ],
     'section'   =>  [ '/^[ \t]*(def|class) /' ],
     'build_targets' => [
