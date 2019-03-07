@@ -133,11 +133,15 @@ static void ansi_get_tty_size(void)
 static void ansi_sigwinch(int s)
 /* SIGWINCH signal handler */
 {
+    struct sigaction sa;
+
     /* get new size */
     ansi_get_tty_size();
 
     /* (re)attach signal */
-    signal(SIGWINCH, ansi_sigwinch);
+    memset(&sa, '\0', sizeof(sa));
+    sa.sa_handler = ansi_sigwinch;
+    sigaction(SIGWINCH, &sa, NULL);
 }
 
 
@@ -305,81 +309,83 @@ static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
 
     str = ansi_read_string(0);
 
-    /* only one char? it's an ASCII or ctrl character */
-    if (str[1] == '\0') {
-        if (str[0] == ' ')
-            f = L"space";
-        else
-        if (str[0] == '\r')
-            f = L"enter";
-        else
-        if (str[0] == '\t')
-            f = L"tab";
-        else
-        if (str[0] == '\033')
-            f = L"escape";
-        else
-        if (str[0] == '\b' || str[0] == '\177')
-            f = L"backspace";
-        else
-        if (str[0] >= ctrl('a') && str[0] <= ctrl('z')) {
-            char tmp[32];
-
-            sprintf(tmp, "ctrl-%c", str[0] + 'a' - ctrl('a'));
+    if (str[0]) {
+        /* only one char? it's an ASCII or ctrl character */
+        if (str[1] == '\0') {
+            if (str[0] == ' ')
+                f = L"space";
+            else
+            if (str[0] == '\r')
+                f = L"enter";
+            else
+            if (str[0] == '\t')
+                f = L"tab";
+            else
+            if (str[0] == '\033')
+                f = L"escape";
+            else
+            if (str[0] == '\b' || str[0] == '\177')
+                f = L"backspace";
+            else
+            if (str[0] >= ctrl('a') && str[0] <= ctrl('z')) {
+                char tmp[32];
+    
+                sprintf(tmp, "ctrl-%c", str[0] + 'a' - ctrl('a'));
+                k = MPDM_MBS(tmp);
+            }
+            else
+            if (str[0] == ctrl(' '))
+                f = L"ctrl-space";
+            else
+                k = MPDM_MBS(str);
+        }
+    
+        /* esc+letter? alt-letter */
+        if (str[0] == '\033' && str[1] >= 'a' &&
+            str[1] <= 'z' && str[2] == '\0') {
+            char tmp[16];
+    
+            sprintf(tmp, "alt-%c", str[1]);
             k = MPDM_MBS(tmp);
         }
-        else
-        if (str[0] == ctrl(' '))
-            f = L"ctrl-space";
-        else
-            k = MPDM_MBS(str);
-    }
-
-    /* esc+letter? alt-letter */
-    if (str[0] == '\033' && str[1] >= 'a' &&
-        str[1] <= 'z' && str[2] == '\0') {
-        char tmp[16];
-
-        sprintf(tmp, "alt-%c", str[1]);
-        k = MPDM_MBS(tmp);
-    }
-
-    /* still nothing? search the table of keys */
-    if (k == NULL && f == NULL) {
-        int n;
-        char *ptr;
-
-        for (n = 0; (ptr = str_to_code[n].ansi_str) != NULL; n++) {
-            if (strncmp(ptr, str, strlen(ptr)) == 0) {
-                f = str_to_code[n].code;
-                break;
+    
+        /* still nothing? search the table of keys */
+        if (k == NULL && f == NULL) {
+            int n;
+            char *ptr;
+    
+            for (n = 0; (ptr = str_to_code[n].ansi_str) != NULL; n++) {
+                if (strncmp(ptr, str, strlen(ptr)) == 0) {
+                    f = str_to_code[n].code;
+                    break;
+                }
+            }
+    
+            /* if a found key starts with _shift-, set shift_pressed flag */
+            if (f && wcsncmp(f, L"_shift-", 7) == 0) {
+                mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+                f += 7;
             }
         }
-
-        /* if a found key starts with _shift-, set shift_pressed flag */
-        if (f && wcsncmp(f, L"_shift-", 7) == 0) {
-            mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
-            f += 7;
+    
+        /* if there is still no recognized ANSI string, return string as is */
+        if (f == NULL) {
+            int n;
+    
+            /* convert carriage returns to new lines */
+            for (n = 0; str[n]; n++) {
+                if (str[n] == '\r')
+                    str[n] = '\n';
+            }
+    
+            mpdm_hset_s(MP, L"raw_string", MPDM_MBS(str));
+            f = L"insert-raw-string";
         }
+    
+        /* if something, create a value */
+        if (k == NULL && f != NULL)
+            k = MPDM_S(f);
     }
-
-    /* if there is still no recognized ANSI string, return string as is */
-    if (f == NULL) {
-        int n;
-
-        /* convert carriage returns to new lines */
-        for (n = 0; str[n]; n++) {
-            if (str[n] == '\r')
-                str[n] = '\n';
-        }
-
-        mpdm_hset_s(MP, L"raw_string", MPDM_MBS(str));
-        f = L"insert-raw-string";
-    }
-
-    /* if something, create a value */
-    if (k == NULL && f != NULL)
-        k = MPDM_S(f);
 
     return k;
 }
@@ -555,9 +561,7 @@ static mpdm_t ansi_drv_startup(mpdm_t a)
 
     ansi_raw_tty(1);
 
-    ansi_get_tty_size();
-
-    signal(SIGWINCH, ansi_sigwinch);
+    ansi_sigwinch(0);
 
     ansi_build_colors();
 
