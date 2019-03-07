@@ -104,7 +104,7 @@ char *ansi_read_string(int fd)
 
     buf[n] = '\0';
 
-    return buf;
+    return n ? buf : NULL;
 }
 
 
@@ -309,7 +309,7 @@ static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
 
     str = ansi_read_string(0);
 
-    if (str[0]) {
+    if (str) {
         /* only one char? it's an ASCII or ctrl character */
         if (str[1] == '\0') {
             if (str[0] == ' ')
