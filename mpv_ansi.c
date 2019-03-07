@@ -108,10 +108,12 @@ char *ansi_read_string(int fd)
 }
 
 
-static void ansi_get_tty_size(int *w, int *h)
+static void ansi_get_tty_size(void)
 /* asks the tty for its size */
 {
+    mpdm_t v;
     char *buffer;
+    int w, h;
 
     /* magic line: save cursor position, move to stupid position,
        ask for current position and restore cursor position */
@@ -120,22 +122,19 @@ static void ansi_get_tty_size(int *w, int *h)
 
     buffer = ansi_read_string(0);
 
-    sscanf(buffer, "\033[%d;%dR", h, w);
+    sscanf(buffer, "\033[%d;%dR", &h, &w);
+
+    v = mpdm_hget_s(MP, L"window");
+    mpdm_hset_s(v, L"tx", MPDM_I(w));
+    mpdm_hset_s(v, L"ty", MPDM_I(h - 1));
 }
 
 
 static void ansi_sigwinch(int s)
 /* SIGWINCH signal handler */
 {
-    int tx, ty;
-    mpdm_t v;
-
     /* get new size */
-    ansi_get_tty_size(&tx, &ty);
-
-    v = mpdm_hget_s(MP, L"window");
-    mpdm_hset_s(v, L"tx", MPDM_I(tx));
-    mpdm_hset_s(v, L"ty", MPDM_I(ty - 1));
+    ansi_get_tty_size();
 
     /* (re)attach signal */
     signal(SIGWINCH, ansi_sigwinch);
@@ -555,7 +554,10 @@ static mpdm_t ansi_drv_startup(mpdm_t a)
     ansi_register_functions();
 
     ansi_raw_tty(1);
-    ansi_sigwinch(0);
+
+    ansi_get_tty_size();
+
+    signal(SIGWINCH, ansi_sigwinch);
 
     ansi_build_colors();
 
