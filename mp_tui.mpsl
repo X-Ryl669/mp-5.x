@@ -253,9 +253,20 @@ sub mp.tui.list(prompt, data, pos)
             else
                 mp.tui.attr(mp.colors.normal.attr);
 
-            mp.tui.move(0, n + 1, 1);
+            /* split the line by tab in two columns */
+            local ll = l->split("\t");
+            local l0 = ll[0];
+            local l1 = ll[1] || '';
 
-            mp.tui.addstr(regex(sprintf("%-" ~ mp.window.tx ~ "s", l), r));
+            /* draw the first part */
+            mp.tui.move(0, n + 1, 1);
+            mp.tui.addstr(mp.trim(l0, mp.window.tx - count(l1)));
+
+            /* draw the middle part */
+            mp.tui.addstr(map(mp.window.tx - count(l0) - count(l1), ' ')->join());
+
+            /* draw the second part */
+            mp.tui.addstr(l1);
 
             n++;
         }
