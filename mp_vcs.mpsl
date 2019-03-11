@@ -95,7 +95,7 @@ sub mp.vcs_form()
     if (vcs == NULL)
         mp.alert(L("This directory is not under a supported version control system"));
     else {
-        local opts = keys(vcs.opts)->sort();
+        local opts = vcs.opts->map(sub (v, i) { i; })->sort();
         local cmd_list = opts->map(sub (e) {
                             sprintf(e, regex(mp.active.name, '/[^\/\\]+$/'));
                          });
