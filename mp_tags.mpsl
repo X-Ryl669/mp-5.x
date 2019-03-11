@@ -59,7 +59,7 @@ mp_doc.actions['complete'] = sub(d) {
 mp_doc.actions['complete_symbol'] = sub(d) {
     mp.long_op(mp.load_tags, 1);
 
-    if (!d->complete(keys(mp.tags), L("Select symbol") ~ ':'))
+    if (!d->complete(map(mp.tags, sub (v, i) { i; }), L("Select symbol") + ':'))
         mp.alert(L("No matching symbol found."));
 };
 
