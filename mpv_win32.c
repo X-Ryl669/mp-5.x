@@ -1353,6 +1353,7 @@ BOOL CALLBACK formDlgProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
             else
             if (wcscmp(type, L"list") == 0) {
                 int i;
+                int ts[] = { 250, 20 };
 
                 t = mpdm_hget_s(w, L"list");
 
@@ -1365,6 +1366,8 @@ BOOL CALLBACK formDlgProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
                         free(ptr);
                     }
                 }
+
+                SendDlgItemMessage(hwnd, ctrl, LB_SETTABSTOPS, 2, (LPARAM) ts);
 
                 /* set position */
                 SendDlgItemMessage(hwnd, ctrl, LB_SETCURSEL,
