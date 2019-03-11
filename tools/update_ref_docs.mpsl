@@ -72,28 +72,25 @@ sub save_ref_document(file, r, hash, prefix, def)
 {
     local f;
 
-    if ((f = open(file, "w")) == NULL)
-        return;
+    if ((f = open(file, "w"))) {
+        f->write(r.header, "\n");
 
-    write(f, r.header);
-    write(f, "\n");
+        foreach (k, sort(map(hash, sub (v, i) { i; }))) {
+            if (prefix)
+                k = prefix + '.' + k;
 
-    foreach (k, sort(map(hash, sub (v, i) { i; }))) {
-        if (prefix)
-            k = prefix + '.' + k;
+            f->write(k, "\n");
+            f->write(sregex(k, '/./g', '-'));
+            f->write("\n\n");
 
-        write(f, k + "\n");
-        write(f, sregex(k, '/./g', '-'));
-        write(f, "\n\n");
+            f->write(r.data[k] || def[k] || "To be written.");
+            f->write("\n\n");
+        }
 
-        write(f, r.data[k] || def[k] || "To be written.");
-        write(f, "\n\n");
+        f->write("\n", r.sig);
+
+        f->close();
     }
-
-    write(f, "\n");
-    write(f, r.sig);
-
-    close(f);
 }
 
 
@@ -136,23 +133,21 @@ update_ref_document('doc/mp_actions.txt', mp.actdesc, NULL, def);
 local f;
 
 if ((f = open('doc/mp_keycodes.txt', 'w')) != NULL) {
-    write(f, "Minimum Profit Keycodes\n");
-    write(f, "=======================\n\n");
+    f->write("Minimum Profit Keycodes\n");
+    f->write("=======================\n\n");
 
-    write(f, "Table with Minimum Profit's keycodes and their default assigned actions.\n\n");
+    f->write("Table with Minimum Profit's keycodes and their default assigned actions.\n\n");
 
     local tbl = " +---------------------+------------------------+\n";
 
-    write(f, tbl);
-    write(f, sprintf(" | %19s | %22s |\n", 'Keycode', 'Action'));
-    write(f, tbl);
+    f->write(tbl, sprintf(" | %19s | %22s |\n", 'Keycode', 'Action'), tbl);
 
     foreach(k, sort(map(all_keycodes, sub (v, i) { i; }))) {
-        write(f, sprintf(" | %19s | %22s |\n", k, all_keycodes[k]));
-        write(f, tbl);
+        if (type(all_keycodes[k]) != "object")
+            f->write(sprintf(" | %19s | %22s |\n", k, all_keycodes[k]), tbl);
     }
 
-    write(f, "\n");
+    f->write("\n");
 
-    close(f);
+    f->close();
 }

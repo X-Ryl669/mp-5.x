@@ -28,8 +28,6 @@ Table with Minimum Profit's keycodes and their default assigned actions.
  +---------------------+------------------------+
  |           alt-space |                   menu |
  +---------------------+------------------------+
- |                ansi | 0x563f82b3a8a0 (object) |
- +---------------------+------------------------+
  |           backspace |            delete_left |
  +---------------------+------------------------+
  |        close-window |                   exit |
