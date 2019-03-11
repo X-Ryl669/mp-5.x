@@ -198,9 +198,7 @@ sub mp_doc.detect_syntax(doc)
 
     /* not yet? try the 'detect' subroutine */
     if (doc.syntax == NULL) {
-        foreach (n, keys(mp.syntax)) {
-            local s = mp.syntax[n];
-
+        foreach (s, mp.syntax) {
             if (is_exec(s.detect) && s.detect(doc)) {
                 doc.syntax = s;
                 break;
