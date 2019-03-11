@@ -134,7 +134,7 @@ mp.actions['open'] = sub (d, filename) {
 
 mp.actions['open_recent'] = sub (d) {
     /* create the list of filenames... */
-    local filenames = mp.state.files->keys()->
+    local filenames = mp.state.files->map(sub (v, i) { i; })->
         /* delete all those not having a timestamp... */
         grep(sub (v, i) { exists(mp.state.files[v], 't'); })->
 
@@ -142,12 +142,12 @@ mp.actions['open_recent'] = sub (d) {
         sort(sub (a, b) { cmp(mp.state.files[b].t, mp.state.files[a].t); })->
 
         /* and add a timestamp for humans */
-        map(sub (v) { v ~ sprintf("\t%t{%Y-%m-%d %H:%M:%S}", mp.state.files[v].t); });
+        map(sub (v) { v + sprintf("\t%t{%Y-%m-%d %H:%M:%S}", mp.state.files[v].t); });
 
     local form = mp.form(
         [
             {
-                label:  L("Recent files") ~ ':',
+                label:  L("Recent files") + ':',
                 type:   'list',
                 list:   filenames
             }

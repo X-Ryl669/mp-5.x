@@ -544,15 +544,15 @@ sub mp.menu_label(action)
     local l = NULL;
 
     /* if action is '-', it's a menu separator */
-    if (action ne '-') {
+    if (action != '-') {
         l = L(mp.actdesc[action]) || action;
 
         /* search this action in mp_doc and global keycodes */
         local ks = (mp_doc.keycodes ~ mp.keycodes)->
-            grep(sub(v) { v eq action; })->keys();
+            grep(sub(v) { v == action; })->map(sub (v, i) { i; });
 
         if (size(ks))
-            l = l ~ ' [' ~ join(ks, ', ') ~ ']';
+            l = l + ' [' + join(ks, ', ') + ']';
     }
 
     return l;
@@ -575,7 +575,7 @@ sub mp.trim(str, max)
 sub mp.get_doc_names(max)
 /* returns an array with the trimmed names of the documents */
 {
-    mp.docs->map(sub(e) {mp.trim(e->get_name(), (max || 32));});
+    mp.docs->map(sub(e) { mp.trim(e->get_name(), (max || 32)); });
 }
 
 
