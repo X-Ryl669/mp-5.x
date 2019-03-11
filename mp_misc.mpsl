@@ -87,7 +87,7 @@ mp_doc.actions['insert_time_stamp'] = sub(doc) {
 };
 
 mp_doc.actions['exec_action'] = sub {
-    local l = join(keys(mp.actions), keys(mp_doc.actions))->sort();
+    local l = (mp.actions + mp_doc.actions)->map(sub (v, i) { i; })->sort();
 
     /* create a map of actions -> keycodes */
     local inv = (mp_doc.keycodes + mp.keycodes)->hmap();
