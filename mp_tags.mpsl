@@ -34,8 +34,8 @@ mp_doc.actions['find_tag']	= sub(d) {
         mp.open_tag(r[0]);
 };
 
-mp_doc.actions['complete'] = sub(d) {
 
+mp_doc.actions['complete'] = sub(d) {
     local words = {};
 
     d->busy(1);
@@ -52,16 +52,17 @@ mp_doc.actions['complete'] = sub(d) {
     if (words[w] == 1)
         hdel(words, w);
 
-    d->complete(keys(words));
+    d->complete(map(words, sub (v, i) { i; }));
 };
 
-mp_doc.actions['complete_symbol'] = sub(d) {
 
+mp_doc.actions['complete_symbol'] = sub(d) {
     mp.long_op(mp.load_tags, 1);
 
     if (!d->complete(keys(mp.tags), L("Select symbol") ~ ':'))
         mp.alert(L("No matching symbol found."));
 };
+
 
 /** default key bindings **/
 
