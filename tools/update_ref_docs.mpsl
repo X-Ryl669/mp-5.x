@@ -1,10 +1,10 @@
 /*
 
-	update_ref_docs.mpsl
+    update_ref_docs.mpsl
 
-	Updates some MP reference documents.
+    Updates some MP reference documents.
 
-	Angel Ortega <angel@triptico.com>
+    Angel Ortega <angel@triptico.com>
 
 */
 
@@ -12,98 +12,97 @@ sub load_ref_document(file)
 /* loads a document and returns a structure with header,
    data entries and signature */
 {
-	local f, l, d, k;
-	local r = {
-		'header'	=> NULL,
-		'data'		=> {},
-		'sig'		=> ''
-	};
+    local f, l, d, k;
+    local r = {
+        'header'    => NULL,
+        'data'      => {},
+        'sig'       => ''
+    };
 
-	if ((f = open(file, "r")) == NULL)
-		return NULL;
+    if ((f = open(file, "r")) == NULL)
+        return NULL;
 
-	d = [];
-	k = NULL;
+    d = [];
+    k = NULL;
 
-	while (l = read(f)) {
-		l = sregex(l, "/\r?\n$/");
+    while (l = read(f)) {
+        l = sregex(l, "/\r?\n$/");
 
-		/* is the line only dashes? */
-		if (regex(l, '/^-+$/')) {
+        /* is the line only dashes? */
+        if (regex(l, '/^-+$/')) {
 
-			/* pop last string */
-			local p = pop(d);
+            /* pop last string */
+            local p = pop(d);
 
-			/* concat all data and reset */
-			local b = join(d, "\n");
-			d = [];
+            /* concat all data and reset */
+            local b = join(d, "\n");
+            d = [];
 
-			/* flush previous data: is this the first one? */
-			if (k == NULL) {
-				/* yes; everything is the header */
-				r.header = b;
-			}
-			else {
-				/* there is a previous one; store */
+            /* flush previous data: is this the first one? */
+            if (k == NULL) {
+                /* yes; everything is the header */
+                r.header = b;
+            }
+            else {
+                /* there is a previous one; store */
                 r.data[k] = b->sregex("/\n$/")->sregex("/^\n/");
-			}
+            }
 
-			k = p;
+            k = p;
 
-			/* if it's the empty string, it's the
-			   signature mark; we're done */
-			if (p eq '') {
-				r.sig = join([ l, read(f) ], "\n");
-				break;
-			}
-		}
-		else
-			push(d, l);
-	}
+            /* if it's the empty string, it's the
+               signature mark; we're done */
+            if (p eq '') {
+                r.sig = join([ l, read(f) ], "\n");
+                break;
+            }
+        }
+        else
+            push(d, l);
+    }
 
-	close(f);
+    close(f);
 
-	return r;
+    return r;
 }
 
 
 sub save_ref_document(file, r, hash, prefix, def)
 /* saves a parsed document filling empty entries from hash */
 {
-	local f;
+    local f;
 
-	if ((f = open(file, "w")) == NULL)
-		return;
+    if ((f = open(file, "w")) == NULL)
+        return;
 
-	write(f, r.header);
-	write(f, "\n");
+    write(f, r.header);
+    write(f, "\n");
 
-	foreach (k, sort(keys(hash))) {
+    foreach (k, sort(map(hash, sub (v, i) { i; }))) {
+        if (prefix)
+            k = prefix + '.' + k;
 
-		if (prefix)
-			k = prefix ~ '.' ~ k;
+        write(f, k + "\n");
+        write(f, sregex(k, '/./g', '-'));
+        write(f, "\n\n");
 
-		write(f, k ~ "\n");
-		write(f, sregex(k, '/./g', '-'));
-		write(f, "\n\n");
+        write(f, r.data[k] || def[k] || "To be written.");
+        write(f, "\n\n");
+    }
 
-		write(f, r.data[k] || def[k] || "To be written.");
-		write(f, "\n\n");
-	}
+    write(f, "\n");
+    write(f, r.sig);
 
-	write(f, "\n");
-	write(f, r.sig);
-
-	close(f);
+    close(f);
 }
 
 
 sub update_ref_document(file, hash, prefix, def)
 {
-	local r;
+    local r;
 
-	if (r = load_ref_document(file))
-		save_ref_document(file, r, hash, prefix, def);
+    if (r = load_ref_document(file))
+        save_ref_document(file, r, hash, prefix, def);
 }
 
 /*****************/
@@ -114,23 +113,22 @@ local kc = {};
 
 local all_keycodes = mp.keycodes ~ mp_doc.keycodes;
 
-foreach (k, keys(all_keycodes))
-	kc[all_keycodes[k]] = k;
+kc = all_keycodes->hmap();
 
 local def = {};
 
 /* fill now the default descriptions */
-foreach (k, keys(mp.actdesc)) {
-	local l;
+foreach (v, i, mp.actdesc) {
+    local l;
 
-	l = '_' ~ mp.actdesc[k] ~ '_';
+    l = '_' + v + '_';
 
-	if (kc[k])
-		l = l ~ " (`" ~ kc[k] ~ "')";
+    if (kc[k])
+        l = l + " (`" + kc[k] + "')";
 
-	l = l ~ "\n\nTo be written.";
+    l = l + "\n\nTo be written.";
 
-	def[k] = l;
+    def[k] = l;
 }
 
 update_ref_document('doc/mp_actions.txt', mp.actdesc, NULL, def);
@@ -138,23 +136,23 @@ update_ref_document('doc/mp_actions.txt', mp.actdesc, NULL, def);
 local f;
 
 if ((f = open('doc/mp_keycodes.txt', 'w')) != NULL) {
-	write(f, "Minimum Profit Keycodes\n");
-	write(f, "=======================\n\n");
+    write(f, "Minimum Profit Keycodes\n");
+    write(f, "=======================\n\n");
 
-	write(f, "Table with Minimum Profit's keycodes and their default assigned actions.\n\n");
+    write(f, "Table with Minimum Profit's keycodes and their default assigned actions.\n\n");
 
-	local tbl = " +---------------------+------------------------+\n";
+    local tbl = " +---------------------+------------------------+\n";
 
-	write(f, tbl);
-	write(f, sprintf(" | %19s | %22s |\n", 'Keycode', 'Action'));
-	write(f, tbl);
+    write(f, tbl);
+    write(f, sprintf(" | %19s | %22s |\n", 'Keycode', 'Action'));
+    write(f, tbl);
 
-	foreach(k, sort(keys(all_keycodes))) {
-		write(f, sprintf(" | %19s | %22s |\n", k, all_keycodes[k]));
-		write(f, tbl);
-	}
+    foreach(k, sort(map(all_keycodes, sub (v, i) { i; }))) {
+        write(f, sprintf(" | %19s | %22s |\n", k, all_keycodes[k]));
+        write(f, tbl);
+    }
 
-	write(f, "\n");
+    write(f, "\n");
 
-	close(f);
+    close(f);
 }

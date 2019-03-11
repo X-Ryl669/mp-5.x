@@ -6,8 +6,6 @@ Table with Minimum Profit's keycodes and their default assigned actions.
  +---------------------+------------------------+
  |             Keycode |                 Action |
  +---------------------+------------------------+
- |               alt-a |                   menu |
- +---------------------+------------------------+
  |     alt-cursor-down |            scroll_down |
  +---------------------+------------------------+
  |     alt-cursor-left |         unindent_block |
@@ -20,6 +18,8 @@ Table with Minimum Profit's keycodes and their default assigned actions.
  +---------------------+------------------------+
  |           alt-enter |             ctrl-enter |
  +---------------------+------------------------+
+ |               alt-g |                   grep |
+ +---------------------+------------------------+
  |            alt-home |              ctrl-home |
  +---------------------+------------------------+
  |        alt-kp-minus |          insert_m_dash |
@@ -27,6 +27,8 @@ Table with Minimum Profit's keycodes and their default assigned actions.
  |           alt-minus |          insert_m_dash |
  +---------------------+------------------------+
  |           alt-space |                   menu |
+ +---------------------+------------------------+
+ |                ansi | 0x563f82b3a8a0 (object) |
  +---------------------+------------------------+
  |           backspace |            delete_left |
  +---------------------+------------------------+
@@ -165,10 +167,6 @@ Table with Minimum Profit's keycodes and their default assigned actions.
  | mouse-left-dblclick | select_word_under_cursor |
  +---------------------+------------------------+
  |          mouse-menu |                   menu |
- +---------------------+------------------------+
- | mouse-middle-button | move_to_mouse_position |
- +---------------------+------------------------+
- |  mouse-right-button | move_to_mouse_position |
  +---------------------+------------------------+
  |    mouse-wheel-down |  move_mouse_wheel_down |
  +---------------------+------------------------+

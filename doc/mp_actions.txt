@@ -304,6 +304,13 @@ _Insert page break character (FF)_
 
 Inserts a page break (form feed) character.
 
+insert_raw_string
+-----------------
+
+_Insert raw string_ (`insert-raw-string')
+
+To be written.
+
 insert_real_tab
 ---------------
 
