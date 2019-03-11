@@ -89,12 +89,31 @@ mp_doc.actions['insert_time_stamp'] = sub(doc) {
 mp_doc.actions['exec_action'] = sub {
     local l = join(keys(mp.actions), keys(mp_doc.actions))->sort();
 
-    l = map(l, sub (e) { e ~ ' - ' ~ L(mp.actdesc[e] || ''); });
+    /* create a map of actions -> keycodes */
+    local inv = (mp_doc.keycodes + mp.keycodes)->hmap();
+
+    l = map(l, sub (e) {
+            local r = [];
+
+            /* add associated key, if any */
+            if (inv[e])
+                r->push(inv[e]);
+
+            /* add action description */
+            e = e + ' - ' + L(mp.actdesc[e] || '');
+
+            /* add references, if any */
+            if (count(r))
+                e = e + "\t[" + r->join(", ") + "]";
+
+            return e;
+        }
+    );
 
     local r = mp.form(
         [
             {
-                label:  L("Select action to execute") ~ ':',
+                label:  L("Select action to execute") + ':',
                 type:   'list',
                 list:   l
             }
