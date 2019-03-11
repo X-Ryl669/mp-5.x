@@ -40,9 +40,9 @@ mp_doc.actions['complete'] = sub(d) {
 
     d->busy(1);
 
+    /* create a unique list of words */
     foreach (l, d.txt.lines)
-        foreach (w, mp.split_by_words(l))
-            words[w]++;
+        words += mp.split_by_words(l)->hmap();
 
     d->busy(0);
 
