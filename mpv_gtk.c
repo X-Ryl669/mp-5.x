@@ -2101,6 +2101,7 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
             gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
 
             renderer = gtk_cell_renderer_text_new();
+            g_object_set(renderer, "xalign", 1.0, NULL);
             gtk_tree_view_column_pack_start(column, renderer, FALSE);
             gtk_tree_view_column_set_attributes(column, renderer, "text", 1, NULL);
 
