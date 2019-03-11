@@ -2082,24 +2082,51 @@ static mpdm_t gtk_drv_form(mpdm_t a, mpdm_t ctxt)
             gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW
                                                 (widget), GTK_SHADOW_IN);
 
-            list_store = gtk_list_store_new(1, G_TYPE_STRING);
+            list_store = gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
             list = gtk_tree_view_new_with_model(GTK_TREE_MODEL(list_store));
             gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(list), FALSE);
+
+            column = gtk_tree_view_column_new();
+            gtk_tree_view_column_set_title(column, "");
+            gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
+
             renderer = gtk_cell_renderer_text_new();
-            column = gtk_tree_view_column_new_with_attributes("", renderer,
-                                                              "text", 0,
-                                                              NULL);
+            gtk_tree_view_column_pack_start(column, renderer, FALSE);
+            gtk_tree_view_column_set_attributes(column, renderer, "text", 0, NULL);
+
             gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
+
+            column = gtk_tree_view_column_new();
+            gtk_tree_view_column_set_title(column, "");
+            gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
+
+            renderer = gtk_cell_renderer_text_new();
+            gtk_tree_view_column_pack_start(column, renderer, FALSE);
+            gtk_tree_view_column_set_attributes(column, renderer, "text", 1, NULL);
+
+            gtk_tree_view_append_column(GTK_TREE_VIEW(list), column);
+
             gtk_container_add(GTK_CONTAINER(widget), list);
 
             l = mpdm_hget_s(w, L"list");
 
             for (i = 0; i < mpdm_size(l); i++) {
                 GtkTreeIter iter;
+                char *ptr2;
 
                 ptr = v_to_utf8(mpdm_aget(l, i));
+
+                /* if there is a tab inside the text,
+                   split in two columns */
+                if ((ptr2 = strchr(ptr, '\t')) == NULL)
+                    ptr2 = "";
+                else {
+                    *ptr2 = '\0';
+                    ptr2++;
+                }
+
                 gtk_list_store_append(list_store, &iter);
-                gtk_list_store_set(list_store, &iter, 0, ptr, -1);
+                gtk_list_store_set(list_store, &iter, 0, ptr, 1, ptr2, -1);
                 g_free(ptr);
             }
 
