@@ -10,7 +10,7 @@
                     'sub', 'break', 'return', 'eq', 'ne'
                 ]
             ),
-            mp.syn_token_list(keys(MPSL.CORE))
+            mp.syn_token_list(MPSL.CORE->map(sub (v, i) { i; }))
         ],
         'word2', [
             "/(NULL|local|global|this)/"
