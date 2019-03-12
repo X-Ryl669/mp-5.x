@@ -388,7 +388,7 @@ sub mp_doc.join_line(doc)
         txt.lines[txt.y] = txt.lines[txt.y] ~ txt.lines[txt.y + 1];
 
         /* delete it */
-        adel(txt.lines, txt.y + 1);
+        del(txt.lines, txt.y + 1);
 
         txt.mod++;
     }
@@ -411,7 +411,7 @@ sub mp_doc.delete_line(doc)
         txt.lines[0] = '';
     else {
         /* destroy the line */
-        adel(txt.lines, txt.y);
+        del(txt.lines, txt.y);
     }
 
     /* fix if it was the last line */

@@ -804,7 +804,7 @@ sub mp.close()
         del(mp.state.files, l.name);
 
     /* delete from the list */
-    adel(mp.docs, mp.active_i);
+    del(mp.docs, mp.active_i);
 
     /* rotate if it was the last one */
     if (mp.active_i == size(mp.docs))
