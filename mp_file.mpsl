@@ -801,7 +801,7 @@ sub mp.close()
 
     /* if the file is specially marked as no_state, delete it */
     if (regex(l.name, '/^<') || l.no_state || l.is_new)
-        hdel(mp.state.files, l.name);
+        del(mp.state.files, l.name);
 
     /* delete from the list */
     adel(mp.docs, mp.active_i);

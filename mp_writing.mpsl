@@ -107,8 +107,8 @@ sub mp_doc.repeated_words(doc, num_chars, max_dist)
     /* if there were previous repeated words, no longer
        consider them as 'typos' */
     if (mp.last_repeated_words) {
-        hdel(mp.word_color, mp.last_repeated_words[0]);
-        hdel(mp.word_color, mp.last_repeated_words[1]);
+        del(mp.word_color, mp.last_repeated_words[0]);
+        del(mp.word_color, mp.last_repeated_words[1]);
     }
 
     while ((l = doc.txt.lines[y]) != NULL || size(q)) {
