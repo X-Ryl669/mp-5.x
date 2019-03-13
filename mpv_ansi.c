@@ -124,9 +124,9 @@ static void ansi_get_tty_size(void)
 
     sscanf(buffer, "\033[%d;%dR", &h, &w);
 
-    v = mpdm_hget_s(MP, L"window");
-    mpdm_hset_s(v, L"tx", MPDM_I(w));
-    mpdm_hset_s(v, L"ty", MPDM_I(h - 1));
+    v = mpdm_get_wcs(MP, L"window");
+    mpdm_set_wcs(v, MPDM_I(w),     L"tx");
+    mpdm_set_wcs(v, MPDM_I(h - 1), L"ty");
 }
 
 
@@ -183,13 +183,13 @@ static void ansi_build_colors(void)
     int n, c;
 
     /* gets the color definitions and attribute names */
-    colors      = mpdm_hget_s(MP, L"colors");
-    color_names = mpdm_hget_s(MP, L"color_names");
+    colors      = mpdm_get_wcs(MP, L"colors");
+    color_names = mpdm_get_wcs(MP, L"color_names");
 
     /* loop the colors */
     n = c = 0;
     while (mpdm_iterator(colors, &c, &v, NULL)) {
-        mpdm_t w = mpdm_hget_s(v, L"text");
+        mpdm_t w = mpdm_get_wcs(v, L"text");
         int c0, c1, cf = 0;
 
         /* get color indexes */
@@ -198,13 +198,13 @@ static void ansi_build_colors(void)
             continue;
 
         /* store the attr */
-        mpdm_hset_s(v, L"attr", MPDM_I(n));
+        mpdm_set_wcs(v, MPDM_I(n), L"attr");
 
         if ((--c0) == -1) c0 = 9;
         if ((--c1) == -1) c1 = 9;
 
         /* flags */
-        w = mpdm_hget_s(v, L"flags");
+        w = mpdm_get_wcs(v, L"flags");
         if (mpdm_seek_wcs(w, L"reverse", 1) != -1)
             cf |= 0x01;
         if (mpdm_seek_wcs(w, L"bright", 1) != -1)
@@ -363,7 +363,7 @@ static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
     
             /* if a found key starts with _shift-, set shift_pressed flag */
             if (f && wcsncmp(f, L"_shift-", 7) == 0) {
-                mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+                mpdm_set_wcs(MP, MPDM_I(1), L"shift_pressed");
                 f += 7;
             }
         }
@@ -378,7 +378,7 @@ static mpdm_t ansi_getkey(mpdm_t args, mpdm_t ctxt)
                     str[n] = '\n';
             }
     
-            mpdm_hset_s(MP, L"raw_string", MPDM_MBS(str));
+            mpdm_set_wcs(MP, MPDM_MBS(str), L"raw_string");
             f = L"insert-raw-string";
         }
     
@@ -440,7 +440,7 @@ static mpdm_t ansi_drv_shutdown(mpdm_t a, mpdm_t ctxt)
 
     ansi_clrscr();
 
-    if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL) {
+    if ((v = mpdm_get_wcs(MP, L"exit_message")) != NULL) {
         mpdm_write_wcs(stdout, mpdm_string(v));
         printf("\n");
     }
@@ -536,22 +536,22 @@ static void ansi_register_functions(void)
     mpdm_t drv;
     mpdm_t tui;
 
-    drv = mpdm_hget_s(mpdm_root(), L"mp_drv");
+    drv = mpdm_get_wcs(mpdm_root(), L"mp_drv");
 
-    mpdm_hset_s(drv, L"timer",      MPDM_X(ansi_drv_timer));
-    mpdm_hset_s(drv, L"shutdown",   MPDM_X(ansi_drv_shutdown));
-    mpdm_hset_s(drv, L"suspend",    MPDM_X(ansi_drv_suspend));
+    mpdm_set_wcs(drv, MPDM_X(ansi_drv_timer),       L"timer");
+    mpdm_set_wcs(drv, MPDM_X(ansi_drv_shutdown),    L"shutdown");
+    mpdm_set_wcs(drv, MPDM_X(ansi_drv_suspend),     L"suspend");
 
     /* execute tui */
     tui = mpsl_eval(MPDM_S(L"load('mp_tui.mpsl');"), NULL, NULL);
 
-    mpdm_hset_s(tui, L"getkey",     MPDM_X(ansi_getkey));
-    mpdm_hset_s(tui, L"addstr",     MPDM_X(ansi_tui_addstr));
-    mpdm_hset_s(tui, L"move",       MPDM_X(ansi_tui_move));
-    mpdm_hset_s(tui, L"attr",       MPDM_X(ansi_tui_attr));
-    mpdm_hset_s(tui, L"refresh",    MPDM_X(ansi_tui_refresh));
-    mpdm_hset_s(tui, L"getxy",      MPDM_X(ansi_tui_getxy));
-    mpdm_hset_s(tui, L"doc_draw",   MPDM_X(ansi_doc_draw));
+    mpdm_set_wcs(tui, MPDM_X(ansi_getkey),      L"getkey");
+    mpdm_set_wcs(tui, MPDM_X(ansi_tui_addstr),  L"addstr");
+    mpdm_set_wcs(tui, MPDM_X(ansi_tui_move),    L"move");
+    mpdm_set_wcs(tui, MPDM_X(ansi_tui_attr),    L"attr");
+    mpdm_set_wcs(tui, MPDM_X(ansi_tui_refresh), L"refresh");
+    mpdm_set_wcs(tui, MPDM_X(ansi_tui_getxy),   L"getxy");
+    mpdm_set_wcs(tui, MPDM_X(ansi_doc_draw),    L"doc_draw");
 }
 
 
@@ -573,10 +573,10 @@ int ansi_drv_detect(int *argc, char ***argv)
 {
     mpdm_t drv;
 
-    drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
+    drv = mpdm_set_wcs(mpdm_root(), MPDM_O(), L"mp_drv");
 
-    mpdm_hset_s(drv, L"id",         MPDM_S(L"ansi"));
-    mpdm_hset_s(drv, L"startup",    MPDM_X(ansi_drv_startup));
+    mpdm_set_wcs(drv, MPDM_S(L"ansi"),          L"id");
+    mpdm_set_wcs(drv, MPDM_X(ansi_drv_startup), L"startup");
 
     return 1;
 }
