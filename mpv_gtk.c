@@ -2405,7 +2405,9 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
 #if CONFOPT_GTK == 3
     GdkPixbuf *pixmap;
 #endif
-    GdkScreen *screen;
+    GdkDisplay *display;
+    GdkMonitor *monitor;
+	GdkRectangle monitor_one_size;
     mpdm_t v;
     int w, h;
     GtkTargetEntry targets[] = {
@@ -2420,18 +2422,14 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
     gtk_window_set_title(GTK_WINDOW(window), "mp " VERSION);
 
     /* get real screen and pick a usable size for the main area */
-    screen = gtk_window_get_screen(GTK_WINDOW(window));
-    if (gdk_screen_get_n_monitors(screen) > 1) {
-    	GdkRectangle monitor_one_size;
-    	gdk_screen_get_monitor_geometry(screen, 0, &monitor_one_size);
+    display = gdk_display_get_default();
+
+    monitor = gdk_display_get_monitor(display, 0);
+
+    gdk_monitor_get_geometry(monitor, &monitor_one_size);
     	
-    	w = (monitor_one_size.width * 3) / 4;
-    	h = (monitor_one_size.height * 2) / 3;
-    }
-    else {
-    	w = (gdk_screen_get_width(screen) * 3) / 4;
-    	h = (gdk_screen_get_height(screen) * 2) / 3;
-    }
+	w = (monitor_one_size.width * 3) / 4;
+	h = (monitor_one_size.height * 2) / 3;
 
     v = mpdm_hget_s(MP, L"state");
     if ((v = mpdm_hget_s(v, L"window")) == NULL) {
