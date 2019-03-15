@@ -126,7 +126,7 @@ install: $(INSTALL_MSG) installdoc $(INSTALLMO)
 	./mkinstalldirs $(PREFIX)/share/man/man1
 	[ -f $(APPNAME).1 ] && install -m 644 $(APPNAME).1 $(PREFIX)/share/man/man1/$(APPNAME).1 || true
 	[ -d /usr/share/applications ] && cp minimum-profit.desktop /usr/share/applications
-	[ -d /usr/share/icons/hicolor/48x48/apps/ ] && cp mp-48x48.png /usr/share/icons/hicolor/48x48/apps/minimum-profit.png
+	[ -d /usr/share/icons/hicolor/48x48/apps/ ] && cp minimum-profit.png /usr/share/icons/hicolor/48x48/apps/
 
 installdoc:
 	./mkinstalldirs $(PREFIX)/share/doc/$(APPNAME)
