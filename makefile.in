@@ -126,6 +126,7 @@ install: $(INSTALL_MSG) installdoc $(INSTALLMO)
 	./mkinstalldirs $(PREFIX)/share/man/man1
 	[ -f $(APPNAME).1 ] && install -m 644 $(APPNAME).1 $(PREFIX)/share/man/man1/$(APPNAME).1 || true
 	[ -d /usr/share/applications ] && cp minimum-profit.desktop /usr/share/applications
+	[ -d /usr/share/icons/hicolor/48x48/apps/ ] && cp mp-48x48.png /usr/share/icons/hicolor/48x48/apps/minimum-profit.png
 
 installdoc:
 	./mkinstalldirs $(PREFIX)/share/doc/$(APPNAME)
@@ -140,6 +141,8 @@ uninstall: $(UNINSTALLMO)
 	rm -rf $(PREFIX)/share/$(APPNAME)
 	rm -rf $(PREFIX)/share/doc/$(APPNAME)
 	rm -f $(PREFIX)/share/man/man1/$(APPNAME).1
+	rm -f /usr/share/applications/minimum-profit.desktop
+	rm -f /usr/share/icons/hicolor/48x48/apps/minimum-profit.png
 
 po/minimum-profit.pot:
 	xgettext -o $@ --language=C --keyword=L --keyword=LL mp*.c *.mpsl
