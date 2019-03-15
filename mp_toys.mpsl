@@ -171,7 +171,7 @@ global mp_pipes = new(mp_base, {
     water_color:  mp.colors.quotes.attr,
     dry_color:    mp.colors.normal.attr,
     cursor_color: mp.colors.cursor.attr,
-    theme:        'u_rnd',
+    theme:        'u_sqr',
 
     get_status: sub (pipes) {
         L("Pipes - carry water from top to bottom by turning the pipes");
