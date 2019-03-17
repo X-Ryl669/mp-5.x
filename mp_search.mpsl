@@ -458,14 +458,10 @@ sub mp_doc.replace_1(doc, org, dst)
         txt = doc.txt;
 
         /* substitute */
-        txt.lines[txt.y] = sregex(txt.lines[txt.y],
-                                mp.prefix_regex(org),
-                                dst, c[0]
-                            );
+        txt.lines[txt.y] = splice(txt.lines[txt.y], dst, c[0], c[1]);
 
-        /* move to correct position */
-        c = regex();
-        doc->set_x(c[0] + c[1]);
+        /* move to new position */
+        doc->set_x(c[0] + count(dst));
 
         txt.mod++;
     }
