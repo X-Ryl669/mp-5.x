@@ -141,7 +141,7 @@ mp.actions['line_options']  = sub {
     );
 
     if (t != NULL) {
-        mp.config.word_wrap     = t[0];
+        mp.config.word_wrap     = integer(t[0]);
         mp.config.auto_indent   = t[1];
         mp.config.eol           = mp.backslash_codes(t[2], 0);
         mp.config.keep_eol      = t[3];

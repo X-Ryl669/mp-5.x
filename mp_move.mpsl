@@ -42,7 +42,7 @@ mp_doc.actions['goto'] = sub (d, line) {
         );
 
         if (t != NULL && t[0] >= 1)
-            line = t[0];
+            line = integer(t[0]);
     }
 
     if (line != NULL) {
