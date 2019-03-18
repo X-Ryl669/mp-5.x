@@ -166,7 +166,7 @@ mp.actions['tab_options']   = sub {
     ] );
 
     if (t != NULL) {
-        mp.config.tab_size       = t[0];
+        mp.config.tab_size       = integer(t[0]);
         mp.config.tabs_as_spaces = t[1];
         mp.config.dynamic_tabs   = t[2];
     }
