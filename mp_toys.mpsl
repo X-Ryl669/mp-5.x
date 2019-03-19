@@ -27,14 +27,14 @@ global mp_maze = new(mp_base, {
         sprintf(L("Maze - help %s to find the treasure. As always, the X marks the spot."), hero);
     },
     init: sub (maze) {
-        if (state eq 'RST' || tx != mp.window.tx || ty != mp.window.ty) {
+        if (state == 'RST' || tx != mp.window.tx || ty != mp.window.ty) {
             tx = mp.window.tx;
             ty = mp.window.ty;
 
             /* ensure odd size */
-            if (!(tx & 1))
+            if (!(tx % 2))
                 tx--;
-            if (!(ty & 1))
+            if (!(ty % 2))
                 ty--;
 
             /* init */
@@ -57,7 +57,7 @@ global mp_maze = new(mp_base, {
 
                     /* can space be opened in this direction?
                        save as possible next position */
-                    if (nx > 0 && ny > 0 && game_map[ny][nx] eq brick)
+                    if (nx > 0 && ny > 0 && game_map[ny][nx] == brick)
                         push(d, t);
                 }
 
@@ -112,20 +112,20 @@ global mp_maze = new(mp_base, {
 
         game_map[y][x] = ' ';
 
-        if (keycode eq 'cursor-up')
+        if (keycode == 'cursor-up')
             y--;
-        if (keycode eq 'cursor-down')
+        if (keycode == 'cursor-down')
             y++;
-        if (keycode eq 'cursor-left')
+        if (keycode == 'cursor-left')
             x--;
-        if (keycode eq 'cursor-right')
+        if (keycode == 'cursor-right')
             x++;
 
-        if (game_map[y][x] eq 'X') {
+        if (game_map[y][x] == 'X') {
             state = 'WON';
         }
         else
-        if (game_map[y][x] eq brick) {
+        if (game_map[y][x] == brick) {
             y = py;
             x = px;
         }
@@ -138,7 +138,7 @@ global mp_maze = new(mp_base, {
         local c = mp.colors.normal.attr;
         local out = map(game_map, sub(e) { [c, join(e)]; });
 
-        if (state eq 'WON') {
+        if (state == 'WON') {
             out[0] = [
                 mp.colors.cursor.attr,
                 L("You won! Press any key.")
@@ -177,7 +177,7 @@ global mp_pipes = new(mp_base, {
         L("Pipes - carry water from top to bottom by turning the pipes");
     },
     init: sub (pipes) {
-        if (state eq 'RST' || tx != mp.window.tx || ty != mp.window.ty) {
+        if (state == 'RST' || tx != mp.window.tx || ty != mp.window.ty) {
             tx = mp.window.tx;
             ty = mp.window.ty;
 
@@ -220,17 +220,17 @@ global mp_pipes = new(mp_base, {
 
         pipes->init();
 
-        if (keycode eq 'cursor-up' && y > 1)
+        if (keycode == 'cursor-up' && y > 1)
             y--;
-        if (keycode eq 'cursor-down'&& y < wy - 2)
+        if (keycode == 'cursor-down'&& y < wy - 2)
             y++;
-        if (keycode eq 'cursor-left' && x > 0)
+        if (keycode == 'cursor-left' && x > 0)
             x--;
-        if (keycode eq 'cursor-right' && x < wx - 1)
+        if (keycode == 'cursor-right' && x < wx - 1)
             x++;
-        if (keycode eq 'enter')
+        if (keycode == 'enter')
             toggle = 1;
-        if (keycode eq 'mouse-left-button') {
+        if (keycode == 'mouse-left-button') {
             local ty = integer(mp.mouse_y / 2);
 
             if (ty >= 1 && ty < wy) {
@@ -274,7 +274,7 @@ global mp_pipes = new(mp_base, {
             py += dir[c][1];
         }
 
-        if (c eq 'WIN') {
+        if (c == 'WIN') {
             attr[py][px] = water_color;
             state = 'WON';
         }
@@ -309,7 +309,7 @@ global mp_pipes = new(mp_base, {
         /* add two more empty lines */
         push(out, [], []);
 
-        if (state eq 'WON') {
+        if (state == 'WON') {
             out[0] = [
                 mp.colors.cursor.attr,
                 L("You won! Press any key.")
