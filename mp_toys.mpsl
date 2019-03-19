@@ -26,19 +26,21 @@ global mp_maze = new(mp_base, {
     dir:        [[0, -1], [1, 0], [0, 1], [-1, 0]],
 
     check_dir:  sub (maze, d) {
-        /* premise: given this kind of maze,
-           from that position in direction d,
-           and turning after hitting a wall, you
-           can only end finding the hero or the spot */
         local ok = -1;
-        local cy = y;
-        local cx = x;
+        local py = y;
+        local px = x;
+        local cy, cx;
+
+        local cnt = 10000;
+
+        cy = py + dir[d][0];
+        cx = px + dir[d][1];
+
+        if (game_map[cy][cx] != ' ')
+            ok = 0;
 
         while (ok == -1) {
-            local py = cy + dir[d][0];
-            local px = cx + dir[d][1];
-
-            local o = game_map[py][px];
+            local o = game_map[cy][cx];
 
             if (o == hero) {
                 /* found ourself */
@@ -50,18 +52,31 @@ global mp_maze = new(mp_base, {
                 ok = 1;
             }
             else
-            if (o == ' ') {
-                /* keep moving */
+            if (o == brick) {
+                /* cannot continue; get back and turn left */
                 cy = py;
                 cx = px;
-            }
-            else {
-                /* turn after hiting a wall */
+
                 d = (d + 1) % 4;
             }
+            else {
+                /* valid position */
+                py = cy;
+                px = cx;
+
+                /* turn right */
+                d = (d + 3) % 4;
+            }
+
+            cy = py + dir[d][0];
+            cx = px + dir[d][1];
+
+            cnt = cnt - 1;
+            if (cnt == 0)
+                break;
         }
 
-        return ok == 1;
+        return ok;
     },
 
     get_status: sub (maze) {
@@ -151,7 +166,9 @@ global mp_maze = new(mp_base, {
         local py = y;
         local px = x;
 
-        game_map[y][x] = ' ';
+        if (keycode == 'f1') {
+            print(maze->check_dir(0));
+        }
 
         if (keycode == 'cursor-up')
             y--;
@@ -170,8 +187,10 @@ global mp_maze = new(mp_base, {
             y = py;
             x = px;
         }
-
-        game_map[y][x] = hero;
+        else {
+            game_map[py][px] = ' ';
+            game_map[y][x]   = hero;
+        }
     },
     render: sub (maze) {
         maze->init();
