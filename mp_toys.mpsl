@@ -161,35 +161,42 @@ global mp_maze = new(mp_base, {
         }
     },
     keypress: sub (maze, keycode) {
-        maze->init();
-
-        local py = y;
-        local px = x;
-
-        if (keycode == 'f1') {
-            print(maze->check_dir(0));
-        }
-
-        if (keycode == 'cursor-up')
-            y--;
-        if (keycode == 'cursor-down')
-            y++;
-        if (keycode == 'cursor-left')
-            x--;
-        if (keycode == 'cursor-right')
-            x++;
-
-        if (game_map[y][x] == spot) {
-            state = 'WON';
-        }
-        else
-        if (game_map[y][x] == brick) {
-            y = py;
-            x = px;
+        if (state == 'WON') {
+            /* in WON state, only enter is accepted */
+            if (keycode == 'enter') {
+                state = 'RST';
+                maze->init();
+            }
         }
         else {
-            game_map[py][px] = ' ';
-            game_map[y][x]   = hero;
+            local py = y;
+            local px = x;
+
+            if (keycode == 'f1') {
+                print(maze->check_dir(0));
+            }
+
+            if (keycode == 'cursor-up')
+                y--;
+            if (keycode == 'cursor-down')
+                y++;
+            if (keycode == 'cursor-left')
+                x--;
+            if (keycode == 'cursor-right')
+                x++;
+
+            if (game_map[y][x] == spot) {
+                state = 'WON';
+            }
+            else
+            if (game_map[y][x] == brick) {
+                y = py;
+                x = px;
+            }
+            else {
+                game_map[py][px] = ' ';
+                game_map[y][x]   = hero;
+            }
         }
     },
     render: sub (maze) {
@@ -201,10 +208,8 @@ global mp_maze = new(mp_base, {
         if (state == 'WON') {
             out[0] = [
                 mp.colors.cursor.attr,
-                L("You won! Press any key.")
+                L("You won! Press ENTER.")
             ];
-
-            state = 'RST';
         }
 
         push(out, []);
