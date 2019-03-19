@@ -22,6 +22,7 @@ global mp_maze = new(mp_base, {
     game_map:   NULL,
     brick:      "\x{2592}",
     hero:       "@",
+    dir:        [[0, -1], [1, 0], [0, 1], [-1, 0]],
 
     get_status: sub (maze) {
         sprintf(L("Maze - help %s to find the treasure. As always, the X marks the spot."), hero);
@@ -51,7 +52,7 @@ global mp_maze = new(mp_base, {
                 /* clear */
                 game_map[y][x] = ' ';
 
-                foreach (t, [[0, -1], [1, 0], [0, 1], [-1, 0]]) {
+                foreach (t, dir) {
                     local ny = y + t[0] * 2;
                     local nx = x + t[1] * 2;
 
