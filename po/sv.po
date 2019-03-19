@@ -1116,7 +1116,6 @@ msgstr ""
 msgid "Play \"Pipes\""
 msgstr ""
 
-#: mp_toys.mpsl:185 mp_toys.mpsl:356
 msgid "You won! Press any key."
 msgstr ""
 
@@ -1164,7 +1163,7 @@ msgstr ""
 msgid "Move one section down"
 msgstr ""
 
-#: mp_toys.mpsl:218
+#: mp_toys.mpsl:242
 msgid "Pipes - carry water from top to bottom by turning the pipes"
 msgstr ""
 
@@ -1437,7 +1436,11 @@ msgstr ""
 msgid "<internal errors>"
 msgstr ""
 
-#: mp_toys.mpsl:68
+#: mp_toys.mpsl:83
 #, c-format
 msgid "Maze - help %s to find the treasure. As always, the %s marks the spot."
+msgstr ""
+
+#: mp_toys.mpsl:211 mp_toys.mpsl:386
+msgid "You won! Press ENTER."
 msgstr ""

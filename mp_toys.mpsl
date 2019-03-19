@@ -281,37 +281,43 @@ global mp_pipes = new(mp_base, {
         return pipes;
     },
     keypress: sub (pipes, keycode) {
-        local toggle = 0;
-
-        pipes->init();
-
-        if (keycode == 'cursor-up' && y > 1)
-            y--;
-        if (keycode == 'cursor-down'&& y < wy - 2)
-            y++;
-        if (keycode == 'cursor-left' && x > 0)
-            x--;
-        if (keycode == 'cursor-right' && x < wx - 1)
-            x++;
-        if (keycode == 'enter')
-            toggle = 1;
-        if (keycode == 'mouse-left-button') {
-            local ty = integer(mp.mouse_y / 2);
-
-            if (ty >= 1 && ty < wy) {
-                local tx = integer(mp.mouse_x / 3);
-
-                if (tx >= 0 && tx < wx) {
-                    x = tx; y = ty;
-                    toggle = 1;
-                }
+        if (state == 'WON') {
+            if (keycode == 'enter') {
+                state = 'RST';
+                pipes->init();
             }
         }
+        else {
+            local toggle = 0;
 
-        if (toggle) {
-            local n = game_map[y][x];
-            game_map[y][x] = pieces[n.next];
-            pipes->verify();
+            if (keycode == 'cursor-up' && y > 1)
+                y--;
+            if (keycode == 'cursor-down'&& y < wy - 2)
+                y++;
+            if (keycode == 'cursor-left' && x > 0)
+                x--;
+            if (keycode == 'cursor-right' && x < wx - 1)
+                x++;
+            if (keycode == 'enter')
+                toggle = 1;
+            if (keycode == 'mouse-left-button') {
+                local ty = integer(mp.mouse_y / 2);
+
+                if (ty >= 1 && ty < wy) {
+                    local tx = integer(mp.mouse_x / 3);
+
+                    if (tx >= 0 && tx < wx) {
+                        x = tx; y = ty;
+                        toggle = 1;
+                    }
+                }
+            }
+
+            if (toggle) {
+                local n = game_map[y][x];
+                game_map[y][x] = pieces[n.next];
+                pipes->verify();
+            }
         }
 
         return pipes;
@@ -377,10 +383,8 @@ global mp_pipes = new(mp_base, {
         if (state == 'WON') {
             out[0] = [
                 mp.colors.cursor.attr,
-                L("You won! Press any key.")
+                L("You won! Press ENTER.")
             ];
-
-            state = 'RST';
         }
 
         return out;

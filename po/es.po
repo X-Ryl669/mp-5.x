@@ -683,9 +683,6 @@ msgstr "Saltar al principio de la línea 'inteligente'"
 msgid "Gathered information on %s"
 msgstr "Información recopilada sobre %s"
 
-msgid "You won!"
-msgstr "¡Has ganado!"
-
 #: mp_vcs.mpsl:96
 msgid "This directory is not under a supported version control system"
 msgstr "Este directorio no está bajo control de versiones."
@@ -707,10 +704,6 @@ msgstr "Control de Versiones..."
 #: mp_misc.mpsl:313
 msgid "Play \"Pipes\""
 msgstr "Jugar a \"Tuberías\""
-
-#: mp_toys.mpsl:185 mp_toys.mpsl:356
-msgid "You won! Press any key."
-msgstr "¡Has ganado! Pulsa una tecla."
 
 #: mp_misc.mpsl:273
 msgid "You already have the latest version."
@@ -756,7 +749,7 @@ msgstr "Mover a la sección anterior"
 msgid "Move one section down"
 msgstr "Mover a la sección siguiente"
 
-#: mp_toys.mpsl:218
+#: mp_toys.mpsl:242
 msgid "Pipes - carry water from top to bottom by turning the pipes"
 msgstr "Tuberías - Lleva el agua de arriba a abajo girando las tuberías"
 
@@ -1016,7 +1009,11 @@ msgstr ""
 msgid "<internal errors>"
 msgstr ""
 
-#: mp_toys.mpsl:68
+#: mp_toys.mpsl:83
 #, c-format
 msgid "Maze - help %s to find the treasure. As always, the %s marks the spot."
 msgstr "Laberinto - Ayuda a %s a encontrar el tesoro. La %s marca el punto."
+
+#: mp_toys.mpsl:211 mp_toys.mpsl:386
+msgid "You won! Press ENTER."
+msgstr "¡Has ganado! Pulsa ENTER."
