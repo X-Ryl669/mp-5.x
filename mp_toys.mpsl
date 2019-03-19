@@ -22,10 +22,50 @@ global mp_maze = new(mp_base, {
     game_map:   NULL,
     brick:      "\x{2592}",
     hero:       "@",
+    spot:       "X",
     dir:        [[0, -1], [1, 0], [0, 1], [-1, 0]],
 
+    check_dir:  sub (maze, d) {
+        /* premise: given this kind of maze,
+           from that position in direction d,
+           and turning after hitting a wall, you
+           can only end finding the hero or the spot */
+        local ok = -1;
+        local cy = y;
+        local cx = x;
+
+        while (ok == -1) {
+            local py = cy + dir[d][0];
+            local px = cx + dir[d][1];
+
+            local o = game_map[py][px];
+
+            if (o == hero) {
+                /* found ourself */
+                ok = 0;
+            }
+            else
+            if (o == spot) {
+                /* found spot */
+                ok = 1;
+            }
+            else
+            if (o == ' ') {
+                /* keep moving */
+                cy = py;
+                cx = px;
+            }
+            else {
+                /* turn after hiting a wall */
+                d = (d + 1) % 4;
+            }
+        }
+
+        return ok == 1;
+    },
+
     get_status: sub (maze) {
-        sprintf(L("Maze - help %s to find the treasure. As always, the X marks the spot."), hero);
+        sprintf(L("Maze - help %s to find the treasure. As always, the %s marks the spot."), hero, spot);
     },
     init: sub (maze) {
         if (state == 'RST' || tx != mp.window.tx || ty != mp.window.ty) {
@@ -92,7 +132,7 @@ global mp_maze = new(mp_base, {
             x = 1 + random(tx / 2) * 2;
             y = 1 + random(ty / 2) * 2;
 
-            game_map[y][x] = 'X';
+            game_map[y][x] = spot;
 
             /* pick hero position */
             x = 1 + random(tx / 2) * 2;
@@ -122,7 +162,7 @@ global mp_maze = new(mp_base, {
         if (keycode == 'cursor-right')
             x++;
 
-        if (game_map[y][x] == 'X') {
+        if (game_map[y][x] == spot) {
             state = 'WON';
         }
         else
