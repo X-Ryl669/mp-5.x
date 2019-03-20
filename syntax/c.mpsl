@@ -172,6 +172,6 @@ sub mp.c_gather_help(word)
     ],
     section:    [ '/(^\/\*\*.*\*\*\/$|^#pragma mark|^[A-Za-z_])/' ],
     build_targets: [
-        "cc -c %s"
+        "cc -c %s && echo Syntax OK"
     ]
 };

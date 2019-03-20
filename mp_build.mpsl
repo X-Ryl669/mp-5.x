@@ -145,6 +145,10 @@ sub mp.build_execute(target)
     log->move_eof();
     log->move_bol();
 
+    /* ensure the log document has something */
+    if (count(log.txt.lines) == 0)
+        log.txt.lines = [''];
+
     /* set the last search regex to match file:line strings,
         so that calling seek-next and seek-prev moves there */
     mp.last_search = '/^[a-z\.\_0-9\/-]+:[0-9]+:/m';
