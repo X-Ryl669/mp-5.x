@@ -405,6 +405,12 @@ static void win32c_attr(int attr)
 }
 
 
+static wchar_t win32c_charat(int x, int y)
+{
+    return (wchar_t) buf[y * tx + x].Char.UnicodeChar;
+}
+
+
 /** TUI **/
 
 static mpdm_t tui_addstr(mpdm_t a, mpdm_t ctxt)
@@ -458,6 +464,36 @@ static mpdm_t tui_getxy(mpdm_t a, mpdm_t ctxt)
     mpdm_unrefnd(v);
 
     return v;
+}
+
+
+static mpdm_t tui_charat(mpdm_t a, mpdm_t ctxt)
+{
+    wchar_t s[2];
+    int x, y;
+
+    x = mpdm_ival(mpdm_get_i(a, 0));
+    y = mpdm_ival(mpdm_get_i(a, 1));
+
+    s[0] = win32c_charat(x, y);
+    s[1] = L'\0';
+
+    return MPDM_S(s);
+}
+
+
+static mpdm_t ansi_tui_charat(mpdm_t a, mpdm_t ctxt)
+{
+    wchar_t s[2];
+    int x, y;
+
+    x = mpdm_ival(mpdm_get_i(a, 0));
+    y = mpdm_ival(mpdm_get_i(a, 1));
+
+    s[0] = L'X';
+    s[1] = L'\0';
+
+    return MPDM_S(s);
 }
 
 
@@ -526,6 +562,7 @@ static void register_functions(void)
     mpdm_hset_s(tui, L"attr",       MPDM_X(tui_attr));
     mpdm_hset_s(tui, L"refresh",    MPDM_X(tui_refresh));
     mpdm_hset_s(tui, L"getxy",      MPDM_X(tui_getxy));
+    mpdm_hset_s(tui, L"charat",     MPDM_X(tui_charat));
     mpdm_hset_s(tui, L"doc_draw",   MPDM_X(win32c_doc_draw));
 }
 

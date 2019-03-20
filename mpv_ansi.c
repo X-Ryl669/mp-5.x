@@ -531,6 +531,21 @@ static mpdm_t ansi_tui_getxy(mpdm_t a, mpdm_t ctxt)
 }
 
 
+static mpdm_t ansi_tui_charat(mpdm_t a, mpdm_t ctxt)
+{
+    wchar_t s[2];
+/*    int x, y;
+
+    x = mpdm_ival(mpdm_get_i(a, 0));
+    y = mpdm_ival(mpdm_get_i(a, 1));
+*/
+    s[0] = L' ';
+    s[1] = L'\0';
+
+    return MPDM_S(s);
+}
+
+
 static void ansi_register_functions(void)
 {
     mpdm_t drv;
@@ -551,6 +566,7 @@ static void ansi_register_functions(void)
     mpdm_set_wcs(tui, MPDM_X(ansi_tui_attr),    L"attr");
     mpdm_set_wcs(tui, MPDM_X(ansi_tui_refresh), L"refresh");
     mpdm_set_wcs(tui, MPDM_X(ansi_tui_getxy),   L"getxy");
+    mpdm_set_wcs(tui, MPDM_X(ansi_tui_charat),  L"charat");
     mpdm_set_wcs(tui, MPDM_X(ansi_doc_draw),    L"doc_draw");
 }
 
