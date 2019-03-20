@@ -100,27 +100,27 @@ sub mp.build_execute(target)
         local f = open(op[1]);
 
         if (f) {
+            local res = '';
             local code = eval(sub { compile(f, op[1]); });
             f->close();
 
-            if (ERROR) {
-                log->append(ERROR);
-                ERROR = NULL;
-            }
+            if (ERROR)
+                res = ERROR;
             else {
                 if (op[0] == 'execute') {
-                    local res = eval(code);
+                    res = eval(code);
 
-                    if (ERROR) {
-                        log->append(ERROR);
-                        ERROR = NULL;
-                    }
+                    if (ERROR)
+                        res = ERROR;
                     else
-                        log->append(dumper(res));
+                        res = dumper(res);
                 }
                 else
-                    log->append("Syntax OK");
+                    res = 'Syntax OK';
             }
+
+            log->append(res);
+            ERROR = NULL;
         }
         else
             log->append("Error opening " + op[1]);
