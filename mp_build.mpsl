@@ -87,33 +87,53 @@ sub mp.build_get_targets()
 
 sub mp.build_execute(target)
 {
+    local doc = mp.active();
     local log = mp.open('<build output>');
 
     log.txt.lines = [];
     log.txt.y = 0;
 
-    /* pipe through make */
-    local p;
-    if ((p = popen(target, 'r')) != NULL) {
-        foreach (l, p)
-            log->append(mp.chomp(l));
+    /* very very special cases: MPSL */
+    if (doc.syntax.name == "MPSL" &&
+        (regex(target, "/^check/") || regex(target, "/^execute/"))) {
+        local op = target->split(" ");
 
-        pclose(p);
+        if (op[0] == 'check') {
+            local code = doc.txt.lines->join("\n");
 
-        log.txt.mod = 0;
-        log.read_only = 1;
+            eval(code);
 
-        log.syntax = mp.get_syntax('make_output');
-
-        log->move_eof();
-        log->move_bol();
-
-        /* set the last search regex to match file:line strings,
-            so that calling seek-next and seek-prev moves there */
-        mp.last_search = '/^[a-z\.\_0-9\/-]+:[0-9]+:/m';
-
-        mp.redraw();
+            if (ERROR) {
+                log->append(ERROR);
+                ERROR = NULL;
+            }
+            else
+                log->append("Syntax OK");
+        }
     }
-    else
-        mp.alert(sprintf(L("Error executing '%s'"), target));
+    else {
+        /* pipe through make */
+        local p;
+        if ((p = popen(target, 'r')) != NULL) {
+            foreach (l, p)
+                log->append(mp.chomp(l));
+
+            pclose(p);
+        }
+        else
+            mp.alert(sprintf(L("Error executing '%s'"), target));
+    }
+
+    log.txt.mod = 0;
+    log.read_only = 1;
+    log.syntax = mp.get_syntax('make_output');
+
+    log->move_eof();
+    log->move_bol();
+
+    /* set the last search regex to match file:line strings,
+        so that calling seek-next and seek-prev moves there */
+    mp.last_search = '/^[a-z\.\_0-9\/-]+:[0-9]+:/m';
+
+    mp.redraw();
 }

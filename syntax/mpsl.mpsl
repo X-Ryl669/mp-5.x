@@ -40,5 +40,9 @@
             '/^/\*\*.*\*\*/$/m'                         /* section mark */
         ]
     ],
-    section:    [ '/(^[A-Za-z_]|^\/\*\*.*\*\*\/$)/' ]
+    section:    [ '/(^[A-Za-z_]|^\/\*\*.*\*\*\/$)/' ],
+    'build_targets' => [
+        'check %s',
+        'execute %s'
+    ]
 };
