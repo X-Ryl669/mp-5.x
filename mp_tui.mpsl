@@ -336,15 +336,15 @@ sub mp.tui.confirm(msg, def, ypos)
     local ret = NULL;
 
     /* get the initials for localized 'Yes' and 'No' */
-    y = regex(L("Yes"), '/^./');
-    n = regex(L("No"), '/^./');
+    y = L("Yes")->slice(0, 1);
+    n = L("No")->slice(0, 1);
 
     /* add options */
-    msg = msg ~ ' (' ~ y ~ '/' ~ n ~ ')';
+    msg = msg + ' (' + y + '/' + n + ')';
 
     if (def != NULL) {
         /* a default option? add to prompt */
-        msg = msg ~ ' [' ~ (def && y || n) ~ ']';
+        msg = msg + ' [' + (def && y || n) + ']';
     }
 
     mp.tui.prompt(msg, ypos);
@@ -356,9 +356,9 @@ sub mp.tui.confirm(msg, def, ypos)
             ret = 1;
         if (regex(k, '/^' ~ n ~ '$/i'))
             ret = 2;
-        if (k eq 'escape')
+        if (k == 'escape')
             ret = 0;
-        if (k eq 'enter')
+        if (k == 'enter')
             ret = (def && 1 || 2);
     }
 
