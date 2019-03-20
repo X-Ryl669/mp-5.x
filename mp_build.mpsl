@@ -25,7 +25,7 @@ mp.actions['build']	= sub {
             local r = mp.form(
                 [
                     {
-                        label:  L("Build target") ~ ':',
+                        label:  L("Build target") + ':',
                         type:   'list',
                         list:   t,
                         value:  mp.makefile_target
@@ -51,7 +51,7 @@ mp.keycodes['f2'] = "build";
 
 /** action descriptions **/
 
-mp.actdesc['build']             = LL("Build project...");
+mp.actdesc['build'] = LL("Build project...");
 
 
 /** code **/
@@ -62,25 +62,23 @@ sub mp.build_get_targets()
     local m = 'make';
 
     if (mp.config.make_opts)
-        m ~= ' ' ~ mp.config.make_opts;
+        m = m + ' ' + mp.config.make_opts;
 
     if ((f = open('Makefile', 'r')) != NULL) {
-        local l;
-
         r = [ m ];
 
-        while (l = read(f)) {
+        foreach (l, f) {
             local t;
 
             if (t = regex(l, '/^[A-Za-z0-9_\.-]+:/'))
-                push(r, m ~ ' ' ~ sregex(t, '/:/', ''));
+                push(r, m + ' ' + sregex(t, '/:/', ''));
         }
 
         close(f);
     }
-    else
+
     if ((f = mp.active.syntax.build_targets) != NULL) {
-        r = f->map(sub (e) { sprintf(e, mp.active.name); });
+        r = r + f->map(sub (e) { sprintf(e, mp.active.name); });
     }
 
     return r;
@@ -97,9 +95,7 @@ sub mp.build_execute(target)
     /* pipe through make */
     local p;
     if ((p = popen(target, 'r')) != NULL) {
-        local l;
-
-        while (l = read(p))
+        foreach (l, p)
             log->append(mp.chomp(l));
 
         pclose(p);
