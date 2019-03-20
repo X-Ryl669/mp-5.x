@@ -532,15 +532,12 @@ sub mp_drv.menu()
     local key = NULL;
     local mouse_x = [];
 
-    while (action == NULL && key ne 'escape') {
+    while (action == NULL && key != 'escape') {
         local pos, mo, my, vy;
         local n = 0;
 
         /* wrap */
-        if (mx < 0)
-            mx = size(mp.menu) - 1;
-        if (mx >= size(mp.menu))
-            mx = 0;
+        mx = (mx + size(mp.menu)) % size(mp.menu);
 
         /* draw the menu bar */
         mp.tui.attr(mp.colors.menu.attr);
@@ -603,15 +600,15 @@ sub mp_drv.menu()
         my = 0;
         vy = 0;
 
-        while (key ne 'escape') {
+        while (key != 'escape') {
             /* draw the options */
             if (my < vy) vy = my;
             if (my > vy + (pty - 1)) vy = my - (pty - 1);
 
             n = 0;
 
-            local empty = [1 .. pos[2]]->map(sub { ' '; })->join();
-            local sep = [1 .. pos[2]]->map(sub { "\x{2500}"; })->join();
+            local empty = map(pos[2], ' ')->join();
+            local sep   = map(pos[2], "\x{2500}")->join();
 
             while (n < pty) {
                 local l = mp.menu_label(mo[n + vy]);
@@ -651,50 +648,48 @@ sub mp_drv.menu()
             }
 
             /* move the hw cursor to the selected option */
-            mp.tui.move(pos[0] , 1 + my - vy);
+            mp.tui.move(pos[0], 1 + my - vy);
 
             mp.tui.refresh();
 
             key = mp.tui.getkey();
 
-            if (key eq 'cursor-up') {
+            if (key == 'cursor-up') {
                 /* move up avoiding separators */
-                while (1) {
-                    if (--my < 0)
-                        my = size(mo) - 1;
+                for (;;) {
+                    my = (my - 1 + size(mo)) % size(mo);
 
-                    if (mo[my] ne '-')
+                    if (mo[my] != '-')
                         break;
                 }
             }
             else
-            if (key eq 'cursor-down') {
+            if (key == 'cursor-down') {
                 /* move down avoiding separators */
-                while (1) {
-                    if (++my >= size(mo))
-                        my = 0;
+                for (;;) {
+                    my = (my + 1) % size(mo);
 
-                    if (mo[my] ne '-')
+                    if (mo[my] != '-')
                         break;
                 }
             }
             else
-            if (key eq 'cursor-right') {
+            if (key == 'cursor-right') {
                 mx++;
                 break;
             }
             else
-            if (key eq 'cursor-left') {
+            if (key == 'cursor-left') {
                 mx--;
                 break;
             }
             else
-            if (key eq 'enter') {
+            if (key == 'enter') {
                 action = mo[my];
                 break;
             }
             else
-            if (key eq 'mouse-left-button') {
+            if (key == 'mouse-left-button') {
                 if (mp.mouse_y == 0) {
                     mx = 0;
                     foreach (x, mouse_x) {
@@ -711,7 +706,7 @@ sub mp_drv.menu()
                 }
                 else {
                     local a = mo[mp.mouse_y - 1];
-                    if (a ne '-')
+                    if (a != '-')
                         action = a;
                 }
 
