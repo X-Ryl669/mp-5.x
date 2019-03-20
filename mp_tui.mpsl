@@ -352,9 +352,13 @@ sub mp.tui.confirm(msg, def, ypos)
     while (ret == NULL) {
         local k = mp.tui.getkey();
 
-        if (regex(k, '/^' ~ y ~ '$/i'))
+        /* allow non-ascii letters for confirmation */
+        if (k == 'insert-raw-string')
+            k = mp.raw_string;
+
+        if (lc(k) == lc(y))
             ret = 1;
-        if (regex(k, '/^' ~ n ~ '$/i'))
+        if (lc(k) == lc(n))
             ret = 2;
         if (k == 'escape')
             ret = 0;
