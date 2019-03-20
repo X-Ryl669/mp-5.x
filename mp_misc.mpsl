@@ -83,7 +83,7 @@ mp_doc.actions['insert_next_item'] = sub(doc) {
 };
 
 mp_doc.actions['insert_time_stamp'] = sub(doc) {
-    doc->store_undo()->insert(strftime(mp.config.time_stamp_format));
+    doc->store_undo()->insert(time() $ '%t{' + mp.config.time_stamp_format + '}');
 };
 
 mp_doc.actions['exec_action'] = sub {
