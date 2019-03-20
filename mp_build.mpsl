@@ -87,29 +87,43 @@ sub mp.build_get_targets()
 
 sub mp.build_execute(target)
 {
-    local doc = mp.active();
+    local syntax = mp.active.syntax.name;
     local log = mp.open('<build output>');
 
     log.txt.lines = [];
     log.txt.y = 0;
 
     /* very very special cases: MPSL */
-    if (doc.syntax.name == "MPSL" &&
-        (regex(target, "/^check/") || regex(target, "/^execute/"))) {
+    if (syntax == "MPSL" && (regex(target, "/^check/") || regex(target, "/^execute/"))) {
         local op = target->split(" ");
 
-        if (op[0] == 'check') {
-            local code = doc.txt.lines->join("\n");
+        local f = open(op[1]);
 
-            eval(code);
+        if (f) {
+            local code = eval(sub { compile(f, op[1]); });
+            f->close();
 
             if (ERROR) {
                 log->append(ERROR);
                 ERROR = NULL;
             }
-            else
-                log->append("Syntax OK");
+            else {
+                if (op[0] == 'execute') {
+                    local res = eval(code);
+
+                    if (ERROR) {
+                        log->append(ERROR);
+                        ERROR = NULL;
+                    }
+                    else
+                        log->append(dumper(res));
+                }
+                else
+                    log->append("Syntax OK");
+            }
         }
+        else
+            log->append("Error opening " + op[1]);
     }
     else {
         /* pipe through make */
