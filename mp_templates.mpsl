@@ -13,16 +13,15 @@
 /** editor actions **/
 
 mp_doc.actions['insert_template'] = sub(d) {
-    local l;
+    /* no templates? do nothing */
+    local l = d->long_op(d.read_templates_file);
 
-    /* no local templates? do nothing */
-    if ((l = d->long_op(d.read_templates_file)) != NULL) {
-
+    if (count(l)) {
         /* select one */
         local t = mp.form(
             [
                 {
-                    label:  L("Template to insert") ~ ':',
+                    label:  L("Template to insert") + ':',
                     type:   'list',
                     list:   l
                 }
@@ -63,7 +62,7 @@ mp.actions['open_templates_file'] = sub {
         if ((t = mp.form(
                 [
                     {
-                        label:  L("Template file to edit") ~ ':',
+                        label:  L("Template file to edit") + ':',
                         type:   'list',
                         list:   templates
                     }
@@ -79,8 +78,8 @@ mp.actions['open_templates_file'] = sub {
 
 /** action descriptions **/
 
-mp.actdesc['insert_template']       = LL("Insert template...");
-mp.actdesc['open_templates_file']   = LL("Edit templates file");
+mp.actdesc['insert_template']     = LL("Insert template...");
+mp.actdesc['open_templates_file'] = LL("Edit templates file");
 
 /** data **/
 
@@ -91,52 +90,48 @@ mp.templates = {};
 sub mp_doc.read_templates_file(d)
 /* reads the $HOME/.mp_templates or $HOME/.mp_templates/{global,syntax.name} file into mp.templates */
 {
-    local f, l, k, v, n;
+    local tmpl_lst = [];
 
     local read_template = sub(filename) {
-        if ((f = open(filename, "r")) == NULL)
-            return NULL;
+        local k = NULL;
+        local v = [];
 
-        while (l = read(f)) {
-            if (regex(l, "/^%%/")) {
+        foreach (l, open(filename, "r")) {
+            l = mp.chomp(l);
+
+            if (l->slice(0, 2) == "%%") {
                 /* new template: store previous, if any */
-                if (k && v) {
-                    push(n, k);
-                    mp.templates[k] = v;
+                if (k) {
+                    push(tmpl_lst, k);
+                    mp.templates[k] = v->join("\n");
                 }
 
                 /* strip prefix */
-                k = sregex(mp.chomp(l), "/^%%/");
-                v = NULL;
+                k = l->slice(2, -1);
+                v = [];
             }
             else {
                 /* add to v */
-                v = v ~ l;
+                v->push(l);
             }
         }
 
-        close(f);
+        /* store pending */
+        if (k) {
+            push(tmpl_lst, k);
+            mp.templates[k] = v->join("\n");
+        }
     };
-
-    k = NULL;
-    v = NULL;
-    n = [];
 
     /* reset */
     mp.templates = {};
 
     read_template(HOMEDIR ~ "/.mp_templates");
     read_template(HOMEDIR ~ "/.mp_templates/global");
-    if (d.syntax != NULL) {
-        read_template(HOMEDIR ~ "/.mp_templates/" ~ d.syntax.id);
-    }
 
-    /* store last value */
-    if (k && v) {
-        push(n, k);
-        mp.templates[k] = v;
-    }
+    if (d.syntax != NULL)
+        read_template(HOMEDIR ~ "/.mp_templates/" ~ d.syntax.id);
 
     /* returns keys(mp.templates), but in its original order */
-    return n;
+    return tmpl_lst;
 }
