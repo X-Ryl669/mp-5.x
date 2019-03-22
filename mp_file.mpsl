@@ -831,9 +831,9 @@ sub mp.open(filename, password)
     if (regex(filename, "/.+:[0-9]+:([0-9]+:)?$/")) {
         local l = split(filename, ':');
 
-        x           = l[2];
-        y           = l[1];
-        filename    = l[0];
+        x        = integer(l[2]);
+        y        = integer(l[1]);
+        filename = l[0];
     }
 
     if ((s = mp.find_file_by_name(filename)) != -1) {
@@ -946,9 +946,9 @@ sub mp.open(filename, password)
         /* look in the state if we have a previous position */
         local p;
         if ((p = mp.state.files[filename]) != NULL) {
-            d->set_y(p.y);
-            d->set_x(p.x);
-            d.txt.vy = p.vy;
+            d->set_y(integer(p.y));
+            d->set_x(integer(p.x));
+            d.txt.vy = integer(p.vy);
         }
 
         if (y)
