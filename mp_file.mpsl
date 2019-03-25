@@ -688,6 +688,16 @@ sub mp_doc.export_as_rtf(doc, fn)
         foreach (p, doc->split_by_paragraph()) {
             local mode = p[0];
             local data = p[1]->map(sub (l) {
+                    /* convert URLs */
+                    l = l->sregex("/(http|ftp)s?:\/\/[^ ,\t]+/g",
+                        sub (m) {
+                            '{\field' +
+                            '{\*\fldinst HYPERLINK "' + m + '" }' +
+                            '{\fldrslt {\ul1 ' + m + '}{}}' +
+                            '}';
+                        }
+                    );
+
                     /* convert *text* to strong */
                     while (l->regex('/\*[a-zA-Z0-9 ,]+\*/')) {
                         l = l->sregex('/\*/', '{\b ')->sregex('/\*/', '}');
