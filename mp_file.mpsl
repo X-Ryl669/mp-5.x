@@ -705,7 +705,7 @@ sub mp_doc.export_as_rtf(doc, fn)
 
                             if (slice(m, 0, 1) != '*') {
                                 p = slice(m, 0, 1);
-                                m = slice(m, 1, -1);
+                                m = slice(m, 2, -2);
                             }
                             else
                                 m = slice(m, 1, -2);
@@ -721,7 +721,7 @@ sub mp_doc.export_as_rtf(doc, fn)
 
                             if (slice(m, 0, 1) != '_') {
                                 p = slice(m, 0, 1);
-                                m = slice(m, 1, -1);
+                                m = slice(m, 2, -2);
                             }
                             else
                                 m = slice(m, 1, -2);
