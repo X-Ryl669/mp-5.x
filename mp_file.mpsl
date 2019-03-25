@@ -699,22 +699,34 @@ sub mp_doc.export_as_rtf(doc, fn)
                     );
 
                     /* convert *text* to strong */
-                    l = l->sregex("/[ \t]\*[^\*]+\*/g",
+                    l = l->sregex("/(^|[ \t])\*[^\*]+\*/g",
                         sub (m) {
-                            slice(m, 0, 1) +
-                            '{\b ' +
-                            slice(m, 2, -2) +
-                            '}';
+                            local p = '';
+
+                            if (slice(m, 0, 1) != '*') {
+                                p = slice(m, 0, 1);
+                                m = slice(m, 1, -1);
+                            }
+                            else
+                                m = slice(m, 1, -2);
+
+                            p + '{\b ' + m + '}';
                         }
                     );
 
                     /* convert _text_ to emphasized */
-                    l = l->sregex("/[ \t]_[^_]+_/g",
+                    l = l->sregex("/(^|[ \t])_[^_]+_/g",
                         sub (m) {
-                            slice(m, 0, 1) +
-                            '{\i ' +
-                            slice(m, 2, -2) +
-                            '}';
+                            local p = '';
+
+                            if (slice(m, 0, 1) != '_') {
+                                p = slice(m, 0, 1);
+                                m = slice(m, 1, -1);
+                            }
+                            else
+                                m = slice(m, 1, -2);
+
+                            p + '{\i ' + m + '}';
                         }
                     );
 
