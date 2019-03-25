@@ -704,9 +704,14 @@ sub mp_doc.export_as_rtf(doc, fn)
                     }
 
                     /* convert _text_ to emphasized */
-                    while (l->regex('/_[a-zA-Z0-9 ,]+_/')) {
-                        l = l->sregex('/_/', '{\i ')->sregex('/_/', '}');
-                    }
+                    l = l->sregex("/[ \t]_[^_]+_/g",
+                        sub (m) {
+                            slice(m, 0, 1) +
+                            '{\i ' +
+                            slice(m, 2, -2) +
+                            '}';
+                        }
+                    );
 
                     /* convert non-ASCII characters to unicode */
                     l = l->split()->map(sub (e) {
