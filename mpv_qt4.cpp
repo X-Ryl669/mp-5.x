@@ -351,21 +351,54 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
         else
         if (wcscmp(type, L"list") == 0) {
             int i;
-            QListWidget *qlw = new QListWidget();
-            qlw->setMinimumWidth(500);
+            QTableWidget *qtw = new QTableWidget();
+            qtw->setSelectionBehavior(QAbstractItemView::SelectRows);
+            qtw->setShowGrid(false);
+
+            qtw->setMinimumWidth(600);
 
             /* if it's the only widget, make it tall */
             if (mpdm_size(widget_list) == 1)
-                qlw->setMinimumHeight(400);
+                qtw->setMinimumHeight(400);
+
+            qtw->horizontalHeader()->hide();
+            qtw->horizontalHeader()->setStretchLastSection(true);
+            qtw->verticalHeader()->hide();
 
             mpdm_t l = mpdm_hget_s(w, L"list");
 
-            for (i = 0; i < (int) mpdm_size(l); i++)
-                qlw->addItem(v_to_qstring(mpdm_aget(l, i)));
+            qtw->setColumnCount(2);
+            qtw->setRowCount(mpdm_size(l));
 
-            qlw->setCurrentRow(mpdm_ival(t));
+            for (i = 0; i < (int) mpdm_size(l); i++) {
+                QTableWidgetItem *qtwi;
+                wchar_t *ptr1, *ptr2;
 
-            qw = qlw;
+                ptr1 = wcsdup(mpdm_string(mpdm_aget(l, i)));
+                if ((ptr2 = wcschr(ptr1, L'\t'))) {
+                    *ptr2 = L'\0';
+                    ptr2++;
+                }
+                else
+                    ptr2 = (wchar_t *)L"";
+
+                qtwi = new QTableWidgetItem(QString::fromWCharArray(ptr1));
+                qtw->setItem(i, 0, qtwi);
+
+                qtwi = new QTableWidgetItem(QString::fromWCharArray(ptr2));
+                qtwi->setTextAlignment(Qt::AlignRight);
+                qtw->setItem(i, 1, qtwi);
+
+                qtw->setRowHeight(i, 24);
+
+                free(ptr1);
+            }
+
+            qtw->selectRow(mpdm_ival(t));
+
+            qtw->resizeColumnsToContents();
+
+            qw = qtw;
         }
 
         qlist[n] = qw;
