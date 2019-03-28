@@ -180,8 +180,7 @@ global mp_maze = new(mp_base, {
                             maze->check(2) ||
                             maze->check(3);
 
-                if (dir)
-                    phero = ['E', 'S', 'W', 'N']->get(dir - 1);
+                phero = ['?', 'E', 'S', 'W', 'N']->get(dir);
             }
 
             if (keycode == 'cursor-up')
