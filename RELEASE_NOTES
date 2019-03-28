@@ -28,6 +28,8 @@ Minimum Profit Release Notes
       refactored. None of these changes add anything new nor
       fix previous bugs.
     - Fixed some whining about deprecated usage in GTK driver.
+    - In the easter egg / hidden game 'maze', pressing f1
+      shows a compass hint instead of the hero.
 
 5.31
 ----
