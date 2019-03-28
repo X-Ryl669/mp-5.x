@@ -32,15 +32,15 @@ global mp_maze = new(mp_base, {
         local cy, cx;
         local pdir = d + 1;
 
-        local cnt = 10000;
-
         cy = py + dir[d][0];
         cx = px + dir[d][1];
 
         if (game_map[cy][cx] != ' ')
             ok = 0;
 
-        while (ok == -1) {
+        local cnt = 10000;
+
+        while (cnt && ok == -1) {
             local o = game_map[cy][cx];
 
             if (o == hero) {
@@ -73,8 +73,6 @@ global mp_maze = new(mp_base, {
             cx = px + dir[d][1];
 
             cnt = cnt - 1;
-            if (cnt == 0)
-                break;
         }
 
         return ok && pdir || 0;
