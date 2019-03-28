@@ -25,11 +25,12 @@ global mp_maze = new(mp_base, {
     spot:       "X",
     dir:        [[0, -1], [1, 0], [0, 1], [-1, 0]],
 
-    check_dir:  sub (maze, d) {
+    check:  sub (maze, d) {
         local ok = -1;
         local py = y;
         local px = x;
         local cy, cx;
+        local pdir = d + 1;
 
         local cnt = 10000;
 
@@ -76,7 +77,7 @@ global mp_maze = new(mp_base, {
                 break;
         }
 
-        return ok;
+        return ok && pdir || 0;
     },
 
     get_status: sub (maze) {
@@ -171,9 +172,16 @@ global mp_maze = new(mp_base, {
         else {
             local py = y;
             local px = x;
+            local phero = hero;
 
             if (keycode == 'f1') {
-                print(maze->check_dir(0));
+                local dir = maze->check(0) ||
+                            maze->check(1) ||
+                            maze->check(2) ||
+                            maze->check(3);
+
+                if (dir)
+                    phero = ['E', 'S', 'W', 'N']->get(dir - 1);
             }
 
             if (keycode == 'cursor-up')
@@ -195,7 +203,7 @@ global mp_maze = new(mp_base, {
             }
             else {
                 game_map[py][px] = ' ';
-                game_map[y][x]   = hero;
+                game_map[y][x]   = phero;
             }
         }
     },
