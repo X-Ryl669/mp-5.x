@@ -950,7 +950,7 @@ sub mp.open(filename, password)
             close(f);
         }
         else
-        if (s[2] & 0040000) {
+        if (bitand(s[2], 0040000)) {
             /* it's a directory: show it */
             ERRNO = NULL;
 
