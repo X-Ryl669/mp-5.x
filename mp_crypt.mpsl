@@ -25,6 +25,9 @@ global arcfour = {
 
         return S[(S[i] + S[j]) % 256];
     },
+    char:   sub (a4, c) {
+        return chr(bitxor(ord(c), a4->byte()));
+    },
     init:   sub (a4, key) {
         /* split as an array of characters */
         local k = split(key || '');
@@ -122,7 +125,7 @@ sub mp.crypt_load(fd, password, ver)
 
     while (left && (c = getchar(fd)) != NULL) {
         /* decrypt byte and concat */
-        c = chr(ord(c) ^ a4->byte());
+        c = a4->char(c);
 
         crc = crc->mp.crc16(ord(c));
 
@@ -178,7 +181,7 @@ sub mp.crypt_save(fd, lines, password, ver)
         /* write each char xoring with next crypto-byte */
         foreach (c, split(l)) {
             crc = crc->mp.crc16(ord(c));
-            putchar(fd, chr(ord(c) ^ a4->byte()));
+            putchar(fd, a4->char(c));
         }
 
         nl++;
