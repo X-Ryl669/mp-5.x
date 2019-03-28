@@ -16,6 +16,18 @@ Minimum Profit Release Notes
       *NOTE*: This encryption format, though it uses a known
       algorithm, has not been audited by anyone remotely
       versed in cryptography, so you are at your own risk.
+    - In Linux and similar systems, both a .desktop and icon
+      files are installed.
+    - In the 'build target' list, also add the generic syntax-
+      dependent build targets at the end (i.e. when editing a
+      Python file in a Makefile-controlled folder, the execute
+      and syntax check options are shown at the end).
+  - Other changes:
+    - There has been many internal changes due to both MPDM
+      and MPSL being moving targets, now that they are heavily
+      refactored. None of these changes add anything new nor
+      fix previous bugs.
+    - Fixed some whining about deprecated usage in GTK driver.
 
 5.31
 ----
