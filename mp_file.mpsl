@@ -664,6 +664,7 @@ sub mp_doc.split_by_paragraph(doc)
 sub mp_doc.export_as_rtf(doc, fn)
 /* exports a text as a very basic RTF file */
 {
+    local f;
     local ret = 0;
 
     /* configurable data */
