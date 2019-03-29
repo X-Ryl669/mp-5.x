@@ -19,8 +19,6 @@ global mp_doc_dir = new(mp_doc);
 
 sub mp_doc_dir.setup(doc)
 {
-    local n;
-
     doc.title = sprintf(L("<listing of %s>"), doc.name);
 
     /* get the directory content */
@@ -34,10 +32,10 @@ sub mp_doc_dir.setup(doc)
         L("Saving commits the changes."),
         L("(Keep the 'number:' on each line untouched)"),
         ''
-    ]->map(sub(e) { '# ' ~ e;});
+    ]->map(sub(e) { '# ' + e; });
 
-    for (n = 0; n < size(doc.dir_content); n++)
-        push(doc.txt.lines, sprintf("%4d: %s", n + 1, doc.dir_content[n]));
+    foreach (v, i, doc.dir_content)
+        doc.txt.lines->push(sprintf("%4d: %s", i + 1, v));
 
     doc.txt.mod = 0;
 
