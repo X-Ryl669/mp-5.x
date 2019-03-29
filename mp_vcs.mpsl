@@ -103,7 +103,7 @@ sub mp.vcs_form()
         local form = mp.form(
             [
                 {
-                    label:  sprintf(L("Available %s commands"), vcs.id) ~ ':',
+                    label:  sprintf(L("Available %s commands"), vcs.id) + ':',
                     type:   'list',
                     list:   cmd_list,
                     value:  mp.vcs_target
@@ -142,7 +142,7 @@ sub mp.vcs_form()
                     log = mp.open(sprintf(L("<%s output>"), vcs.id));
 
                     log->move_eof();
-                    log->insert(cmd ~ ":\n\n");
+                    log->insert(cmd + ":\n\n");
                 }
 
                 log->actions.exec_command(cmd);
@@ -179,7 +179,7 @@ sub mp_doc_vcs.query_close(doc)
             local log = mp.open(doc.vcs.log_name);
 
             log->move_eof();
-            log->insert(cmd ~ ":\n\n");
+            log->insert(cmd + ":\n\n");
             log->actions.exec_command(cmd);
             log->insert_newline();
 
