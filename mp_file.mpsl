@@ -674,6 +674,7 @@ sub mp_doc.export_as_troff(doc, fn)
                  ".pl 10i\n");
         f->write(".ps ", troff_font_size, "\n",
                  ".vs ", troff_font_size * 2, "\n");
+        f->write(".\\\"generator Minimum Profit ", mp.VERSION, "\n");
 
         foreach (p, doc->split_by_paragraph()) {
             local mode = p[0];
@@ -704,7 +705,7 @@ sub mp_doc.export_as_troff(doc, fn)
             }
             else
             if (mode == 'verbatim') {
-                f->write(".nf\n", data->join("\n"), "\n\n");
+                f->write(".nf\n", data->join("\n"), "\n.fi\n\n");
             }
             else
             if (mode == 'center') {
