@@ -19,13 +19,18 @@ kind of text, line breaks are meaningful and no justification is done.
 This is an example:
 
  From: Angel Ortega <angel@triptico.com>
- To: <undisclosed>
- Subject: Release captain Trips
- 
+ To: <biohazard laboratory staff>
+ Subject: Release the virus
+  
  This is an example email.
+     Line breaks are shown as written.
 
 This kind of paragraphs shall be shown in a monospaced font if the output
-format makes it possible.
+format makes it possible. In the example above, the line between the
+subject and the body has *two* spaces: one to mark it as a paragraph to
+be centered and another one to include some content, as leading spaces
+are deleted on output. Otherwise, they will be treated as two different
+paragraphs.
 
 If a paragraph is made of lines with a leading space *and* a trailing
 space, it's treated as text that must be shown centered, as in titles,
@@ -47,11 +52,12 @@ in _this example_. As well, strong text can be surrounded by asterisks,
 like in the *this very attention-demanding text*.
 
 Unicode is accepted wherever possible; some output formats have encoding
-limitations, though, so be creative.
+limitations, though, so be reasonable. As it's important for spanish
+writing, special treatment for m-dashes is included.
 
 Some output formatting can be tweaked via configuration variables, see
 mp.config for details.
 
 Finally, please note that this format has been designed to make it suitable
-for writing by Angel Ortega. You may find it useless, stupid or whatever.
-I don't care. Keep moving.
+for writing by Angel Ortega in spanish. You may find it useless, stupid or
+whatever. I don't care. Keep moving.

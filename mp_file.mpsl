@@ -599,7 +599,7 @@ sub mp_doc.save(doc)
 }
 
 
-sub mp_doc.split_by_paragraph(doc)
+sub mp_doc.parse_as_mptxt(doc)
 /* splits a text document by paragraph */
 {
     local tdoc = [];
@@ -678,7 +678,7 @@ sub mp_doc.export_as_troff(doc, fn)
                  ".vs ", mp.config.troff_font_size * 2, "\n");
         f->write(".\\\"generator Minimum Profit ", mp.VERSION, "\n");
 
-        foreach (p, doc->split_by_paragraph()) {
+        foreach (p, doc->parse_as_mptxt()) {
             local mode = p[0];
             local data = p[1]->map(sub (l) {
                     /* convert _text_ to emphasized */
@@ -753,7 +753,7 @@ sub mp_doc.export_as_rtf(doc, fn)
         /* default style */
         f->write('\f0' + tfs + '\fi0' + mp.config.rtf_line_style_1 + ali + "\r\n");
 
-        foreach (p, doc->split_by_paragraph()) {
+        foreach (p, doc->parse_as_mptxt()) {
             local mode = p[0];
             local data = p[1]->map(sub (l) {
                     /* convert URLs */
