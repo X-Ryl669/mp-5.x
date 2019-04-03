@@ -1,0 +1,57 @@
+ Minimum Profit: the mptxt format 
+
+ Angel Ortega <angel@triptico.com> 
+
+The mptxt format is a very lightweight text formatting that can be
+converted by the Minimum Profit text editor to other text formats. This
+document describes version 1.00 of the mptxt format.
+
+Output formats supported as of Minimum Profit 5.32 is RTF and troff.
+
+Default paragraphs are delimited by blank lines; line breaks can be used
+arbitrarily and treated the same as spaces. On output they follow the
+de-facto spanish literary convention: first line is indented unless it's
+the first paragraph of the text or if it follows a special section, like a
+centered text or a section break.
+
+Paragraphs with a leading space are treated as _verbatim_ text; in this
+kind of text, line breaks are meaningful and no justification is done.
+This is an example:
+
+ From: Angel Ortega <angel@triptico.com>
+ To: <undisclosed>
+ Subject: Release captain Trips
+ 
+ This is an example email.
+
+This kind of paragraphs shall be shown in a monospaced font if the output
+format makes it possible.
+
+If a paragraph is made of lines with a leading space *and* a trailing
+space, it's treated as text that must be shown centered, as in titles,
+subtitles. This is an example:
+
+ INTERREGNO EVIL CORPORATION 
+ NO ENTRY 
+ TRESPASSERS SHALL BE SHOT ON SIGHT 
+
+Or, for example, to introduce a section separator, like this:
+
+ *** 
+
+If the output format support it somehow, URLs shall be made clickable,
+like when writing one like http://triptico.com or similar.
+
+Text that must be shown emphasized can be surrounded by underscores, like
+in _this example_. As well, strong text can be surrounded by asterisks,
+like in the *this very attention-demanding text*.
+
+Unicode is accepted wherever possible; some output formats have encoding
+limitations, though, so be creative.
+
+Some output formatting can be tweaked via configuration variables, see
+mp.config for details.
+
+Finally, please note that this format has been designed to make it suitable
+for writing by Angel Ortega. You may find it useless, stupid or whatever.
+I don't care. Keep moving.
