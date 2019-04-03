@@ -665,9 +665,10 @@ sub mp_doc.split_by_paragraph(doc)
 
 sub mp_doc.export_as_troff(doc, fn)
 {
-    local f;
+    local f, p_enc;
     local ret = 0;
 
+    p_enc = ENCODING;
     encoding("iso8859-1");
 
     if ((f = open(fn, "wb"))) {
@@ -719,7 +720,7 @@ sub mp_doc.export_as_troff(doc, fn)
     else
         ret = -1;
 
-    encoding();
+    encoding(p_enc);
 
     return ret;
 }
