@@ -72,6 +72,39 @@ mp_doc.actions['save'] = sub (d) {
     return d;
 };
 
+mp_doc.actions['export'] = sub (d, filename) {
+    local ret = 0;
+    local fmts = [ 'RTF', 'troff' ];
+
+    if (filename == NULL)
+        filename = mp.savefile(L("Export to file (available formats: ")
+            + fmts->join(", ") + ')');
+
+    if (filename != NULL) {
+        local format = filename->split(".")->pop()->lc();
+
+        d->busy(1);
+
+        if (format == 'rtf')
+            ret = d->export_as_rtf(filename);
+        else
+        if (format == 'troff')
+            ret = d->export_as_troff(filename);
+        else
+            ret = -2;
+
+        d->busy(0);
+
+        if (ret == -1)
+            mp.alert(sprintf(L("Error exporting '%s': %s"),
+                mp.trim(filename, 32), ERRNO));
+        else
+        if (ret == -2)
+            mp.alert(sprintf(L("Unknown export format '%s'. Available: [%s]"),
+                format, fmts->join(", ")));
+    }
+};
+
 mp_doc.actions['export_as_rtf'] = sub (d, filename) {
     if (filename == NULL)
         filename = mp.savefile(L("RTF file name" + ':'));
@@ -441,6 +474,7 @@ mp.actdesc['new']                = LL("New");
 mp.actdesc['save']               = LL("Save...");
 mp.actdesc['save_as']            = LL("Save as...");
 mp.actdesc['export_as_rtf']      = LL("Export as RTF...");
+mp.actdesc['export']             = LL("Export...");
 mp.actdesc['next']               = LL("Next");
 mp.actdesc['prev']               = LL("Previous");
 mp.actdesc['open']               = LL("Open...");
