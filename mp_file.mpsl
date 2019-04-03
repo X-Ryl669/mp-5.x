@@ -18,7 +18,7 @@ mp.config.rtf_mono_font_face = 'Courier New';
 mp.config.rtf_mono_font_size = 10;
 mp.config.rtf_line_style_0   = '\sa0\sl0\slmult0';
 mp.config.rtf_line_style_1   = '\sa227\sl480\slmult1';
-mp.config.rtf_justify        = 0;
+mp.config.rtf_justify        = 1;
 mp.config.troff_font_size    = 12;
 mp.config.troff_page_height  = 10;
 
