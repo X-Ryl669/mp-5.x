@@ -792,9 +792,7 @@ sub mp_doc.export_as_rtf(doc, fn)
                         sub (m) { '{\b ' + slice(m, 1, -2) + '}'; });
 
                     /* convert non-ASCII characters to unicode */
-                    l = l->split()->map(sub (e) {
-                            ord(e) > 127 && sprintf("\\u%d?", ord(e)) || e;
-                        })->join();
+                    l = l->escape(" ", "\x{7f}", "\\u%d?");
 
                     return l;
                 }
