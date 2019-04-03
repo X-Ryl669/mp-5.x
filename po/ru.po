@@ -54,11 +54,11 @@ msgid ""
 "\n"
 msgstr ""
 
-#: mp_crypt.mpsl:72 mp_file.mpsl:114
+#: mp_crypt.mpsl:75 mp_file.mpsl:137
 msgid "Password"
 msgstr "Пароль"
 
-#: mp_crypt.mpsl:76
+#: mp_crypt.mpsl:79
 msgid "Password (again)"
 msgstr "Пароль (еще раз)"
 
@@ -81,7 +81,7 @@ msgstr "Ошибка при выполнении функции пользова
 msgid "Line to go to"
 msgstr "Перейти на строку"
 
-#: mp_core.mpsl:362 mp_file.mpsl:26 mp_file.mpsl:567 mp_session.mpsl:49
+#: mp_core.mpsl:362 mp_file.mpsl:28 mp_file.mpsl:590 mp_session.mpsl:49
 #: mp_session.mpsl:57
 msgid "<unnamed>"
 msgstr "<безымянный>"
@@ -181,7 +181,7 @@ msgstr ""
 msgid " [Y/N]"
 msgstr ""
 
-#: mp_tui.mpsl:442
+#: mp_tui.mpsl:443
 msgid " [ENTER]"
 msgstr " [ВВОД]"
 
@@ -233,11 +233,11 @@ msgstr ""
 "  -nt, --no-transparent   Отключить прозрачный режим (eterm, aterm, и.т.п.)\n"
 "                         "
 
-#: mpv_gtk.c:1911 mp_tui.mpsl:343
+#: mpv_gtk.c:1911 mp_tui.mpsl:339
 msgid "Yes"
 msgstr "Да"
 
-#: mpv_gtk.c:1912 mp_tui.mpsl:344
+#: mpv_gtk.c:1912 mp_tui.mpsl:340
 msgid "No"
 msgstr "Нет"
 
@@ -353,7 +353,7 @@ msgstr "Сортировать строки"
 msgid "Suspend application"
 msgstr "Приостановить приложение"
 
-#: mp_file.mpsl:449
+#: mp_file.mpsl:472
 msgid "Save modified texts"
 msgstr "Сохранить измененные тексты"
 
@@ -367,7 +367,7 @@ msgstr "Показать буфер обмена"
 msgid "Search next"
 msgstr "Искать дальше"
 
-#: mp_crypt.mpsl:94
+#: mp_crypt.mpsl:97
 msgid "Password protect..."
 msgstr "Защитить паролем..."
 
@@ -380,7 +380,7 @@ msgstr "Показать лог"
 msgid "Break hardlinks on write"
 msgstr "Разрушать жесткие ссылки при записи"
 
-#: mp_file.mpsl:436
+#: mp_file.mpsl:459
 msgid "Save as..."
 msgstr "Сохранить как..."
 
@@ -391,7 +391,7 @@ msgstr "Заменить..."
 msgid "Replace in all..."
 msgstr "Заменить везде..."
 
-#: mp_file.mpsl:435
+#: mp_file.mpsl:458
 msgid "Save..."
 msgstr "Сохранить..."
 
@@ -410,18 +410,18 @@ msgstr "Вставить блок"
 msgid "Play macro"
 msgstr "Воспроизвести макрос"
 
-#: mp_file.mpsl:439
+#: mp_file.mpsl:462
 msgid "Previous"
 msgstr "Предыдущий"
 
 msgid "Reopen..."
 msgstr "Открыть еще раз..."
 
-#: mp_file.mpsl:438
+#: mp_file.mpsl:461
 msgid "Next"
 msgstr "Следующий"
 
-#: mp_file.mpsl:440
+#: mp_file.mpsl:463
 msgid "Open..."
 msgstr "Открыть..."
 
@@ -433,7 +433,7 @@ msgstr "Следующее слово"
 msgid "Word right"
 msgstr "Предыдущее слово"
 
-#: mp_file.mpsl:434
+#: mp_file.mpsl:457
 msgid "New"
 msgstr "Создать"
 
@@ -457,7 +457,7 @@ msgstr "Перейти назад к такому же символу"
 msgid "Character right"
 msgstr "Следующий символ"
 
-#: mp_file.mpsl:452
+#: mp_file.mpsl:475
 msgid "Open file under cursor"
 msgstr "Открыть файл под курсором"
 
@@ -492,7 +492,7 @@ msgstr "Начало строки"
 msgid "Select last succesful search"
 msgstr "Показать последний успешный поиск"
 
-#: mp_drv.mpsl:25 mp_tui.mpsl:412
+#: mp_drv.mpsl:25 mp_tui.mpsl:413
 msgid "Menu"
 msgstr "Меню"
 
@@ -532,7 +532,7 @@ msgstr "Вставить строку"
 msgid "Insert new line above cursor"
 msgstr "Вставить новую строку над курсором"
 
-#: mp_templates.mpsl:82
+#: mp_templates.mpsl:81
 msgid "Insert template..."
 msgstr "Вставить шаблон..."
 
@@ -554,7 +554,7 @@ msgstr "Заменить начертание буквы, если A-Z или a-
 msgid "Flip word case"
 msgstr "Заменить начертание слова"
 
-#: mp_file.mpsl:450
+#: mp_file.mpsl:473
 msgid "Run system command..."
 msgstr "Выполнить системную команду..."
 
@@ -565,15 +565,15 @@ msgstr "Выполнить функцию редактора..."
 msgid "Document list"
 msgstr "Список документов"
 
-#: mp_file.mpsl:448
+#: mp_file.mpsl:471
 msgid "Edit configuration file"
 msgstr "Редактировать конфигурационный файл"
 
-#: mp_templates.mpsl:83
+#: mp_templates.mpsl:82
 msgid "Edit templates file"
 msgstr "Редактировать файл шаблонов"
 
-#: mp_file.mpsl:441
+#: mp_file.mpsl:464
 msgid "Exit"
 msgstr "Выход"
 
@@ -605,7 +605,7 @@ msgstr "Вырезать блок"
 msgid "About..."
 msgstr "О программе..."
 
-#: mp_file.mpsl:443
+#: mp_file.mpsl:466
 msgid "Close"
 msgstr "Закрыть"
 
@@ -622,7 +622,7 @@ msgstr "Удалить до конца слова"
 msgid "Grep (find inside) files..."
 msgstr "Поиск (grep) по файлам..."
 
-#: mp_crypt.mpsl:83
+#: mp_crypt.mpsl:86
 msgid "Passwords don't match."
 msgstr "Не правильный пароль."
 
@@ -654,14 +654,14 @@ msgstr ""
 msgid "Word-wrap a paragraph"
 msgstr ""
 
-#: mp_file.mpsl:44
+#: mp_file.mpsl:46
 msgid "Save file as"
 msgstr "Сохранить файл как"
 
 msgid "Error saving file: %s"
 msgstr "Ошибка сохранения файла: %s"
 
-#: mp_file.mpsl:104 mp_file.mpsl:396
+#: mp_file.mpsl:127 mp_file.mpsl:419
 msgid "File to open"
 msgstr "Открыть файл"
 
@@ -753,7 +753,7 @@ msgstr "Тэг не найден"
 msgid "Select tag"
 msgstr "Выделить тэг"
 
-#: mp_templates.mpsl:25
+#: mp_templates.mpsl:24
 msgid "Template to insert"
 msgstr ""
 
@@ -780,19 +780,19 @@ msgstr "Опции табудяции"
 msgid "File has changed. Are you sure?"
 msgstr "Файл был изменен. Вы уверены?"
 
-#: mp_file.mpsl:217 mp_file.mpsl:283
+#: mp_file.mpsl:240 mp_file.mpsl:306
 msgid "System command"
 msgstr "Системные комманды"
 
 msgid "Error writing command '%s'"
 msgstr "Ошибка записи комманды '%s'"
 
-#: mp_file.mpsl:271
+#: mp_file.mpsl:294
 #, c-format
 msgid "Error reading from command '%s'"
 msgstr "Ошибка чтения комманды '%s'"
 
-#: mp_file.mpsl:444
+#: mp_file.mpsl:467
 msgid "Revert"
 msgstr "Возвратиться"
 
@@ -820,11 +820,11 @@ msgstr "Подсчитать слова"
 msgid "Toggle spellchecking"
 msgstr "Промежуточная проверка"
 
-#: mp_tui.mpsl:736
+#: mp_tui.mpsl:732
 msgid "Please, wait..."
 msgstr "Пожалусто, подождите"
 
-#: mp_file.mpsl:246
+#: mp_file.mpsl:269
 #, c-format
 msgid "Error writing to command '%s'"
 msgstr "Ошибка записи комманды '%s'"
@@ -865,7 +865,7 @@ msgstr "Неизвестное действие '%s'"
 msgid "Unbound keystroke '%s'"
 msgstr "Неизвестное сочетание '%s'"
 
-#: mp_file.mpsl:849
+#: mp_file.mpsl:942
 #, c-format
 msgid "New file '%s'"
 msgstr "Новый файл '%s'"
@@ -893,7 +893,7 @@ msgstr "Выделить используя мышь"
 msgid "Mark end of lines"
 msgstr "Помечать конец строки"
 
-#: mp_file.mpsl:445
+#: mp_file.mpsl:468
 msgid "Close all"
 msgstr "Закрыть все"
 
@@ -917,7 +917,7 @@ msgstr "Собрать проект..."
 msgid "Mark vertical block"
 msgstr "Выделить вертикальный блок"
 
-#: mp_file.mpsl:499
+#: mp_file.mpsl:522
 msgid "Read-only document"
 msgstr "Документ только для чтения"
 
@@ -929,11 +929,11 @@ msgstr ""
 msgid "Keep original end of lines"
 msgstr ""
 
-#: mp_file.mpsl:453
+#: mp_file.mpsl:476
 msgid "Hexadecimal viewer..."
 msgstr ""
 
-#: mp_file.mpsl:454
+#: mp_file.mpsl:477
 msgid "Open dropped files"
 msgstr ""
 
@@ -997,7 +997,7 @@ msgstr ""
 msgid "Toggle insert/overwrite mode"
 msgstr ""
 
-#: mp_file.mpsl:451
+#: mp_file.mpsl:474
 msgid "Filter selection through system command..."
 msgstr ""
 
@@ -1033,7 +1033,7 @@ msgstr ""
 msgid "Unindent block"
 msgstr ""
 
-#: mp_templates.mpsl:66
+#: mp_templates.mpsl:65
 msgid "Template file to edit"
 msgstr ""
 
@@ -1094,7 +1094,7 @@ msgstr ""
 msgid "&Writing"
 msgstr ""
 
-#: mp_file.mpsl:121
+#: mp_file.mpsl:144
 #, c-format
 msgid "Bad password for file '%s'"
 msgstr ""
@@ -1110,31 +1110,31 @@ msgstr ""
 msgid "Move one section down"
 msgstr ""
 
-#: mp_toys.mpsl:242
+#: mp_toys.mpsl:247
 msgid "Pipes - carry water from top to bottom by turning the pipes"
 msgstr ""
 
-#: mp_file.mpsl:51 mp_file.mpsl:67 mp_file.mpsl:79
+#: mp_file.mpsl:53 mp_file.mpsl:69
 #, c-format
 msgid "Error saving '%s': %s"
 msgstr ""
 
-#: mp_file.mpsl:176
+#: mp_file.mpsl:199
 #, c-format
 msgid "'%s' has changed. Are you sure?"
 msgstr ""
 
-#: mp_file.mpsl:473
+#: mp_file.mpsl:496
 #, c-format
 msgid "'%s' was changed externally. Reload?"
 msgstr ""
 
-#: mp_file.mpsl:513
+#: mp_file.mpsl:536
 #, c-format
 msgid "'%s' has changed. Save changes?"
 msgstr ""
 
-#: mp_file.mpsl:126
+#: mp_file.mpsl:149
 #, c-format
 msgid "Error opening '%s': %s"
 msgstr ""
@@ -1151,60 +1151,60 @@ msgstr ""
 msgid "You have a development version newer than any stable release."
 msgstr ""
 
-#: mp_file.mpsl:166
+#: mp_file.mpsl:189
 msgid "Folder to open"
 msgstr ""
 
-#: mp_file.mpsl:446
+#: mp_file.mpsl:469
 msgid "Open folder..."
 msgstr ""
 
-#: mp_dir.mpsl:24
+#: mp_dir.mpsl:22
 #, c-format
 msgid "<listing of %s>"
 msgstr ""
 
-#: mp_dir.mpsl:31
+#: mp_dir.mpsl:29
 msgid "Directory editor"
 msgstr ""
 
-#: mp_dir.mpsl:32
+#: mp_dir.mpsl:30
 msgid "Deleting a line deletes the file;"
 msgstr ""
 
-#: mp_dir.mpsl:33
+#: mp_dir.mpsl:31
 msgid "Changing a line renames the file;"
 msgstr ""
 
-#: mp_dir.mpsl:34
+#: mp_dir.mpsl:32
 msgid "Saving commits the changes."
 msgstr ""
 
-#: mp_dir.mpsl:35
+#: mp_dir.mpsl:33
 msgid "(Keep the 'number:' on each line untouched)"
 msgstr ""
 
-#: mp_dir.mpsl:54
+#: mp_dir.mpsl:52
 #, c-format
 msgid "<changes to directory '%s'>"
 msgstr ""
 
-#: mp_dir.mpsl:73
+#: mp_dir.mpsl:71
 #, c-format
 msgid "# error renaming '%s' to '%s' (%s)"
 msgstr ""
 
-#: mp_dir.mpsl:76
+#: mp_dir.mpsl:74
 #, c-format
 msgid "# renamed '%s' to '%s'"
 msgstr ""
 
-#: mp_dir.mpsl:93
+#: mp_dir.mpsl:91
 #, c-format
 msgid "# error deleting '%s' (%s)"
 msgstr ""
 
-#: mp_dir.mpsl:95
+#: mp_dir.mpsl:93
 #, c-format
 msgid "# deleted '%s'"
 msgstr ""
@@ -1221,7 +1221,7 @@ msgstr ""
 msgid "Build target"
 msgstr ""
 
-#: mp_build.mpsl:122
+#: mp_build.mpsl:138
 #, c-format
 msgid "Error executing '%s'"
 msgstr ""
@@ -1246,7 +1246,7 @@ msgstr ""
 msgid "Mark vertical selection block"
 msgstr ""
 
-#: mp_file.mpsl:442
+#: mp_file.mpsl:465
 msgid "Suspend"
 msgstr ""
 
@@ -1266,11 +1266,9 @@ msgstr ""
 msgid "Cut line"
 msgstr ""
 
-#: mp_file.mpsl:75
 msgid "RTF file name"
 msgstr ""
 
-#: mp_file.mpsl:437
 msgid "Export as RTF..."
 msgstr ""
 
@@ -1314,11 +1312,11 @@ msgstr ""
 msgid "..."
 msgstr ""
 
-#: mp_file.mpsl:150
+#: mp_file.mpsl:173
 msgid "Recent files"
 msgstr ""
 
-#: mp_file.mpsl:455
+#: mp_file.mpsl:478
 msgid "Open recent files..."
 msgstr ""
 
@@ -1356,7 +1354,7 @@ msgstr ""
 msgid "Components: driver %s, MPDM %s, MPSL %s"
 msgstr ""
 
-#: mp_dir.mpsl:102
+#: mp_dir.mpsl:100
 msgid "# nothing changed."
 msgstr ""
 
@@ -1364,11 +1362,29 @@ msgstr ""
 msgid "<internal errors>"
 msgstr ""
 
-#: mp_toys.mpsl:83
+#: mp_toys.mpsl:82
 #, c-format
 msgid "Maze - help %s to find the treasure. As always, the %s marks the spot."
 msgstr ""
 
-#: mp_toys.mpsl:211 mp_toys.mpsl:386
+#: mp_toys.mpsl:216 mp_toys.mpsl:391
 msgid "You won! Press ENTER."
+msgstr ""
+
+#: mp_file.mpsl:80
+msgid "Export to file (available formats: "
+msgstr ""
+
+#: mp_file.mpsl:99
+#, c-format
+msgid "Error exporting '%s': %s"
+msgstr ""
+
+#: mp_file.mpsl:103
+#, c-format
+msgid "Unknown export format '%s'. Available: [%s]"
+msgstr ""
+
+#: mp_file.mpsl:460
+msgid "Export..."
 msgstr ""

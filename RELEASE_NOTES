@@ -22,7 +22,10 @@ Minimum Profit Release Notes
       dependent build targets at the end (i.e. when editing a
       Python file in a Makefile-controlled folder, the execute
       and syntax check options are shown at the end).
+    - New mptxt exporting to .troff format.
   - Other changes:
+    - The `export_as_rtf' action no longer exists; it has been
+      replaced by 'export'.
     - There has been many internal changes due to both MPDM
       and MPSL being moving targets, now that they are heavily
       refactored. None of these changes add anything new nor

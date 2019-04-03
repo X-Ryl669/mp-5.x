@@ -236,5 +236,9 @@ __I18N__ = {
 	"Play \"Maze\"" => "Jugar a \"Laberinto\"",
 	"Maze - help %s to find the treasure. As always, the %s marks the spot." => "Laberinto - Ayuda a %s a encontrar el tesoro. La %s marca el punto.",
 	"You won! Press ENTER." => "\x{00a1}Has ganado! Pulsa ENTER.",
+	"Export to file (available formats: " => "Export a (formatos disponibles: ",
+	"Error exporting '%s': %s" => "Error al exportar '%s': %s",
+	"Unknown export format '%s'. Available: [%s]" => "Formato de exportaci\x{00f3}n '%s' desconocido. Disponibles: [%s]",
+	"Export..." => "Exportar...",
 	"-" => "-"
 };
