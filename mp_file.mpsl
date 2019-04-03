@@ -19,6 +19,8 @@ mp.config.rtf_mono_font_size = 10;
 mp.config.rtf_line_style_0   = '\sa0\sl0\slmult0';
 mp.config.rtf_line_style_1   = '\sa227\sl480\slmult1';
 mp.config.rtf_justify        = 0;
+mp.config.troff_font_size    = 12;
+mp.config.troff_page_height  = 10;
 
 /** editor actions **/
 
@@ -665,15 +667,14 @@ sub mp_doc.export_as_troff(doc, fn)
 {
     local f;
     local ret = 0;
-    local troff_font_size = 12;
 
     encoding("iso8859-1");
 
     if ((f = open(fn, "wb"))) {
         f->write(".de hd\n'sp 0.8i\n..\n.wh 0 hd\n",
-                 ".pl 10i\n");
-        f->write(".ps ", troff_font_size, "\n",
-                 ".vs ", troff_font_size * 2, "\n");
+                 ".pl ", mp.config.troff_page_height, "i\n");
+        f->write(".ps ", mp.config.troff_font_size, "\n",
+                 ".vs ", mp.config.troff_font_size * 2, "\n");
         f->write(".\\\"generator Minimum Profit ", mp.VERSION, "\n");
 
         foreach (p, doc->split_by_paragraph()) {
@@ -736,8 +737,6 @@ sub mp_doc.export_as_rtf(doc, fn)
     local ali = mp.config.rtf_justify && '\qj' || '';
 
     if ((f = open(fn, "wb"))) {
-        local p = [];
-
         f->write('{\rtf1\ansi\plain', "\r\n");
         f->write('{\*\generator Minimum Profit ', mp.VERSION, "}\r\n");
 
