@@ -482,21 +482,6 @@ static mpdm_t tui_charat(mpdm_t a, mpdm_t ctxt)
 }
 
 
-static mpdm_t ansi_tui_charat(mpdm_t a, mpdm_t ctxt)
-{
-    wchar_t s[2];
-    int x, y;
-
-    x = mpdm_ival(mpdm_get_i(a, 0));
-    y = mpdm_ival(mpdm_get_i(a, 1));
-
-    s[0] = L'X';
-    s[1] = L'\0';
-
-    return MPDM_S(s);
-}
-
-
 static mpdm_t win32c_doc_draw(mpdm_t args, mpdm_t ctxt)
 /* draws the document part */
 {
