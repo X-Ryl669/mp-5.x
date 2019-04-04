@@ -18,6 +18,7 @@ mp.tui = {};
 
 mp.colors.menu = {
     text:   [ 'white', 'blue' ],
+    gui:    [ 0xffffff, 0x0000aa ],
     flags:  [ 'bright' ]
 };
 

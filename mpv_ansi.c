@@ -29,7 +29,7 @@
 
 
 #define MAX_COLORS 100
-char ansi_attrs[MAX_COLORS][32];
+char ansi_attrs[MAX_COLORS][64];
 
 
 /** code **/
@@ -181,6 +181,10 @@ static void ansi_build_colors(void)
     mpdm_t color_names;
     mpdm_t v;
     int n, c;
+    int color256 = 0;
+
+    v = mpdm_get_wcs(MP, L"config");
+    color256 = mpdm_ival(mpdm_get_wcs(v, L"ansi_color256"));
 
     /* gets the color definitions and attribute names */
     colors      = mpdm_get_wcs(MP, L"colors");
@@ -189,19 +193,8 @@ static void ansi_build_colors(void)
     /* loop the colors */
     n = c = 0;
     while (mpdm_iterator(colors, &c, &v, NULL)) {
-        mpdm_t w = mpdm_get_wcs(v, L"text");
+        mpdm_t w;
         int c0, c1, cf = 0;
-
-        /* get color indexes */
-        if ((c0 = mpdm_seek(color_names, mpdm_aget(w, 0), 1)) == -1 ||
-            (c1 = mpdm_seek(color_names, mpdm_aget(w, 1), 1)) == -1)
-            continue;
-
-        /* store the attr */
-        mpdm_set_wcs(v, MPDM_I(n), L"attr");
-
-        if ((--c0) == -1) c0 = 9;
-        if ((--c1) == -1) c1 = 9;
 
         /* flags */
         w = mpdm_get_wcs(v, L"flags");
@@ -212,13 +205,40 @@ static void ansi_build_colors(void)
         if (mpdm_seek_wcs(w, L"underline", 1) != -1)
             cf |= 0x04;
 
-        sprintf(ansi_attrs[n], "\033[0;%s%s%s%d;%dm",
-            cf & 0x1 ? "7;" : "",
-            cf & 0x2 ? "1;" : "",
-            cf & 0x4 ? "4;" : "",
-            c0 + 30,
-            c1 + 40
-        );
+        if (color256) {
+            w = mpdm_get_wcs(v, L"gui");
+            c0 = mpdm_ival(mpdm_get_i(w, 0));
+            c1 = mpdm_ival(mpdm_get_i(w, 1));
+
+            sprintf(ansi_attrs[n], "\033[0;%s%s38;2;%d;%d;%dm\033[48;2;%d;%d;%dm",
+                cf & 0x1 ? "7;" : "",
+                cf & 0x4 ? "4;" : "",
+                (c0 >> 16) & 0xff, (c0 >> 8) & 0xff, c0 & 0xff,
+                (c1 >> 16) & 0xff, (c1 >> 8) & 0xff, c1 & 0xff
+            );
+        }
+        else {
+            w = mpdm_get_wcs(v, L"text");
+
+            /* get color indexes */
+            if ((c0 = mpdm_seek(color_names, mpdm_aget(w, 0), 1)) == -1 ||
+                (c1 = mpdm_seek(color_names, mpdm_aget(w, 1), 1)) == -1)
+                continue;
+
+            if ((--c0) == -1) c0 = 9;
+            if ((--c1) == -1) c1 = 9;
+
+            sprintf(ansi_attrs[n], "\033[0;%s%s%s%d;%dm",
+                cf & 0x1 ? "7;" : "",
+                cf & 0x2 ? "1;" : "",
+                cf & 0x4 ? "4;" : "",
+                c0 + 30,
+                c1 + 40
+            );
+        }
+
+        /* store the attr */
+        mpdm_set_wcs(v, MPDM_I(n), L"attr");
 
         n++;
     }

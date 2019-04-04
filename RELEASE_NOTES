@@ -16,6 +16,10 @@ Minimum Profit Release Notes
       *NOTE*: This encryption format, though it uses a known
       algorithm, has not been audited by anyone remotely
       versed in cryptography, so you are at your own risk.
+    - The ANSI driver now support 256 color; if the config
+      variable mp.config.ansi_color256 is set to non-zero,
+      the 'gui' color definitions shall be used instead of
+      the usual 'text' definitions.
     - In Linux and similar systems, both a .desktop and icon
       files are installed.
     - In the 'build target' list, also add the generic syntax-
