@@ -21,6 +21,7 @@ mp.config.rtf_line_style_1   = '\sa227\sl480\slmult1';
 mp.config.rtf_justify        = 1;
 mp.config.troff_font_size    = 12;
 mp.config.troff_page_height  = 10;
+mp.config.html_title         = '';
 
 /** editor actions **/
 
@@ -846,7 +847,7 @@ sub mp_doc.export_as_html(doc, fn)
     local f, p_enc;
     local ret = 0;
 
-    local title = fn;
+    local title = mp.config.html_title || fn;
 
     if ((f = open(fn, "wb"))) {
         f->write("<!DOCTYPE html>\n");
@@ -854,7 +855,7 @@ sub mp_doc.export_as_html(doc, fn)
 
         f->write("<head>\n",
             "<meta name=\"generator\" content=\"Minimum Profit ", mp.VERSION, "\"/>\n",
-            "<title>", fn, "</title>\n",
+            "<title>", title, "</title>\n",
             "</head>\n",
             "<body>\n");
 
