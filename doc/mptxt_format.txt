@@ -1,4 +1,4 @@
- Minimum Profit: the mptxt format 
+ *Minimum Profit: the mptxt format* 
 
  Angel Ortega <angel@triptico.com> 
 
@@ -6,7 +6,7 @@ The mptxt format is a very lightweight text formatting that can be
 converted by the Minimum Profit text editor to other text formats. This
 document describes version 1.00 of the mptxt format.
 
-Output formats supported as of Minimum Profit 5.32 are RTF and troff.
+Output formats supported as of Minimum Profit 5.32 are RTF, troff and HTML.
 
 Default paragraphs are delimited by blank lines; line breaks can be used
 arbitrarily and treated the same as spaces. On output they follow the
@@ -49,7 +49,7 @@ like when writing one like http://triptico.com or similar.
 
 Text that must be shown emphasized can be surrounded by underscores, like
 in _this example_. As well, strong text can be surrounded by asterisks,
-like in the *this very attention-demanding text*.
+like in *this very attention-demanding text*.
 
 Unicode is accepted wherever possible; some output formats have encoding
 limitations, though, so be reasonable. As it's important for spanish
