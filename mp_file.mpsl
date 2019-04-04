@@ -74,7 +74,7 @@ mp_doc.actions['save'] = sub (d) {
 
 mp_doc.actions['export'] = sub (d, filename) {
     local ret = 0;
-    local fmts = [ 'RTF', 'troff' ];
+    local fmts = [ 'RTF', 'troff', 'HTML' ];
 
     if (filename == NULL)
         filename = mp.savefile(L("Export to file (available formats: ")
@@ -91,6 +91,9 @@ mp_doc.actions['export'] = sub (d, filename) {
         if (format == 'troff')
             ret = d->export_as_troff(filename);
         else
+        if (format == 'html')
+            ret = d->export_as_html(filename);
+        else
             ret = -2;
 
         d->busy(0);
@@ -100,7 +103,7 @@ mp_doc.actions['export'] = sub (d, filename) {
                 mp.trim(filename, 32), ERRNO));
         else
         if (ret == -2)
-            mp.alert(sprintf(L("Unknown export format '%s'. Available: [%s]"),
+            mp.alert(sprintf(L("Unknown export format '%s'.\nAvailable: [%s]"),
                 format, fmts->join(", ")));
     }
 };
@@ -680,71 +683,8 @@ sub mp_doc.parse_as_mptxt(doc)
 }
 
 
-sub mp_doc.export_as_troff(doc, fn)
-{
-    local f, p_enc;
-    local ret = 0;
-
-    p_enc = ENCODING;
-    encoding("iso8859-1");
-
-    if ((f = open(fn, "wb"))) {
-        f->write(".de hd\n'sp 0.8i\n..\n.wh 0 hd\n",
-                 ".pl ", mp.config.troff_page_height, "i\n");
-        f->write(".ps ", mp.config.troff_font_size, "\n",
-                 ".vs ", mp.config.troff_font_size * 2, "\n");
-        f->write(".\\\"generator Minimum Profit ", mp.VERSION, "\n");
-
-        foreach (p, doc->parse_as_mptxt()) {
-            local mode = p[0];
-            local data = p[1]->map(sub (l) {
-                    /* convert _text_ to emphasized */
-                    l = l->sregex("/_[^_]+_/g",
-                        sub (m) { '\fI' + slice(m, 1, -2) + '\fP'; });
-
-                    /* convert *text* to strong */
-                    l = l->sregex("/\*[^\*]+\*/g",
-                        sub (m) { '\fB' + slice(m, 1, -2) + '\fP'; });
-
-                    /* convert special characters */
-                    l = l->sregex("/\x{2014}/g", '\(em');
-
-                    return l;
-                }
-            );
-
-            if (mode == 'page')
-                f->write(".bp\r\n");
-            else
-            if (mode == 'first') {
-                f->write(data->join("\n"), "\n\n");
-            }
-            if (mode == 'para') {
-                f->write("\t", data->join("\n"), "\n\n");
-            }
-            else
-            if (mode == 'verbatim') {
-                f->write(".nf\n", data->join("\n"), "\n.fi\n\n");
-            }
-            else
-            if (mode == 'center') {
-                f->write(".ce ", integer(count(data)), "\n", data->join("\n"), "\n.ce 0\n\n");
-            }
-        }
-
-        f->close();
-    }
-    else
-        ret = -1;
-
-    encoding(p_enc);
-
-    return ret;
-}
-
-
 sub mp_doc.export_as_rtf(doc, fn)
-/* exports a text as a very basic RTF file */
+/* exports an mptext as RTF */
 {
     local f;
     local ret = 0;
@@ -827,6 +767,146 @@ sub mp_doc.export_as_rtf(doc, fn)
         }
 
         f->write("}\r\n");
+        f->close();
+    }
+    else
+        ret = -1;
+
+    return ret;
+}
+
+
+sub mp_doc.export_as_troff(doc, fn)
+/* exports an mptxt as a troff file */
+{
+    local f, p_enc;
+    local ret = 0;
+
+    p_enc = ENCODING;
+    encoding("iso8859-1");
+
+    if ((f = open(fn, "wb"))) {
+        f->write(".de hd\n'sp 0.8i\n..\n.wh 0 hd\n",
+                 ".pl ", mp.config.troff_page_height, "i\n");
+        f->write(".ps ", mp.config.troff_font_size, "\n",
+                 ".vs ", mp.config.troff_font_size * 2, "\n");
+        f->write(".\\\"generator Minimum Profit ", mp.VERSION, "\n");
+
+        foreach (p, doc->parse_as_mptxt()) {
+            local mode = p[0];
+            local data = p[1]->map(sub (l) {
+                    /* convert _text_ to emphasized */
+                    l = l->sregex("/_[^_]+_/g",
+                        sub (m) { '\fI' + slice(m, 1, -2) + '\fP'; });
+
+                    /* convert *text* to strong */
+                    l = l->sregex("/\*[^\*]+\*/g",
+                        sub (m) { '\fB' + slice(m, 1, -2) + '\fP'; });
+
+                    /* convert special characters */
+                    l = l->sregex("/\x{2014}/g", '\(em');
+
+                    return l;
+                }
+            );
+
+            if (mode == 'page')
+                f->write(".bp\r\n");
+            else
+            if (mode == 'first') {
+                f->write(data->join("\n"), "\n\n");
+            }
+            if (mode == 'para') {
+                f->write("\t", data->join("\n"), "\n\n");
+            }
+            else
+            if (mode == 'verbatim') {
+                f->write(".nf\n", data->join("\n"), "\n.fi\n\n");
+            }
+            else
+            if (mode == 'center') {
+                f->write(".ce ", integer(count(data)), "\n", data->join("\n"), "\n.ce 0\n\n");
+            }
+        }
+
+        f->close();
+    }
+    else
+        ret = -1;
+
+    encoding(p_enc);
+
+    return ret;
+}
+
+
+sub mp_doc.export_as_html(doc, fn)
+/* exports an mptxt as a basic HTML file */
+{
+    local f, p_enc;
+    local ret = 0;
+
+    local title = fn;
+
+    if ((f = open(fn, "wb"))) {
+        f->write("<!DOCTYPE html>\n");
+        f->write("<html>\n");
+
+        f->write("<head>",
+            "<title>", fn, "</title>",
+            "</head>\n",
+            "<body>\n");
+
+        foreach (p, doc->parse_as_mptxt()) {
+            local mode = p[0];
+            local data = p[1]->map(sub (l) {
+                    /* convert problematic characters */
+                    l = l->sregex("/[&<>]/g", {
+                        "&" => '\&amp;',
+                        "<" => '\&lt;',
+                        ">" => '\&gt;'
+                        }
+                    );
+
+                    /* convert URLs */
+                    l = l->sregex("/(http|ftp)s?:\/\/[^ ,\t]+/g",
+                        sub (m) {
+                            "<a href=\"" + m + "\">" + m + "</a>";
+                        }
+                    );
+
+                    /* convert _text_ to emphasized */
+                    l = l->sregex("/_[^_]+_/g",
+                        sub (m) { '<em>' + slice(m, 1, -2) + '</em>'; });
+
+                    /* convert *text* to strong */
+                    l = l->sregex("/\*[^\*]+\*/g",
+                        sub (m) { '<strong>' + slice(m, 1, -2) + '</strong>'; });
+
+                    return l;
+                }
+            );
+
+            if (mode == 'page')
+                f->write("<!-- page break -->");
+            else
+            if (mode == 'first') {
+                f->write("<p class='first'>\n", data->join("\n"), "\n</p>\n");
+            }
+            if (mode == 'para') {
+                f->write("<p class='para'>\n", data->join("\n"), "\n</p>\n");
+            }
+            else
+            if (mode == 'verbatim') {
+                f->write("<pre class='verbatim'>\n", data->join("\n"), "\n</pre>\n");
+            }
+            else
+            if (mode == 'center') {
+                f->write("<p class='center' style='text-align: center'>\n", data->join("<br />\n"), "\n</p>\n");
+            }
+        }
+
+        f->write("</body>\n");
         f->close();
     }
     else

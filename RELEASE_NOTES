@@ -23,6 +23,7 @@ Minimum Profit Release Notes
       Python file in a Makefile-controlled folder, the execute
       and syntax check options are shown at the end).
     - New mptxt exporting to .troff format.
+    - New mptxt exporting to .html format.
   - Other changes:
     - The `export_as_rtf' action no longer exists; it has been
       replaced by 'export'.
