@@ -184,15 +184,12 @@ _Exit_ (`ctrl-q')
 
 Closes all documents and exists Minimum Profit.
 
-export_as_rtf
--------------
+export
+------
 
-_Export as RTF..._
-
-Exports the current document as a very basic RTF file. Words surrounded by
-asterisks are converted as strong text and those surrended by underscores
-are converted as emphasized text. Also, form feeds (ascii 0C) are converted
-to page breaks.
+Exports the current document to an external format. The document must be
+in the mptxt format. Please see the mptxt_format.txt document for the
+markup and the supported output formats.
 
 filter_selection
 ----------------
