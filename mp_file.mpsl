@@ -79,7 +79,7 @@ mp_doc.actions['export'] = sub (d, filename) {
 
     if (filename == NULL)
         filename = mp.savefile(L("Export to file (available formats: ")
-            + fmts->join(", ") + ')');
+            + fmts->join(", ") + '):');
 
     if (filename != NULL) {
         local format = filename->split(".")->pop()->lc();
@@ -104,7 +104,7 @@ mp_doc.actions['export'] = sub (d, filename) {
                 mp.trim(filename, 32), ERRNO));
         else
         if (ret == -2)
-            mp.alert(sprintf(L("Unknown export format '%s'.\nAvailable: [%s]"),
+            mp.alert(sprintf(L("Unsupported format '%s'.\n(Not one of: [%s])"),
                 format, fmts->join(", ")));
     }
 };

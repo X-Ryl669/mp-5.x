@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: mp_crypt.mpsl:75 mp_file.mpsl:137
+#: mp_crypt.mpsl:75 mp_file.mpsl:141
 msgid "Password"
 msgstr "Palabra clave"
 
@@ -22,12 +22,12 @@ msgstr "Palabra clave (de nuevo)"
 msgid "Line to go to"
 msgstr "Número de línea"
 
-#: mp_core.mpsl:362 mp_file.mpsl:28 mp_file.mpsl:590 mp_session.mpsl:49
+#: mp_core.mpsl:362 mp_file.mpsl:29 mp_file.mpsl:594 mp_session.mpsl:49
 #: mp_session.mpsl:57
 msgid "<unnamed>"
 msgstr "<sin nombre>"
 
-#: mp_file.mpsl:240 mp_file.mpsl:306
+#: mp_file.mpsl:244 mp_file.mpsl:310
 msgid "System command"
 msgstr "Comando del sistema"
 
@@ -60,15 +60,15 @@ msgstr "Tag a buscar"
 msgid "Word wrap on column (0, no word wrap)"
 msgstr "Word wrap en columna (0, ninguno)"
 
-#: mp_tui.mpsl:443
+#: mp_tui.mpsl:444
 msgid " [ENTER]"
 msgstr " [ENTER]"
 
-#: mpv_gtk.c:1911 mp_tui.mpsl:339
+#: mpv_gtk.c:1911 mp_tui.mpsl:340
 msgid "Yes"
 msgstr "Sí"
 
-#: mpv_gtk.c:1912 mp_tui.mpsl:340
+#: mpv_gtk.c:1912 mp_tui.mpsl:341
 msgid "No"
 msgstr "No"
 
@@ -188,31 +188,31 @@ msgstr "Buscar siguiente"
 msgid "Replace..."
 msgstr "Reemplazar..."
 
-#: mp_file.mpsl:461
+#: mp_file.mpsl:465
 msgid "Next"
 msgstr "Siguiente"
 
-#: mp_file.mpsl:457
+#: mp_file.mpsl:461
 msgid "New"
 msgstr "Nuevo"
 
-#: mp_file.mpsl:463
+#: mp_file.mpsl:467
 msgid "Open..."
 msgstr "Abrir..."
 
-#: mp_file.mpsl:458
+#: mp_file.mpsl:462
 msgid "Save..."
 msgstr "Guardar..."
 
-#: mp_file.mpsl:459
+#: mp_file.mpsl:463
 msgid "Save as..."
 msgstr "Guardar cómo..."
 
-#: mp_file.mpsl:466
+#: mp_file.mpsl:470
 msgid "Close"
 msgstr "Cerrar"
 
-#: mp_file.mpsl:475
+#: mp_file.mpsl:479
 msgid "Open file under cursor"
 msgstr "Abrir fichero bajo el cursor"
 
@@ -224,7 +224,7 @@ msgstr "Distinguir mayúsculas"
 msgid "Automatic indentation"
 msgstr "Indentación automática"
 
-#: mp_file.mpsl:473
+#: mp_file.mpsl:477
 msgid "Run system command..."
 msgstr "Ejecutar comando del sistema..."
 
@@ -244,11 +244,11 @@ msgstr "Insertar molde..."
 msgid "Edit templates file"
 msgstr "Editar fichero de moldes"
 
-#: mp_file.mpsl:471
+#: mp_file.mpsl:475
 msgid "Edit configuration file"
 msgstr "Editar fichero de configuración"
 
-#: mp_drv.mpsl:25 mp_tui.mpsl:413
+#: mp_drv.mpsl:25 mp_tui.mpsl:414
 msgid "Menu"
 msgstr "Menú"
 
@@ -256,7 +256,7 @@ msgstr "Menú"
 msgid "About..."
 msgstr "Acerca de..."
 
-#: mp_file.mpsl:464
+#: mp_file.mpsl:468
 msgid "Exit"
 msgstr "Salir"
 
@@ -268,7 +268,7 @@ msgstr "Ejecutar macro"
 msgid "Record macro"
 msgstr "Grabar macro"
 
-#: mp_file.mpsl:472
+#: mp_file.mpsl:476
 msgid "Save modified texts"
 msgstr "Guardar textos modificados"
 
@@ -288,7 +288,7 @@ msgstr "Mover a la anterior ocurrencia del carácter actual"
 msgid "Move to next instance of current char"
 msgstr "Mover a la siguiente ocurrencia del carácter actual"
 
-#: mp_file.mpsl:462
+#: mp_file.mpsl:466
 msgid "Previous"
 msgstr "Anterior"
 
@@ -324,11 +324,11 @@ msgstr "Juntar un párrafo en una sola línea"
 msgid "Word-wrap a paragraph"
 msgstr "Recortar por palabras un párrafo"
 
-#: mp_file.mpsl:46
+#: mp_file.mpsl:47
 msgid "Save file as"
 msgstr "Guardar fichero como"
 
-#: mp_file.mpsl:127 mp_file.mpsl:419
+#: mp_file.mpsl:131 mp_file.mpsl:423
 msgid "File to open"
 msgstr "Fichero a abrir"
 
@@ -441,12 +441,12 @@ msgstr "Opciones de línea..."
 msgid "Tab options..."
 msgstr "Opciones de tabulación..."
 
-#: mp_file.mpsl:294
+#: mp_file.mpsl:298
 #, c-format
 msgid "Error reading from command '%s'"
 msgstr "Error al leer desde el comando '%s'"
 
-#: mp_file.mpsl:467
+#: mp_file.mpsl:471
 msgid "Revert"
 msgstr "Revertir"
 
@@ -471,11 +471,11 @@ msgstr "Contar palabras"
 msgid "Toggle spellchecking"
 msgstr "Conmutar ortografía"
 
-#: mp_tui.mpsl:732
+#: mp_tui.mpsl:733
 msgid "Please, wait..."
 msgstr "Por favor, espere..."
 
-#: mp_file.mpsl:269
+#: mp_file.mpsl:273
 #, c-format
 msgid "Error writing to command '%s'"
 msgstr "Error escribiendo al comando '%s'"
@@ -510,7 +510,7 @@ msgstr "Acción '%s' desconocida"
 msgid "Unbound keystroke '%s'"
 msgstr "Tecla '%s' sin asociar"
 
-#: mp_file.mpsl:942
+#: mp_file.mpsl:1022
 #, c-format
 msgid "New file '%s'"
 msgstr "Nuevo archivo '%s'"
@@ -538,7 +538,7 @@ msgstr "Marcar arrastrando el ratón"
 msgid "Mark end of lines"
 msgstr "Marcar fines de línea"
 
-#: mp_file.mpsl:468
+#: mp_file.mpsl:472
 msgid "Close all"
 msgstr "Cerrar todo"
 
@@ -552,7 +552,7 @@ msgstr "Objetivo del Makefile"
 msgid "Build project..."
 msgstr "Construir proyecto..."
 
-#: mp_file.mpsl:522
+#: mp_file.mpsl:526
 msgid "Read-only document"
 msgstr "Documento de sólo lectura"
 
@@ -616,11 +616,11 @@ msgstr "Borrar bloque"
 msgid "Keep original end of lines"
 msgstr "Mantener fin de línea original"
 
-#: mp_file.mpsl:476
+#: mp_file.mpsl:480
 msgid "Hexadecimal viewer..."
 msgstr "Visor hexadecimal..."
 
-#: mp_file.mpsl:477
+#: mp_file.mpsl:481
 msgid "Open dropped files"
 msgstr "Abrir ficheros arrastrados"
 
@@ -636,7 +636,7 @@ msgstr "Insertar nuevo elemento"
 msgid "Toggle insert/overwrite mode"
 msgstr "Conmutar modo insertar/sobreescribir"
 
-#: mp_file.mpsl:474
+#: mp_file.mpsl:478
 msgid "Filter selection through system command..."
 msgstr "Filtrar selección mediante comando de sistema..."
 
@@ -733,7 +733,7 @@ msgstr "&Proyecto"
 msgid "&Writing"
 msgstr "E&scritura"
 
-#: mp_file.mpsl:144
+#: mp_file.mpsl:148
 #, c-format
 msgid "Bad password for file '%s'"
 msgstr "Password incorrecta para el fichero '%s'"
@@ -753,27 +753,27 @@ msgstr "Mover a la sección siguiente"
 msgid "Pipes - carry water from top to bottom by turning the pipes"
 msgstr "Tuberías - Lleva el agua de arriba a abajo girando las tuberías"
 
-#: mp_file.mpsl:53 mp_file.mpsl:69
+#: mp_file.mpsl:54 mp_file.mpsl:70
 #, c-format
 msgid "Error saving '%s': %s"
 msgstr "Error al guardar '%s': %s"
 
-#: mp_file.mpsl:199
+#: mp_file.mpsl:203
 #, c-format
 msgid "'%s' has changed. Are you sure?"
 msgstr "'%s' ha cambiado. ¿Está seguro?"
 
-#: mp_file.mpsl:496
+#: mp_file.mpsl:500
 #, c-format
 msgid "'%s' was changed externally. Reload?"
 msgstr "'%s' fue cambiado externamente. ¿Recargarlo?"
 
-#: mp_file.mpsl:536
+#: mp_file.mpsl:540
 #, c-format
 msgid "'%s' has changed. Save changes?"
 msgstr "'%s' ha cambiado. ¿Guardar cambios?"
 
-#: mp_file.mpsl:149
+#: mp_file.mpsl:153
 #, c-format
 msgid "Error opening '%s': %s"
 msgstr "Error al abrir '%s': %s"
@@ -790,11 +790,11 @@ msgstr "Codificaciones disponibles"
 msgid "You have a development version newer than any stable release."
 msgstr "Tienes una versión de desarrollo posterior a las estables."
 
-#: mp_file.mpsl:189
+#: mp_file.mpsl:193
 msgid "Folder to open"
 msgstr "Carpeta a abrir"
 
-#: mp_file.mpsl:469
+#: mp_file.mpsl:473
 msgid "Open folder..."
 msgstr "Abrir carpeta..."
 
@@ -885,7 +885,7 @@ msgstr "Marcar bloque"
 msgid "Mark vertical selection block"
 msgstr "Marcar bloque vertical"
 
-#: mp_file.mpsl:465
+#: mp_file.mpsl:469
 msgid "Suspend"
 msgstr "Suspender"
 
@@ -957,11 +957,11 @@ msgstr "Reemplazar espacios por tabuladores"
 msgid "..."
 msgstr ""
 
-#: mp_file.mpsl:173
+#: mp_file.mpsl:177
 msgid "Recent files"
 msgstr "Archivos recientes"
 
-#: mp_file.mpsl:478
+#: mp_file.mpsl:482
 msgid "Open recent files..."
 msgstr "Abrir archivos recientes..."
 
@@ -1016,20 +1016,24 @@ msgstr "Laberinto - Ayuda a %s a encontrar el tesoro. La %s marca el punto."
 msgid "You won! Press ENTER."
 msgstr "¡Has ganado! Pulsa ENTER."
 
-#: mp_file.mpsl:80
+#: mp_file.mpsl:81
 msgid "Export to file (available formats: "
-msgstr "Export a (formatos disponibles: "
+msgstr "Exportar a (formatos disponibles: "
 
-#: mp_file.mpsl:99
+#: mp_file.mpsl:103
 #, c-format
 msgid "Error exporting '%s': %s"
 msgstr "Error al exportar '%s': %s"
 
-#: mp_file.mpsl:103
-#, c-format
-msgid "Unknown export format '%s'. Available: [%s]"
-msgstr "Formato de exportación '%s' desconocido. Disponibles: [%s]"
-
-#: mp_file.mpsl:460
+#: mp_file.mpsl:464
 msgid "Export..."
 msgstr "Exportar..."
+
+#: mp_file.mpsl:107
+#, c-format
+msgid ""
+"Unsupported format '%s'.\n"
+"(Not one of: [%s])"
+msgstr ""
+"Formato '%s' no soportado.\n"
+"(No es uno de: [%s])"

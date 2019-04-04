@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: mp_crypt.mpsl:75 mp_file.mpsl:137
+#: mp_crypt.mpsl:75 mp_file.mpsl:141
 msgid "Password"
 msgstr ""
 
@@ -34,7 +34,7 @@ msgstr ""
 msgid "Line to go to"
 msgstr "Naar regelnummer"
 
-#: mp_core.mpsl:362 mp_file.mpsl:28 mp_file.mpsl:590 mp_session.mpsl:49
+#: mp_core.mpsl:362 mp_file.mpsl:29 mp_file.mpsl:594 mp_session.mpsl:49
 #: mp_session.mpsl:57
 msgid "<unnamed>"
 msgstr "<nieuw bestand>"
@@ -51,7 +51,7 @@ msgstr "Kan bestand '%s' niet aanmaken."
 msgid "File has changed. Save changes?"
 msgstr "Bestand veranderd. Wijzigingen Opslaan?"
 
-#: mp_file.mpsl:240 mp_file.mpsl:306
+#: mp_file.mpsl:244 mp_file.mpsl:310
 msgid "System command"
 msgstr "Systeem commando"
 
@@ -126,18 +126,18 @@ msgstr "N"
 msgid " [Y/N]"
 msgstr " [J/N]"
 
-#: mp_tui.mpsl:443
+#: mp_tui.mpsl:444
 msgid " [ENTER]"
 msgstr " [ENTER]"
 
 msgid "<about Minimum Profit>"
 msgstr "<over Minimum Profit>"
 
-#: mpv_gtk.c:1911 mp_tui.mpsl:339
+#: mpv_gtk.c:1911 mp_tui.mpsl:340
 msgid "Yes"
 msgstr "Ja"
 
-#: mpv_gtk.c:1912 mp_tui.mpsl:340
+#: mpv_gtk.c:1912 mp_tui.mpsl:341
 msgid "No"
 msgstr "Nee"
 
@@ -317,34 +317,34 @@ msgstr "Vervang..."
 msgid "Replace in all..."
 msgstr "Vervang in hele tekst..."
 
-#: mp_file.mpsl:461
+#: mp_file.mpsl:465
 msgid "Next"
 msgstr "Volgend bestand"
 
-#: mp_file.mpsl:457
+#: mp_file.mpsl:461
 msgid "New"
 msgstr "Nieuw"
 
-#: mp_file.mpsl:463
+#: mp_file.mpsl:467
 msgid "Open..."
 msgstr "Open..."
 
 msgid "Reopen..."
 msgstr "Heropen..."
 
-#: mp_file.mpsl:458
+#: mp_file.mpsl:462
 msgid "Save..."
 msgstr "Opslaan..."
 
-#: mp_file.mpsl:459
+#: mp_file.mpsl:463
 msgid "Save as..."
 msgstr "Opslaan als..."
 
-#: mp_file.mpsl:466
+#: mp_file.mpsl:470
 msgid "Close"
 msgstr "Sluiten"
 
-#: mp_file.mpsl:475
+#: mp_file.mpsl:479
 msgid "Open file under cursor"
 msgstr "Open bestand onder de aanwijzer"
 
@@ -380,7 +380,7 @@ msgstr "Geavanceerder zoeken"
 msgid "Help for word under cursor"
 msgstr "Hulp voor woord onder de aanwijzer"
 
-#: mp_file.mpsl:473
+#: mp_file.mpsl:477
 msgid "Run system command..."
 msgstr "Voor systeem commando uit..."
 
@@ -403,7 +403,7 @@ msgstr "Maak markering af..."
 msgid "Edit templates file"
 msgstr "Bewerk templates bestand"
 
-#: mp_file.mpsl:471
+#: mp_file.mpsl:475
 msgid "Edit configuration file"
 msgstr "Bewerk configuratie bestand"
 
@@ -413,7 +413,7 @@ msgstr "Woorden afkappen..."
 msgid "Tab size..."
 msgstr "Tab grootte..."
 
-#: mp_drv.mpsl:25 mp_tui.mpsl:413
+#: mp_drv.mpsl:25 mp_tui.mpsl:414
 msgid "Menu"
 msgstr "Menu"
 
@@ -421,7 +421,7 @@ msgstr "Menu"
 msgid "About..."
 msgstr "Over..."
 
-#: mp_file.mpsl:464
+#: mp_file.mpsl:468
 msgid "Exit"
 msgstr "Afsluiten"
 
@@ -442,7 +442,7 @@ msgstr "Gebruik muis om aan te wijzen"
 msgid "Execute editor function..."
 msgstr "Voor editor functies uit..."
 
-#: mp_file.mpsl:472
+#: mp_file.mpsl:476
 msgid "Save modified texts"
 msgstr "Bewaar gewijzigde teksten"
 
@@ -531,7 +531,7 @@ msgstr ""
 msgid "Jump to matching bracket"
 msgstr ""
 
-#: mp_file.mpsl:462
+#: mp_file.mpsl:466
 msgid "Previous"
 msgstr ""
 
@@ -640,14 +640,14 @@ msgstr ""
 msgid "Word-wrap a paragraph"
 msgstr ""
 
-#: mp_file.mpsl:46
+#: mp_file.mpsl:47
 msgid "Save file as"
 msgstr ""
 
 msgid "Error saving file: %s"
 msgstr ""
 
-#: mp_file.mpsl:127 mp_file.mpsl:419
+#: mp_file.mpsl:131 mp_file.mpsl:423
 msgid "File to open"
 msgstr ""
 
@@ -769,12 +769,12 @@ msgstr ""
 msgid "Error writing command '%s'"
 msgstr ""
 
-#: mp_file.mpsl:294
+#: mp_file.mpsl:298
 #, c-format
 msgid "Error reading from command '%s'"
 msgstr ""
 
-#: mp_file.mpsl:467
+#: mp_file.mpsl:471
 msgid "Revert"
 msgstr ""
 
@@ -802,11 +802,11 @@ msgstr ""
 msgid "Toggle spellchecking"
 msgstr ""
 
-#: mp_tui.mpsl:732
+#: mp_tui.mpsl:733
 msgid "Please, wait..."
 msgstr ""
 
-#: mp_file.mpsl:269
+#: mp_file.mpsl:273
 #, c-format
 msgid "Error writing to command '%s'"
 msgstr ""
@@ -847,7 +847,7 @@ msgstr ""
 msgid "Unbound keystroke '%s'"
 msgstr ""
 
-#: mp_file.mpsl:942
+#: mp_file.mpsl:1022
 #, c-format
 msgid "New file '%s'"
 msgstr ""
@@ -875,7 +875,7 @@ msgstr ""
 msgid "Mark end of lines"
 msgstr ""
 
-#: mp_file.mpsl:468
+#: mp_file.mpsl:472
 msgid "Close all"
 msgstr ""
 
@@ -895,7 +895,7 @@ msgstr ""
 msgid "Build project..."
 msgstr ""
 
-#: mp_file.mpsl:522
+#: mp_file.mpsl:526
 msgid "Read-only document"
 msgstr ""
 
@@ -965,11 +965,11 @@ msgstr ""
 msgid "Keep original end of lines"
 msgstr ""
 
-#: mp_file.mpsl:476
+#: mp_file.mpsl:480
 msgid "Hexadecimal viewer..."
 msgstr ""
 
-#: mp_file.mpsl:477
+#: mp_file.mpsl:481
 msgid "Open dropped files"
 msgstr ""
 
@@ -985,7 +985,7 @@ msgstr ""
 msgid "Toggle insert/overwrite mode"
 msgstr ""
 
-#: mp_file.mpsl:474
+#: mp_file.mpsl:478
 msgid "Filter selection through system command..."
 msgstr ""
 
@@ -1091,7 +1091,7 @@ msgstr ""
 msgid "&Writing"
 msgstr ""
 
-#: mp_file.mpsl:144
+#: mp_file.mpsl:148
 #, c-format
 msgid "Bad password for file '%s'"
 msgstr ""
@@ -1111,27 +1111,27 @@ msgstr ""
 msgid "Pipes - carry water from top to bottom by turning the pipes"
 msgstr ""
 
-#: mp_file.mpsl:53 mp_file.mpsl:69
+#: mp_file.mpsl:54 mp_file.mpsl:70
 #, c-format
 msgid "Error saving '%s': %s"
 msgstr ""
 
-#: mp_file.mpsl:199
+#: mp_file.mpsl:203
 #, c-format
 msgid "'%s' has changed. Are you sure?"
 msgstr ""
 
-#: mp_file.mpsl:496
+#: mp_file.mpsl:500
 #, c-format
 msgid "'%s' was changed externally. Reload?"
 msgstr ""
 
-#: mp_file.mpsl:536
+#: mp_file.mpsl:540
 #, c-format
 msgid "'%s' has changed. Save changes?"
 msgstr ""
 
-#: mp_file.mpsl:149
+#: mp_file.mpsl:153
 #, c-format
 msgid "Error opening '%s': %s"
 msgstr ""
@@ -1148,11 +1148,11 @@ msgstr ""
 msgid "You have a development version newer than any stable release."
 msgstr ""
 
-#: mp_file.mpsl:189
+#: mp_file.mpsl:193
 msgid "Folder to open"
 msgstr ""
 
-#: mp_file.mpsl:469
+#: mp_file.mpsl:473
 msgid "Open folder..."
 msgstr ""
 
@@ -1243,7 +1243,7 @@ msgstr ""
 msgid "Mark vertical selection block"
 msgstr ""
 
-#: mp_file.mpsl:465
+#: mp_file.mpsl:469
 msgid "Suspend"
 msgstr ""
 
@@ -1309,11 +1309,11 @@ msgstr ""
 msgid "..."
 msgstr ""
 
-#: mp_file.mpsl:173
+#: mp_file.mpsl:177
 msgid "Recent files"
 msgstr ""
 
-#: mp_file.mpsl:478
+#: mp_file.mpsl:482
 msgid "Open recent files..."
 msgstr ""
 
@@ -1368,20 +1368,30 @@ msgstr ""
 msgid "You won! Press ENTER."
 msgstr ""
 
-#: mp_file.mpsl:80
+#: mp_file.mpsl:81
 msgid "Export to file (available formats: "
-msgstr ""
-
-#: mp_file.mpsl:99
-#, c-format
-msgid "Error exporting '%s': %s"
 msgstr ""
 
 #: mp_file.mpsl:103
 #, c-format
+msgid "Error exporting '%s': %s"
+msgstr ""
+
 msgid "Unknown export format '%s'. Available: [%s]"
 msgstr ""
 
-#: mp_file.mpsl:460
+#: mp_file.mpsl:464
 msgid "Export..."
+msgstr ""
+
+msgid ""
+"Unknown export format '%s'.\n"
+"Available: [%s]"
+msgstr ""
+
+#: mp_file.mpsl:107
+#, c-format
+msgid ""
+"Unsupported format '%s'.\n"
+"(Not one of: [%s])"
 msgstr ""
