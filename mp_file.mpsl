@@ -852,8 +852,9 @@ sub mp_doc.export_as_html(doc, fn)
         f->write("<!DOCTYPE html>\n");
         f->write("<html>\n");
 
-        f->write("<head>",
-            "<title>", fn, "</title>",
+        f->write("<head>\n",
+            "<meta name=\"generator\" content=\"Minimum Profit ", mp.VERSION, "\"/>\n",
+            "<title>", fn, "</title>\n",
             "</head>\n",
             "<body>\n");
 
