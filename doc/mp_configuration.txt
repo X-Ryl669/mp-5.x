@@ -13,12 +13,12 @@ following MPSL code to `~/.mp.mpsl' or `/etc/mp.mpsl':
 
 All configuration variables are in the `mp.config' hash.
 
-mp.config.ansi_color256
+mp.config.ansi_rgbcolor
 -----------------------
 
 If set to non-zero, the ANSI driver shall use the GUI colors instead
 of the text ones. Obviously, it should only be used in terminals that
-support 256 color mode; almost all modern terminal emulators do
+support RGB color mode; almost all modern terminal emulators do
 (default: 0, use standard text colors).
 
 mp.config.auto_indent

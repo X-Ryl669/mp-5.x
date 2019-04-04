@@ -181,10 +181,10 @@ static void ansi_build_colors(void)
     mpdm_t color_names;
     mpdm_t v;
     int n, c;
-    int color256 = 0;
+    int rgbcolor = 0;
 
     v = mpdm_get_wcs(MP, L"config");
-    color256 = mpdm_ival(mpdm_get_wcs(v, L"ansi_color256"));
+    rgbcolor = mpdm_ival(mpdm_get_wcs(v, L"ansi_rgbcolor"));
 
     /* gets the color definitions and attribute names */
     colors      = mpdm_get_wcs(MP, L"colors");
@@ -205,7 +205,7 @@ static void ansi_build_colors(void)
         if (mpdm_seek_wcs(w, L"underline", 1) != -1)
             cf |= 0x04;
 
-        if (color256) {
+        if (rgbcolor) {
             w = mpdm_get_wcs(v, L"gui");
             c0 = mpdm_ival(mpdm_get_i(w, 0));
             c1 = mpdm_ival(mpdm_get_i(w, 1));
