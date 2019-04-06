@@ -941,8 +941,7 @@ sub mp.add(doc)
 sub mp.next()
 /* rotates through the document list */
 {
-    if (++mp.active_i == size(mp.docs))
-        mp.active_i = 0;
+    mp.active_i = (mp.active_i + 1) % count(mp.docs);
 
     return mp.active();
 }
@@ -951,10 +950,7 @@ sub mp.next()
 sub mp.prev()
 /* rotates through the document list, backwards */
 {
-    mp.active_i -= 1;
-
-    if (mp.active_i == -1)
-        mp.active_i = size(mp.docs) - 1;
+    mp.active_i = (mp.active_i - 1 + count(mp.docs)) % count(mp.docs);
 
     return mp.active();
 }
