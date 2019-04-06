@@ -150,13 +150,13 @@ mp.actions['encoding']  = sub {
 };
 
 mp.actions['zoom_in']   = sub {
-    mp.config.font_size++;
+    mp.config.font_size += 1;
     mp.update_ui();
 };
 
 mp.actions['zoom_out']  = sub {
     if (mp.config.font_size > 4) {
-        mp.config.font_size--;
+        mp.config.font_size -= 1;
         mp.update_ui();
     }
 };

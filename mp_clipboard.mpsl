@@ -12,7 +12,7 @@
 
 /** editor actions **/
 
-mp_doc.actions ~= {
+mp_doc.actions += {
     unmark:             sub (d) { d->unmark(); },
     mark_tag:           sub (d) { d->start_selection(0); },
     mark:               sub (d) { d->mark(); },
@@ -41,7 +41,7 @@ mp_doc.actions ~= {
             local r = mp.form(
                 [
                     {
-                        'label'   => L("Cut lines containing") ~ ':',
+                        'label'   => L("Cut lines containing") + ':',
                         'type'    => 'text',
                         'history' => 'cut_lines_with_string'
                     }
@@ -64,7 +64,7 @@ mp_doc.actions ~= {
 
 /** default key bindings **/
 
-mp_doc.keycodes ~= {
+mp_doc.keycodes += {
     "f8" =>         "unmark",
     "f9" =>         "mark_tag",
     "ctrl-b" =>     "mark_tag_vertical",
@@ -76,7 +76,7 @@ mp_doc.keycodes ~= {
 
 /** action descriptions **/
 
-mp.actdesc ~= {
+mp.actdesc += {
     unmark:                   LL("Unmark block"),
     mark_tag:                 LL("Mark beginning/end of block"),
     mark:                     LL("Mark selection block"),
@@ -146,7 +146,7 @@ sub mp_doc.mark(doc)
             if (txt.y < txt.mark.ay ||
                 (txt.y == txt.mark.ay && txt.x < txt.mark.ax)) {
                 /* move the beginning of the block */
-                txt.mark ~= {
+                txt.mark += {
                     bx: txt.x,
                     by: txt.y,
                     ex: txt.mark.ax,
@@ -155,7 +155,7 @@ sub mp_doc.mark(doc)
             }
             else {
                 /* move the end of the block */
-                txt.mark ~= {
+                txt.mark += {
                     ex: txt.x,
                     ey: txt.y,
                     bx: txt.mark.ax,
@@ -285,7 +285,7 @@ sub mp_doc.paste(doc)
     local t = mp.config.auto_indent;
     mp.config.auto_indent = 0;
 
-	/* is there a block? replace it */
+    /* is there a block? replace it */
     if (doc.txt.mark != NULL) {
         /* move there */
         doc.txt.x = doc.txt.mark.bx;
@@ -293,7 +293,7 @@ sub mp_doc.paste(doc)
 
         /* and delete the block */
         doc->delete_mark();
-	}
+    }
 
     if (mp.clipboard_vertical == 0) {
         /* normal selection in clipboard */
@@ -311,14 +311,14 @@ sub mp_doc.paste(doc)
             /* pad out to current x position */
             e = txt.x - size(txt.lines[txt.y]);
 
-            while(e-- > 0)
-                txt.lines[txt.y] = txt.lines[txt.y] ~ " ";
-			
+            foreach (_, e)
+                txt.lines[txt.y] = txt.lines[txt.y] + " ";
+
             /* insert this line of the clipboard */
             w = splice(txt.lines[txt.y], mp.clipboard[i++], txt.x, 0);
             txt.lines[txt.y++] = w;
         }
-        txt.y--;
+        txt.y -= 1;
         txt.mod++;
     }
 
@@ -345,7 +345,7 @@ sub mp_doc.cut_lines_with_string(doc, str)
     if (str == NULL || str eq '')
         str = '^$';
 
-    str = '/' ~ str ~ '/';
+    str = '/' + str + '/';
 
     if (doc.txt.mark) {
         doc->cut();

@@ -220,7 +220,7 @@ sub mp_doc.set_x(doc, x)
         /* cursor moved left of the bol; effective cursor up + eol */
         if (txt.y > 0) {
             /* one line up */
-            txt.y--;
+            txt.y -= 1;
 
             /* set x to the end of the line */
             txt.x = size(txt.lines[txt.y]);
@@ -306,7 +306,7 @@ sub mp_doc.scroll_down(doc)
 sub mp_doc.scroll_up(doc)
 {
     if (doc.txt.vy > 0)
-        doc.txt.vy--;
+        doc.txt.vy -= 1;
 }
 
 
@@ -455,7 +455,7 @@ sub mp_doc.move_word_left(doc)
         if (txt.y == 0)
             break;
 
-        txt.y--;
+        txt.y -= 1;
         txt.x = size(txt.lines[txt.y]);
     }
 
@@ -612,8 +612,8 @@ sub mp_doc.get_range(doc, bx, by, ex, ey, v)
                 local p = ex - bx - size(l);
 
                 /* pad out to end of block line */
-                while (p-- >= 0)
-                    l = l ~ " ";
+                foreach (_, p)
+                    l = l + " ";
 
                 push(r, l);
             }

@@ -297,7 +297,7 @@ sub mp_doc.seek_matching(doc)
             local line = split(txt.lines[txt.y]);
             for (j = txt.x; i && j < size(line); j++) {
                 if (line[j] eq inc) i++;
-                else if (line[j] eq dec) i--;   
+                else if (line[j] eq dec) i -= 1;   
             }    
             if (!i) 
                 return doc->set_y(txt.y)->set_x(j-1);
@@ -312,20 +312,20 @@ sub mp_doc.seek_matching(doc)
     {
         /* backward searching */
         local dec = matching_open[p];
-        if (txt.x) txt.x--;
+        if (txt.x) txt.x -= 1;
         else {
-            txt.y--;
+            txt.y -= 1;
             if (txt.y >= 0) txt.x = size(txt.lines[txt.y]) - 1;
         }
         while (i > 0 && txt.y >= 0) {
             local line = split(txt.lines[txt.y]);
-            for (j = txt.x; i && j >= 0; j--) {
+            for (j = txt.x; i && j >= 0; j -= 1) {
                 if (line[j] eq inc) i++;
-                else if (line[j] eq dec) i--;   
+                else if (line[j] eq dec) i -= 1;
             }    
-            if (!i) 
-                return doc->set_y(txt.y)->set_x(j+1);
-            txt.y--;
+            if (!i)
+                return doc->set_y(txt.y)->set_x(j + 1);
+            txt.y -= 1;
             if (txt.y >= 0) txt.x = size(txt.lines[txt.y]) - 1;
         }
     }

@@ -376,18 +376,16 @@ mp_doc.actions['open_under_cursor'] = sub (d) {
         local f;
         local y = d.txt.y - 1;
 
-        while (y >= 0) {
+        foreach (_, y) {
             /* pick filename (stripping mark from previous line) */
             if (d.txt.lines[y]->regex('/^\+\+\+ /')) {
                 f = d.txt.lines[y]->sregex('/^\+\+\+ .\//');
                 break;
             }
-
-            y--;
         }
 
         if (f != NULL)
-            d = mp.open(f ~ ':' ~ l ~ ':');
+            d = mp.open(f + ':' + l + ':');
     }
     else
     if ((w = d->get_word("/[^ \t\"\'<>]+/")) != NULL)
@@ -953,7 +951,9 @@ sub mp.next()
 sub mp.prev()
 /* rotates through the document list, backwards */
 {
-    if (--mp.active_i == -1)
+    mp.active_i -= 1;
+
+    if (mp.active_i == -1)
         mp.active_i = size(mp.docs) - 1;
 
     return mp.active();

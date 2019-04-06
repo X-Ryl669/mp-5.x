@@ -88,9 +88,9 @@ global mp_maze = new(mp_base, {
 
             /* ensure odd size */
             if (!(tx % 2))
-                tx--;
+                tx -= 1;
             if (!(ty % 2))
-                ty--;
+                ty -= 1;
 
             /* init */
             game_map = map(ty, sub { map(tx, brick); });
@@ -182,13 +182,13 @@ global mp_maze = new(mp_base, {
             }
 
             if (keycode == 'cursor-up')
-                y--;
+                y -= 1;
             if (keycode == 'cursor-down')
-                y++;
+                y += 1;
             if (keycode == 'cursor-left')
-                x--;
+                x -= 1;
             if (keycode == 'cursor-right')
-                x++;
+                x += 1;
 
             if (game_map[y][x] == spot) {
                 state = 'WON';
@@ -296,13 +296,13 @@ global mp_pipes = new(mp_base, {
             local toggle = 0;
 
             if (keycode == 'cursor-up' && y > 1)
-                y--;
+                y -= 1;
             if (keycode == 'cursor-down'&& y < wy - 2)
-                y++;
+                y += 1;
             if (keycode == 'cursor-left' && x > 0)
-                x--;
+                x -= 1;
             if (keycode == 'cursor-right' && x < wx - 1)
-                x++;
+                x += 1;
             if (keycode == 'enter')
                 toggle = 1;
             if (keycode == 'mouse-left-button') {

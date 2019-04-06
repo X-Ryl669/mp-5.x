@@ -249,16 +249,13 @@ sub mp_doc.indent_block(doc, insert_tab)
 
         /* use to be while d.txt.y <= endY, but that entered an endless loop when
             you were indenting a block including the very last line in the file */
-        while (times >= 0) {
+        foreach (_, times)
             doc->set_x(0)->insert_tab()->move_down();
-        
-            times--;
-        }
-    
+
         doc->set_y(startY)->set_x(0)->mark();
-    
+
         doc->set_y(endY)->move_eol()->mark();
-    
+
         doc->set_y(currentY);
         if (!currentX) doc->set_x(0);
     }
@@ -296,11 +293,8 @@ sub mp_doc.unindent_block(doc, insert_real_tab)
 
         /* use to be while d.txt.y <= endY, but that entered an endless loop when
             you were unindenting a block including the very last line in the file */
-        while (times >= 0) {
+        foreach (_, times)
             doc->unindent_line()->move_down();
-
-            times--;
-        }
 
         doc->set_y(startY)->set_x(0)->mark();
 
@@ -636,7 +630,8 @@ sub mp_doc.insert_tab(doc)
         local y = doc.txt.y;
 
         while (y > 0) {
-            local l = splice(doc.txt.lines[--y], NULL, 0, doc.txt.x);
+            y -= 1;
+            local l = splice(doc.txt.lines[y], NULL, 0, doc.txt.x);
 
             if (l) {
                 doc->insert(regex(l, "/^[^ \t]*[ \t]*/")->sregex("/[^ \t]/g", ' '));
@@ -650,7 +645,7 @@ sub mp_doc.insert_tab(doc)
         local n = mp.config.tab_size -
             ((doc.txt.x) % mp.config.tab_size);
 
-        while (n--)
+        foreach (_, n)
             doc->insert(' ');
     }
     else

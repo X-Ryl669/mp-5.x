@@ -99,7 +99,7 @@ sub mp.tui.readline(prompt, history, default, flags)
         }
         else
         if (k == 'backspace' && x > 0) {
-            x--;
+            x -= 1;
             r = splice(r, NULL, x, 1);
         }
         else
@@ -122,7 +122,7 @@ sub mp.tui.readline(prompt, history, default, flags)
         }
         else
         if (k == 'cursor-up' && size(h)) {
-            i--;
+            i -= 1;
             r = h[i % size(h)];
             x = size(r);
         }
@@ -134,7 +134,7 @@ sub mp.tui.readline(prompt, history, default, flags)
         }
         else
         if (k == 'cursor-left' && x > 0) {
-            x--;
+            x -= 1;
         }
         else
         if (k == 'cursor-right' && x < size(r)) {
@@ -281,7 +281,7 @@ sub mp.tui.list(prompt, data, pos)
         k = mp.tui.getkey();
 
         if (k == 'cursor-up')
-            pos--;
+            pos -= 1;
         else
         if (k == 'cursor-down')
             pos++;
@@ -681,7 +681,7 @@ sub mp_drv.menu()
             }
             else
             if (key == 'cursor-left') {
-                mx--;
+                mx -= 1;
                 break;
             }
             else

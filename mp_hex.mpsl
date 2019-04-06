@@ -68,7 +68,7 @@ global mp_hex_view = new(mp_base, {
             bpl = 100;
 
             while ((12 + (bpl * 4)) > mp.window.tx)
-                bpl--;
+                bpl -= 1;
 
             /* round offset */
             offset = integer(offset / bpl) * bpl;
