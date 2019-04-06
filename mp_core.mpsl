@@ -18,7 +18,7 @@ L = gettext;
 sub LL(x) { x; }
 
 /* set gettext() domain */
-gettext_domain('minimum-profit', APPDIR ~ 'locale');
+gettext_domain('minimum-profit', APPDIR + 'locale');
 
 /* test if gettext() can do a basic translation */
 if (gettext('&File') eq '&File' && ENV.LANG) {
@@ -28,7 +28,7 @@ if (gettext('&File') eq '&File' && ENV.LANG) {
     push(v, shift(split(v[-1], '_')));      /* es */
 
     foreach (l, v) {
-        eval('load("lang/' ~ l ~ '.mpsl");');
+        eval('load("lang/' + l + '.mpsl");');
 
         if (ERROR == NULL)
             break;
@@ -501,14 +501,14 @@ sub mp.backslash_codes(s, d)
     local r;
 
     if (d) {
-        r = s->sregex("/[\r\n\t]/g", { "\r" => '\r', "\n" => '\n', "\t" => '\t'});
+        r = s->sregex("/[\r\n\t]/g", { "\r" => '\r', "\n" => '\n', "\t" => '\t' });
     }
     else {
         r = s->
-            sregex("/\\\\[rnt]/g", { '\r' => "\r", '\n' => "\n", '\t' => "\t"})->
+            sregex("/\\\\[rnt]/g", { '\r' => "\r", '\n' => "\n", '\t' => "\t" })->
             sregex("/\\\\x\\{[0-9A-Za-z]{4}\\}/g", sub (e) {
                     /* expand \x{HHHH} to character */
-                    e = ("0x" ~ e->regex("/[0-9A-Za-z]{4}/")) + 0;
+                    e = ("0x" + e->regex("/[0-9A-Za-z]{4}/")) + 0;
                     chr(e);
                 }
             );
@@ -548,7 +548,7 @@ sub mp.menu_label(action)
         l = L(mp.actdesc[action]) || action;
 
         /* search this action in mp_doc and global keycodes */
-        local ks = (mp_doc.keycodes ~ mp.keycodes)->
+        local ks = (mp_doc.keycodes + mp.keycodes)->
             grep(sub(v) { v == action; })->map(sub (v, i) { i; });
 
         if (size(ks))
@@ -583,8 +583,8 @@ sub mp.usage()
 /* set mp.exit_message with an usage message (--help) */
 {
     mp.exit_message = 
-        sprintf(L("Minimum Profit %s - Programmer Text Editor"), mp.VERSION) ~
-        "\nAngel Ortega <angel@triptico.com> et al.\n\n" ~
+        sprintf(L("Minimum Profit %s - Programmer Text Editor"), mp.VERSION) +
+        "\nAngel Ortega <angel@triptico.com> et al.\n\n" +
         L("Usage: mp-5 [options] [files...]\n"\
             "\n"\
             "Options:\n"\
@@ -623,7 +623,7 @@ sub mp.process_cmdline()
             local c = shift(ARGV);
 
             if (! regex(c, '/;\s*$/'))
-                c = c ~ ';';
+                c = c + ';';
 
             eval(c);
         }
@@ -658,7 +658,7 @@ sub mp.process_cmdline()
         }
         else {
             if (nl) {
-                push(mp.active_pending, o ~ ':' ~ nl ~ ':');
+                push(mp.active_pending, o + ':' + nl + ':');
                 nl = NULL;
             }
             else
@@ -667,7 +667,7 @@ sub mp.process_cmdline()
     }
 
     if (ERROR) {
-        mp.exit_message = ERROR ~ "\n";
+        mp.exit_message = ERROR + "\n";
         ERROR = NULL;
         mp_c.exit();
         return;
@@ -692,7 +692,7 @@ sub mp.load_profile()
     }
 
     /* if ~/.mp.mpsl exists, execute it */
-    if (ERROR == NULL && stat(HOMEDIR ~ '.mp.mpsl') != NULL) {
+    if (ERROR == NULL && stat(HOMEDIR + '.mp.mpsl') != NULL) {
         eval( sub {
             local INC = [ HOMEDIR ];
             load(".mp.mpsl");
@@ -716,7 +716,7 @@ sub mp.normalize_version(vs)
 {
     local l = vs->sregex('/-.+$/')->split('.');
 
-    return l[0] ~ '.' ~  l[1] ~ l[2];
+    return l[0] + '.' +  l[1] + l[2];
 }
 
 
@@ -742,7 +742,7 @@ sub mp.test_versions()
 sub mp.load_state()
 {
     /* read state file */
-    local j = open(HOMEDIR ~ ".mp_state.json", "r")->map()->join();
+    local j = open(HOMEDIR + ".mp_state.json", "r")->map()->join();
 
     if (j) {
         /* parse as json and take the first scanned value */
@@ -759,7 +759,7 @@ sub mp.load_state()
 
 sub mp.save_state()
 {
-    open(HOMEDIR ~ ".mp_state.json", "w")->write(fmt("%j", mp.state))->close();
+    open(HOMEDIR + ".mp_state.json", "w")->write(fmt("%j", mp.state))->close();
 }
 
 
@@ -791,7 +791,7 @@ local mp_modules = [
 ];
 
 foreach (m, mp_modules) {
-    eval('load("mp_' ~ m ~ '.mpsl");');
+    eval('load("mp_' + m + '.mpsl");');
 
     if (ERROR != NULL) {
         local log = mp.open(L("<internal errors>"));
@@ -799,8 +799,8 @@ foreach (m, mp_modules) {
         log->insert(ERROR + "\n");
         log->move_bof();
 
-        log.txt.mod     = 0;
-        log.undo_q      = [];
+        log.txt.mod   = 0;
+        log.undo_q    = [];
         log.read_only = 1;
 
         ERROR = NULL;
