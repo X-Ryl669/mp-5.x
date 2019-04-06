@@ -90,7 +90,7 @@ global mp_hex_view = new(mp_base, {
                     sprintf(" %06X |", ftell(fd))
                 ];
 
-                for (n = 0; n < bpl; n++) {
+                for (n = 0; n < bpl; n += 1) {
                     local a = 0;
 
                     if ((c = getchar(fd)) == NULL)
@@ -115,13 +115,13 @@ global mp_hex_view = new(mp_base, {
 
                     push(av, a, c);
 
-                    o++;
+                    o += 1;
                 }
 
                 while (n < bpl) {
                     push(nv, mp.colors.normal.attr, '   ');
                     push(av, mp.colors.word2.attr,  ' ');
-                    n++;
+                    n += 1;
                 }
 
                 push(out, ov->join(nv)->join(av));

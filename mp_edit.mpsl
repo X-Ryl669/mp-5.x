@@ -336,7 +336,7 @@ sub mp_doc.break_line(doc, col)
     txt.lines[txt.y] = l1 || '';
 
     /* move to next line */
-    txt.y++;
+    txt.y += 1;
 
     /* insert a new line here */
     expand(txt.lines, txt.y, 1);
@@ -366,7 +366,7 @@ sub mp_doc.break_line(doc, col)
     /* put second part there (or an empty string if NULL) */
     txt.lines[txt.y] = l2 || '';
 
-    txt.mod++;
+    txt.mod += 1;
 
     return doc;
 }
@@ -384,7 +384,7 @@ sub mp_doc.join_line(doc)
         /* delete it */
         del(txt.lines, txt.y + 1);
 
-        txt.mod++;
+        txt.mod += 1;
     }
 
     return doc;
@@ -415,7 +415,7 @@ sub mp_doc.delete_line(doc)
     /* move to previous x position */
     txt.x = mp_c.vx2x(txt.lines[txt.y], vx);
 
-    txt.mod++;
+    txt.mod += 1;
 
     return doc;
 }
@@ -439,7 +439,7 @@ sub mp_doc.delete_char(doc)
         txt.lines[txt.y] = w;
     }
 
-    txt.mod++;
+    txt.mod += 1;
 
     return doc;
 }
@@ -489,12 +489,12 @@ sub mp_doc.delete_range(doc, bx, by, ex, ey, v)
             while (by <= ey) {
                 w = splice(txt.lines[by], NULL, bx, ex - bx);
                 txt.lines[by] = w;
-                by++;
+                by += 1;
             }
         }
     }
 
-    txt.mod++;
+    txt.mod += 1;
 
     return doc;
 }
@@ -515,7 +515,7 @@ sub mp_doc.insert_string(doc, str)
     /* move right */
     txt.x += size(str);
 
-    txt.mod++;
+    txt.mod += 1;
 
     return doc;
 }
@@ -552,8 +552,11 @@ sub mp_doc.insert(doc, a)
             expand(txt.lines, txt.y, s - 2);
 
             /* transfer middle lines */
-            while (n < s - 1)
-                txt.lines[txt.y++] = a[n++];
+            while (n < s - 1) {
+                txt.lines[txt.y] = a[n];
+                txt.y += 1;
+                n += 1;
+            }
         }
     }
 
@@ -564,7 +567,6 @@ sub mp_doc.append(doc, a)
 /* appends an array of lines to the document, bypassing indentation rules and current cursor position */
 {
     local txt = doc.txt;
-    local s;
 
     doc->delete_mark();
 
@@ -572,13 +574,12 @@ sub mp_doc.append(doc, a)
     if (type(a) ne "array")
         a = split(a, "\n");
 
-    if ((s = size(a))) {
+    if (size(a)) {
         /* append now */
-        local n = 0;
-        while (n < s)
-            push(txt.lines, a[n++]);
+        foreach (l, a)
+            txt.lines->push(a);
 
-        txt.mod++;
+        txt.mod += 1;
     }
 
     return doc;
@@ -778,7 +779,7 @@ sub mp_doc.unindent_line(d)
                 break;
             }
 
-            i++;
+            i += 1;
         }
     }
 

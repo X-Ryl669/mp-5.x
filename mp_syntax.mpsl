@@ -56,7 +56,7 @@ sub mp_doc.actions.section_list(d) {
                 if (e[1] > d.txt.y)
                     break;
 
-                pos++;
+                pos += 1;
             }
 
             if (pos < 0 || pos > size(l))

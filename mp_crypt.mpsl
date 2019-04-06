@@ -184,7 +184,7 @@ sub mp.crypt_save(fd, lines, password, ver)
             putchar(fd, a4->char(c));
         }
 
-        nl++;
+        nl += 1;
     }
 
     if (ver == 2) {

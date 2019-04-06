@@ -315,11 +315,14 @@ sub mp_doc.paste(doc)
                 txt.lines[txt.y] = txt.lines[txt.y] + " ";
 
             /* insert this line of the clipboard */
-            w = splice(txt.lines[txt.y], mp.clipboard[i++], txt.x, 0);
-            txt.lines[txt.y++] = w;
+            w = splice(txt.lines[txt.y], mp.clipboard[i], txt.x, 0);
+            txt.lines[txt.y] = w;
+
+            i += 1;
+            txt.y += 1;
         }
         txt.y -= 1;
-        txt.mod++;
+        txt.mod += 1;
     }
 
     mp.config.auto_indent = t;
@@ -398,7 +401,7 @@ sub mp_doc.cut_line(doc)
     doc.txt.x = 0;
     doc->mark();
     if (doc.txt.y < size(doc.txt.lines) - 1)
-        doc.txt.y++;
+        doc.txt.y += 1;
     else 
         doc->move_eol();
     doc->mark();

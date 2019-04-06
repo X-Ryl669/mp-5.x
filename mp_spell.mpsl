@@ -212,7 +212,7 @@ sub mp_doc.search_misspelled(doc)
         }
 
         x = 0;
-        y++;
+        y += 1;
     }
 
     return 0;

@@ -233,7 +233,7 @@ sub mp_doc.set_x(doc, x)
                 /* cursor moved right of eol;
                    effective cursor down + bol */
                 txt.x = 0;
-                txt.y++;
+                txt.y += 1;
             }
         }
         else
@@ -299,7 +299,7 @@ sub mp_doc.move_up(doc)
 sub mp_doc.scroll_down(doc)
 {
     if (doc.txt.vy < size(doc.txt.lines) - 1)
-        doc.txt.vy++;
+        doc.txt.vy += 1;
 }
 
 
@@ -383,7 +383,7 @@ sub mp_doc.move_bol(doc)
 
         while (non_white < size(l) &&
             (l[non_white] eq " " || l[non_white] eq "\t")) {
-            non_white++;
+            non_white += 1;
         }
 
         if (doc.txt.x == non_white)
@@ -482,7 +482,7 @@ sub mp_doc.move_word_right(doc)
         }
 
         /* try next line */
-        txt.y++;
+        txt.y += 1;
         txt.x = 0;
     }
 
@@ -594,11 +594,13 @@ sub mp_doc.get_range(doc, bx, by, ex, ey, v)
             w = slice(txt.lines[n], bx, -1);
 
             push(r, w || '');
-            n++;
+            n += 1;
 
             /* take the central lines */
-            while (n < ey)
-                push(r, txt.lines[n++]);
+            while (n < ey) {
+                push(r, txt.lines[n]);
+                n += 1;
+            }
 
             /* take the last line */
             w = slice(txt.lines[n], 0, ex);
@@ -607,7 +609,7 @@ sub mp_doc.get_range(doc, bx, by, ex, ey, v)
         else {
             /* use vertical selection block */
             while (n <= ey) {
-                w = slice(txt.lines[n++], bx, ex - bx + 1);
+                w = slice(txt.lines[n], bx, ex - bx + 1);
                 local l = w;
                 local p = ex - bx - size(l);
 
@@ -616,6 +618,7 @@ sub mp_doc.get_range(doc, bx, by, ex, ey, v)
                     l = l + " ";
 
                 push(r, l);
+                n += 1;
             }
         }
     }

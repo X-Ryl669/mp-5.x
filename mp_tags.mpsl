@@ -231,7 +231,7 @@ sub mp_doc.complete(d, list, label)
                 d.txt.lines[d.txt.y] = w;
                 d.txt.x = offset + size(l[a]);
 
-                d.txt.mod++;
+                d.txt.mod += 1;
 
                 ret = 1;
             }

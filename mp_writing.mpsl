@@ -137,7 +137,7 @@ sub mp_doc.repeated_words(doc, num_chars, max_dist)
             }
             else {
                 /* try another line */
-                y++;
+                y += 1;
                 x = 0;
             }
         }

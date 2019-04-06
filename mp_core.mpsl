@@ -389,7 +389,7 @@ global mp_doc = new(mp_base, {
 sub mp.redraw()
 {
     /* just increment the redraw trigger */
-    mp.redraw_counter++;
+    mp.redraw_counter += 1;
 }
 
 

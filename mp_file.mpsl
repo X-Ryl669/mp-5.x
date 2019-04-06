@@ -562,7 +562,7 @@ sub mp.save_th(f, doc)
             write(f, eol);
 
         write(f, l);
-        nl++;
+        nl += 1;
     }
 
     doc.disk_op = 0;
@@ -661,7 +661,7 @@ sub mp_doc.parse_as_mptxt(doc)
                 if (pc == 0)
                     p_mode = 'first';
 
-                pc++;
+                pc += 1;
             }
             else
                 pc = 0;
