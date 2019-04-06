@@ -577,7 +577,7 @@ sub mp_doc.append(doc, a)
     if (size(a)) {
         /* append now */
         foreach (l, a)
-            txt.lines->push(a);
+            txt.lines->push(l);
 
         txt.mod += 1;
     }
