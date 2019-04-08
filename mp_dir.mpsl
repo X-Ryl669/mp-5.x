@@ -32,7 +32,7 @@ sub mp_doc_dir.setup(doc)
         L("Saving commits the changes."),
         L("(Keep the 'number:' on each line untouched)"),
         ''
-    ]->map(sub(e) { '# ' + e; });
+    ]->map("# %s");
 
     foreach (v, i, doc.dir_content)
         doc.txt.lines->push(sprintf("%4d: %s", i + 1, v));
