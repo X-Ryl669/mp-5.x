@@ -33,22 +33,22 @@ global mp_hex_view = new(mp_base, {
             return hex;
         },
         keypress:   sub (hex, keycode) {
-            if (keycode eq 'cursor-down')
+            if (keycode == 'cursor-down')
                 offset += bpl;
             else
-            if (keycode eq 'cursor-up')
+            if (keycode == 'cursor-up')
                 offset -= bpl;
             else
-            if (keycode eq 'page-down')
+            if (keycode == 'page-down')
                 offset += bpl * (mp.window.ty - 1);
             else
-            if (keycode eq 'page-up')
+            if (keycode == 'page-up')
                 offset -= bpl * (mp.window.ty - 1);
             else
-            if (keycode eq 'home')
+            if (keycode == 'home')
                 offset = 0;
             else
-            if (keycode eq 'end')
+            if (keycode == 'end')
                 offset = 0x7fffffff;
 
             if (offset < 0)
@@ -156,7 +156,7 @@ global mp_hex_view = new(mp_base, {
                 local t = mp.form(
                     [
                         {
-                            label:   L("Hex string to seek") ~ ':',
+                            label:   L("Hex string to seek") + ':',
                             type:    'text',
                             history: 'search-hex'
                         }
