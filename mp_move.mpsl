@@ -34,7 +34,7 @@ mp_doc.actions['goto'] = sub (d, line) {
         local t = mp.form(
             [
                 {
-                    'label'     => L("Line to go to") ~ ':',
+                    'label'     => L("Line to go to") + ':',
                     'type'      => 'text',
                     'history'   => 'goto'
                 }
@@ -160,7 +160,7 @@ mp.actdesc['scroll_up']                 = LL("Scroll document up");
 sub mp_doc.get_name(doc)
 {
     local n = doc.title || doc.name;
-    return doc.txt.mod && (n ~ ' *') || n;
+    return doc.txt.mod && (n + ' *') || n;
 }
 
 

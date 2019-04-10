@@ -22,12 +22,12 @@ mp_doc.actions['seek'] = sub (d) {
     local t = mp.form(
         [
             {
-                label:   L("Text to seek") ~ ':',
+                label:   L("Text to seek") + ':',
                 type:    'text',
                 history: 'search'
             },
             {
-                label:   L("Case sensitive") ~ ':',
+                label:   L("Case sensitive") + ':',
                 type:    'checkbox',
                 value:   mp.config.case_sensitive_search
             }
@@ -90,22 +90,22 @@ mp_doc.actions['replace'] = sub (d) {
     local r = mp.form(
         [
             {
-                'label'     => L("Replace text") ~ ':',
+                'label'     => L("Replace text") + ':',
                 'type'      => 'text',
                 'history'   => 'search'
             },
             {
-                'label'     => L("Replace with") ~ ':',
+                'label'     => L("Replace with") + ':',
                 'type'      => 'text',
                 'history'   => 'replace'
             },
             {
-                'label'     => L("Case sensitive") ~ ':',
+                'label'     => L("Case sensitive") + ':',
                 'type'      => 'checkbox',
                 'value'     => mp.config.case_sensitive_search
             },
             {
-                'label'     => L("Global replace") ~ ':',
+                'label'     => L("Global replace") + ':',
                 'type'      => 'checkbox',
                 'value'     => mp.config.global_replace
             }
@@ -131,17 +131,17 @@ mp.actions['grep']  = sub {
     local r = mp.form(
         [
             {
-                'label'     => L("Text to seek") ~ ':',
+                'label'     => L("Text to seek") + ':',
                 'type'      => 'text',
                 'history'   => 'search'
             },
             {
-                'label'     => L("Files to grep (empty, all)") ~ ':',
+                'label'     => L("Files to grep (empty, all)") + ':',
                 'type'      => 'text',
                 'history'   => 'grep'
             },
             {
-                'label'     => L("Base directory (empty, current)") ~ ':',
+                'label'     => L("Base directory (empty, current)") + ':',
                 'type'      => 'text',
                 'history'   => 'grep_base'
             },
@@ -156,9 +156,9 @@ mp.actions['grep']  = sub {
     if (r != NULL && r[0] != '') {
         mp.config.recursive_grep = r[3];
 
-        local t = '<grep ' ~ r[0] ~ ' ' ~ r[1] ~ '>';
+        local t = '<grep ' + r[0] + ' ' + r[1] + '>';
 
-        if ((r = mp.long_op(mp.grep, '/' ~ r[0] ~ '/', r[1], r[2], r[3])) == NULL)
+        if ((r = mp.long_op(mp.grep, '/' + r[0] + '/', r[1], r[2], r[3])) == NULL)
             mp.alert(L("File(s) not found."));
         else
         if (size(r) == 0)
@@ -340,11 +340,11 @@ sub mp.prefix_regex(str)
         return NULL;
 
     /* surround with / for the regex */
-    str = '/' ~ str ~ '/';
+    str = '/' + str + '/';
 
     /* add optional case insensitivity flag */
     if (! mp.config.case_sensitive_search)
-        str = str ~ 'i';
+        str = str + 'i';
 
     return str;
 }
@@ -370,7 +370,7 @@ sub mp_doc.search_dir(doc, str, dir)
 
     if (dir == -1) {
         /* search backwards */
-        str = str ~ 'l';
+        str = str + 'l';
 
         ex = txt.x && txt.x - 1 || 0;
         ey = txt.y;
@@ -504,7 +504,7 @@ sub mp_doc.seek_prev_or_next_char(doc, func)
 
     /* search for it (mp.search() or mp.search_back()) */
     local t = mp.last_search;
-    doc->func("\\" ~ w);
+    doc->func("\\" + w);
     mp.last_search = t;
 
     /* move back */

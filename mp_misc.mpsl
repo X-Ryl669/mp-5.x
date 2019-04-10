@@ -16,7 +16,7 @@ mp.actions['eval']  = sub {
     local t = mp.form(
         [
             {
-                label:      L("Code to execute") ~ ':',
+                label:      L("Code to execute") + ':',
                 type:       'text',
                 history:    'eval'
             }
@@ -29,15 +29,15 @@ mp.actions['eval']  = sub {
         x = t[0];
 
         if (! regex(x, '/;\s*$/'))
-            x = x ~ ';';
+            x = x + ';';
 
         r = eval(x);
 
         local d = mp.open("<dump>");
-        d->move_eof()->insert("> " ~ x ~ "\n");
+        d->move_eof()->insert("> " + x + "\n");
 
         if (ERROR != NULL) {
-            d->insert(L("Error: ") ~ ERROR ~ "\n");
+            d->insert(L("Error: ") + ERROR + "\n");
             ERROR = NULL;
         }
         else
@@ -55,7 +55,7 @@ mp_doc.actions['eval_doc']  = sub (d) {
         t = eval(t);
 
         if (ERROR != NULL) {
-            mp.alert(L("Error: ") ~ ERROR);
+            mp.alert(L("Error: ") + ERROR);
 
             /* try to move the cursor to the line
                where the error was */
@@ -79,7 +79,7 @@ mp_doc.actions['insert_next_item'] = sub(doc) {
             n = integer(r[1]);
     }
 
-    doc->store_undo()->insert(' * ' ~ (n + 1) ~ ': ');
+    doc->store_undo()->insert(' * ' + (n + 1) + ': ');
 };
 
 mp_doc.actions['insert_time_stamp'] = sub(doc) {
@@ -145,7 +145,7 @@ mp.actions['encoding']  = sub {
         local e = t[0] && l[t[0]] || '';
 
         if (encoding(e) == -1)
-            mp.alert(L("Invalid encoding ") ~ e);
+            mp.alert(L("Invalid encoding ") + e);
     }
 };
 

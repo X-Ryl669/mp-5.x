@@ -65,7 +65,7 @@ sub mp_doc.actions.section_list(d) {
             local r = mp.form(
                 [
                     {
-                        label:  L("Section list") ~ ':',
+                        label:  L("Section list") + ':',
                         type:   'list',
                         list:   map(l, sub (e) { e[0]; }),
                         value:  pos
@@ -137,7 +137,7 @@ mp.syntax = {};
 
 /** syntax definitions **/
 
-sub mp.syn_token_list(l) { '/\<(' ~ join(l, "|") ~ ')\>/'; }
+sub mp.syn_token_list(l) { '/\<(' + join(l, "|") + ')\>/'; }
 
 /** code **/
 
@@ -151,7 +151,7 @@ sub mp.get_syntax(key)
         r = mp.syntax[key];
     else {
         /* try on-demand load */
-        if ((r = eval("load('syntax/" ~ key ~ ".mpsl');")) != NULL)
+        if ((r = eval("load('syntax/" + key + ".mpsl');")) != NULL)
             mp.syntax[key] = r;
 
         ERROR = NULL;

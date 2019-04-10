@@ -44,7 +44,7 @@ mp.actions['prev'] = sub { mp.prev(); };
 mp_doc.actions['save_as'] = sub (d, newname) {
 
     if (newname == NULL)
-        newname = mp.savefile(L("Save file as") ~ ':');
+        newname = mp.savefile(L("Save file as") + ':');
 
     if (newname != NULL) {
         /* store new name */
@@ -128,7 +128,7 @@ mp.actions['suspend'] = sub {
 
 mp.actions['open'] = sub (d, filename) {
     if (filename == NULL)
-        filename = mp.openfile(L("File to open") ~ ':');
+        filename = mp.openfile(L("File to open") + ':');
 
     if (filename != NULL && filename != "") {
         if (mp.long_op(mp.open, filename) == NULL) {
@@ -138,7 +138,7 @@ mp.actions['open'] = sub (d, filename) {
                     [
                         {
                             type: 'password',
-                            label: L("Password") ~ ':'
+                            label: L("Password") + ':'
                         }
                     ]
                 );
@@ -225,7 +225,7 @@ mp_doc.actions['revert'] = sub (d) {
 };
 
 mp.actions['open_config_file']  = sub {
-    mp.open(HOMEDIR ~ ".mp.mpsl");
+    mp.open(HOMEDIR + ".mp.mpsl");
 };
 
 mp.actions['sync'] = sub {
@@ -241,7 +241,7 @@ mp_doc.actions['exec_command'] = sub (d, cmd) {
         local t = mp.form(
             [
                 {
-                    label:      L("System command") ~ ':',
+                    label:      L("System command") + ':',
                     type:       'text',
                     history:    'system'
                 }
@@ -264,7 +264,7 @@ mp_doc.actions['exec_command'] = sub (d, cmd) {
                 mp.busy(1);
 
                 foreach (l, d->get_active_area())
-                    write(p, l ~ mp.config.eol);
+                    write(p, l + mp.config.eol);
 
                 pclose(p);
                 mp.busy(0);
@@ -307,7 +307,7 @@ mp_doc.actions['filter_selection'] = sub (d, cmd) {
         local t = mp.form(
             [
                 {
-                    'label'     => L("System command") ~ ':',
+                    'label'     => L("System command") + ':',
                     'type'      => 'text',
                     'history'   => 'system2'
                 }
@@ -418,7 +418,7 @@ mp.actions['hex_view']  = sub (doc, filename) {
     local d = NULL;
 
     if (filename == NULL)
-        filename = mp.openfile(L("File to open") ~ ':');
+        filename = mp.openfile(L("File to open") + ':');
 
     if (filename != NULL && filename != "") {
         if (mp.load_on_demand(mp_hex_view, "mp_hex.mpsl")) {
@@ -521,7 +521,7 @@ sub mp_doc.post_event(doc, k)
 
         mp.message = {
             timeout:    time() + 2,
-            string:     '*' ~ L("Read-only document") ~ '*'
+            string:     '*' + L("Read-only document") + '*'
         };
     }
 

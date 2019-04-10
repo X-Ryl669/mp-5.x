@@ -22,7 +22,7 @@ mp_doc.actions['find_tag']	= sub(d) {
     local r = mp.form(
         [
             {
-                label:      L("Tag to seek") ~ ':',
+                label:      L("Tag to seek") + ':',
                 type:       'text',
                 history:    'find_tag',
                 value:      tag
@@ -112,14 +112,14 @@ sub mp.load_tags(force)
 
         /* clean the regex 'markup' for the label */
         l = sregex(t[2], '@^/\^@', '');
-        l = sregex(l, '@\$/;"$@', '') ~ ' [' ~ t[1] ~ ']';
+        l = sregex(l, '@\$/;"$@', '') + ' [' + t[1] + ']';
 
         /* clean the regex itself */
         r = sregex(t[2], '@/;"$@');
         r = sregex(r, '@^/@');
 
         /* escape all troublesome characters */
-        r = sregex(r, "/([\(\)\*\?\[\{\}]|\])/g", sub (m) { "\\" ~ m; });
+        r = sregex(r, "/([\(\)\*\?\[\{\}]|\])/g", sub (m) { "\\" + m; });
 
         /* store the tag information */
         mp.tags[t[0]] = {
@@ -147,7 +147,7 @@ sub mp.open_tag(tag)
 
     /* greps all tags containing the tag, and returns the
        values from mp.tags */
-    if ((t = map(grep(keys(mp.tags), '/' ~ tag ~ '/'), mp.tags)) == NULL) {
+    if ((t = map(grep(keys(mp.tags), '/' + tag + '/'), mp.tags)) == NULL) {
         mp.alert(L("Tag not found."));
         return;
     }
@@ -162,7 +162,7 @@ sub mp.open_tag(tag)
         local r = mp.form(
             [
                 {
-                    label:  L("Select tag") ~ ':',
+                    label:  L("Select tag") + ':',
                     type:   'list',
                     list:   l
                 }
@@ -195,7 +195,7 @@ sub mp_doc.complete(d, list, label)
         local l, a;
 
         /* takes all list elements starting with word */
-        l = sort(grep(list, '/^' ~ word ~ '/'));
+        l = sort(grep(list, '/^' + word + '/'));
 
         if (size(l)) {
             if (size(l) == 1)
@@ -205,7 +205,7 @@ sub mp_doc.complete(d, list, label)
                 local r = mp.form(
                     [
                         {
-                            label:  label || L("Select") ~ ':',
+                            label:  label || L("Select") + ':',
                             type:   'list',
                             list:   l
                         }

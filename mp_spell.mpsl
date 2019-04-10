@@ -101,7 +101,7 @@ sub mp.is_word_misspelled(w)
         return 0;
 
     /* write the word */
-    write(mp.ispell_pipe, w ~ "\n");
+    write(mp.ispell_pipe, w + "\n");
 
     /* wait for the response */
     if ((l = read(mp.ispell_pipe)) == NULL) {

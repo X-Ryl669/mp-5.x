@@ -102,38 +102,38 @@ mp.actions['line_options']  = sub {
     local t = mp.form(
         [
             {
-                label:      L("Word wrap on column (0, no word wrap)") ~ ':',
+                label:      L("Word wrap on column (0, no word wrap)") + ':',
                 type:       'text',
                 value:      mp.config.word_wrap,
                 history:    'wordwrap'
             },
             {
-                label:      L("Automatic indentation") ~ ':',
+                label:      L("Automatic indentation") + ':',
                 type:       'checkbox',
                 value:      mp.config.auto_indent
             },
             {
-                label:      L("Line termination") ~ ':',
+                label:      L("Line termination") + ':',
                 value:      lt,
                 type:       'text'
             },
             {
-                label:      L("Keep original end of lines") ~ ':',
+                label:      L("Keep original end of lines") + ':',
                 value:      mp.config.keep_eol,
                 type:       'checkbox'
             },
             {
-                label:      L("Mark end of lines") ~ ':',
+                label:      L("Mark end of lines") + ':',
                 value:      mp.config.mark_eol,
                 type:       'checkbox'
             },
             {
-                label:      L("'Smart' move to beginning of line") ~ ':',
+                label:      L("'Smart' move to beginning of line") + ':',
                 value:      mp.config.smart_bol,
                 type:       'checkbox'
             },
             {
-                label:      L("Show line numbers") ~ ':',
+                label:      L("Show line numbers") + ':',
                 value:      mp.config.show_line_numbers,
                 type:       'checkbox'
             }
@@ -153,14 +153,14 @@ mp.actions['line_options']  = sub {
 
 mp.actions['tab_options']   = sub {
     local t = mp.form( [
-        { 'label'   => L("Tab size") ~ ':',
+        { 'label'   => L("Tab size") + ':',
           'type'    => 'text',
           'value'   => mp.config.tab_size,
           'history' => 'tabsize' },
-        { 'label'   => L("Convert tabs to spaces") ~ ':',
+        { 'label'   => L("Convert tabs to spaces") + ':',
           'type'    => 'checkbox',
           'value'   => mp.config.tabs_as_spaces },
-        { 'label'   => L("Use previous line for tab columns") ~ ':',
+        { 'label'   => L("Use previous line for tab columns") + ':',
           'type'    => 'checkbox',
           'value'   => mp.config.dynamic_tabs }
     ] );
@@ -357,7 +357,7 @@ sub mp_doc.break_line(doc, col)
         l2 = sregex(l2, "/^[ \t]*/");
 
         /* concatenate */
-        l2 = i ~ l2;
+        l2 = i + l2;
 
         /* the x position is further the length of that */
         txt.x += size(i);
@@ -379,7 +379,7 @@ sub mp_doc.join_line(doc)
 
     if (txt.y < size(txt.lines)) {
         /* concats current line with the next one */
-        txt.lines[txt.y] = txt.lines[txt.y] ~ txt.lines[txt.y + 1];
+        txt.lines[txt.y] = txt.lines[txt.y] + txt.lines[txt.y + 1];
 
         /* delete it */
         del(txt.lines, txt.y + 1);
@@ -597,7 +597,7 @@ sub mp_doc.wrap_words(doc)
         local c = mp_c.x2vx(txt.lines[txt.y], txt.x);
 
         if (c >= mp.config.word_wrap &&
-            regex(txt.lines[txt.y], "/^.{1," ~ mp.config.word_wrap ~ "}[ \t]/")) {
+            regex(txt.lines[txt.y], "/^.{1," + mp.config.word_wrap + "}[ \t]/")) {
             local w;
 
             /* take the coordinates */

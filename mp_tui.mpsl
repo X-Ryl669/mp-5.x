@@ -411,7 +411,7 @@ sub mp.tui.draw(doc)
     /* draws the scrollbar */
     mp.tui.draw_scrollbar(doc);
 
-    local t = "ctrl-space: " ~ L("Menu");
+    local t = "ctrl-space: " + L("Menu");
 
     /* draw the status line */
     mp.tui.attr(mp.colors.normal.attr);
@@ -441,7 +441,7 @@ sub mp_drv.alert(msg)
 {
     local k;
 
-    mp.tui.prompt(msg ~ L(" [ENTER]"));
+    mp.tui.prompt(msg + L(" [ENTER]"));
 
     while ((k = mp.tui.getkey()) != 'enter' && k != 'mouse-left-button');
 }
