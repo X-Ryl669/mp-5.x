@@ -382,7 +382,7 @@ sub mp_doc.move_bol(doc)
         local l = split(doc.txt.lines[doc.txt.y]);
 
         while (non_white < size(l) &&
-            (l[non_white] eq " " || l[non_white] eq "\t")) {
+            (l[non_white] == " " || l[non_white] == "\t")) {
             non_white += 1;
         }
 

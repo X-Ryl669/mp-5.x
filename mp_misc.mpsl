@@ -238,7 +238,7 @@ mp.actions.check_for_updates = sub {
         while ((l = read(f)) != NULL) {
             l = mp.chomp(l);
 
-            if (l eq '')
+            if (l == '')
                 break;
         }
 

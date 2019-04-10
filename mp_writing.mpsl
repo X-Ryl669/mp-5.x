@@ -151,7 +151,7 @@ sub mp_doc.repeated_words(doc, num_chars, max_dist)
             foreach (w2, q) {
                 /* does the word and any other in
                    the queue match the regexes? */
-                if ((w1[3] eq w2[3]) || (w1[4] eq w2[4])) {
+                if ((w1[3] == w2[3]) || (w1[4] == w2[4])) {
                     /* add both to the word color hash */
                     mp.word_color[w1[0]] =
                     mp.word_color[w2[0]] =

@@ -21,7 +21,7 @@ sub LL(x) { x; }
 gettext_domain('minimum-profit', APPDIR + 'locale');
 
 /* test if gettext() can do a basic translation */
-if (gettext('&File') eq '&File' && ENV.LANG) {
+if (gettext('&File') == '&File' && ENV.LANG) {
     /* no; try alternatives using the LANG variable */
     local v = [ sregex(ENV.LANG, '!/!g') ]; /* es_ES.UTF-8 */
     push(v, shift(split(v[-1], '.')));      /* es_ES */
@@ -65,7 +65,7 @@ global mp = {
         emacs_scrolling:        0,
         no_text_mouse:          0,
         show_line_numbers:      0,
-        eol:                    (mp_drv.id eq 'win32' && "\r\n" || "\n"),
+        eol:                    (mp_drv.id == 'win32' && "\r\n" || "\n"),
         status_format:          "%m%n %x,%y [%l] %R%O %s %e %t",
         time_stamp_format:      "%a, %d %b %Y %H:%M:%S %z"
     },
@@ -448,7 +448,7 @@ sub mp.process_event(k)
         /* get the action asociated to the keycode */
         if (a != NULL) {
             /* if it's a hash, store for further testing */
-            if (type(a) eq "object")
+            if (type(a) == "object")
                 mp.keycodes_t = a;
             else {
                 /* if it's executable, run it */
@@ -456,7 +456,7 @@ sub mp.process_event(k)
                     a(doc);
                 else
                 /* if it's an array, process it sequentially */
-                if (type(a) eq "array")
+                if (type(a) == "array")
                     foreach(l, a)
                         mp.process_action(l);
                 else
@@ -612,13 +612,13 @@ sub mp.process_cmdline()
     mp.active_pending = [];
 
     while (o = shift(ARGV)) {
-        if (o eq '-h' || o eq '--help') {
+        if (o == '-h' || o == '--help') {
             mp.usage();
             mp_c.exit();
             return;
         }
         else
-        if (o eq '-e') {
+        if (o == '-e') {
             /* execute code */
             local c = shift(ARGV);
 
@@ -628,7 +628,7 @@ sub mp.process_cmdline()
             eval(c);
         }
         else
-        if (o eq '-f') {
+        if (o == '-f') {
             /* execute script */
             local s = shift(ARGV);
 
@@ -641,16 +641,16 @@ sub mp.process_cmdline()
             }
         }
         else
-        if (o eq '-d')
+        if (o == '-d')
             chdir(shift(ARGV));
         else
-        if (o eq '-t')
+        if (o == '-t')
             mp.open_tag(shift(ARGV));
         else
-        if (o eq '-x')
+        if (o == '-x')
             mp.actions.hex_view(NULL, shift(ARGV));
         else
-        if (o eq '-txt')
+        if (o == '-txt')
             mp.config.text_mode = 1;
         else
         if (regex(o, '/^\+[0-9]+$/')) {

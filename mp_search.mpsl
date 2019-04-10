@@ -296,8 +296,8 @@ sub mp_doc.seek_matching(doc)
         while (i > 0 && txt.y < (size(txt.lines) - 1)) {
             local line = split(txt.lines[txt.y]);
             for (j = txt.x; i && j < size(line); j += 1) {
-                if (line[j] eq inc) i += 1;
-                else if (line[j] eq dec) i -= 1;   
+                if (line[j] == inc) i += 1;
+                else if (line[j] == dec) i -= 1;   
             }    
             if (!i) 
                 return doc->set_y(txt.y)->set_x(j-1);
@@ -320,8 +320,8 @@ sub mp_doc.seek_matching(doc)
         while (i > 0 && txt.y >= 0) {
             local line = split(txt.lines[txt.y]);
             for (j = txt.x; i && j >= 0; j -= 1) {
-                if (line[j] eq inc) i += 1;
-                else if (line[j] eq dec) i -= 1;
+                if (line[j] == inc) i += 1;
+                else if (line[j] == dec) i -= 1;
             }    
             if (!i)
                 return doc->set_y(txt.y)->set_x(j + 1);
@@ -523,10 +523,10 @@ sub mp.grep(rx, spec, base, rec, r)
     local all;
 
     /* if spec is empty, set as NULL (meaning "glob everything") */
-    if (spec eq '')
+    if (spec == '')
         spec = NULL;
 
-    if (base eq '')
+    if (base == '')
         base = NULL;
 
     all = glob(spec, base);

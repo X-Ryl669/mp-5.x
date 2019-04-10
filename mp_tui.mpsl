@@ -495,22 +495,22 @@ sub mp_drv.form(widgets)
     foreach (w, widgets) {
         local r1 = NULL;
 
-        if (w.type eq 'text')
+        if (w.type == 'text')
             r1 = mp.tui.readline(w.label, w.history, w.value,
                 { 'y' => y } );
         else
-        if (w.type eq 'password')
+        if (w.type == 'password')
             r1 = mp.tui.readline(w.label, NULL, NULL,
                 { 'password' => '*', 'y' => y });
         else
-        if (w.type eq 'checkbox') {
+        if (w.type == 'checkbox') {
             /* return value conversion */
             local c = [ NULL, 1, 0 ];
 
             r1 = c[mp.tui.confirm(w.label, w.value, y)];
         }
         else
-        if (w.type eq 'list')
+        if (w.type == 'list')
             r1 = mp.tui.list(w.label, w.list, w.value);
 
         /* cancellation? */

@@ -345,7 +345,7 @@ sub mp_doc.cut_lines_with_string(doc, str)
     local r = [];
     local p;
 
-    if (str == NULL || str eq '')
+    if (str == NULL || str == '')
         str = '^$';
 
     str = '/' + str + '/';
@@ -374,7 +374,7 @@ sub mp_doc.cut_lines_with_string(doc, str)
     }
 
     /* if p is the working document, move content back to doc */
-    if (p.name eq '<wrk>')
+    if (p.name == '<wrk>')
         doc->insert(p.txt.lines);
 
     mp.clipboard = r;
