@@ -64,7 +64,7 @@ sub mp_doc_dir.save(doc)
             local op = doc.name + '/' + doc.dir_content[n - 1];
             local np = doc.name + '/' + p[1];
 
-            if (op ne np) {
+            if (op != np) {
                 local m;
 
                 if (rename(op, np) == -1)

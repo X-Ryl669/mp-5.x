@@ -112,14 +112,14 @@ sub mp.is_word_misspelled(w)
     local t = l;
 
     /* drop all lines until an empty one */
-    while (t ne "\n")
+    while (t != "\n")
         t = read(mp.ispell_pipe);
 
     /* take first char of the response */
     l = regex(l, '/^./');
 
     /* if it's not a '*' nor a '+', it's misspelled */
-    if (l ne '*' && l ne '+')
+    if (l != '*' && l != '+')
         ret = 1;
 
     mp.spelling_cache[w] = ret;

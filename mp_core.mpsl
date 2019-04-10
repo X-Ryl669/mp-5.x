@@ -749,7 +749,7 @@ sub mp.load_state()
         j = j->sscanf("%j")->shift();
 
         /* must be an object; otherwise, drop it */
-        if (type(j) ne "object")
+        if (type(j) != "object")
             j = NULL;
     }
 

@@ -528,7 +528,7 @@ sub mp_doc.insert(doc, a)
     local s;
 
     /* if a is not an array, split it */
-    if (type(a) ne "array")
+    if (type(a) != "array")
         a = split(a, "\n");
 
     if ((s = size(a))) {
@@ -571,7 +571,7 @@ sub mp_doc.append(doc, a)
     doc->delete_mark();
 
     /* if a is not an array, split it */
-    if (type(a) ne "array")
+    if (type(a) != "array")
         a = split(a, "\n");
 
     if (size(a)) {

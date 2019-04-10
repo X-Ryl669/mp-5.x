@@ -130,7 +130,7 @@ mp.actions['open'] = sub (d, filename) {
     if (filename == NULL)
         filename = mp.openfile(L("File to open") ~ ':');
 
-    if (filename != NULL && filename ne "") {
+    if (filename != NULL && filename != "") {
         if (mp.long_op(mp.open, filename) == NULL) {
             if (ERRNO == NULL) {
                 /* not open but no ERRNO: it's encrypted */
@@ -420,7 +420,7 @@ mp.actions['hex_view']  = sub (doc, filename) {
     if (filename == NULL)
         filename = mp.openfile(L("File to open") ~ ':');
 
-    if (filename != NULL && filename ne "") {
+    if (filename != NULL && filename != "") {
         if (mp.load_on_demand(mp_hex_view, "mp_hex.mpsl")) {
             d = new(mp_hex_view, { name: filename })->init();
 
@@ -1046,7 +1046,7 @@ sub mp.open(filename, password)
             if ((ver = mp.crypt_detect(f))) {
                 ERRNO = NULL;
 
-                if (password != NULL && password ne '') {
+                if (password != NULL && password != '') {
                     /* and load the file */
                     local lines = mp.crypt_load(f, password, ver);
 

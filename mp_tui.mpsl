@@ -443,7 +443,7 @@ sub mp_drv.alert(msg)
 
     mp.tui.prompt(msg ~ L(" [ENTER]"));
 
-    while ((k = mp.tui.getkey()) ne 'enter' && k ne 'mouse-left-button');
+    while ((k = mp.tui.getkey()) != 'enter' && k != 'mouse-left-button');
 }
 
 
@@ -483,7 +483,7 @@ sub mp_drv.form(widgets)
 
     /* print first all prompts */
     foreach (w, widgets) {
-        if (w.type ne 'list') {
+        if (w.type != 'list') {
             mp.tui.prompt(w.label, y);
             y += 1;
         }

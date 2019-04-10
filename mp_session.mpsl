@@ -46,7 +46,7 @@ sub mp.save_session()
     filenames = [];
 
     /* no named files? exit doing nothing */
-    if (grep(mp.docs, sub (e) { e.name ne L("<unnamed>"); }) == NULL)
+    if (grep(mp.docs, sub (e) { e.name != L("<unnamed>"); }) == NULL)
         return -1;
 
     if ((fh = open(mp.session_file(), "w")) == NULL) {
@@ -54,7 +54,7 @@ sub mp.save_session()
     }
 
     foreach (doc, mp.docs) {
-        if (doc.name ne L("<unnamed>"))
+        if (doc.name != L("<unnamed>"))
             write (fh,
                 sprintf("%s\t%i\t%i\t%s\n",
                     doc.name, doc.txt.x, doc.txt.y,

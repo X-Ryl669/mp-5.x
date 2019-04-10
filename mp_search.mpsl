@@ -153,7 +153,7 @@ mp.actions['grep']  = sub {
         ]
     );
 
-    if (r != NULL && r[0] ne '') {
+    if (r != NULL && r[0] != '') {
         mp.config.recursive_grep = r[3];
 
         local t = '<grep ' ~ r[0] ~ ' ' ~ r[1] ~ '>';
@@ -191,7 +191,7 @@ sub mp.apply_func_to_all_lines(d, func) {
     foreach (l, d.txt.lines) {
         local nl = func(l);
 
-        if (l ne nl) {
+        if (l != nl) {
             cnt += 1;
             lines->push(nl);
         }
