@@ -29,31 +29,30 @@ sub mp.c_gather_help(word)
         }
 
         if (ok && (f = open(fn, "r")) != NULL) {
-            local l;
             local n = 0;
 
-            while ((l = read(f)) != NULL) {
+            foreach (l, f) {
                 n++;
-                local where = fn ~ ':' ~ n ~ ':';
+                local where = fn + ':' + n + ':';
 
                 l = mp.chomp(l);
 
-                if (regex(l, "/^[ \t]*#define[ \t]+" ~ word ~ "/")) {
+                if (regex(l, "/^[ \t]*#define[ \t]+" + word + "/")) {
                     /* it's a CPP define */
                     push(h, where, l);
                 }
                 else
-                if (regex(l, "/^[A-Za-z_]+.*[ \t]+" ~ word ~ "[ \t]*\(.*/")) {
+                if (regex(l, "/^[A-Za-z_]+.*[ \t]+" + word + "[ \t]*\(.*/")) {
                     /* it's a function definition or prototype */
                     push(h, where, l);
                 }
                 else
-                if (regex(l, "/^(typedef[ \]*|static[ \]*)?struct[ \t]+.*" ~ word ~ ".*\{/")) {
+                if (regex(l, "/^(typedef[ \]*|static[ \]*)?struct[ \t]+.*" + word + ".*\{/")) {
                     /* it's a structure definition */
                     push(h, where, l);
 
                     /* add up to the end of the struct */
-                    while ((l = read(f)) != NULL) {
+                    foreach (l, f) {
                         l = mp.chomp(l);
 
                         n++;
@@ -70,11 +69,11 @@ sub mp.c_gather_help(word)
                     l = mp.chomp(l);
                     n++;
 
-                    if (regex(l, "/ \* " ~ word ~ " - /")) {
+                    if (regex(l, "/ \* " + word + " - /")) {
                         /* it is; dump up to a ; */
-                        push(h, where, '/' ~ '**', l);
+                        push(h, where, '/' + '**', l);
 
-                        while ((l = read(f)) != NULL) {
+                        foreach (l, f) {
                             n++;
                             l = mp.chomp(l);
 
