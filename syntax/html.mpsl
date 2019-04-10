@@ -3,7 +3,7 @@
     'name'      =>  'HTML',
     'defs'      =>  [
         'word1',    [
-            "/<[\/]?[ \t]*(" ~
+            "/<[\/]?[ \t]*(" +
                 join([
                     "a", "abbr", "acronym", "address",
                     "area", "b", "base", "bdo", "big",
@@ -21,7 +21,7 @@
                     "strong", "style", "sub", "sup", "table",
                     "tbody", "td", "textarea", "tfoot", "th",
                     "thead", "title", "tr", "tt", "ul",
-                    "var" ], "|") ~
+                    "var" ], "|") +
             ")[^<>]*>/i"
         ],
         'word2',    [
