@@ -14,14 +14,13 @@
     detect:         sub (d) {
         local r, n;
 
-        n = 0;
-        while (n < 100) {
-            if (regex(d.txt.lines[n++], '/^--- /'))
+        for (n = 0; n < 100; n += 1) {
+            if (regex(d.txt.lines[n], '/^--- /'))
                 break;
         }
 
-        if (regex(d.txt.lines[n++], '/^\+\+\+ /') &&
-            regex(d.txt.lines[n++], '/^@@ /'))
+        if (regex(d.txt.lines[n + 1], '/^\+\+\+ /') &&
+            regex(d.txt.lines[n + 2], '/^@@ /'))
             r = 1;
 
         return r;
