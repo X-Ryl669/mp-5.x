@@ -32,7 +32,7 @@ sub mp.c_gather_help(word)
             local n = 0;
 
             foreach (l, f) {
-                n++;
+                n += 1;
                 local where = fn + ':' + n + ':';
 
                 l = mp.chomp(l);
@@ -55,7 +55,7 @@ sub mp.c_gather_help(word)
                     foreach (l, f) {
                         l = mp.chomp(l);
 
-                        n++;
+                        n += 1;
                         push(h, l);
 
                         if (regex(l, "/^\};/"))
@@ -67,14 +67,14 @@ sub mp.c_gather_help(word)
                     /* mp_doccer help: is it for this word? */
                     l = read(f);
                     l = mp.chomp(l);
-                    n++;
+                    n += 1;
 
                     if (regex(l, "/ \* " + word + " - /")) {
                         /* it is; dump up to a ; */
                         push(h, where, '/' + '**', l);
 
                         foreach (l, f) {
-                            n++;
+                            n += 1;
                             l = mp.chomp(l);
 
                             if (regex(l, "/^\{/"))
