@@ -72,7 +72,7 @@ global mp_maze = new(mp_base, {
             cy = py + dir[d][0];
             cx = px + dir[d][1];
 
-            cnt = cnt - 1;
+            cnt -= 1;
         }
 
         return ok && pdir || 0;
@@ -173,12 +173,12 @@ global mp_maze = new(mp_base, {
             local phero = hero;
 
             if (keycode == 'f1') {
-                local dir = maze->check(0) ||
-                            maze->check(1) ||
-                            maze->check(2) ||
-                            maze->check(3);
+                local d = maze->check(0) ||
+                          maze->check(1) ||
+                          maze->check(2) ||
+                          maze->check(3);
 
-                phero = ['?', 'W', 'S', 'E', 'N']->get(dir);
+                phero = ['?', 'W', 'S', 'E', 'N']->get(d);
             }
 
             if (keycode == 'cursor-up')
