@@ -75,7 +75,7 @@ global mp_maze = new(mp_base, {
             cnt -= 1;
         }
 
-        return ok && pdir || 0;
+        return ok == 1 && pdir || 0;
     },
 
     get_status: sub (maze) {
