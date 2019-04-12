@@ -59,10 +59,14 @@ mp_doc.actions['eval_doc']  = sub (d) {
 
             /* try to move the cursor to the line
                where the error was */
-            local l = regex(ERROR, [ '/, line /', '/[0-9]+/' ]);
+            local l = ERROR->sscanf("<INLINE>:%d:%d:");
 
-            if (size(l) == 2)
-                d->set_y(l[1]);
+            if (size(l) > 0) {
+                d->set_y(integer(l[0]) - 1);
+
+                if (size(l) > 1)
+                    d->set_x(integer(l[1]) - 1);
+            }
 
             ERROR = NULL;
         }
