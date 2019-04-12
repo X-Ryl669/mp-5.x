@@ -94,6 +94,8 @@ if [ "$CONFIG_HELP" = "1" ] ; then
     echo
     echo "Environment variables:"
     echo "CC                    C Compiler."
+    echo "CPP                   C++ Compiler."
+    echo "LD                    Linker."
     echo "AR                    Library Archiver."
     echo "CFLAGS                Compile flags (i.e., -O3)."
     echo "WINDRES               MS Windows resource compiler."
