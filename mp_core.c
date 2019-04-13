@@ -1275,7 +1275,7 @@ void mp_startup(int argc, char *argv[])
 
 #ifdef CONFOPT_EXTERNAL_TAR
     /* add code library as externally installed tar */
-    mpdm_push(INC, mpdm_strcat_s(
+    mpdm_push(INC, mpdm_strcat_wcs(
         mpdm_hget_s(mpdm_root(), L"APPDIR"), L"/mp-dist.tar"));
 
 #else /* CONFOPT_EXTERNAL_TAR */
