@@ -138,13 +138,13 @@ if ((f = open('doc/mp_keycodes.txt', 'w')) != NULL) {
 
     f->write("Table with Minimum Profit's keycodes and their default assigned actions.\n\n");
 
-    local tbl = " +---------------------+------------------------+\n";
+    local tbl = " +---------------------+--------------------------+\n";
 
-    f->write(tbl, sprintf(" | %19s | %22s |\n", 'Keycode', 'Action'), tbl);
+    f->write(tbl, sprintf(" | %19s | %24s |\n", 'Keycode', 'Action'), tbl);
 
-    foreach(k, sort(map(all_keycodes, sub (v, i) { i; }))) {
+    foreach(k, sort(map(all_keycodes, sub (v, i) { i; } ))) {
         if (type(all_keycodes[k]) != "object")
-            f->write(sprintf(" | %19s | %22s |\n", k, all_keycodes[k]), tbl);
+            f->write(sprintf(" | %19s | %24s |\n", k, all_keycodes[k]), tbl);
     }
 
     f->write("\n");
