@@ -52,7 +52,7 @@ sub load_ref_document(file)
 
             /* if it's the empty string, it's the
                signature mark; we're done */
-            if (p eq '') {
+            if (p == '') {
                 r.sig = join([ l, read(f) ], "\n");
                 break;
             }
@@ -108,7 +108,7 @@ update_ref_document('doc/mp_configuration.txt', mp.config, 'mp.config');
 
 local kc = {};
 
-local all_keycodes = mp.keycodes ~ mp_doc.keycodes;
+local all_keycodes = mp.keycodes + mp_doc.keycodes;
 
 kc = all_keycodes->hmap();
 
