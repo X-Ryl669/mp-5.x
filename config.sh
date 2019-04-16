@@ -191,7 +191,6 @@ if [ ! -f $MPDM/Makefile ] ; then
     ( echo ; cd $MPDM ; ./config.sh --prefix=$PREFIX --docdir=$PREFIX/share/doc/$APPNAME $CONF_ARGS ; echo )
 fi
 
-cat $MPDM/config.ldflags >> config.ldflags
 echo "MPDM=$MPDM" >> makefile.opts
 
 # MPSL
@@ -212,13 +211,14 @@ else
     exit 1
 fi
 
-# If MPSL is not configured, do it
-if [ ! -f $MPSL/Makefile ] ; then
-    ( echo ; cd $MPSL ; ./config.sh --prefix=$PREFIX --docdir=$PREFIX/share/doc/$APPNAME $CONF_ARGS ; echo )
-fi
+echo
+(cd $MPSL && ./config.sh --prefix=$PREFIX --docdir=$PREFIX/share/doc/$APPNAME $CONF_ARGS)
+echo
 
-cat $MPSL/config.ldflags >> config.ldflags
 echo "MPSL=$MPSL" >> makefile.opts
+
+cat $MPDM/config.ldflags >> config.ldflags
+cat $MPSL/config.ldflags >> config.ldflags
 
 # Win32
 
