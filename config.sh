@@ -186,11 +186,6 @@ else
     exit 1
 fi
 
-# If MPDM is not configured, do it
-if [ ! -f $MPDM/Makefile ] ; then
-    ( echo ; cd $MPDM ; ./config.sh --prefix=$PREFIX --docdir=$PREFIX/share/doc/$APPNAME $CONF_ARGS ; echo )
-fi
-
 echo "MPDM=$MPDM" >> makefile.opts
 
 # MPSL
