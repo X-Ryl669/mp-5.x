@@ -21,22 +21,20 @@ mp.actions['build']	= sub {
         mp.alert(L("No build targets found."));
     else {
         /* more than one target? ask user to pick one */
-        if (size(t) > 1) {
-            local r = mp.form(
-                [
-                    {
-                        label:  L("Build target") + ':',
-                        type:   'list',
-                        list:   t,
-                        value:  mp.makefile_target
-                    }
-                ]
-            );
+        local r = mp.form(
+            [
+                {
+                    label:  L("Build target") + ':',
+                    type:   'list',
+                    list:   t,
+                    value:  mp.makefile_target
+                }
+            ]
+        );
 
-            if (r != NULL) {
-                mp.makefile_target = r[0];
-                target = t[mp.makefile_target];
-            }
+        if (r != NULL) {
+            mp.makefile_target = r[0];
+            target = t[mp.makefile_target];
         }
 
         if (target != NULL)
@@ -58,14 +56,15 @@ mp.actdesc['build'] = LL("Build project...");
 
 sub mp.build_get_targets()
 {
-    local r, f;
+    local r = [];
     local m = 'make';
+    local f;
 
     if (mp.config.make_opts)
         m = m + ' ' + mp.config.make_opts;
 
     if ((f = open('Makefile', 'r')) != NULL) {
-        r = [ m ];
+        r->push(m);
 
         foreach (l, f) {
             local t;
