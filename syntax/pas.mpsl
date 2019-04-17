@@ -9,17 +9,18 @@
                     "if", "then", "else",
                     "program", "function", "procedure", "const", "var", "type",
                     "for", "to", "downto", "do", "begin", "end", "of",
-                    "repeat", "until", "while", "in", "case"
+                    "repeat", "until", "while", "in", "case",
+                    "unit", "interface", "uses", "implementation"
                 ]
-            )
+            ) + 'i'
         ],
         'word2', [
             mp.syn_token_list(
                 [
                     "char", "byte", "record", "integer", "boolean", "array",
-                    "and", "or", "div", "with", "not", "string", "file"
+                    "and", "or", "div", "with", "not", "string", "file", "word"
                 ]
-            )
+            ) + 'i'
         ],
         'word3', [
             '/]/',
