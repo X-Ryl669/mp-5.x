@@ -1,6 +1,16 @@
 Minimum Profit Release Notes
 ============================
 
+5.33
+----
+
+ - New features:
+    - Double page mode: if the viewport screen is wider than
+      the value in mp.config.double_page (default: 120), two
+      pages are shown simultaneously. If you don't like this
+      mode, set mp.config.double_page to 0 in the configuration
+      file.
+
 5.32
 ----
 
