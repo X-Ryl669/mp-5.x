@@ -65,6 +65,7 @@ global mp = {
         emacs_scrolling:        0,
         no_text_mouse:          0,
         show_line_numbers:      0,
+        double_page:            120,
         eol:                    (mp_drv.id == 'win32' && "\r\n" || "\n"),
         status_format:          "%m%n %x,%y [%l] %R%O %s %e %t",
         time_stamp_format:      "%a, %d %b %Y %H:%M:%S %z"

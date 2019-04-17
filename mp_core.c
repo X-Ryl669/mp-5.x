@@ -50,6 +50,7 @@ struct drw_1_info {
     int redraw;                 /* redraw trigger */
     int vwrap;                  /* visual wrap value */
     int xoffset;                /* # of columns reserved for line numbers */
+    int double_page;            /* # of columns where double page activates */
 };
 
 struct drw_1_info drw_1;
@@ -218,18 +219,28 @@ static int drw_prepare(mpdm_t doc)
     drw_1.mark_eol      = mpdm_ival(mpdm_hget_s(config, L"mark_eol"));
     drw_1.t_lines       = mpdm_size(lines);
 
+    n = mpdm_ival(mpdm_hget_s(config, L"double_page"));;
+
+    if (n && drw_1.tx > n) {
+        /* if the usable screen is wider than the
+           double page setting, activate it */
+        drw_1.tx /= 2;
+        drw_1.ty *= 2;
+        drw_1.double_page = 1;
+    }
+    else
+        drw_1.double_page = 0;
+
     /* adjust the visual y coordinate */
     if (drw_adjust_y(y, &drw_1.vy, drw_1.ty))
         mpdm_hset_s(txt, L"vy", MPDM_I(drw_1.vy));
 
     /* adjust the visual x coordinate */
-    if (drw_adjust_x
-        (x, y, &drw_1.vx, drw_1.tx, mpdm_string(mpdm_aget(lines, y))))
+    if (drw_adjust_x(x, y, &drw_1.vx, drw_1.tx, mpdm_string(mpdm_aget(lines, y))))
         mpdm_hset_s(txt, L"vx", MPDM_I(drw_1.vx));
 
     /* get the maximum prereadable lines */
-    drw_1.p_lines =
-        drw_1.vy > drw_1.preread_lines ? drw_1.preread_lines : drw_1.vy;
+    drw_1.p_lines = drw_1.vy > drw_1.preread_lines ? drw_1.preread_lines : drw_1.vy;
 
     /* maximum lines */
     drw_1.n_lines = drw_1.ty + drw_1.p_lines;
@@ -824,7 +835,80 @@ static void drw_remap_truncate(void)
 }
 
 
+static void drw_double_page(void)
+/* recompose a double page char-mapped buffer */
+{
+    if (drw_1.double_page) {
+        int n, m;
+        wchar_t *dp_cmap = drw_2.cmap;
+        int *dp_amap     = drw_2.amap;
+        int *dp_vx2x     = drw_2.vx2x;
+        int *dp_vy2y     = drw_2.vy2y; 
+        int o = 0;
+
+        n = (drw_1.tx + 1) * drw_1.ty;
+        drw_2.cmap  = calloc(n, sizeof(wchar_t));
+        drw_2.amap  = calloc(n, sizeof(int));
+        drw_2.vx2x  = calloc(n, sizeof(int));
+        drw_2.vy2y  = calloc(n, sizeof(int));
+
+        for (n = 0; n < drw_1.ty / 2; n++) {
+            int i;
+
+            /* copy first column */
+            i = n * (drw_1.tx + 1);
+
+            for (m = 0; m < drw_1.tx && dp_amap[i] != -1; m++) {
+                drw_2.amap[o] = dp_amap[i];
+                drw_2.cmap[o] = dp_cmap[i];
+                drw_2.vx2x[o] = dp_vx2x[i];
+                drw_2.vy2y[o] = dp_vy2y[i];
+
+                i++;
+                o++;
+            }
+
+            /* fill up to next column with spaces */
+            for (; m < drw_1.tx; m++) {
+                drw_2.amap[o] = drw_1.normal_attr;
+                drw_2.cmap[o] = L' ';
+                drw_2.vx2x[o] = dp_vx2x[i];
+                drw_2.vy2y[o] = dp_vy2y[i];
+
+                o++;
+            }
+
+            /* put the column separator */
+            drw_2.amap[o] = drw_1.normal_attr;
+            drw_2.cmap[o] = L'\x2502';
+            o++;
+
+            /* copy the second column */
+            i = (n - 1 + drw_1.ty / 2) * (drw_1.tx + 1);
+
+            for (m = 0; m < drw_1.tx; m++) {
+                drw_2.amap[o] = dp_amap[i];
+                drw_2.cmap[o] = dp_cmap[i];
+                drw_2.vx2x[o] = dp_vx2x[i];
+                drw_2.vy2y[o] = dp_vy2y[i];
+
+                i++;
+                o++;
+            }
+        }
+
+        /* restore size */
+        drw_1.tx *= 2;
+        drw_1.ty /= 2;
+
+        free(dp_cmap);
+        free(dp_amap);
+    }
+}
+
+
 static mpdm_t drw_remap_to_array(void)
+/* converts the char-mapped buffer to arrays of attr, string per line */
 {
     mpdm_t r = MPDM_A(0);
     wchar_t *line = malloc((drw_1.tx + 1) * sizeof(wchar_t));
@@ -956,6 +1040,8 @@ static mpdm_t drw_draw(mpdm_t doc, int optimize)
         drw_remap_basic_vwrap();
     else
         drw_remap_truncate();
+
+    drw_double_page();
 
     r = drw_remap_to_array();
 
