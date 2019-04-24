@@ -42,7 +42,7 @@ sub mp.c_gather_help(word)
                     push(h, where, l);
                 }
                 else
-                if (regex(l, "/^[A-Za-z_]+.*[ \t]+" + word + "[ \t]*\(.*/")) {
+                if (regex(l, "/^[A-Za-z_]+.*[ \t]+\*?" + word + "[ \t]*\(.*/")) {
                     /* it's a function definition or prototype */
                     push(h, where, l);
                 }
