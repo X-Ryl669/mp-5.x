@@ -55,6 +55,6 @@
     'section'       =>  [ '/(^sub \w+|^package|^## )/' ],
     'build_targets' => [
         'perl %s',
-        'perl -cw %s'
+        'perl -I. -cw %s'
     ]
 };
