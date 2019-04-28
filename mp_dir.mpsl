@@ -60,7 +60,7 @@ sub mp_doc_dir.save(doc)
         local p = l->sscanf(" %d: %S");
         local n;
 
-        if (size(p) == 2 && (n = p[0]) > 0 && p[1]) {
+        if (size(p) == 2 && (n = integer(p[0])) > 0 && p[1]) {
             local op = doc.name + '/' + doc.dir_content[n - 1];
             local np = doc.name + '/' + p[1];
 
