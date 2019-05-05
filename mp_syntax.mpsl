@@ -276,6 +276,21 @@ sub mp_doc.section_list(doc)
             }
         }
     }
+    else {
+        r = [];
+
+        /* select all lines after an FF (page break) */
+        foreach (l, i, doc.txt.lines) {
+            if (l == "\x{000c}") {
+                r->push([doc.txt.lines[i + 1], i + 1]);
+            }
+        }
+
+        if (size(r))
+            r->ins([doc.txt.lines[0], 0]);
+        else
+            r = NULL;
+    }
 
     return r;
 }
