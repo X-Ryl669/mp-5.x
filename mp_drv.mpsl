@@ -31,7 +31,6 @@ sub mp_drv.busy(onoff)          { return NULL; }
 sub mp_drv.clip_to_sys()        { return NULL; }
 sub mp_drv.confirm(msg)         { return NULL; }
 sub mp_drv.form(widgets)        { return NULL; }
-sub mp_drv.id()                 { return NULL; }
 sub mp_drv.main_loop()          { return NULL; }
 sub mp_drv.menu()               { return NULL; }
 sub mp_drv.openfile(prompt)     { return NULL; }

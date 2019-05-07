@@ -10,6 +10,8 @@ Minimum Profit Release Notes
       pages are shown simultaneously. If you don't like this
       mode, set mp.config.double_page to 0 in the configuration
       file.
+    - New command line option -ni for "non-interactive" mode.
+      Expected to be used with -e or -f.
 
 5.32
 ----

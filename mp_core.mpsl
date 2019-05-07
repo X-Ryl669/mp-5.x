@@ -597,6 +597,7 @@ sub mp.usage()
             " -x {file}          Open file in the hexadecimal viewer\n"\
             " -txt               Use text mode instead of GUI\n"\
             " +NNN               Moves to line number NNN of last file"\
+            " -ni                Non-interactive (to be used with -e or -f)"\
             "\n");
 }
 

@@ -1323,6 +1323,34 @@ static mpdm_t find_in_embedded_tar(mpdm_t args, mpdm_t ctxt)
 
 #endif
 
+
+mpdm_t ni_drv_startup(mpdm_t v)
+{
+    return NULL;
+}
+
+
+int ni_drv_detect(int *argc, char ***argv)
+{
+    int n, ret = 0;
+
+    for (n = 0; n < *argc; n++) {
+        if (strcmp(argv[0][n], "-ni") == 0)
+            ret = 1;
+    }
+
+    if (ret) {
+        mpdm_t drv;
+
+        drv = mpdm_set_wcs(mpdm_root(), MPDM_O(), L"mp_drv");
+        mpdm_set_wcs(drv, MPDM_S(L"ni"), L"id");
+        mpdm_set_wcs(drv, MPDM_X(ni_drv_startup), L"startup");
+    }
+
+    return ret;
+}
+
+
 void mp_startup(int argc, char *argv[])
 {
     mpdm_t INC;
@@ -1371,7 +1399,7 @@ void mp_startup(int argc, char *argv[])
 
 #endif /* CONFOPT_EXTERNAL_TAR */
 
-    if (!TRY_DRIVERS()) {
+    if (!ni_drv_detect(&argc, &argv) && !TRY_DRIVERS()) {
         printf("No usable driver found; exiting.\n");
         exit(1);
     }
