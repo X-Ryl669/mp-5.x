@@ -596,7 +596,7 @@ sub mp.usage()
             " -d {directory}     Set current directory\n"\
             " -x {file}          Open file in the hexadecimal viewer\n"\
             " -txt               Use text mode instead of GUI\n"\
-            " +NNN               Moves to line number NNN of last file"\
+            " +NNN               Moves to line number NNN of last file\n"\
             " -ni                Non-interactive (to be used with -e or -f)"\
             "\n");
 }
