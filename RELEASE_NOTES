@@ -11,7 +11,9 @@ Minimum Profit Release Notes
       mode, set mp.config.double_page to 0 in the configuration
       file.
     - New command line option -ni for "non-interactive" mode.
-      Expected to be used with -e or -f.
+      Expected to be used with -e or -f. No video driver is
+      tried and it exists immediately after executing the
+      code or script.
 
 5.32
 ----
