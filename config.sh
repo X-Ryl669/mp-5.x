@@ -32,6 +32,8 @@ WITH_EXTERNAL_TAR=0
 # store command line args for configuring the libraries
 CONF_ARGS="$*"
 
+MINGW32_PREFIX=i686-w64-mingw32
+
 # parse arguments
 while [ $# -gt 0 ] ; do
 
@@ -48,9 +50,11 @@ while [ $# -gt 0 ] ; do
     --with-external-tar) WITH_EXTERNAL_TAR=1 ;;
     --help)              CONFIG_HELP=1 ;;
 
-    --mingw32)          CC=i586-mingw32msvc-cc
-                        WINDRES=i586-mingw32msvc-windres
-                        AR=i586-mingw32msvc-ar
+    --mingw32)          CC=${MINGW32_PREFIX}-gcc
+                        WINDRES=${MINGW32_PREFIX}-windres
+                        AR=${MINGW32_PREFIX}-ar
+                        LD=${MINGW32_PREFIX}-ld
+                        CPP=${MINGW32_PREFIX}-g++
                         CFLAGS="-O3 $CFLAGS"
                         ;;
 
