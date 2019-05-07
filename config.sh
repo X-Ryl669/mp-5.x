@@ -54,11 +54,6 @@ while [ $# -gt 0 ] ; do
                         CFLAGS="-O3 $CFLAGS"
                         ;;
 
-    --debian)           BUILD_FOR_DEBIAN=1
-                        PREFIX=/usr
-                        APPNAME=mped
-                        ;;
-
     --prefix)           PREFIX=$2 ; shift ;;
     --prefix=*)         PREFIX=`echo $1 | sed -e 's/--prefix=//'` ;;
     --with-moc=*)       MOC=`echo $1 | sed -e 's/--with-moc=//'` ;;
@@ -80,7 +75,6 @@ if [ "$CONFIG_HELP" = "1" ] ; then
     echo "--without-qt5         Disable Qt5 interface detection."
     echo "--with-moc            Path to your Qt moc. Ie: --with-moc=/usr/lib64/qt4/bin/moc"
     echo "--without-ansi        Disable ANSI terminal interface detection."
-    echo "--without-unix-glob   Disable glob.h usage (use workaround)."
     echo "--with-included-regex Use included regex code (gnu_regex.c)."
     echo "--with-pcre           Enable PCRE library detection."
     echo "--without-gettext     Disable gettext usage."
@@ -88,7 +82,6 @@ if [ "$CONFIG_HELP" = "1" ] ; then
     echo "--without-wcwidth     Disable system wcwidth() (use workaround)."
     echo "--with-null-hash      Tell MPDM to use a NULL hashing function."
     echo "--mingw32             Build using the mingw32 compiler."
-    echo "--debian              Build for Debian ('make deb')."
     echo "--with-external-tar   Store code in external tar (vs. embedded)."
 
     echo
