@@ -176,8 +176,5 @@ uninstall-mo:
 		rm -f $(PREFIX)/share/locale/$$B/LC_MESSAGES/minimum-profit.mo ; \
 	done
 
-deb:
-	dpkg-buildpackage -rfakeroot -b -uc -us
-
 Makefile: VERSION makefile.in
 	./config.sh $(CONF_ARGS)
