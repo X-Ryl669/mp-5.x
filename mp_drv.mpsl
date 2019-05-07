@@ -26,13 +26,23 @@ mp.actdesc['menu']          = LL("Menu");
 
 /** default UI functions (dummy) **/
 
-sub mp_drv.menu()               { return NULL; }
-sub mp_drv.clip_to_sys()        { return NULL; }
-sub mp_drv.sys_to_clip()        { return NULL; }
-sub mp_drv.update_ui()          { return NULL; }
-sub mp_drv.timer(msecs,func)    { return NULL; }
+sub mp_drv.alert(msg)           { return NULL; }
 sub mp_drv.busy(onoff)          { return NULL; }
+sub mp_drv.clip_to_sys()        { return NULL; }
+sub mp_drv.confirm(msg)         { return NULL; }
+sub mp_drv.form(widgets)        { return NULL; }
+sub mp_drv.id()                 { return NULL; }
+sub mp_drv.main_loop()          { return NULL; }
+sub mp_drv.menu()               { return NULL; }
+sub mp_drv.openfile(prompt)     { return NULL; }
+sub mp_drv.openfolder(prompt)   { return NULL; }
+sub mp_drv.savefile(prompt)     { return NULL; }
+sub mp_drv.shutdown()           { return NULL; }
+/*sub mp_drv.startup()            { return NULL; }*/
 sub mp_drv.suspend()            { return NULL; }
+sub mp_drv.sys_to_clip()        { return NULL; }
+sub mp_drv.timer(msecs,func)    { return NULL; }
+sub mp_drv.update_ui()          { return NULL; }
 
 /** driver wrappers **/
 
