@@ -50,6 +50,9 @@ while [ $# -gt 0 ] ; do
     --with-external-tar) WITH_EXTERNAL_TAR=1 ;;
     --help)              CONFIG_HELP=1 ;;
 
+    --mingw32-prefix=*)     MINGW32_PREFIX=`echo $1 | sed -e 's/--mingw32-prefix=//'`
+                            ;;
+
     --mingw32)          CC=${MINGW32_PREFIX}-gcc
                         WINDRES=${MINGW32_PREFIX}-windres
                         AR=${MINGW32_PREFIX}-ar
@@ -69,24 +72,25 @@ done
 if [ "$CONFIG_HELP" = "1" ] ; then
 
     echo "Available options:"
-    echo "--prefix=PREFIX       Installation prefix ($PREFIX)."
-    echo "--without-curses      Disable curses (text) interface detection."
-    echo "--without-gtk         Disable GTK interface detection."
-    echo "--without-win32       Disable win32 interface detection."
-    echo "--with-kde4           Enable KDE4 interface detection."
-    echo "--without-qt          Disable Qt interface detection."
-    echo "--without-qt4         Disable Qt4 interface detection."
-    echo "--without-qt5         Disable Qt5 interface detection."
-    echo "--with-moc            Path to your Qt moc. Ie: --with-moc=/usr/lib64/qt4/bin/moc"
-    echo "--without-ansi        Disable ANSI terminal interface detection."
-    echo "--with-included-regex Use included regex code (gnu_regex.c)."
-    echo "--with-pcre           Enable PCRE library detection."
-    echo "--without-gettext     Disable gettext usage."
-    echo "--without-iconv       Disable iconv usage."
-    echo "--without-wcwidth     Disable system wcwidth() (use workaround)."
-    echo "--with-null-hash      Tell MPDM to use a NULL hashing function."
-    echo "--mingw32             Build using the mingw32 compiler."
-    echo "--with-external-tar   Store code in external tar (vs. embedded)."
+    echo "--prefix=PREFIX         Installation prefix ($PREFIX)."
+    echo "--without-curses        Disable curses (text) interface detection."
+    echo "--without-gtk           Disable GTK interface detection."
+    echo "--without-win32         Disable win32 interface detection."
+    echo "--with-kde4             Enable KDE4 interface detection."
+    echo "--without-qt            Disable Qt interface detection."
+    echo "--without-qt4           Disable Qt4 interface detection."
+    echo "--without-qt5           Disable Qt5 interface detection."
+    echo "--with-moc              Path to your Qt moc. Ie: --with-moc=/usr/lib64/qt4/bin/moc"
+    echo "--without-ansi          Disable ANSI terminal interface detection."
+    echo "--with-included-regex   Use included regex code (gnu_regex.c)."
+    echo "--with-pcre             Enable PCRE library detection."
+    echo "--without-gettext       Disable gettext usage."
+    echo "--without-iconv         Disable iconv usage."
+    echo "--without-wcwidth       Disable system wcwidth() (use workaround)."
+    echo "--with-null-hash        Tell MPDM to use a NULL hashing function."
+    echo "--mingw32-prefix=PREFIX Prefix name for mingw32 ($MINGW32_PREFIX)."
+    echo "--mingw32               Build using the mingw32 compiler."
+    echo "--with-external-tar     Store code in external tar (vs. embedded)."
 
     echo
     echo "Environment variables:"
