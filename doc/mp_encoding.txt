@@ -118,6 +118,16 @@ with a BOM prefix.
 
 Aliases: `ucs-4be'.
 
+msdos-437
+---------
+
+On input and output, uses the MSDOS 437 (original IBM PC) code page.
+
+msdos-850
+---------
+
+On input and output, uses the MSDOS 850 (DOS Latin 1) code page.
+
 Iconv support
 -------------
 
