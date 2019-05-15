@@ -14,6 +14,7 @@ Minimum Profit Release Notes
       Expected to be used with -e or -f. No video driver is
       tried and it exists immediately after executing the
       code or script.
+    - Native encoding support for Windows-1252 code page.
 
 5.32
 ----
