@@ -741,7 +741,7 @@ sub mp.assert_version(found, minimal, package)
 sub mp.test_versions()
 /* tests component versions */
 {
-    mp.assert_version(MPDM.version, 2.50, 'MPDM');
+    mp.assert_version(MPDM.version, 2.51, 'MPDM');
     mp.assert_version(MPSL.VERSION, 2.50, 'MPSL');
 }
 
@@ -749,7 +749,7 @@ sub mp.test_versions()
 sub mp.load_state()
 {
     /* read state file */
-    local j = open(HOMEDIR + ".mp_state.json", "r")->map()->join();
+    local j = open(HOMEDIR + ".mp_state.json", "r")->join();
 
     if (j) {
         /* parse as json and take the first scanned value */
