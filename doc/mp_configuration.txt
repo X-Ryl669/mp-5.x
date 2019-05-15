@@ -44,6 +44,13 @@ The external command to be executed when a tag search is requested. By
 default is `ctags *'. Other useful value is `ctags -R', that search for
 tags recursively in subdirectories.
 
+mp.config.double_page
+---------------------
+
+Set the screen width (in characters) where the double page mode
+is automatically enabled. If no double page mode is desired,
+set it to 0 (default: 120).
+
 mp.config.dynamic_tabs
 ----------------------
 
