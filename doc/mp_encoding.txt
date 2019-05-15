@@ -128,6 +128,13 @@ msdos-850
 
 On input and output, uses the MSDOS 850 (DOS Latin 1) code page.
 
+windows-1252
+------------
+
+On input and output, uses the Windows-1252 code page, also misnomed
+everywhere as ANSI. Many texts that claim to be iso8859-1 are really
+windows-1252.
+
 Iconv support
 -------------
 
