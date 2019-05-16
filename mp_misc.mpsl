@@ -169,8 +169,8 @@ mp.actions['about'] = sub {
     local msg =
         sprintf(L("Minimum Profit %s - Programmer Text Editor"), mp.VERSION) +
         "\nAngel Ortega <angel@triptico.com> et al.\n\n" +
-        sprintf(L("Components: driver %s, MPDM %s, MPSL %s"),
-            (mp_drv.id || 'unknown'), MPDM.version, MPSL.VERSION) + "\n" +
+        sprintf(L("Components: driver %s, MPDM %s, MPSL %s (%s)"),
+            (mp_drv.id || 'unknown'), MPDM.version, MPSL.VERSION, __VER__) + "\n" +
         "\n"\
         "This is free and unencumbered software released into the public domain.\n"\
         "\n"\
