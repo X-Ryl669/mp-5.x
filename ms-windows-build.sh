@@ -2,7 +2,7 @@
 
 set -e
 
-[-f Makefile ] && make realdistclean
+[ -f Makefile ] && make realdistclean
 
 ./config.sh --mingw32-prefix=i686-w64-mingw32 --mingw32
 
