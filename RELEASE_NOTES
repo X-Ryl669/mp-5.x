@@ -15,6 +15,9 @@ Minimum Profit Release Notes
       tried and it exists immediately after executing the
       code or script.
     - Native encoding support for Windows-1252 code page.
+ - Other stuff:
+    - A new script ms-windows-build.sh, to build 32 and 64
+      bit MS Windows binaries using mingw32.
 
 5.32
 ----
