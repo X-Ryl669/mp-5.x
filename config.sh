@@ -91,6 +91,7 @@ if [ "$CONFIG_HELP" = "1" ] ; then
     echo "--mingw32-prefix=PREFIX Prefix name for mingw32 ($MINGW32_PREFIX)."
     echo "--mingw32               Build using the mingw32 compiler."
     echo "--with-external-tar     Store code in external tar (vs. embedded)."
+    echo "--without-zlib          Disable Zlib support."
 
     echo
     echo "Environment variables:"
