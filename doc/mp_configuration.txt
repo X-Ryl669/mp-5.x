@@ -175,24 +175,6 @@ mp.config.rtf_font_size
 
 Font size to be used in RTF exporting for normal text. Default is 12.
 
-mp.config.rtf_justify
----------------------
-
-Justify normal paragraphs in RTF exporting or not. Default is 0.
-
-mp.config.rtf_line_style_0
---------------------------
-
-RTF code to be used in line style 0 (center and verbatim text). Default
-is '\sa0\sl0\slmult0' (normal line height and single line spacing).
-
-mp.config.rtf_line_style_1
---------------------------
-
-RTF code to be used in line style 1 (normal paragraph text). Default
-is '\sa227\sl480\slmult1' (double line spacing, additional space after
-each paragraph and double line spacing).
-
 mp.config.rtf_mono_font_face
 ----------------------------
 
@@ -203,6 +185,31 @@ mp.config.rtf_mono_font_size
 ----------------------------
 
 Font size to be used in RTF exporting for verbatim text. Default is 10.
+
+mp.config.rtf_style_center
+--------------------------
+
+To be written.
+
+mp.config.rtf_style_default
+---------------------------
+
+To be written.
+
+mp.config.rtf_style_first
+-------------------------
+
+To be written.
+
+mp.config.rtf_style_para
+------------------------
+
+To be written.
+
+mp.config.rtf_style_verbatim
+----------------------------
+
+To be written.
 
 mp.config.rw_max_dist
 ---------------------
