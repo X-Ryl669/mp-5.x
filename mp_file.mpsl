@@ -699,7 +699,7 @@ sub mp_doc.export_as_rtf(doc, fn)
         f->write('{\*\generator Minimum Profit ', mp.VERSION, "}\r\n");
 
         /* page size (a4) */
-        f->write('\paperw11906\paperh16838', "\r\n");
+        f->write('\paperw11906\paperh16838\widowctrl', "\r\n");
 
         /* font table (font faces) */
         f->write('{\fonttbl',
