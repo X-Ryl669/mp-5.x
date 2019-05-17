@@ -16,9 +16,11 @@ mp.config.rtf_font_face      = 'Times New Roman';
 mp.config.rtf_font_size      = 12;
 mp.config.rtf_mono_font_face = 'Courier New';
 mp.config.rtf_mono_font_size = 10;
-mp.config.rtf_line_style_0   = '\sa0\sl0\slmult0';
-mp.config.rtf_line_style_1   = '\sa227\sl480\slmult1';
-mp.config.rtf_justify        = 1;
+mp.config.rtf_style_default  = '\sa227\sl480\slmult1\qj';
+mp.config.rtf_style_first    = '\fi0';
+mp.config.rtf_style_para     = '\fi567';
+mp.config.rtf_style_center   = '\fi0\qc';
+mp.config.rtf_style_verbatim = '\fi0\ql\sl0';
 mp.config.troff_font_size    = 12;
 mp.config.troff_page_height  = 10;
 mp.config.html_title         = '';
@@ -689,9 +691,8 @@ sub mp_doc.export_as_rtf(doc, fn)
     local ret = 0;
 
     /* configurable data */
-    local tfs = '\fs' + string(mp.config.rtf_font_size * 2);
-    local mfs = '\fs' + string(mp.config.rtf_mono_font_size * 2);
-    local ali = mp.config.rtf_justify && '\qj' || '';
+    local tfont = '\f0\fs' + string(mp.config.rtf_font_size * 2);
+    local mfont = '\f1\fs' + string(mp.config.rtf_mono_font_size * 2);
 
     if ((f = open(fn, "wb"))) {
         f->write('{\rtf1\ansi\plain', "\r\n");
@@ -705,9 +706,6 @@ sub mp_doc.export_as_rtf(doc, fn)
             '{\f0\froman\fprq2\fcharset0 ', mp.config.rtf_font_face, ';}',
             '{\f1\fmodern\fprq2\fcharset0 ', mp.config.rtf_mono_font_face, ';}',
             "}\r\n");
-
-        /* default style */
-        f->write('\f0' + tfs + '\fi0' + mp.config.rtf_line_style_1 + ali + "\r\n");
 
         foreach (p, doc->parse_as_mptxt()) {
             local mode = p[0];
@@ -741,27 +739,35 @@ sub mp_doc.export_as_rtf(doc, fn)
                 f->write("\\page\r\n");
             else
             if (mode == 'first') {
-                f->write('\fi0', "\r\n", data->join(" \r\n"), "\n\\par\r\n");
+                f->write(mp.config.rtf_style_default,
+                         mp.config.rtf_style_first,
+                         tfont, "\r\n",
+                         data->join(" \r\n"),
+                         "\n\\par\r\n");
             }
             else
             if (mode == 'para') {
-                f->write('\fi567', "\r\n", data->join(" \r\n"), "\n\\par\r\n");
+                f->write(mp.config.rtf_style_default,
+                         mp.config.rtf_style_para,
+                         tfont, "\r\n",
+                         data->join(" \r\n"),
+                         "\n\\par\r\n");
             }
             else
             if (mode == 'verbatim') {
-                f->write('\fi0{\ql\f1', mfs, "\r\n");
-                f->write('{', mp.config.rtf_line_style_0, "\r\n");
-                local l = pop(data);
-                f->write(data->map( sub (e) { e + "\\par\r\n"; } )->join());
-                f->write('}', l, "\n\\par\r\n}\r\n");
+                f->write(mp.config.rtf_style_default,
+                         mp.config.rtf_style_verbatim,
+                         mfont, "\r\n",
+                         data->join("\\line\r\n"),
+                         "\n\\par\r\n");
             }
             else
             if (mode == 'center') {
-                f->write('\fi0{\qc', "\r\n");
-                f->write('{', mp.config.rtf_line_style_0, "\r\n");
-                local l = pop(data);
-                f->write(data->map( sub (e) { e + "\\par\r\n"; } )->join());
-                f->write('}', l, "\n\\par\r\n}\r\n");
+                f->write(mp.config.rtf_style_default,
+                         mp.config.rtf_style_center,
+                         tfont, "\r\n",
+                         data->join("\\line\r\n"),
+                         "\n\\par\r\n");
             }
         }
 
@@ -810,7 +816,7 @@ sub mp_doc.export_as_troff(doc, fn)
             );
 
             if (mode == 'page')
-                f->write(".bp\r\n");
+                f->write(".bp\n");
             else
             if (mode == 'first') {
                 f->write(data->join("\n"), "\n\n");
