@@ -860,6 +860,7 @@ sub mp_doc.export_as_html(doc, fn)
         f->write("<head>\n",
             "<meta name=\"generator\" content=\"Minimum Profit ", mp.VERSION, "\"/>\n",
             "<title>", title, "</title>\n",
+            "<style>.center { text-align: center }</style>\n",
             "</head>\n",
             "<body>\n");
 
@@ -908,7 +909,7 @@ sub mp_doc.export_as_html(doc, fn)
             }
             else
             if (mode == 'center') {
-                f->write("<p class='center' style='text-align: center'>\n", data->join("<br />\n"), "\n</p>\n");
+                f->write("<p class='center'>\n", data->join("<br />\n"), "\n</p>\n");
             }
         }
 
