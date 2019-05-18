@@ -16,7 +16,7 @@ mp.config.rtf_font_face      = 'Times New Roman';
 mp.config.rtf_font_size      = 12;
 mp.config.rtf_mono_font_face = 'Courier New';
 mp.config.rtf_mono_font_size = 10;
-mp.config.rtf_style_default  = '\sa227\sl480\slmult1';
+mp.config.rtf_style_default  = '\sa227\sl480\slmult1\widctlpar';
 mp.config.rtf_style_first    = '\qj\fi0';
 mp.config.rtf_style_para     = '\qj\fi567';
 mp.config.rtf_style_center   = '\qc\fi0';
@@ -688,24 +688,25 @@ sub mp_doc.export_as_rtf(doc, fn)
 /* exports an mptext as RTF */
 {
     local f;
-    local ret = 0;
-
-    /* configurable data */
-    local tfont = '\f0\fs' + string(mp.config.rtf_font_size * 2);
-    local mfont = '\f1\fs' + string(mp.config.rtf_mono_font_size * 2);
+    local ret = -1;
 
     if ((f = open(fn, "wb"))) {
         f->write('{\rtf1\ansi\plain', "\r\n");
         f->write('{\*\generator Minimum Profit ', mp.VERSION, "}\r\n");
 
         /* page size (a4) */
-        f->write('\paperw11906\paperh16838\widowctrl', "\r\n");
+        f->write('\paperw11906\paperh16838', "\r\n");
 
         /* font table (font faces) */
         f->write('{\fonttbl',
             '{\f0\froman\fprq2\fcharset0 ', mp.config.rtf_font_face, ';}',
             '{\f1\fmodern\fprq2\fcharset0 ', mp.config.rtf_mono_font_face, ';}',
             "}\r\n");
+
+        local tfont = '\f0\fs' + string(mp.config.rtf_font_size * 2);
+        local mfont = '\f1\fs' + string(mp.config.rtf_mono_font_size * 2);
+
+        rem = NULL;
 
         foreach (p, doc->parse_as_mptxt()) {
             local mode = p[0];
@@ -736,46 +737,49 @@ sub mp_doc.export_as_rtf(doc, fn)
             );
 
             if (mode == 'page')
-                f->write("\\page\r\n");
-            else
+                f->write("\r\n\\page\r\n");
+            else {
+                if (rem)
+                    f->write(rem);
+
+                f->write(mp.config.rtf_style_default);
+
+                rem = "\r\n\\par\r\n";
+            }
+
             if (mode == 'first') {
-                f->write(mp.config.rtf_style_default,
-                         mp.config.rtf_style_first,
+                f->write(mp.config.rtf_style_first,
                          tfont, "\r\n",
-                         data->join(" \r\n"),
-                         "\n\\par\r\n");
+                         data->join(" \r\n"));
             }
             else
             if (mode == 'para') {
-                f->write(mp.config.rtf_style_default,
-                         mp.config.rtf_style_para,
+                f->write(mp.config.rtf_style_para,
                          tfont, "\r\n",
-                         data->join(" \r\n"),
-                         "\n\\par\r\n");
+                         data->join(" \r\n"));
             }
             else
             if (mode == 'verbatim') {
-                f->write(mp.config.rtf_style_default,
-                         mp.config.rtf_style_verbatim,
+                f->write(mp.config.rtf_style_verbatim,
                          mfont, "\r\n",
-                         data->join("\\line\r\n"),
-                         "\n\\par\r\n");
+                         data->join("\\line\r\n"));
             }
             else
             if (mode == 'center') {
-                f->write(mp.config.rtf_style_default,
-                         mp.config.rtf_style_center,
+                f->write(mp.config.rtf_style_center,
                          tfont, "\r\n",
-                         data->join("\\line\r\n"),
-                         "\n\\par\r\n");
+                         data->join("\\line\r\n"));
             }
         }
 
+        if (rem)
+            f->write(rem);
+
         f->write("}\r\n");
         f->close();
+
+        ret = 0;
     }
-    else
-        ret = -1;
 
     return ret;
 }
