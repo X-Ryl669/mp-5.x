@@ -16,7 +16,7 @@ mp.config.rtf_font_face      = 'Times New Roman';
 mp.config.rtf_font_size      = 12;
 mp.config.rtf_mono_font_face = 'Courier New';
 mp.config.rtf_mono_font_size = 10;
-mp.config.rtf_style_default  = '\sa227\sl480\slmult1\widctlpar';
+mp.config.rtf_style_default  = '\sa227\sl480\slmult1';
 mp.config.rtf_style_first    = '\qj\fi0';
 mp.config.rtf_style_para     = '\qj\fi567';
 mp.config.rtf_style_center   = '\qc\fi0';
@@ -737,7 +737,7 @@ sub mp_doc.export_as_rtf(doc, fn)
             );
 
             if (mode == 'page')
-                f->write("\r\n\\page\r\n");
+                f->write("\r\n\\page");
             else {
                 if (rem)
                     f->write(rem);
