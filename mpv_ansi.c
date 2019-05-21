@@ -221,8 +221,8 @@ static void ansi_build_colors(void)
             w = mpdm_get_wcs(v, L"text");
 
             /* get color indexes */
-            if ((c0 = mpdm_seek(color_names, mpdm_aget(w, 0), 1)) == -1 ||
-                (c1 = mpdm_seek(color_names, mpdm_aget(w, 1), 1)) == -1)
+            if ((c0 = mpdm_seek(color_names, mpdm_get_i(w, 0), 1)) == -1 ||
+                (c1 = mpdm_seek(color_names, mpdm_get_i(w, 1), 1)) == -1)
                 continue;
 
             if ((--c0) == -1) c0 = 9;
@@ -420,11 +420,11 @@ static mpdm_t ansi_doc_draw(mpdm_t args, mpdm_t ctxt)
     mpdm_t d;
     int n, m;
 
-    d = mpdm_aget(args, 0);
+    d = mpdm_get_i(args, 0);
     d = mpdm_ref(mp_draw(d, 0));
 
     for (n = 0; n < mpdm_size(d); n++) {
-        mpdm_t l = mpdm_aget(d, n);
+        mpdm_t l = mpdm_get_i(d, n);
 
         ansi_gotoxy(0, n);
 
@@ -433,8 +433,8 @@ static mpdm_t ansi_doc_draw(mpdm_t args, mpdm_t ctxt)
             mpdm_t s;
 
             /* get the attribute and the string */
-            attr = mpdm_ival(mpdm_aget(l, m++));
-            s = mpdm_aget(l, m);
+            attr = mpdm_ival(mpdm_get_i(l, m++));
+            s = mpdm_get_i(l, m);
 
             ansi_set_attr(attr);
             ansi_print_v(s);
@@ -494,7 +494,7 @@ static mpdm_t ansi_drv_suspend(mpdm_t a, mpdm_t ctxt)
 static mpdm_t ansi_tui_addstr(mpdm_t a, mpdm_t ctxt)
 /* TUI: add a string */
 {
-    ansi_print_v(mpdm_aget(a, 0));
+    ansi_print_v(mpdm_get_i(a, 0));
 
     return NULL;
 }
@@ -503,10 +503,10 @@ static mpdm_t ansi_tui_addstr(mpdm_t a, mpdm_t ctxt)
 static mpdm_t ansi_tui_move(mpdm_t a, mpdm_t ctxt)
 /* TUI: move to a screen position */
 {
-    ansi_gotoxy(mpdm_ival(mpdm_aget(a, 0)), mpdm_ival(mpdm_aget(a, 1)));
+    ansi_gotoxy(mpdm_ival(mpdm_get_i(a, 0)), mpdm_ival(mpdm_get_i(a, 1)));
 
     /* if third argument is not NULL, clear line */
-    if (mpdm_aget(a, 2) != NULL)
+    if (mpdm_get_i(a, 2) != NULL)
         printf("\033[K");
 
     return NULL;
@@ -516,7 +516,7 @@ static mpdm_t ansi_tui_move(mpdm_t a, mpdm_t ctxt)
 static mpdm_t ansi_tui_attr(mpdm_t a, mpdm_t ctxt)
 /* TUI: set attribute for next string */
 {
-    ansi_set_attr(mpdm_ival(mpdm_aget(a, 0)));
+    ansi_set_attr(mpdm_ival(mpdm_get_i(a, 0)));
 
     return NULL;
 }
@@ -546,8 +546,8 @@ static mpdm_t ansi_tui_getxy(mpdm_t a, mpdm_t ctxt)
     v = MPDM_A(2);
     mpdm_ref(v);
 
-    mpdm_aset(v, MPDM_I(x - 1), 0);
-    mpdm_aset(v, MPDM_I(y - 1), 1);
+    mpdm_set_i(v, MPDM_I(x - 1), 0);
+    mpdm_set_i(v, MPDM_I(y - 1), 1);
 
     mpdm_unrefnd(v);
 
