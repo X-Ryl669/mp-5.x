@@ -22,8 +22,6 @@
 #include <commctrl.h>
 #include <shlobj.h>
 
-#define MPDM_OLD_COMPAT
-
 #include "mpdm.h"
 #include "mpsl.h"
 
@@ -91,9 +89,9 @@ static void update_window_size(void)
         ty = (rect.bottom - rect.top - tab_height) / font_height;
 
         /* store the 'window' size */
-        v = mpdm_hget_s(MP, L"window");
-        mpdm_hset_s(v, L"tx", MPDM_I(tx));
-        mpdm_hset_s(v, L"ty", MPDM_I(ty));
+        v = mpdm_get_wcs(MP, L"window");
+        mpdm_set_wcs(v, MPDM_I(tx), L"tx");
+        mpdm_set_wcs(v, MPDM_I(ty), L"ty");
     }
 }
 
@@ -115,23 +113,23 @@ static void build_fonts(HDC hdc)
     }
 
     /* get current configuration */
-    if ((c = mpdm_hget_s(MP, L"config")) != NULL) {
-        if ((v = mpdm_hget_s(c, L"font_size")) != NULL)
+    if ((c = mpdm_get_wcs(MP, L"config")) != NULL) {
+        if ((v = mpdm_get_wcs(c, L"font_size")) != NULL)
             font_size = mpdm_ival(v);
         else
-            mpdm_hset_s(c, L"font_size", MPDM_I(font_size));
+            mpdm_set_wcs(c, MPDM_I(font_size), L"font_size");
 
-        if ((v = mpdm_hget_s(c, L"font_weight")) != NULL)
+        if ((v = mpdm_get_wcs(c, L"font_weight")) != NULL)
             font_weight = mpdm_rval(v) * 1000.0;
         else
-            mpdm_hset_s(c, L"font_weight", MPDM_R(font_weight / 1000.0));
+            mpdm_set_wcs(c, MPDM_R(font_weight / 1000.0), L"font_weight");
 
-        if ((v = mpdm_hget_s(c, L"font_face")) != NULL) {
+        if ((v = mpdm_get_wcs(c, L"font_face")) != NULL) {
             v = mpdm_ref(MPDM_2MBS(v->data));
             font_face = (char *) v->data;
         }
         else
-            mpdm_hset_s(c, L"font_face", MPDM_MBS(font_face));
+            mpdm_set_wcs(c, MPDM_MBS(font_face), L"font_face");
     }
 
     /* create fonts */
@@ -168,28 +166,28 @@ static void build_colors(void)
     int n, c;
 
     /* gets the color definitions and attribute names */
-    colors = mpdm_hget_s(MP, L"colors");
+    colors = mpdm_get_wcs(MP, L"colors");
 
     /* loop the colors */
     n = c = 0;
     while (mpdm_iterator(colors, &c, &v, &i)) {
         int m;
-        mpdm_t w = mpdm_hget_s(v, L"gui");
+        mpdm_t w = mpdm_get_wcs(v, L"gui");
 
         /* store the 'normal' attribute */
         if (wcscmp(mpdm_string(i), L"normal") == 0)
             normal_attr = n;
 
         /* store the attr */
-        mpdm_hset_s(v, L"attr", MPDM_I(n));
+        mpdm_set_wcs(v, MPDM_I(n), L"attr");
 
-        m = mpdm_ival(mpdm_aget(w, 0));
+        m = mpdm_ival(mpdm_get_i(w, 0));
         inks[n] = ((m & 0x000000ff) << 16) | ((m & 0x0000ff00)) | ((m & 0x00ff0000) >> 16);
-        m = mpdm_ival(mpdm_aget(w, 1));
+        m = mpdm_ival(mpdm_get_i(w, 1));
         papers[n] = ((m & 0x000000ff) << 16) | ((m & 0x0000ff00)) | ((m & 0x00ff0000) >> 16);
 
         /* flags */
-        w = mpdm_hget_s(v, L"flags");
+        w = mpdm_get_wcs(v, L"flags");
 
         underlines[n] = mpdm_seek_wcs(w, L"underline", 1) != -1 ? 1 : 0;
 
@@ -217,7 +215,7 @@ static void build_menu(void)
     int win32_menu_id = 1000;
 
     /* gets the current menu */
-    m = mpdm_hget_s(MP, L"menu");
+    m = mpdm_get_wcs(MP, L"menu");
 
     if (menu != NULL)
         DestroyMenu(menu);
@@ -230,14 +228,14 @@ static void build_menu(void)
         HMENU submenu = CreatePopupMenu();
 
         /* get the label and the items */
-        mi = mpdm_aget(m, n);
-        v = mpdm_gettext(mpdm_aget(mi, 0));
-        l = mpdm_aget(mi, 1);
+        mi = mpdm_get_i(m, n);
+        v = mpdm_gettext(mpdm_get_i(mi, 0));
+        l = mpdm_get_i(mi, 1);
 
         /* create the submenus */
         for (i = 0; i < mpdm_size(l); i++) {
             /* get the action */
-            mpdm_t v = mpdm_aget(l, i);
+            mpdm_t v = mpdm_get_i(l, i);
 
             /* if the action is a separator... */
             if (*((wchar_t *) v->data) == L'-')
@@ -287,7 +285,7 @@ static void draw_filetabs(void)
         for (n = 0; n < mpdm_size(names); n++) {
             TCITEM ti;
             char *ptr;
-            mpdm_t v = mpdm_aget(names, n);
+            mpdm_t v = mpdm_get_i(names, n);
 
             /* convert to mbs */
             ptr = mpdm_wcstombs(v->data, NULL);
@@ -308,7 +306,7 @@ static void draw_filetabs(void)
     mpdm_unref(names);
 
     /* set the active one */
-    TabCtrl_SetCurSel(hwtabs, mpdm_ival(mpdm_hget_s(MP, L"active_i")));
+    TabCtrl_SetCurSel(hwtabs, mpdm_ival(mpdm_get_wcs(MP, L"active_i")));
 }
 
 
@@ -323,12 +321,12 @@ static void draw_scrollbar(void)
     d = mp_active();
 
     /* get the coordinates */
-    v = mpdm_hget_s(d, L"txt");
-    pos = mpdm_ival(mpdm_hget_s(v, L"vy"));
-    max = mpdm_size(mpdm_hget_s(v, L"lines"));
+    v = mpdm_get_wcs(d, L"txt");
+    pos = mpdm_ival(mpdm_get_wcs(v, L"vy"));
+    max = mpdm_size(mpdm_get_wcs(v, L"lines"));
 
-    v = mpdm_hget_s(MP, L"window");
-    size = mpdm_ival(mpdm_hget_s(v, L"ty"));
+    v = mpdm_get_wcs(MP, L"window");
+    size = mpdm_ival(mpdm_get_wcs(v, L"ty"));
 
     si.cbSize = sizeof(si);
     si.fMask  = SIF_ALL;
@@ -391,7 +389,7 @@ static void win32_draw(HWND hwnd)
     r2.bottom = r2.top + font_height;
 
     for (n = 0; n < mpdm_size(d); n++) {
-        mpdm_t l = mpdm_aget(d, n);
+        mpdm_t l = mpdm_get_i(d, n);
 
         r2.left = rect.left;
 
@@ -400,8 +398,8 @@ static void win32_draw(HWND hwnd)
             mpdm_t s;
 
             /* get the attribute and the string */
-            attr = mpdm_ival(mpdm_aget(l, m++));
-            s = mpdm_aget(l, m);
+            attr = mpdm_ival(mpdm_get_i(l, m++));
+            s = mpdm_get_i(l, m);
 
             SetTextColor(hdc, inks[attr]);
             SetBkColor(hdc, papers[attr]);
@@ -444,7 +442,7 @@ static void win32_vkey(int c)
 
     /* set mp.shift_pressed */
     if (GetKeyState(VK_SHIFT) & 0x8000)
-        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+        mpdm_set_wcs(MP, MPDM_I(1), L"shift_pressed");
 
     if (GetKeyState(VK_CONTROL) & 0x8000) {
         switch (c) {
@@ -729,7 +727,7 @@ static void win32_akey(int k)
 
     /* set mp.shift_pressed */
     if (GetKeyState(VK_SHIFT) & 0x8000)
-        mpdm_hset_s(MP, L"shift_pressed", MPDM_I(1));
+        mpdm_set_wcs(MP, MPDM_I(1), L"shift_pressed");
 
     switch (k) {
     case ctrl(' '):
@@ -861,9 +859,9 @@ static void win32_vscroll(UINT wparam)
     case SB_THUMBPOSITION:
     case SB_THUMBTRACK:
         /* set both y and vy */
-        txt = mpdm_hget_s(mp_active(), L"txt");
+        txt = mpdm_get_wcs(mp_active(), L"txt");
         mp_set_y(mp_active(), HIWORD(wparam));
-        mpdm_hset_s(txt, L"vy", MPDM_I(HIWORD(wparam)));
+        mpdm_set_wcs(txt, MPDM_I(HIWORD(wparam)), L"vy");
         redraw();
         break;
     }
@@ -912,7 +910,7 @@ static void dropped_files(HDROP hDrop)
 
     DragFinish(hDrop);
 
-    mpdm_hset_s(MP, L"dropped_files", a);
+    mpdm_set_wcs(MP, a, L"dropped_files");
 
     mpdm_unref(a);
 
@@ -973,7 +971,7 @@ long CALLBACK WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
 
     case WM_PAINT:
 
-        if (mpdm_size(mpdm_hget_s(MP, L"docs")))
+        if (mpdm_size(mpdm_get_wcs(MP, L"docs")))
             win32_draw(hwnd);
 
         return 0;
@@ -1005,8 +1003,8 @@ long CALLBACK WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
         x = (LOWORD(lparam)) / font_width;
         y = (HIWORD(lparam) - tab_height) / font_height;
 
-        mpdm_hset_s(MP, L"mouse_x", MPDM_I(x));
-        mpdm_hset_s(MP, L"mouse_y", MPDM_I(y));
+        mpdm_set_wcs(MP, MPDM_I(x), L"mouse_x");
+        mpdm_set_wcs(MP, MPDM_I(y), L"mouse_y");
 
         switch (msg) {
         case WM_LBUTTONDOWN:
@@ -1042,8 +1040,8 @@ long CALLBACK WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
             x = (LOWORD(lparam)) / font_width;
             y = (HIWORD(lparam) - tab_height) / font_height;
 
-            mpdm_hset_s(MP, L"mouse_to_x", MPDM_I(x));
-            mpdm_hset_s(MP, L"mouse_to_y", MPDM_I(y));
+            mpdm_set_wcs(MP, MPDM_I(x), L"mouse_to_x");
+            mpdm_set_wcs(MP, MPDM_I(y), L"mouse_to_y");
 
             mp_process_event(MPDM_S(L"mouse-drag"));
 
@@ -1082,12 +1080,12 @@ long CALLBACK WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
 
             GetWindowRect(hwnd, &r);
 
-            v = mpdm_hget_s(MP, L"state");
-            v = mpdm_hset_s(v, L"window", MPDM_H(0));
-            mpdm_hset_s(v, L"x", MPDM_I(r.left));
-            mpdm_hset_s(v, L"y", MPDM_I(r.top));
-            mpdm_hset_s(v, L"w", MPDM_I(r.right - r.left));
-            mpdm_hset_s(v, L"h", MPDM_I(r.bottom - r.top));
+            v = mpdm_get_wcs(MP, L"state");
+            v = mpdm_set_wcs(v, MPDM_O(), L"window");
+            mpdm_set_wcs(v, MPDM_I(r.left),           L"x");
+            mpdm_set_wcs(v, MPDM_I(r.top),            L"y");
+            mpdm_set_wcs(v, MPDM_I(r.right - r.left), L"w");
+            mpdm_set_wcs(v, MPDM_I(r.bottom - r.top), L"h");
         }
 
         if (!mp_exit_requested)
@@ -1110,7 +1108,7 @@ long CALLBACK WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
             int n = TabCtrl_GetCurSel(hwtabs);
 
             /* set mp.active_i to this */
-            mpdm_hset_s(MP, L"active_i", MPDM_I(n));
+            mpdm_set_wcs(MP, MPDM_I(n), L"active_i");
 
             redraw();
         }
@@ -1121,7 +1119,7 @@ long CALLBACK WndProc(HWND hwnd, UINT msg, UINT wparam, LONG lparam)
         {
             mpdm_t v;
 
-            if ((v = mpdm_hget_s(MP, L"timer_func"))) {
+            if ((v = mpdm_get_wcs(MP, L"timer_func"))) {
                 mpdm_void(mpdm_exec(v, NULL, NULL));
                 redraw();
             }
@@ -1147,7 +1145,7 @@ static mpdm_t win32_drv_clip_to_sys(mpdm_t a, mpdm_t ctxt)
     int s;
 
     /* convert the clipboard to DOS text */
-    d = mpdm_hget_s(MP, L"clipboard");
+    d = mpdm_get_wcs(MP, L"clipboard");
 
     if (mpdm_size(d)) {
         v = mpdm_ref(mpdm_join_wcs(d, L"\r\n"));
@@ -1192,8 +1190,8 @@ static mpdm_t win32_drv_sys_to_clip(mpdm_t a, mpdm_t ctxt)
         d = mpdm_ref(mpdm_split_wcs(v, L"\r\n"));
 
         /* and set as the clipboard */
-        mpdm_hset_s(MP, L"clipboard", d);
-        mpdm_hset_s(MP, L"clipboard_vertical", MPDM_I(0));
+        mpdm_set_wcs(MP, d, L"clipboard");
+        mpdm_set_wcs(MP, MPDM_I(0), L"clipboard_vertical");
 
         GlobalUnlock(hclp);
 
@@ -1228,7 +1226,7 @@ static mpdm_t win32_drv_shutdown(mpdm_t a, mpdm_t ctxt)
 
     SendMessage(hwnd, WM_CLOSE, 0, 0);
 
-    if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL)
+    if ((v = mpdm_get_wcs(MP, L"exit_message")) != NULL)
         MessageBoxW(NULL, mpdm_string(v), L"mp " VERSION, MB_ICONWARNING | MB_OK);
 
     return NULL;
@@ -1239,7 +1237,7 @@ static mpdm_t win32_drv_alert(mpdm_t a, mpdm_t ctxt)
 /* alert driver function */
 {
     /* 1# arg: prompt */
-    MessageBoxW(hwnd, mpdm_string(mpdm_aget(a, 0)), L"mp " VERSION, MB_ICONWARNING | MB_OK);
+    MessageBoxW(hwnd, mpdm_string(mpdm_get_i(a, 0)), L"mp " VERSION, MB_ICONWARNING | MB_OK);
 
     return NULL;
 }
@@ -1251,7 +1249,7 @@ static mpdm_t win32_drv_confirm(mpdm_t a, mpdm_t ctxt)
     int ret = 0;
 
     /* 1# arg: prompt */
-    ret = MessageBoxW(hwnd, mpdm_string(mpdm_aget(a, 0)), L"mp " VERSION,
+    ret = MessageBoxW(hwnd, mpdm_string(mpdm_get_i(a, 0)), L"mp " VERSION,
                        MB_ICONQUESTION | MB_YESNOCANCEL);
 
     if (ret == IDYES)
@@ -1297,14 +1295,14 @@ BOOL CALLBACK formDlgProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 
         /* fill controls with its initial data */
         for (n = 0; n < mpdm_size(form_args); n++) {
-            mpdm_t w = mpdm_aget(form_args, n);
+            mpdm_t w = mpdm_get_i(form_args, n);
             wchar_t *type;
             mpdm_t t;
             int ctrl = CTRL_ID + n;
             wchar_t *wptr;
             char *ptr;
 
-            if ((t = mpdm_hget_s(w, L"label")) != NULL) {
+            if ((t = mpdm_get_wcs(w, L"label")) != NULL) {
                 SetDlgItemTextW(hwnd, LABEL_ID + n, mpdm_string(t));
 
                 SendDlgItemMessage(hwnd, LABEL_ID + n, WM_SETFONT,
@@ -1314,20 +1312,20 @@ BOOL CALLBACK formDlgProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
             SendDlgItemMessage(hwnd, ctrl, WM_SETFONT,
                                (WPARAM) hf, MAKELPARAM(FALSE, 0));
 
-            type = mpdm_string(mpdm_hget_s(w, L"type"));
+            type = mpdm_string(mpdm_get_wcs(w, L"type"));
 
             if (wcscmp(type, L"text") == 0) {
-                if ((t = mpdm_hget_s(w, L"value")) != NULL) {
+                if ((t = mpdm_get_wcs(w, L"value")) != NULL) {
                     SetDlgItemTextW(hwnd, ctrl, mpdm_string(t));
                 }
 
                 /* store the history into combo_items */
-                if ((t = mpdm_hget_s(w, L"history")) != NULL) {
+                if ((t = mpdm_get_wcs(w, L"history")) != NULL) {
                     t = mp_get_history(t);
                     int i;
 
                     for (i = 0; i < mpdm_size(t); i++) {
-                        mpdm_t v = mpdm_aget(t, i);
+                        mpdm_t v = mpdm_get_i(t, i);
 
                         if ((ptr = mpdm_wcstombs(v->data, NULL)) != NULL) {
                             SendDlgItemMessage(hwnd,
@@ -1347,7 +1345,7 @@ BOOL CALLBACK formDlgProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
             }
             else
             if (wcscmp(type, L"checkbox") == 0) {
-                if ((t = mpdm_hget_s(w, L"value")) != NULL)
+                if ((t = mpdm_get_wcs(w, L"value")) != NULL)
                     SendDlgItemMessage(hwnd, ctrl,
                                        BM_SETCHECK, mpdm_ival(t) ?
                                        BST_CHECKED : BST_UNCHECKED, 0);
@@ -1357,11 +1355,11 @@ BOOL CALLBACK formDlgProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
                 int i;
                 int ts[] = { 250, 20 };
 
-                t = mpdm_hget_s(w, L"list");
+                t = mpdm_get_wcs(w, L"list");
 
                 /* fill the list */
                 for (i = 0; i < mpdm_size(t); i++) {
-                    wptr = mpdm_string(mpdm_aget(t, i));
+                    wptr = mpdm_string(mpdm_get_i(t, i));
                     if ((ptr = mpdm_wcstombs(wptr, NULL)) != NULL) {
                         SendDlgItemMessage(hwnd, ctrl,
                                            LB_ADDSTRING, 0, (LPARAM) ptr);
@@ -1373,7 +1371,7 @@ BOOL CALLBACK formDlgProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 
                 /* set position */
                 SendDlgItemMessage(hwnd, ctrl, LB_SETCURSEL,
-                                   mpdm_ival(mpdm_hget_s(w, L"value")), 0);
+                                   mpdm_ival(mpdm_get_wcs(w, L"value")), 0);
             }
         }
 
@@ -1401,8 +1399,8 @@ BOOL CALLBACK formDlgProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 
         /* fill all return values */
         for (n = 0; n < mpdm_size(form_args); n++) {
-            mpdm_t w = mpdm_aget(form_args, n);
-            wchar_t *type = mpdm_string(mpdm_hget_s(w, L"type"));
+            mpdm_t w = mpdm_get_i(form_args, n);
+            wchar_t *type = mpdm_string(mpdm_get_wcs(w, L"type"));
             int ctrl = CTRL_ID + n;
 
             if (wcscmp(type, L"text") == 0) {
@@ -1413,13 +1411,13 @@ BOOL CALLBACK formDlgProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
                 GetDlgItemText(hwnd, ctrl, tmp, sizeof(tmp) - 1);
                 v = MPDM_MBS(tmp);
 
-                mpdm_aset(form_values, v, n);
+                mpdm_set_i(form_values, v, n);
 
                 /* if it has history, fill it */
-                if (v && (h = mpdm_hget_s(w, L"history")) && mpdm_cmp_wcs(v, L"")) {
+                if (v && (h = mpdm_get_wcs(w, L"history")) && mpdm_cmp_wcs(v, L"")) {
                     h = mp_get_history(h);
 
-                    if (mpdm_cmp(v, mpdm_aget(h, -1)) != 0)
+                    if (mpdm_cmp(v, mpdm_get_i(h, -1)) != 0)
                         mpdm_push(h, v);
                 }
             }
@@ -1427,18 +1425,18 @@ BOOL CALLBACK formDlgProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
                 char tmp[2048];
 
                 GetDlgItemText(hwnd, ctrl, tmp, sizeof(tmp) - 1);
-                mpdm_aset(form_values, MPDM_MBS(tmp), n);
+                mpdm_set_i(form_values, MPDM_MBS(tmp), n);
             }
             else
             if (wcscmp(type, L"checkbox") == 0) {
-                mpdm_aset(form_values,
+                mpdm_set_i(form_values,
                           MPDM_I(SendDlgItemMessage(hwnd, ctrl,
                                                     BM_GETCHECK, 0, 0)),
                           n);
             }
             else
             if (wcscmp(type, L"list") == 0) {
-                mpdm_aset(form_values,
+                mpdm_set_i(form_values,
                           MPDM_I(SendDlgItemMessage(hwnd, ctrl,
                                                     LB_GETCURSEL, 0, 0)),
                           n);
@@ -1511,7 +1509,7 @@ static mpdm_t win32_drv_form(mpdm_t a, mpdm_t ctxt)
     int spacing = 5;
 
     /* first argument: list of widgets */
-    build_form_data(mpdm_aget(a, 0));
+    build_form_data(mpdm_get_i(a, 0));
 
     /* On-the-fly dialog template creation */
     /* Note: all this crap is taken from MSDN, no less */
@@ -1533,8 +1531,8 @@ static mpdm_t win32_drv_form(mpdm_t a, mpdm_t ctxt)
 
     /* first pass: calculate maximum size of labels */
     for (n = 0; n < mpdm_size(form_args); n++) {
-        mpdm_t w = mpdm_aget(form_args, n);
-        int l = mpdm_size(mpdm_hget_s(w, L"label"));
+        mpdm_t w = mpdm_get_i(form_args, n);
+        int l = mpdm_size(mpdm_get_wcs(w, L"label"));
 
         if (label_width < l)
             label_width = l;
@@ -1545,14 +1543,14 @@ static mpdm_t win32_drv_form(mpdm_t a, mpdm_t ctxt)
 
     /* second pass: create the dialog controls */
     for (n = 0; n < mpdm_size(form_args); n++) {
-        mpdm_t w = mpdm_aget(form_args, n);
+        mpdm_t w = mpdm_get_i(form_args, n);
         wchar_t *type;
         int w_class;
         int style;
         int inc = 1;
         int sz = 1;
 
-        type = mpdm_string(mpdm_hget_s(w, L"type"));
+        type = mpdm_string(mpdm_get_wcs(w, L"type"));
 
         if (wcscmp(type, L"text") == 0) {
             w_class = 0x0085;
@@ -1658,7 +1656,7 @@ static mpdm_t open_or_save(int o, mpdm_t a)
     int r;
 
     /* 1# arg: prompt */
-    wptr = mpdm_string(mpdm_aget(a, 0));
+    wptr = mpdm_string(mpdm_get_i(a, 0));
     ptr = mpdm_wcstombs(wptr, NULL);
 
     memset(&ofn, '\0', sizeof(OPENFILENAME));
@@ -1716,7 +1714,7 @@ static mpdm_t win32_drv_openfolder(mpdm_t a, mpdm_t ctxt)
     LPITEMIDLIST i;
 
     /* 1# arg: prompt */
-    ptr = mpdm_wcstombs(mpdm_string(mpdm_aget(a, 0)), NULL);
+    ptr = mpdm_wcstombs(mpdm_string(mpdm_get_i(a, 0)), NULL);
 
     memset(&bi, '\0', sizeof(bi));
     bi.hwndOwner      = hwnd;
@@ -1748,12 +1746,12 @@ static mpdm_t win32_drv_update_ui(mpdm_t a, mpdm_t ctxt)
 
 static mpdm_t win32_drv_timer(mpdm_t a, mpdm_t ctxt)
 {
-    int msecs = mpdm_ival(mpdm_aget(a, 0));
-    mpdm_t func = mpdm_aget(a, 1);
+    int msecs = mpdm_ival(mpdm_get_i(a, 0));
+    mpdm_t func = mpdm_get_i(a, 1);
 
     KillTimer(hwnd, 1);
 
-    mpdm_hset_s(MP, L"timer_func", func);
+    mpdm_set_wcs(MP, func, L"timer_func");
 
     /* if msecs and func are set, program timer */
     if (msecs > 0 && func != NULL)
@@ -1765,7 +1763,7 @@ static mpdm_t win32_drv_timer(mpdm_t a, mpdm_t ctxt)
 
 static mpdm_t win32_drv_busy(mpdm_t a, mpdm_t ctxt)
 {
-    int onoff = mpdm_ival(mpdm_aget(a, 0));
+    int onoff = mpdm_ival(mpdm_get_i(a, 0));
 
     SetCursor(LoadCursor(NULL, onoff ? IDC_WAIT : IDC_ARROW));
 
@@ -1777,20 +1775,20 @@ static void register_functions(void)
 {
     mpdm_t drv;
 
-    drv = mpdm_hget_s(mpdm_root(), L"mp_drv");
-    mpdm_hset_s(drv, L"main_loop",   MPDM_X(win32_drv_main_loop));
-    mpdm_hset_s(drv, L"shutdown",    MPDM_X(win32_drv_shutdown));
-    mpdm_hset_s(drv, L"clip_to_sys", MPDM_X(win32_drv_clip_to_sys));
-    mpdm_hset_s(drv, L"sys_to_clip", MPDM_X(win32_drv_sys_to_clip));
-    mpdm_hset_s(drv, L"update_ui",   MPDM_X(win32_drv_update_ui));
-    mpdm_hset_s(drv, L"timer",       MPDM_X(win32_drv_timer));
-    mpdm_hset_s(drv, L"busy",        MPDM_X(win32_drv_busy));
-    mpdm_hset_s(drv, L"alert",       MPDM_X(win32_drv_alert));
-    mpdm_hset_s(drv, L"confirm",     MPDM_X(win32_drv_confirm));
-    mpdm_hset_s(drv, L"openfile",    MPDM_X(win32_drv_openfile));
-    mpdm_hset_s(drv, L"savefile",    MPDM_X(win32_drv_savefile));
-    mpdm_hset_s(drv, L"form",        MPDM_X(win32_drv_form));
-    mpdm_hset_s(drv, L"openfolder",  MPDM_X(win32_drv_openfolder));
+    drv = mpdm_get_wcs(mpdm_root(), L"mp_drv");
+    mpdm_set_wcs(drv, MPDM_X(win32_drv_main_loop),   L"main_loop");
+    mpdm_set_wcs(drv, MPDM_X(win32_drv_shutdown),    L"shutdown");
+    mpdm_set_wcs(drv, MPDM_X(win32_drv_clip_to_sys), L"clip_to_sys");
+    mpdm_set_wcs(drv, MPDM_X(win32_drv_sys_to_clip), L"sys_to_clip");
+    mpdm_set_wcs(drv, MPDM_X(win32_drv_update_ui),   L"update_ui");
+    mpdm_set_wcs(drv, MPDM_X(win32_drv_timer),       L"timer");
+    mpdm_set_wcs(drv, MPDM_X(win32_drv_busy),        L"busy");
+    mpdm_set_wcs(drv, MPDM_X(win32_drv_alert),       L"alert");
+    mpdm_set_wcs(drv, MPDM_X(win32_drv_confirm),     L"confirm");
+    mpdm_set_wcs(drv, MPDM_X(win32_drv_openfile),    L"openfile");
+    mpdm_set_wcs(drv, MPDM_X(win32_drv_savefile),    L"savefile");
+    mpdm_set_wcs(drv, MPDM_X(win32_drv_form),        L"form");
+    mpdm_set_wcs(drv, MPDM_X(win32_drv_openfolder),  L"openfolder");
 }
 
 
@@ -1820,22 +1818,22 @@ static mpdm_t win32_drv_startup(mpdm_t a, mpdm_t ctxt)
 
     RegisterClassW(&wc);
 
-    v = mpdm_hget_s(MP, L"state");
-    if ((v = mpdm_hget_s(v, L"window")) == NULL) {
-        v = mpdm_hset_s(mpdm_hget_s(MP, L"state"), L"window", MPDM_H(0));
-        mpdm_hset_s(v, L"x", MPDM_I(10));
-        mpdm_hset_s(v, L"y", MPDM_I(10));
-        mpdm_hset_s(v, L"w", MPDM_I(600));
-        mpdm_hset_s(v, L"h", MPDM_I(400));
+    v = mpdm_get_wcs(MP, L"state");
+    if ((v = mpdm_get_wcs(v, L"window")) == NULL) {
+        v = mpdm_set_wcs(mpdm_get_wcs(MP, L"state"), MPDM_O(), L"window");
+        mpdm_set_wcs(v, MPDM_I(10),  L"x");
+        mpdm_set_wcs(v, MPDM_I(10),  L"y");
+        mpdm_set_wcs(v, MPDM_I(600), L"w");
+        mpdm_set_wcs(v, MPDM_I(400), L"h");
     }
 
     /* create the window */
     hwnd = CreateWindowW(L"minimumprofit5.x", L"mp " VERSION,
                          WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_VSCROLL,
-                         mpdm_ival(mpdm_hget_s(v, L"x")),
-                         mpdm_ival(mpdm_hget_s(v, L"y")),
-                         mpdm_ival(mpdm_hget_s(v, L"w")),
-                         mpdm_ival(mpdm_hget_s(v, L"h")),
+                         mpdm_ival(mpdm_get_wcs(v, L"x")),
+                         mpdm_ival(mpdm_get_wcs(v, L"y")),
+                         mpdm_ival(mpdm_get_wcs(v, L"w")),
+                         mpdm_ival(mpdm_get_wcs(v, L"h")),
                          NULL, NULL, hinst, NULL);
 
     ShowWindow(hwnd, SW_SHOW);
@@ -1868,8 +1866,8 @@ static mpdm_t win32_drv_startup(mpdm_t a, mpdm_t ctxt)
     ShowWindow(hwstatus, SW_SHOW);
     UpdateWindow(hwstatus);
 
-    if ((v = mpdm_hget_s(MP, L"config")) != NULL &&
-        mpdm_ival(mpdm_hget_s(v, L"maximize")) > 0)
+    if ((v = mpdm_get_wcs(MP, L"config")) != NULL &&
+        mpdm_ival(mpdm_get_wcs(v, L"maximize")) > 0)
         SendMessage(hwnd, WM_SYSCOMMAND, SC_MAXIMIZE, 0);
 
     return NULL;
@@ -1888,10 +1886,10 @@ int win32_drv_detect(int *argc, char ***argv)
     if (ret) {
         mpdm_t drv;
 
-        drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
+        drv = mpdm_set_wcs(mpdm_root(), MPDM_O(), L"mp_drv");
 
-        mpdm_hset_s(drv, L"id",      MPDM_S(L"win32"));
-        mpdm_hset_s(drv, L"startup", MPDM_X(win32_drv_startup));
+        mpdm_set_wcs(drv, MPDM_S(L"win32"), L"id");
+        mpdm_set_wcs(drv, MPDM_X(win32_drv_startup), L"startup");
     }
 
     return ret;
