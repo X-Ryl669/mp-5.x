@@ -26,6 +26,8 @@
 
 #include <ncurses.h>
 
+#define MPDM_OLD_COMPAT
+
 #include "mpdm.h"
 #include "mpsl.h"
 

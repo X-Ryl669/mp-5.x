@@ -19,6 +19,9 @@ extern "C" int qt5_drv_detect(int *argc, char ***argv);
 #include <stdio.h>
 #include <wchar.h>
 #include <unistd.h>
+
+#define MPDM_OLD_COMPAT
+
 #include "mpdm.h"
 #include "mpsl.h"
 #include "mp.h"
