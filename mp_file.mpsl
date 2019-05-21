@@ -852,7 +852,7 @@ sub mp_doc.export_as_troff(doc, fn)
 sub mp_doc.export_as_html(doc, fn)
 /* exports an mptxt as a basic HTML file */
 {
-    local f, p_enc;
+    local f;
     local ret = 0;
 
     local title = mp.config.html_title || fn;
@@ -917,7 +917,7 @@ sub mp_doc.export_as_html(doc, fn)
             }
         }
 
-        f->write("</body>\n");
+        f->write("</body>\n</html>\n");
         f->close();
     }
     else
