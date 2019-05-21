@@ -17,8 +17,6 @@
 #include <stdio.h>
 #include <windows.h>
 
-#define MPDM_OLD_COMPAT
-
 #include "mpdm.h"
 #include "mpsl.h"
 
@@ -58,9 +56,9 @@ static void update_window_size(void)
     tx = (csbi.srWindow.Right - csbi.srWindow.Left) + 1;
     ty = (csbi.srWindow.Bottom - csbi.srWindow.Top) + 1;
 
-    v = mpdm_hget_s(MP, L"window");
-    mpdm_hset_s(v, L"tx", MPDM_I(tx));
-    mpdm_hset_s(v, L"ty", MPDM_I(ty - 1));
+    v = mpdm_get_wcs(MP, L"window");
+    mpdm_set_wcs(v, MPDM_I(tx),     L"tx");
+    mpdm_set_wcs(v, MPDM_I(ty - 1), L"ty");
 
     buf = realloc(buf, tx * ty * sizeof(CHAR_INFO));
     win32c_clrscr();
@@ -74,13 +72,13 @@ static void build_colors(void)
     int n, c;
 
     /* gets the color definitions and attribute names */
-    colors      = mpdm_hget_s(MP, L"colors");
-    color_names = mpdm_hget_s(MP, L"color_names");
+    colors      = mpdm_get_wcs(MP, L"colors");
+    color_names = mpdm_get_wcs(MP, L"color_names");
 
     /* loop the colors */
     n = c = 0;
     while (mpdm_iterator(colors, &c, &v, &i)) {
-        mpdm_t w = mpdm_hget_s(v, L"text");
+        mpdm_t w = mpdm_get_wcs(v, L"text");
         int c0, c1;
     	WORD cp = 0;
 
@@ -89,11 +87,11 @@ static void build_colors(void)
             normal_attr = n;
 
         /* store the attr */
-        mpdm_hset_s(v, L"attr", MPDM_I(n));
+        mpdm_set_wcs(v, MPDM_I(n), L"attr");
 
         /* get color indexes */
-        if ((c0 = mpdm_seek(color_names, mpdm_aget(w, 0), 1)) == -1 ||
-            (c1 = mpdm_seek(color_names, mpdm_aget(w, 1), 1)) == -1)
+        if ((c0 = mpdm_seek(color_names, mpdm_get_i(w, 0), 1)) == -1 ||
+            (c1 = mpdm_seek(color_names, mpdm_get_i(w, 1), 1)) == -1)
             continue;
 
         /* color names match the color bits; 0 is 'default' */
@@ -104,7 +102,7 @@ static void build_colors(void)
         c1--;
 
         /* flags */
-        w = mpdm_hget_s(v, L"flags");
+        w = mpdm_get_wcs(v, L"flags");
 
         if (mpdm_seek_wcs(w, L"reverse", 1) != -1) {
             int t = c0;
@@ -157,8 +155,8 @@ static mpdm_t win32c_getkey(mpdm_t args, mpdm_t ctxt)
             switch (e->dwEventFlags) {
             case 0:
 
-                mpdm_hset_s(MP, L"mouse_x", MPDM_I(e->dwMousePosition.X));
-                mpdm_hset_s(MP, L"mouse_y", MPDM_I(e->dwMousePosition.Y - by));
+                mpdm_set_wcs(MP, MPDM_I(e->dwMousePosition.X), L"mouse_x");
+                mpdm_set_wcs(MP, MPDM_I(e->dwMousePosition.Y - by), L"mouse_y");
 
                 mouse_down = 0;
                 if (e->dwButtonState & FROM_LEFT_1ST_BUTTON_PRESSED) {
@@ -179,8 +177,8 @@ static mpdm_t win32c_getkey(mpdm_t args, mpdm_t ctxt)
 
             case MOUSE_MOVED:
                 if (mouse_down) {
-                    mpdm_hset_s(MP, L"mouse_to_x", MPDM_I(e->dwMousePosition.X));
-                    mpdm_hset_s(MP, L"mouse_to_y", MPDM_I(e->dwMousePosition.Y - by));
+                    mpdm_set_wcs(MP, MPDM_I(e->dwMousePosition.X), L"mouse_to_x");
+                    mpdm_set_wcs(MP, MPDM_I(e->dwMousePosition.Y - by), L"mouse_to_y");
 
                     f = L"mouse-drag";
                 }
@@ -205,7 +203,7 @@ static mpdm_t win32c_getkey(mpdm_t args, mpdm_t ctxt)
                 if (e->dwControlKeyState & (LEFT_ALT_PRESSED|RIGHT_ALT_PRESSED))
                     p = L"alt-";
 
-                mpdm_hset_s(MP, L"shift_pressed", MPDM_I(e->dwControlKeyState & SHIFT_PRESSED));
+                mpdm_set_wcs(MP, MPDM_I(e->dwControlKeyState & SHIFT_PRESSED), L"shift_pressed");
 
                 if (c) {
                     if (c > 32) {
@@ -418,7 +416,7 @@ static wchar_t win32c_charat(int x, int y)
 static mpdm_t tui_addstr(mpdm_t a, mpdm_t ctxt)
 /* TUI: add a string */
 {
-    win32c_addstr(mpdm_aget(a, 0));
+    win32c_addstr(mpdm_get_i(a, 0));
     return NULL;
 }
 
@@ -426,9 +424,9 @@ static mpdm_t tui_addstr(mpdm_t a, mpdm_t ctxt)
 static mpdm_t tui_move(mpdm_t a, mpdm_t ctxt)
 /* TUI: move to a screen position */
 {
-    int cx = mpdm_ival(mpdm_aget(a, 0));
-    int cy = mpdm_ival(mpdm_aget(a, 1));
-    int dl = mpdm_aget(a, 2) != NULL;
+    int cx = mpdm_ival(mpdm_get_i(a, 0));
+    int cy = mpdm_ival(mpdm_get_i(a, 1));
+    int dl = mpdm_get_i(a, 2) != NULL;
 
     win32c_move(cx, cy, dl);
 
@@ -439,7 +437,7 @@ static mpdm_t tui_move(mpdm_t a, mpdm_t ctxt)
 static mpdm_t tui_attr(mpdm_t a, mpdm_t ctxt)
 /* TUI: set attribute for next string */
 {
-    win32c_attr(mpdm_ival(mpdm_aget(a, 0)));
+    win32c_attr(mpdm_ival(mpdm_get_i(a, 0)));
     return NULL;
 }
 
@@ -460,8 +458,8 @@ static mpdm_t tui_getxy(mpdm_t a, mpdm_t ctxt)
     v = MPDM_A(2);
     mpdm_ref(v);
 
-    mpdm_aset(v, MPDM_I(cx), 0);
-    mpdm_aset(v, MPDM_I(cy), 1);
+    mpdm_set_i(v, MPDM_I(cx), 0);
+    mpdm_set_i(v, MPDM_I(cy), 1);
 
     mpdm_unrefnd(v);
 
@@ -492,11 +490,11 @@ static mpdm_t win32c_doc_draw(mpdm_t args, mpdm_t ctxt)
 
     win32c_clrscr();
 
-    d = mpdm_aget(args, 0);
+    d = mpdm_get_i(args, 0);
     d = mpdm_ref(mp_draw(d, 0));
 
     for (n = 0; n < mpdm_size(d); n++) {
-        mpdm_t l = mpdm_aget(d, n);
+        mpdm_t l = mpdm_get_i(d, n);
 
         win32c_move(0, n, 0);
 
@@ -505,8 +503,8 @@ static mpdm_t win32c_doc_draw(mpdm_t args, mpdm_t ctxt)
             mpdm_t s;
 
             /* get the attribute and the string */
-            attr = mpdm_ival(mpdm_aget(l, m++));
-            s = mpdm_aget(l, m);
+            attr = mpdm_ival(mpdm_get_i(l, m++));
+            s = mpdm_get_i(l, m);
 
             win32c_attr(attr);
             win32c_addstr(s);
@@ -523,7 +521,7 @@ static mpdm_t win32c_drv_shutdown(mpdm_t a)
 {
     mpdm_t v;
 
-    if ((v = mpdm_hget_s(MP, L"exit_message")) != NULL) {
+    if ((v = mpdm_get_wcs(MP, L"exit_message")) != NULL) {
         mpdm_write_wcs(stdout, mpdm_string(v));
         printf("\n");
     }
@@ -537,20 +535,20 @@ static void register_functions(void)
     mpdm_t drv;
     mpdm_t tui;
 
-    drv = mpdm_hget_s(mpdm_root(), L"mp_drv");
-    mpdm_hset_s(drv, L"shutdown",   MPDM_X(win32c_drv_shutdown));
+    drv = mpdm_get_wcs(mpdm_root(), L"mp_drv");
+    mpdm_set_wcs(drv, MPDM_X(win32c_drv_shutdown), L"shutdown");
 
     /* execute tui */
     tui = mpsl_eval(MPDM_S(L"load('mp_tui.mpsl');"), NULL, NULL);
 
-    mpdm_hset_s(tui, L"getkey",     MPDM_X(win32c_getkey));
-    mpdm_hset_s(tui, L"addstr",     MPDM_X(tui_addstr));
-    mpdm_hset_s(tui, L"move",       MPDM_X(tui_move));
-    mpdm_hset_s(tui, L"attr",       MPDM_X(tui_attr));
-    mpdm_hset_s(tui, L"refresh",    MPDM_X(tui_refresh));
-    mpdm_hset_s(tui, L"getxy",      MPDM_X(tui_getxy));
-    mpdm_hset_s(tui, L"charat",     MPDM_X(tui_charat));
-    mpdm_hset_s(tui, L"doc_draw",   MPDM_X(win32c_doc_draw));
+    mpdm_set_wcs(tui, MPDM_X(win32c_getkey),    L"getkey");
+    mpdm_set_wcs(tui, MPDM_X(tui_addstr),       L"addstr");
+    mpdm_set_wcs(tui, MPDM_X(tui_move),         L"move");
+    mpdm_set_wcs(tui, MPDM_X(tui_attr),         L"attr");
+    mpdm_set_wcs(tui, MPDM_X(tui_refresh),      L"refresh");
+    mpdm_set_wcs(tui, MPDM_X(tui_getxy),        L"getxy");
+    mpdm_set_wcs(tui, MPDM_X(tui_charat),       L"charat");
+    mpdm_set_wcs(tui, MPDM_X(win32c_doc_draw),  L"doc_draw");
 }
 
 
@@ -584,10 +582,10 @@ int win32_drv_detect(int *argc, char ***argv)
     if (SetConsoleMode(s_in, ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT) &&
         SetConsoleMode(s_out, ENABLE_PROCESSED_OUTPUT)) {
 
-        mpdm_t drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
+        mpdm_t drv = mpdm_set_wcs(mpdm_root(), MPDM_O(), L"mp_drv");
 
-        mpdm_hset_s(drv, L"id",      MPDM_S(L"win32c"));
-        mpdm_hset_s(drv, L"startup", MPDM_X(win32c_drv_startup));
+        mpdm_set_wcs(drv, MPDM_S(L"win32c"), L"id");
+        mpdm_set_wcs(drv, MPDM_X(win32c_drv_startup), L"startup");
 
         ret = 1;
     }
