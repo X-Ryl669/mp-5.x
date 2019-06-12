@@ -548,6 +548,9 @@ sub mp.menu_label(action)
     if (action != '-') {
         l = L(mp.actdesc[action]) || action;
 
+        /* replace the ... with the Unicode character */
+        l = l->sregex("/\.\.\./", "\x{2026}");
+
         /* search this action in mp_doc and global keycodes */
         local ks = (mp_doc.keycodes + mp.keycodes)->
             grep(sub(v) { v == action; })->map(sub (v, i) { i; });
