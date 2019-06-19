@@ -1750,9 +1750,11 @@ static void selection_received(GtkWidget *w, GtkSelectionData *sel, gpointer d)
 static mpdm_t gtk_drv_clip_to_sys(mpdm_t a, mpdm_t ctxt)
 /* driver-dependent mp to system clipboard */
 {
-    got_selection = gtk_selection_owner_set(area,
-                                            GDK_SELECTION_CLIPBOARD,
-                                            GDK_CURRENT_TIME);
+    GtkClipboard *clip = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+    mpdm_t d = mpdm_join_wcs(mpdm_get_wcs(MP, L"clipboard"), L"\n");
+    char *ptr = v_to_utf8(d);
+
+    gtk_clipboard_set_text(clip, ptr, -1);
 
     return NULL;
 }
