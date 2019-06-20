@@ -61,12 +61,6 @@ static GdkColor normal_paper;
 static GdkRGBA normal_paper;
 #endif
 
-/* true if the selection is ours */
-static int got_selection = 0;
-
-/* hack for active waiting for the selection */
-static int wait_for_selection = 0;
-
 /* global modal status */
 /* code for the 'normal' attribute */
 static int normal_attr = 0;
@@ -1689,77 +1683,9 @@ static gint configure_event(GtkWidget *w, GdkEventConfigure *event)
 }
 
 
-static gint selection_clear_event(GtkWidget *w, GdkEventSelection *e, gpointer d)
-/* 'selection_clear_event' handler */
-{
-#if 0
-    got_selection = 0;
-#endif
-
-    return TRUE;
-}
-
-
-static void selection_get(GtkWidget *w, GtkSelectionData *sel, guint info, guint tm)
-/* 'selection_get' handler */
-{
-#if 0
-    if (got_selection) {
-        mpdm_t d;
-
-        /* gets the clipboard and joins */
-        d = mpdm_get_wcs(MP, L"clipboard");
-
-        if (mpdm_size(d)) {
-            char *ptr;
-
-            d = mpdm_ref(mpdm_join_wcs(d, L"\n"));
-
-            /* convert to current locale */
-            ptr = v_to_utf8(d);
-
-            /* pastes into primary selection */
-            gtk_selection_data_set_text(sel, ptr, -1);
-
-            g_free(ptr);
-
-            mpdm_unref(d);
-        }
-    }
-#endif
-}
-
-static void selection_received(GtkWidget *w, GtkSelectionData *sel, gpointer d)
-/* 'selection_received' handler */
-{
-#if 0
-    if (gtk_selection_data_get_data(sel) != NULL) {
-        /* get selection */
-        GtkClipboard *clip = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
-        mpdm_t v = MPDM_MBS(gtk_clipboard_wait_for_text(clip));
-
-        /* split and set as the clipboard */
-        mpdm_set_wcs(MP, mpdm_split_wcs(v, L"\n"), L"clipboard");
-        mpdm_set_wcs(MP, MPDM_I(0), L"clipboard_vertical");
-
-        /* wait no more for the selection */
-        wait_for_selection = 0;
-    }
-    else
-        wait_for_selection = -1;
-#endif
-}
-
-
 static mpdm_t gtk_drv_clip_to_sys(mpdm_t a, mpdm_t ctxt)
 /* driver-dependent mp to system clipboard */
 {
-#if 0
-    got_selection = gtk_selection_owner_set(area,
-                                            GDK_SELECTION_CLIPBOARD,
-                                            GDK_CURRENT_TIME);
-#endif
-
     GtkClipboard *clip = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
     mpdm_t d = mpdm_join_wcs(mpdm_get_wcs(MP, L"clipboard"), L"\n");
     char *ptr = v_to_utf8(d);
@@ -1780,32 +1706,6 @@ static mpdm_t gtk_drv_sys_to_clip(mpdm_t a, mpdm_t ctxt)
     /* split and set as the clipboard */
     mpdm_set_wcs(MP, mpdm_split_wcs(v, L"\n"), L"clipboard");
     mpdm_set_wcs(MP, MPDM_I(0), L"clipboard_vertical");
-
-#if 0
-    if (!got_selection) {
-        int n;
-        char *formats[] = { "UTF8_STRING", "STRING", NULL };
-
-        for (n = 0; formats[n] != NULL; n++) {
-
-            /* triggers a selection capture */
-            if (gtk_selection_convert(area, GDK_SELECTION_CLIPBOARD,
-                                      gdk_atom_intern(formats[n], FALSE),
-                                      GDK_CURRENT_TIME)) {
-
-                /* processes the pending events
-                   (i.e., the 'selection_received' handler) */
-                wait_for_selection = 1;
-
-                while (wait_for_selection == 1)
-                    gtk_main_iteration();
-
-                if (!wait_for_selection)
-                    break;
-            }
-        }
-    }
-#endif
 
     return NULL;
 }
@@ -2555,15 +2455,6 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
 
     g_signal_connect(G_OBJECT(area), "motion_notify_event",
                      G_CALLBACK(motion_notify_event), NULL);
-
-    g_signal_connect(G_OBJECT(area), "selection_clear_event",
-                     G_CALLBACK(selection_clear_event), NULL);
-
-    g_signal_connect(G_OBJECT(area), "selection_get",
-                     G_CALLBACK(selection_get), NULL);
-
-    g_signal_connect(G_OBJECT(area), "selection_received",
-                     G_CALLBACK(selection_received), NULL);
 
     g_signal_connect(G_OBJECT(area), "scroll_event",
                      G_CALLBACK(scroll_event), NULL);
