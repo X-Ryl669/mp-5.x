@@ -1709,30 +1709,29 @@ static void selection_get(GtkWidget *w, GtkSelectionData *sel, guint info, guint
 
         if (mpdm_size(d)) {
             char *ptr;
-            int s;
 
             d = mpdm_ref(mpdm_join_wcs(d, L"\n"));
 
             /* convert to current locale */
-            ptr = mpdm_wcstombs(d->data, &s);
+            ptr = v_to_utf8(d);
 
             /* pastes into primary selection */
-            gtk_selection_data_set_text(sel, ptr, (gsize) s);
+            gtk_selection_data_set_text(sel, ptr, -1);
 
-            free(ptr);
+            g_free(ptr);
 
             mpdm_unref(d);
         }
     }
 }
 
-
 static void selection_received(GtkWidget *w, GtkSelectionData *sel, gpointer d)
 /* 'selection_received' handler */
 {
     if (gtk_selection_data_get_data(sel) != NULL) {
         /* get selection */
-        mpdm_t v = MPDM_MBS((char *)gtk_selection_data_get_data(sel));
+        GtkClipboard *clip = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+        mpdm_t v = MPDM_MBS(gtk_clipboard_wait_for_text(clip));
 
         /* split and set as the clipboard */
         mpdm_set_wcs(MP, mpdm_split_wcs(v, L"\n"), L"clipboard");
