@@ -1732,8 +1732,7 @@ static void selection_received(GtkWidget *w, GtkSelectionData *sel, gpointer d)
 {
     if (gtk_selection_data_get_data(sel) != NULL) {
         /* get selection */
-        GtkClipboard *clip = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
-        mpdm_t v = MPDM_MBS(gtk_clipboard_wait_for_text(clip));
+        mpdm_t v = MPDM_MBS((char *)gtk_selection_data_get_data(sel));
 
         /* split and set as the clipboard */
         mpdm_set_wcs(MP, mpdm_split_wcs(v, L"\n"), L"clipboard");
