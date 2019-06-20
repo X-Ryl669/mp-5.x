@@ -1756,8 +1756,6 @@ static mpdm_t gtk_drv_clip_to_sys(mpdm_t a, mpdm_t ctxt)
 
     gtk_clipboard_set_text(clip, ptr, -1);
 
-    g_free(ptr);
-
     return NULL;
 }
 
