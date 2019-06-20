@@ -1692,7 +1692,9 @@ static gint configure_event(GtkWidget *w, GdkEventConfigure *event)
 static gint selection_clear_event(GtkWidget *w, GdkEventSelection *e, gpointer d)
 /* 'selection_clear_event' handler */
 {
+#if 0
     got_selection = 0;
+#endif
 
     return TRUE;
 }
@@ -1701,6 +1703,7 @@ static gint selection_clear_event(GtkWidget *w, GdkEventSelection *e, gpointer d
 static void selection_get(GtkWidget *w, GtkSelectionData *sel, guint info, guint tm)
 /* 'selection_get' handler */
 {
+#if 0
     if (got_selection) {
         mpdm_t d;
 
@@ -1723,11 +1726,13 @@ static void selection_get(GtkWidget *w, GtkSelectionData *sel, guint info, guint
             mpdm_unref(d);
         }
     }
+#endif
 }
 
 static void selection_received(GtkWidget *w, GtkSelectionData *sel, gpointer d)
 /* 'selection_received' handler */
 {
+#if 0
     if (gtk_selection_data_get_data(sel) != NULL) {
         /* get selection */
         GtkClipboard *clip = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
@@ -1742,15 +1747,25 @@ static void selection_received(GtkWidget *w, GtkSelectionData *sel, gpointer d)
     }
     else
         wait_for_selection = -1;
+#endif
 }
 
 
 static mpdm_t gtk_drv_clip_to_sys(mpdm_t a, mpdm_t ctxt)
 /* driver-dependent mp to system clipboard */
 {
+#if 0
     got_selection = gtk_selection_owner_set(area,
                                             GDK_SELECTION_CLIPBOARD,
                                             GDK_CURRENT_TIME);
+#endif
+
+    GtkClipboard *clip = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+    mpdm_t d = mpdm_join_wcs(mpdm_get_wcs(MP, L"clipboard"), L"\n");
+    char *ptr = v_to_utf8(d);
+
+    gtk_clipboard_set_text(clip, ptr, -1);
+    g_free(ptr);
 
     return NULL;
 }
@@ -1759,6 +1774,14 @@ static mpdm_t gtk_drv_clip_to_sys(mpdm_t a, mpdm_t ctxt)
 static mpdm_t gtk_drv_sys_to_clip(mpdm_t a, mpdm_t ctxt)
 /* driver-dependent system to mp clipboard */
 {
+    GtkClipboard *clip = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
+    mpdm_t v = MPDM_MBS(gtk_clipboard_wait_for_text(clip));
+
+    /* split and set as the clipboard */
+    mpdm_set_wcs(MP, mpdm_split_wcs(v, L"\n"), L"clipboard");
+    mpdm_set_wcs(MP, MPDM_I(0), L"clipboard_vertical");
+
+#if 0
     if (!got_selection) {
         int n;
         char *formats[] = { "UTF8_STRING", "STRING", NULL };
@@ -1782,6 +1805,7 @@ static mpdm_t gtk_drv_sys_to_clip(mpdm_t a, mpdm_t ctxt)
             }
         }
     }
+#endif
 
     return NULL;
 }
