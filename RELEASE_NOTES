@@ -6,6 +6,9 @@ Minimum Profit Release Notes
 
  - New features:
     - New syntax highlight definitions for RTF files.
+ - Bug fixes:
+    - The GTK clipboard code has been rewritten to support
+      copy / paste of characters with high Unicode points.
 
 5.33
 ----
