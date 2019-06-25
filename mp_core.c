@@ -1405,7 +1405,7 @@ void mp_mpsl(void)
 {
     mpdm_t e;
 
-    mpsl_eval(MPDM_S(L"load('mp_core.mpsl');"), NULL, NULL);
+    mpdm_void(mpsl_eval(MPDM_S(L"load('mp_core.mpsl');"), NULL, NULL));
 
     if ((e = mpdm_get_wcs(mpdm_root(), L"ERROR")) != NULL) {
         mpdm_write_wcs(stdout, mpdm_string(e));
