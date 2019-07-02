@@ -9,6 +9,7 @@ Minimum Profit Release Notes
  - Bug fixes:
     - The GTK clipboard code has been rewritten to support
       copy / paste of characters with high Unicode points.
+    - Fixed some memory leaks in underlying libraries.
 
 5.33
 ----
