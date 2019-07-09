@@ -764,11 +764,15 @@ sub mp.load_state()
     }
 
     mp.state = j || {};
+
+    mp.history = mp.state.history || {};
 }
 
 
 sub mp.save_state()
 {
+    mp.state.history = mp.history;
+
     open(HOMEDIR + ".mp_state.json", "w")->write(fmt("%j", mp.state))->close();
 }
 
