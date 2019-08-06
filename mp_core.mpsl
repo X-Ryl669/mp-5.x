@@ -186,7 +186,7 @@ global mp = {
                 'undo', 'redo', '-',
                 'cut_mark', 'copy_mark', 'paste_mark', 'delete_mark',
                 'delete_line', 'cut_lines_with_string', '-',
-                'mark', 'mark_vertical', 'unmark', 'mark_all', '-',
+                'mark_tag', 'mark_tag_vertical', 'unmark', 'mark_all', '-',
                 'insert_template', '-',
                 'exec_command', 'filter_selection', '-',
                 'exec_action', 'eval', 'eval_doc'
