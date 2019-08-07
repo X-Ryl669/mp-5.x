@@ -149,7 +149,7 @@ sub mp.open_tag(tag)
 
     /* greps all tags containing the tag, and returns the
        values from mp.tags */
-    t = keys(mp.tags)->grep(regcomp('/' + tag + '/'))->map(mp.tags);
+    t = mp.tags->map(sub (v, i) { i; })->grep(regcomp('/' + tag + '/'))->map(mp.tags);
 
     /* no tags? */
     if (size(t) == 0)
