@@ -176,7 +176,7 @@ sub mp.open_tag(tag)
                 a = r[0];
         }
 
-        if (a) {
+        if (a != NULL) {
             tag = t[a];
 
             /* open the file */
