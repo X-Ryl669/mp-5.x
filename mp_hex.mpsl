@@ -40,17 +40,19 @@ global mp_hex_view = new(mp_base, {
             if (keycode == 'cursor-up')
                 offset -= bpl;
             else
-            if (keycode == 'page-down')
+            if (keycode == 'page-down' || keycode == 'mouse-wheel-down')
                 offset += bpl * (mp.window.ty - 1);
             else
-            if (keycode == 'page-up')
+            if (keycode == 'page-up' || keycode == 'mouse-wheel-up')
                 offset -= bpl * (mp.window.ty - 1);
             else
             if (keycode == 'home')
                 offset = 0;
             else
-            if (keycode == 'end')
-                offset = 0x7fffffff;
+            if (keycode == 'end') {
+                fseek(fd, 0, 2);
+                offset = ftell(fd);
+            }
 
             if (offset < 0)
                 offset = 0;
@@ -76,7 +78,7 @@ global mp_hex_view = new(mp_base, {
             }
 
             /* round offset */
-            offset = integer(offset / bpl) * bpl;
+            offset -= offset % bpl;
 
             fseek(fd, offset, 0);
 
@@ -98,8 +100,10 @@ global mp_hex_view = new(mp_base, {
                 for (n = 0; n < bpl; n += 1) {
                     local a = 0;
 
-                    if ((c = getchar(fd)) == NULL)
+                    if ((c = getchar(fd)) == NULL) {
+                        n -= 1;
                         break;
+                    }
 
                     if (o >= f_offset && o < f_offset + f_size)
                         a = mp.colors.search.attr;
