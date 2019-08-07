@@ -36,23 +36,25 @@ mp_doc.actions['find_tag']	= sub(d) {
 
 
 mp_doc.actions['complete'] = sub(d) {
-    local words = {};
-
-    d->busy(1);
-
-    /* create a unique list of words */
-    foreach (l, d.txt.lines)
-        words += mp.split_by_words(l)->hmap();
-
-    d->busy(0);
-
-    /* if the current word happens only one time, delete it */
     local w = d->get_word();
 
-    if (words[w] == 1)
+    if (w) {
+        local words = {};
+
+        d->busy(1);
+
+        /* create a unique list of words */
+        foreach (l, d.txt.lines)
+            words += mp.split_by_words(l)->hmap();
+
+        /* delete current word from the set because
+           the user wouldn't want to complete a complete word */
         del(words, w);
 
-    d->complete(map(words, sub (v, i) { i; }));
+        d->busy(0);
+
+        d->complete(map(words, sub (v, i) { i; }));
+    }
 };
 
 
