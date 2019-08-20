@@ -899,7 +899,7 @@ sub mp_doc.export_as_html(doc, fn)
             );
 
             if (mode == 'page')
-                f->write("<!-- page break -->");
+                f->write("<p style='page-break-after: always'></p>\n");
             else
             if (mode == 'first') {
                 f->write("<p class='first'>\n", data->join("\n"), "\n</p>\n");
