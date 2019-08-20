@@ -298,6 +298,9 @@ sub mp_doc.move_up(doc)
 
 sub mp_doc.scroll_down(doc)
 {
+    if (doc.txt.vy >= doc.txt.y)
+        doc->move_down();
+
     if (doc.txt.vy < size(doc.txt.lines) - 1)
         doc.txt.vy += 1;
 }
@@ -305,6 +308,9 @@ sub mp_doc.scroll_down(doc)
 
 sub mp_doc.scroll_up(doc)
 {
+    if (doc.txt.y - doc.txt.vy >= mp.window.ty - 2)
+        doc->move_up();
+
     if (doc.txt.vy > 0)
         doc.txt.vy -= 1;
 }
