@@ -174,11 +174,28 @@ sub mp.tui.readline(prompt, history, default, flags)
                         done = 1;
                     }
                     else {
-                        r = l[p];
+                        /* If in a subdirectory, we need to walk only one path up only and not to '../' */
+                        if (p == 0) {
+                            local segment = split(r, '/');
+                            /* Remove last slash's empty value */
+                            pop(segment);
+                            /* Walk up one item */
+                            if (size(segment) > 0) pop(segment);
+                            if (size(segment) == 0) {
+                                if (r[0] == '/') segment = ['/'];
+                                else {
+                                    segment = split(getenv('PWD'), '/');
+                                }
+                            }
+                            r = join(segment, '/') + '/';
+                        } 
+                        else {
+                            r = l[p];
 
-                        /* if it's not a directory, retry */
-                        if (regex(r, '@/$@') == NULL)
-                            done = 1;
+                            /* if it's not a directory, retry */
+                            if (regex(r, '@/$@') == NULL)
+                                done = 1;
+                        }
                     }
                 }
                 else
