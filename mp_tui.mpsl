@@ -196,7 +196,7 @@ sub mp.tui.readline(prompt, history, default, flags)
     }
 
     /* if a string was accepted, store in the history */
-    if (h != NULL && size(r) && h[-1] != r)
+    if (!flags.password && h != NULL && size(r) && h[-1] != r)
         push(h, r);
 
     return r;
