@@ -52,7 +52,8 @@ sub mp.tui.readline(prompt, history, default, flags)
     r = default || '';
 
     /* get the history stack */
-    h = mp.get_history(history);
+    if (history)
+        h = mp.get_history(history);
 
     i = 0;
     x = size(r);

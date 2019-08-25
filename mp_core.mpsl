@@ -771,6 +771,7 @@ sub mp.load_state()
 
 sub mp.save_state()
 {
+    del(mp.history, "[NULL]");
     mp.state.history = mp.history;
 
     open(HOMEDIR + ".mp_state.json", "w")->write(fmt("%j", mp.state))->close();
