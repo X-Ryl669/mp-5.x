@@ -796,6 +796,7 @@ sub mp_doc.export_as_troff(doc, fn)
 
     if ((f = open(fn, "wb"))) {
         f->write(".de hd\n'sp 0.8i\n..\n.wh 0 hd\n",
+                 ".de fo\n.tl ''%'\n..\n.wh -0.2i fo\n",
                  ".pl ", mp.config.troff_page_height, "i\n");
         f->write(".ps ", mp.config.troff_font_size, "\n",
                  ".vs ", mp.config.troff_font_size * 2, "\n");
