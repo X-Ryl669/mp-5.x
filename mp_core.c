@@ -678,6 +678,9 @@ static mpdm_t drw_push_pair(mpdm_t l, int i, int a, wchar_t * tmp)
 
 static wchar_t drw_char(wchar_t c)
 {
+    if (c == L'\t')
+        c = L'\x21e5';
+
     if (drw_1.mark_eol) {
         if (c == L'\t')
             c = L'\xb7';
