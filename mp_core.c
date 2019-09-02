@@ -102,7 +102,7 @@ static int drw_wcwidth(int x, wchar_t c)
         break;
 
     default:
-        r = mpdm_wcwidth(c);
+        r = 1;
         break;
     }
 
