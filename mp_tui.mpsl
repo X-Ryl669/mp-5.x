@@ -168,18 +168,35 @@ sub mp.tui.readline(prompt, history, default, flags)
                 if (size(l)) {
                     ins(l, '../', 0);
 
-                    local p = mp.tui.list(prompt, l, 0);
+                    local p = mp.tui.list(prompt, l, 2, 1);
 
                     if (p == NULL) {
                         r = NULL;
                         done = 1;
                     }
                     else {
-                        r = l[p];
+                        /* If in a subdirectory, we need to walk only one path up only and not to '../' */
+                        if (p == 0) {
+                            local segment = split(r, '/');
+                            /* Remove last slash's empty value */
+                            pop(segment);
+                            /* Walk up one item */
+                            if (size(segment) > 0) pop(segment);
+                            if (size(segment) == 0) {
+                                if (r[0] == '/') segment = ['/'];
+                                else {
+                                    segment = split(getenv('PWD'), '/');
+                                }
+                            }
+                            r = join(segment, '/') + '/';
+                        } 
+                        else {
+                            r = l[p];
 
-                        /* if it's not a directory, retry */
-                        if (regex(r, '@/$@') == NULL)
-                            done = 1;
+                            /* if it's not a directory, retry */
+                            if (regex(r, '@/$@') == NULL)
+                                done = 1;
+                        }
                     }
                 }
                 else
@@ -204,10 +221,10 @@ sub mp.tui.readline(prompt, history, default, flags)
 }
 
 
-sub mp.tui.list(prompt, data, pos)
+sub mp.tui.list(prompt, data, pos, split_entry)
 /* select from a list */
 {
-    local vy, ty;
+    local vy, ty, hint, last_time;
 
     mp.tui.attr(mp.colors.menu.attr);
     mp.tui.move(0, 0, 1);
@@ -216,6 +233,8 @@ sub mp.tui.list(prompt, data, pos)
 
     vy = 0;
     ty = mp.window.ty;
+    last_time = 0;
+    hint = "";
 
     if (pos == NULL)
         pos = 0;
@@ -281,6 +300,13 @@ sub mp.tui.list(prompt, data, pos)
 
         k = mp.tui.getkey();
 
+        /* set up a 2s timeout when reseting the user's hint */ 
+        local t = time();
+        if ((t - last_time) >= 2) 
+            hint = "";
+
+        last_time = t;
+
         if (k == 'cursor-up')
             pos -= 1;
         else
@@ -313,16 +339,30 @@ sub mp.tui.list(prompt, data, pos)
         }
         else
         if ((ord(k) >= ord('a') && ord(k) <= ord('z')) ||
-            (ord(k) >= ord('A') && ord(k) <= ord('Z'))) {
+            (ord(k) >= ord('A') && ord(k) <= ord('Z')) ||
+            (ord(k) >= ord('0') && ord(k) <= ord('9')) ||
+            k == '.' || k == '_') {
+
+            /* hint ~= lc(k) is crashing mp-5 */
+            hint = join([hint, lc(k)]);
             /* search the first item >= k */
             pos = 0;
 
             while (pos < size(data) - 1) {
-                local c = regex(data[pos], '/^./');
+                local entry = data[pos];
 
-                if (ord(c) >= ord(k))
-                    break;
+                if (split_entry) {
+                    local segment = split(entry, '/');
+                    if (size(segment) > 0)
+                        entry = segment[size(segment) - 1];
+                }
 
+                if (size(hint) <= size(entry)) {
+                    /* no need to compare the complete entry, only the user-hinted size */
+                    local c = splice(lc(entry), NULL, size(hint), size(entry) - size(hint));
+                    if (cmp(hint, c) <= 0)
+                        break;
+                }
                 pos += 1;
             }
         }
@@ -512,7 +552,7 @@ sub mp_drv.form(widgets)
         }
         else
         if (w.type == 'list')
-            r1 = mp.tui.list(w.label, w.list, w.value);
+            r1 = mp.tui.list(w.label, w.list, w.value, 0);
 
         /* cancellation? */
         if (r1 == NULL) {
