@@ -243,7 +243,7 @@ sub mp_doc.indent_block(doc, insert_tab)
         local startY   = doc.txt.mark.by;
         /* If the selection ends on a first column, don't indent the last line, it's not the user's intend */ 
         local endY     = doc.txt.mark.ey - (doc.txt.mark.ex == 0);
-        local times    = endY - startY;
+        local times    = endY - startY + 1;
         
         doc->unmark()->set_y(startY);
 
@@ -285,7 +285,7 @@ sub mp_doc.unindent_block(doc, insert_real_tab)
         local startY   = doc.txt.mark.by;
         /* If the selection ends on a first column, don't indent the last line, it's not the user's intend */ 
         local endY     = doc.txt.mark.ey - (doc.txt.mark.ex == 0);
-        local times    = endY - startY;
+        local times    = endY - startY + 1;
 
         doc->unmark();
 
