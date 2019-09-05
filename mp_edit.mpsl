@@ -667,7 +667,13 @@ sub mp_doc.keypress(doc, key)
 /* inserts from a keystroke (with undo) */
 {
     if (size(key) == 1) {
-        doc->store_undo()->insert(key);
+        local t = time();
+        if ((t - doc.last_insert) > 1) {
+            /** Only store undo if sufficient time elapsed */
+            doc->store_undo();
+        } 
+        doc.last_insert = t; 
+        doc->insert(key);
     }
     else
     if (key != NULL) {
