@@ -506,6 +506,41 @@ sub mp_doc.insert_string(doc, str)
     local txt = doc.txt;
     local w;
 
+    if (txt.mark.vertical == 1) {
+        /* Need to perform vertical editing */
+        /* This insert the given string at all lines concerned by the mark itself (multiple time) */
+        /* Please notice that it does not remove the mark here, but modify it so it's only a single char wide */
+
+        if (txt.mark.bx != txt.mark.ex) {
+            /* Need to delete all previous text in the mark first */
+            local old_mark = { bx: txt.mark.bx, by: txt.mark.by, ey: txt.mark.ey };
+            doc->delete_range(txt.mark.bx, txt.mark.by,
+                txt.mark.ex, txt.mark.ey, txt.mark.vertical);
+
+            /* Restore a zero column wide vertical mark */
+            txt.mark.vertical = 1;
+            txt.mark.bx = old_mark.bx; 
+            txt.mark.by = old_mark.by;
+            txt.mark.ex = old_mark.bx; 
+            txt.mark.ey = old_mark.ey;
+        }
+
+        /* Then insert the string at the given position */
+        local s = txt.mark.by;
+        while (s <= txt.mark.ey) {
+            w = splice(txt.lines[s], str, txt.mark.bx, mp.config.insert && size(str) || 0);
+            txt.lines[s] = w;
+
+            s += 1;
+        }
+        txt.mark.bx += size(str);
+        txt.mark.ex += size(str);
+        txt.x += size(str);
+
+        txt.mod += 1;
+
+        return doc;
+    }
     doc->delete_mark();
 
     /* splice and change */
