@@ -95,7 +95,7 @@ sub mp.load_session()
         if (stat(data[0]) != NULL) {
             doc = mp.open(data[0]);
 
-            doc->set_y(data[2])->set_x(data[1]);
+            doc->set_y(integer(data[2]))->set_x(integer(data[1]));
 
             /* if it has the 'a' flag, set as active */
             if (regex(data[3], '/a/'))
