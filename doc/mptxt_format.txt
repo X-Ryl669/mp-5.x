@@ -38,7 +38,7 @@ subtitles. This is an example:
 
  INTERREGNO EVIL CORPORATION 
  NO ENTRY 
- TRESPASSERS SHALL BE SHOT ON SIGHT 
+ TRESPASSERS WILL BE SHOT ON SIGHT 
 
 Or, for example, to introduce a section separator, like this:
 

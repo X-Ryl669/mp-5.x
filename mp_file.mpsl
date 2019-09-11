@@ -703,6 +703,9 @@ sub mp_doc.export_as_rtf(doc, fn)
             '{\f1\fmodern\fprq2\fcharset0 ', mp.config.rtf_mono_font_face, ';}',
             "}\r\n");
 
+        /* page numbers in the footer */
+        f->write('{\footer \qc{\field{\*\fldinst  PAGE }{\fldrslt 1}}}', "\r\n");
+
         local tfont = '\f0\fs' + string(mp.config.rtf_font_size * 2);
         local mfont = '\f1\fs' + string(mp.config.rtf_mono_font_size * 2);
 
