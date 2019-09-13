@@ -676,9 +676,9 @@ static mpdm_t drw_push_pair(mpdm_t l, int i, int a, wchar_t * tmp)
 }
 
 
-static wchar_t drw_char(wchar_t c)
+static wchar_t drw_char(wchar_t c, int n)
 {
-    if (c == L'\t')
+    if (n == 0 && c == L'\t')
         c = L'\x21e5';
 
     if (drw_1.mark_eol) {
@@ -766,7 +766,7 @@ static void drw_remap_basic_vwrap(void)
                 break;
 
             for (n = 0; n < t && mx < drw_1.tx; n++)
-                drw_map_1(mx++, my, drw_char(c), drw_2.attrs[i], x, y);
+                drw_map_1(mx++, my, drw_char(c, n), drw_2.attrs[i], x, y);
 
             i++;
 
@@ -811,7 +811,7 @@ static void drw_remap_truncate(void)
 
             for (n = 0; n < t && mx < drw_1.tx; n++) {
                 if (ax >= drw_1.vx)
-                    drw_map_1(mx++, my, drw_char(c), drw_2.attrs[i], x, y);
+                    drw_map_1(mx++, my, drw_char(c, n), drw_2.attrs[i], x, y);
                 ax++;
             }
 
