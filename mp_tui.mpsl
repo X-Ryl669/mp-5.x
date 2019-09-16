@@ -352,6 +352,10 @@ sub mp.tui.list(prompt, data, pos, split_entry)
                 local entry = data[pos];
 
                 if (split_entry) {
+                    /* trim any trailing slash */
+                    if (entry[size(entry) - 1] == '/')
+                        entry = splice(entry, NULL, size(entry) - 1, 1);
+
                     local segment = split(entry, '/');
                     if (size(segment) > 0)
                         entry = segment[size(segment) - 1];
