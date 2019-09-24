@@ -168,7 +168,7 @@ sub mp.tui.readline(prompt, history, default, flags)
                 if (size(l)) {
                     ins(l, '../', 0);
 
-                    local p = mp.tui.list(prompt, l, 2, 1);
+                    local p = mp.tui.list(prompt, l, 2, { 'split_entry' => 1 });
 
                     if (p == NULL) {
                         r = NULL;
@@ -221,18 +221,60 @@ sub mp.tui.readline(prompt, history, default, flags)
 }
 
 
-sub mp.tui.list(prompt, data, pos, split_entry)
+sub mp.tui.list(prompt, data, pos, flags)
 /* select from a list */
 {
-    local vy, ty, hint, last_time;
+    local vy = 0, ty, hint, last_time, sy, sx = 0, lines = 0, sugc = mp.colors.normal.attr;
 
-    mp.tui.attr(mp.colors.menu.attr);
-    mp.tui.move(0, 0, 1);
-    mp.tui.addstr(prompt);
-    mp.tui.attr(mp.colors.normal.attr);
+    /* extract the top left position for the list */
+    if (flags != NULL && flags.y)
+        sy = flags.y;
+    else 
+        sy = 0;
 
-    vy = 0;
-    ty = mp.window.ty;
+    if (flags != NULL && flags.x) {
+        sx = flags.x;
+        /* make sure we have enough space to display a medium sized line */
+        if (sx + 64 > mp.window.tx) {
+            sx = 0;
+        }
+    }
+
+    /* compute the end position for the list */
+    if (flags != NULL && flags.lines) {
+        /* if it's doesn't fit the complete window, let's display it completely in the window */
+        if (flags.lines > mp.window.ty) {
+            sy = 0;
+            ty = mp.window.ty;
+        } else {
+            ty = flags.y + flags.lines + 1;
+
+            /* check that it fits the requirement, else move it above the start position */
+            if (ty > mp.window.ty) {
+                sy = flags.y - flags.lines - 2;
+                ty = flags.y - 1;
+            }
+        }
+    }
+    else 
+        ty = mp.window.ty;
+    
+    /* draw the prompt if it's provided */
+    if (prompt != NULL) {
+        mp.tui.attr(mp.colors.menu.attr);
+        mp.tui.move(sx, sy, 1);
+        mp.tui.addstr(prompt);
+        mp.tui.attr(mp.colors.normal.attr);
+        sy += 1;
+    }
+
+
+    if (flags != NULL && flags.color)
+        sugc = flags.color;
+
+
+
+    lines = ty - sy;
     last_time = 0;
     hint = "";
 
@@ -242,33 +284,33 @@ sub mp.tui.list(prompt, data, pos, split_entry)
     for (;;) {
         local k, n, cp;
 
-        /* limits for pos */
+        /* limits for pos (in data space) */
         if (pos < 0)
             pos = 0;
         if (pos >= size(data))
             pos = size(data) - 1;
 
-        /* limits for vy */
+        /* limits for vy (in data space) */
         if (pos < vy)
             vy = pos;
-        if (vy + ty <= pos)
-            vy = pos - ty + 1;
+        if ((vy + lines - 1) <= pos)
+            vy = pos - lines + 1;
 
         /* draw all the lines */
         n = 0;
-        while (n < ty) {
+        while (n < lines) {
             local l = data[n + vy];
 
             /* no more data? */
             if (l == NULL)
                 break;
 
-            if (n + vy == pos) {
+            if ((n + vy) == pos) {
                 cp = n;
                 mp.tui.attr(mp.colors.cursor.attr);
             }
             else
-                mp.tui.attr(mp.colors.normal.attr);
+                mp.tui.attr(sugc);
 
             /* split the line by tab in two columns */
             local ll = l->split("\t");
@@ -276,11 +318,11 @@ sub mp.tui.list(prompt, data, pos, split_entry)
             local l1 = ll[1] || '';
 
             /* draw the first part */
-            mp.tui.move(0, n + 1, 1);
+            mp.tui.move(sx, sy + n, 1);
             mp.tui.addstr(mp.trim(l0, mp.window.tx - count(l1)));
 
             /* draw the middle part */
-            mp.tui.addstr(map(mp.window.tx - count(l0) - count(l1), ' ')->join());
+            mp.tui.addstr(map(mp.window.tx - count(l0) - count(l1) - sx, ' ')->join());
 
             /* draw the second part */
             mp.tui.addstr(l1);
@@ -289,13 +331,14 @@ sub mp.tui.list(prompt, data, pos, split_entry)
         }
 
         /* clean the rest of lines */
-        mp.tui.attr(mp.colors.normal.attr);
-        while (n < ty) {
-            mp.tui.move(0, n + 1, 1);
+        mp.tui.attr(sugc);
+        while (n < lines) {
+            mp.tui.move(sx, sy + n, 1);
             n += 1;
         }
 
-        mp.tui.move(0, cp + 1);
+        mp.tui.move(sx, sy + cp);
+        mp.tui.attr(mp.colors.normal.attr);
         mp.tui.refresh();
 
         k = mp.tui.getkey();
@@ -314,10 +357,10 @@ sub mp.tui.list(prompt, data, pos, split_entry)
             pos += 1;
         else
         if (k == 'page-up')
-            pos -= ty;
+            pos -= (ty - sy);
         else
         if (k == 'page-down')
-            pos += ty;
+            pos += (ty - sy);
         else
         if (k == 'home')
             pos = 0;
@@ -351,7 +394,7 @@ sub mp.tui.list(prompt, data, pos, split_entry)
             while (pos < size(data) - 1) {
                 local entry = data[pos];
 
-                if (split_entry) {
+                if (flags != NULL && flags.split_entry) {
                     /* trim any trailing slash */
                     if (entry[size(entry) - 1] == '/')
                         entry = splice(entry, NULL, size(entry) - 1, 1);
@@ -556,7 +599,7 @@ sub mp_drv.form(widgets)
         }
         else
         if (w.type == 'list')
-            r1 = mp.tui.list(w.label, w.list, w.value, 0);
+            r1 = mp.tui.list(w.label, w.list, w.value);
 
         /* cancellation? */
         if (r1 == NULL) {
