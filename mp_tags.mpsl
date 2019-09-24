@@ -15,7 +15,7 @@ mp.config.ctags_cmd = "ctags *";
 
 /** editor actions **/
 
-mp_doc.actions['find_tag']	= sub(d) {
+mp_doc.actions['find_tag'] = sub(d) {
     local tag = d->get_word();
 
     /* ask for it, taking the word under the cursor */
@@ -207,15 +207,8 @@ sub mp_doc.complete(d, list, label)
                 a = 0;
             else {
                 /* more than one; ask user */
-                local r = mp.form(
-                    [
-                        {
-                            label:  label || L("Select") + ':',
-                            type:   'list',
-                            list:   l
-                        }
-                    ]
-                );
+                local r = mp.tui.list("Completion", l, 0, { 'y' => (d.txt.y - d.txt.vy) + 1, 'lines' => 5, 'x' => d.txt.x, 'color' => mp.colors.suggest.attr } );
+
 
                 if (r != NULL)
                     a = r[0];
