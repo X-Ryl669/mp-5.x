@@ -541,7 +541,26 @@ static mpdm_t nc_tui_getkey(mpdm_t args, mpdm_t ctxt)
                 if (m.bstate & BUTTON4_PRESSED)
                     f = L"mouse-wheel-up";
                 else
+#if NCURSES_MOUSE_VERSION == 2
+                if (m.bstate & BUTTON5_PRESSED)
+                    f = L"mouse-wheel-down";
+                else
                     f = NULL;
+#else
+                {
+                    static MEVENT previous;
+                    /* with NCURSES_MOUSE_VERSION set to 1, there was no bit left in the state for wheel 
+                       down event and most distributions still ship with such version.
+                       In that case, mouse wheel down event is just an event that has not changed its position since
+                       last call. That's a bit hacky, but it seems to work */
+                    if (previous.x == m.x && previous.y == m.y)
+                        f = L"mouse-wheel-down";
+                    else
+                        f = NULL;
+        
+                    previous.x = m.x; previous.y = m.y;
+                }
+#endif
             }
             break;
 #endif /* NCURSES_MOUSE_VERSION */
