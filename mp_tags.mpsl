@@ -65,17 +65,76 @@ mp_doc.actions['complete_symbol'] = sub(d) {
         mp.alert(L("No matching symbol found."));
 };
 
+/* completes the current word using clang */
+mp_doc.actions['complete_with_clang'] = sub(d) {
+    local w = d->get_word(), clang_options = "";
+    if (size(w) == 0)
+        return NULL;
+
+    d->busy(1);
+
+
+    /* the clang command to trigger is: 
+        clang -fsyntax-only -Xclang -code-completion-macros -Xclang -code-completion-patterns -Xclang -code-completion-brief-comments -Xclang -code-completion-at=file:line:col <clang-build-options> <file>
+       we use stdin here to avoid creating a temporary file 
+    */
+    local target = sprintf("clang -x%s -fsyntax-only -Xclang -code-completion-macros -Xclang -code-completion-brief-comments -Xclang -code-completion-at=-:%d:%d %s - 2>/dev/null", "c++", d.txt.y, d.txt.x - size(w), clang_options); 
+/*    mp.alert(sprintf(L("Executing: %s"), target)); */
+    local p, lines = [];
+    if ((p = popen2(target)) != NULL) {
+        /* write the document first */
+        mp.save_th(p[1], d);
+        pclose(p[1]);
+
+        foreach (l, p[0])
+            lines->push(mp.chomp(l));
+        
+        pclose(p[0]);
+        /* we only keep completions that start with the current word */
+        lines = lines->grep(regcomp('/^COMPLETION: ' + w + '/'))->map(sub(v) { split(v, ' : '); });
+    }
+    else {
+        d->busy(0);
+        mp.alert(sprintf(L("Error executing '%s'"), target));
+
+        return NULL;
+    }
+    if (size(lines) == 0) {
+        mp.message = {
+            timeout:    time() + 2,
+            string:     L("No completion found")
+        };
+
+        return NULL;
+    }
+
+    local list = [];
+    /* lines format is [[garbage, completion with arguments, <optional description>], ...] */
+    foreach(line, lines) {
+        if (line[1] != NULL) {
+            if (line[2] != NULL)
+                list->push(line[1] + "\t" + line[2]);
+            else list->push(line[1]);
+        }
+    }
+
+    d->busy(0);
+    d->complete(list);        
+};
+
 
 /** default key bindings **/
 
 mp_doc.keycodes['ctrl-t'] = "find_tag";
 mp_doc.keycodes['ctrl-u'] = "complete";
+mp_doc.keycodes['alt-u']  = "complete_with_clang";
 
 /** action descriptions **/
 
-mp.actdesc['find_tag']          = LL("Search tag...");
-mp.actdesc['complete']          = LL("Complete...");
-mp.actdesc['complete_symbol']   = LL("Symbol completion...");
+mp.actdesc['find_tag']            = LL("Search tag...");
+mp.actdesc['complete']            = LL("Complete...");
+mp.actdesc['complete_symbol']     = LL("Symbol completion...");
+mp.actdesc['complete_with_clang'] = LL("Completion with clang...");
 
 /** code **/
 
@@ -238,3 +297,4 @@ sub mp_doc.complete(d, list, label)
 
     return ret;
 }
+
