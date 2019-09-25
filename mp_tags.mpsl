@@ -71,18 +71,29 @@ mp_doc.actions['complete_with_clang'] = sub(d) {
     if (size(w) == 0)
         return NULL;
 
-    d->busy(1);
+    local ext = "", extension = "";
+    ext = lc(d.name->regex("/\.[^.]+$/"));
+    if (ext == ".cpp") extension = "c++";
+    if (ext == ".c++") extension = "c++";
+    if (ext == ".cc")  extension = "c++";
+    if (ext == ".c")   extension = "c";
+    /* For headers we can't deduce if it's c++ or c, so let's guess it's C++ */
+    if (ext == ".h")   extension = "c++";
+    if (ext == ".hpp") extension = "c++";
+    if (ext == ".hh")  extension = "c++";
+    /* Clang only works for C/C++ */
+    if (extension == "") return NULL;
 
+    d->busy(1);
 
     /* the clang command to trigger is: 
         clang -fsyntax-only -Xclang -code-completion-macros -Xclang -code-completion-patterns -Xclang -code-completion-brief-comments -Xclang -code-completion-at=file:line:col <clang-build-options> <file>
        we use stdin here to avoid creating a temporary file 
     */
-    local target = sprintf("clang -x%s -fsyntax-only -Xclang -code-completion-macros -Xclang -code-completion-brief-comments -Xclang -code-completion-at=-:%d:%d %s - 2>/dev/null", "c++", d.txt.y, d.txt.x - size(w), clang_options); 
-/*    mp.alert(sprintf(L("Executing: %s"), target)); */
+    local target = sprintf("clang -x%s -fsyntax-only -Xclang -code-completion-macros -Xclang -code-completion-brief-comments -Xclang -code-completion-at=-:%d:%d %s - 2>/dev/null", extension, d.txt.y+1, d.txt.x - size(w)+1, clang_options); 
     local p, lines = [];
     if ((p = popen2(target)) != NULL) {
-        /* write the document first */
+        /* write the document first (close is done in the function) */
         mp.save_th(p[1], d);
         pclose(p[1]);
 
@@ -91,7 +102,7 @@ mp_doc.actions['complete_with_clang'] = sub(d) {
         
         pclose(p[0]);
         /* we only keep completions that start with the current word */
-        lines = lines->grep(regcomp('/^COMPLETION: ' + w + '/'))->map(sub(v) { split(v, ' : '); });
+        lines = lines->grep(regcomp('/^COMPLETION: ' + w + '/'))->map(sub(v) { split(v, ': '); });
     }
     else {
         d->busy(0);
@@ -112,12 +123,12 @@ mp_doc.actions['complete_with_clang'] = sub(d) {
     /* lines format is [[garbage, completion with arguments, <optional description>], ...] */
     foreach(line, lines) {
         if (line[1] != NULL) {
+            local completion = split(line[1], " ");
             if (line[2] != NULL)
-                list->push(line[1] + "\t" + line[2]);
-            else list->push(line[1]);
+                list->push(completion[0] + "\t" + line[2]);
+            else list->push(completion[0]);
         }
     }
-
     d->busy(0);
     d->complete(list);        
 };
@@ -268,7 +279,6 @@ sub mp_doc.complete(d, list, label)
                 /* more than one; ask user */
                 local r = mp.tui.list("Completion", l, 0, { 'y' => (d.txt.y - d.txt.vy) + 1, 'lines' => 5, 'x' => d.txt.x, 'color' => mp.colors.suggest.attr } );
 
-
                 if (r != NULL)
                     a = r[0];
             }
@@ -280,13 +290,15 @@ sub mp_doc.complete(d, list, label)
                 /* split line by words to take the offset of current word */
                 local r = d->split_line_by_words();
                 local offset = r[1][r[2]];
+                local ll = l[a]->split("\t");
+
 
                 /* substitute current word with newly selected word */
-                local w = splice(d.txt.lines[d.txt.y], l[a], offset, size(word));
+                local w = splice(d.txt.lines[d.txt.y], ll[0], offset, size(word));
 
                 /* change line and x cursor */
                 d.txt.lines[d.txt.y] = w;
-                d.txt.x = offset + size(l[a]);
+                d.txt.x = offset + size(ll[0]);
 
                 d.txt.mod += 1;
 

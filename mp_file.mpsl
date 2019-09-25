@@ -569,8 +569,6 @@ sub mp.save_th(f, doc)
 
     doc.disk_op = 0;
 
-    close(f);
-
     return nl;
 }
 
@@ -602,7 +600,8 @@ sub mp_doc.save(doc)
             mp.crypt_save(f, doc.txt.lines, doc.password, doc.crypt_ver);
         else
             mp.save_th(f, doc);
-    
+
+        close(f);    
         doc.txt.mod = 0;
     
         /* set back the permissions and ownership, if available */
