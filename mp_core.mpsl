@@ -145,6 +145,11 @@ global mp = {
         search: {
             text:   [ 'black', 'green' ],
             gui:    [ 0x000000, 0x00cc77 ]
+        },
+        suggest: {
+            text:   [ 'black', 'white' ],
+            gui:    [ 0x000000, 0x808080 ],
+            flags:  [ 'bright' ]
         }
     },
 
@@ -338,6 +343,8 @@ mp.colors.word3.gui         = [ 0xe0e0e0, 0x1b1b1b ];
 mp.colors.tag.gui           = [ 0x8888ff, 0x1b1b1b ];
 mp.colors.spell.gui         = [ 0xff8888, 0x1b1b1b ];
 mp.colors.search.gui        = [ 0x000000, 0x00cc77 ];
+mp.colors.search.gui        = [ 0x000000, 0x00cc77 ];
+mp.colors.suggest.gui       = [ 0x000000, 0x808080 ];
 
 /** MP base class **/
 
