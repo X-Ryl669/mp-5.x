@@ -193,8 +193,6 @@ sub mp.crypt_save(fd, lines, password, ver)
         fd->putchar(chr(crc->bitand(0x00ff)));
     }
 
-    close(fd);
-
     return nl;
 }
 
