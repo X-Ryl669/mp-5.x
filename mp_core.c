@@ -1331,7 +1331,7 @@ int ni_drv_detect(int *argc, char ***argv)
     int n, ret = 0;
 
     for (n = 0; n < *argc; n++) {
-        if (strcmp(argv[0][n], "-ni") == 0)
+        if (strcmp(argv[0][n], "-ni") == 0 || strcmp(argv[0][n], "-F") == 0)
             ret = 1;
     }
 

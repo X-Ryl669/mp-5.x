@@ -603,9 +603,10 @@ sub mp.usage()
             " -t {tag}           Edits the file where tag is defined\n"\
             " -e {mpsl_code}     Executes MPSL code\n"\
             " -f {mpsl_script}   Executes MPSL script file\n"\
+            " -F {mpsl_script}   Executes MPSL script file and exits\n"\
             " -d {directory}     Set current directory\n"\
-            " -x {file}          Open file in the hexadecimal viewer\n"\
-            " -txt               Use text mode instead of GUI\n"\
+            " -x {file}          Opens file in the hexadecimal viewer\n"\
+            " -txt               Uses text mode instead of GUI\n"\
             " +NNN               Moves to line number NNN of last file\n"\
             " -ni                Non-interactive (to be used with -e or -f)"\
             "\n");
@@ -640,7 +641,7 @@ sub mp.process_cmdline()
             eval(c);
         }
         else
-        if (o == '-f') {
+        if (o == '-f' || o == '-F') {
             /* execute script */
             local s = shift(ARGV);
 
