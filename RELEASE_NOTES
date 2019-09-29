@@ -6,6 +6,8 @@ Minimum Profit Release Notes
 
  - New features:
     - History (search, replace, etc.) is saved.
+    - New command line argument -F, to execute an MPSL script
+      and exit immediately after.
 
 5.34
 ----
