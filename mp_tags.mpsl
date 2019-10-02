@@ -277,7 +277,15 @@ sub mp_doc.complete(d, list, label)
                 a = 0;
             else {
                 /* more than one; ask user */
-                local r = mp.tui.list("Completion", l, 0, { 'y' => (d.txt.y - d.txt.vy) + 1, 'lines' => 5, 'x' => d.txt.x, 'color' => mp.colors.suggest.attr } );
+                local r = mp.form(
+                    [
+                        {
+                            label:  label || L("Select") + ':',
+                            type:   'list',
+                            list:   l
+                        }
+                    ]
+                );
 
                 if (r != NULL)
                     a = r[0];
