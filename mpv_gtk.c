@@ -609,7 +609,14 @@ static void gtk_drv_render(mpdm_t doc, int optimize)
 
     gr.height = font_height;
 
+#if GDK_MAJOR_VERSION > 3 || GDK_MINOR_VERSION >= 22
+    GdkDrawingContext *gdc;
+    gdc = gdk_window_begin_draw_frame(gtk_widget_get_window(area),
+        cairo_region_create());
+    cr = gdk_drawing_context_get_cairo_context(gdc);
+#else
     cr = gdk_cairo_create(gtk_widget_get_window(area));
+#endif
 
     for (n = 0; n < mpdm_size(d); n++) {
         PangoLayout *pl;
@@ -708,7 +715,12 @@ static void gtk_drv_render(mpdm_t doc, int optimize)
         g_object_unref(pl);
     }
 
+#if GDK_MAJOR_VERSION > 3 || GDK_MINOR_VERSION >= 22
+    gdk_window_end_draw_frame(gtk_widget_get_window(area), gdc);
+#else
     cairo_destroy(cr);
+#endif
+
     mpdm_unref(d);
 
     draw_filetabs();
@@ -911,8 +923,8 @@ static gint key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data
         mpdm_set_wcs(MP, MPDM_I(1), L"shift_pressed");
 
     /* reserve alt for menu mnemonics */
-/*	if (GDK_MOD1_MASK & event->state)
-		return(0);*/
+/*  if (GDK_MOD1_MASK & event->state)
+        return(0);*/
 
     if (event->state & (GDK_CONTROL_MASK)) {
         switch (event->keyval) {
@@ -2330,7 +2342,7 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
 #endif
     GdkDisplay *display;
     GdkMonitor *monitor;
-	GdkRectangle monitor_one_size;
+    GdkRectangle monitor_one_size;
     mpdm_t v;
     int w, h;
     GtkTargetEntry targets[] = {
@@ -2350,9 +2362,9 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
     monitor = gdk_display_get_monitor(display, 0);
 
     gdk_monitor_get_geometry(monitor, &monitor_one_size);
-    	
-	w = (monitor_one_size.width * 3) / 4;
-	h = (monitor_one_size.height * 2) / 3;
+        
+    w = (monitor_one_size.width * 3) / 4;
+    h = (monitor_one_size.height * 2) / 3;
 
     v = mpdm_get_wcs(MP, L"state");
     if ((v = mpdm_get_wcs(v, L"window")) == NULL) {
