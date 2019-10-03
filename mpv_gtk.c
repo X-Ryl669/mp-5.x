@@ -2465,9 +2465,6 @@ static mpdm_t gtk_drv_startup(mpdm_t a, mpdm_t ctxt)
     g_signal_connect(G_OBJECT(area), "drag_data_received",
                      G_CALLBACK(drag_data_received), NULL);
 
-    gtk_selection_add_target(area, GDK_SELECTION_CLIPBOARD,
-                             GDK_SELECTION_TYPE_STRING, 1);
-
     g_signal_connect(G_OBJECT(file_tabs), "switch_page",
                      G_CALLBACK(switch_page), NULL);
 
