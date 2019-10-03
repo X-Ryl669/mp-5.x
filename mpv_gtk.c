@@ -285,13 +285,11 @@ static void build_colors(void)
 
 /** menu functions **/
 
-static void redraw(void);
-
 static void menu_item_callback(mpdm_t action)
 /* menu click callback */
 {
     mp_process_action(action);
-    redraw();
+    gtk_widget_queue_draw(GTK_WIDGET(area));
 
 //    gtk_widget_hide(menu_bar);
 
@@ -399,7 +397,7 @@ static void switch_page(GtkNotebook *nb, gpointer *p, gint pg_num, gpointer d)
     mpdm_set_wcs(MP, MPDM_I(pg_num), L"active_i");
 
     gtk_widget_grab_focus(area);
-    redraw();
+    gtk_widget_queue_draw(GTK_WIDGET(area));
 }
 
 
@@ -511,7 +509,7 @@ static gint scroll_event(GtkWidget *widget, GdkEventScroll *event)
 
     if (ptr != NULL) {
         mp_process_event(MPDM_S(ptr));
-        redraw();
+        gtk_widget_queue_draw(GTK_WIDGET(area));
     }
 
     return 0;
@@ -535,7 +533,7 @@ static void value_changed(GtkAdjustment * adj, gpointer * data)
     if (y != i) {
         mp_set_y(doc, i);
         mpdm_set_wcs(txt, MPDM_I(i), L"vy");
-        redraw();
+        gtk_widget_queue_draw(GTK_WIDGET(area));
     }
 }
 
@@ -731,13 +729,6 @@ static void gtk_drv_render(mpdm_t doc, int optimize)
 }
 
 
-static void redraw(void)
-{
-    if (mpdm_size(mpdm_get_wcs(MP, L"docs")))
-        gtk_drv_render(mp_active(), 0);
-}
-
-
 static gint delete_event(GtkWidget * w, GdkEvent * e, gpointer data)
 /* 'delete_event' handler */
 {
@@ -758,7 +749,7 @@ static gint key_release_event(GtkWidget *w, GdkEventKey *e, gpointer d)
 /* 'key_release_event' handler */
 {
     if (mp_keypress_throttle(0))
-        gtk_drv_render(mp_active(), 0);
+        gtk_widget_queue_draw(GTK_WIDGET(area));
 
     return 0;
 }
@@ -1548,8 +1539,7 @@ static gint key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data
     if (mp_exit_requested)
         gtk_main_quit();
 
-    if (mp_keypress_throttle(1))
-        gtk_drv_render(mp_active(), 1);
+    gtk_widget_queue_draw(GTK_WIDGET(area));
 
     return 0;
 }
@@ -1594,7 +1584,7 @@ static gint button_press_event(GtkWidget *w, GdkEventButton *event, gpointer d)
     if (ptr != NULL)
         mp_process_event(MPDM_S(ptr));
 
-    redraw();
+    gtk_widget_queue_draw(GTK_WIDGET(area));
 
 //    gtk_widget_hide(menu_bar);
 
@@ -1625,7 +1615,8 @@ static gint motion_notify_event(GtkWidget *w, GdkEventMotion *event, gpointer d)
         mpdm_set_wcs(MP, MPDM_I(y), L"mouse_to_y");
 
         mp_process_event(MPDM_S(L"mouse-drag"));
-        gtk_drv_render(mp_active(), 1);
+
+        gtk_widget_queue_draw(GTK_WIDGET(area));
     }
 
     return TRUE;
@@ -1654,7 +1645,8 @@ static void drag_data_received(GtkWidget *w, GdkDragContext *dc,
     mpdm_set_wcs(MP, v, L"dropped_files");
 
     mp_process_event(MPDM_S(L"dropped-files"));
-    gtk_drv_render(mp_active(), 1);
+
+    gtk_widget_queue_draw(GTK_WIDGET(area));
 
     gtk_drag_finish(dc, TRUE, TRUE, time);
 }
@@ -1671,7 +1663,8 @@ static void realize(GtkWidget *w)
 static gint expose_event(GtkWidget *w, cairo_t *e)
 /* 'expose_event' handler */
 {
-    redraw();
+    if (mpdm_size(mpdm_get_wcs(MP, L"docs")))
+        gtk_drv_render(mp_active(), 0);
 
     return FALSE;
 }
@@ -1686,7 +1679,7 @@ static gint configure_event(GtkWidget *w, GdkEventConfigure *event)
         memcpy(&o, event, sizeof(o));
 
         update_window_size();
-        redraw();
+        gtk_widget_queue_draw(GTK_WIDGET(area));
 
         gtk_window_get_size(GTK_WINDOW(window), &ls_w, &ls_h);
     }
@@ -1797,7 +1790,7 @@ static gint timer_callback(gpointer data)
 
     if ((v = mpdm_get_wcs(MP, L"timer_func"))) {
         mpdm_void(mpdm_exec(v, NULL, NULL));
-        redraw();
+        gtk_widget_queue_draw(GTK_WIDGET(area));
     }
 
     return TRUE;
@@ -2219,7 +2212,7 @@ static mpdm_t gtk_drv_update_ui(mpdm_t a, mpdm_t ctxt)
     build_colors();
     build_menu();
 
-    redraw();
+    gtk_widget_queue_draw(GTK_WIDGET(area));
 
     return NULL;
 }
