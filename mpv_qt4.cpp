@@ -20,7 +20,7 @@ extern "C" int qt5_drv_detect(int *argc, char ***argv);
 #include <wchar.h>
 #include <unistd.h>
 
-#define MPDM_OLD_COMPAT
+//#define MPDM_OLD_COMPAT
 
 #include "mpdm.h"
 #include "mpsl.h"
@@ -106,17 +106,17 @@ MPWindow::MPWindow(QWidget * parent) : QMainWindow(parent)
 
     this->setWindowIcon(QIcon(QPixmap(mp_xpm)));
 
-    mpdm_t v = mpdm_hget_s(MP, L"state");
-    if ((v = mpdm_hget_s(v, L"window")) == NULL) {
-        v = mpdm_hset_s(mpdm_hget_s(MP, L"state"), L"window", MPDM_H(0));
-        mpdm_hset_s(v, L"x", MPDM_I(20));
-        mpdm_hset_s(v, L"y", MPDM_I(20));
-        mpdm_hset_s(v, L"w", MPDM_I(600));
-        mpdm_hset_s(v, L"h", MPDM_I(400));
+    mpdm_t v = mpdm_get_wcs(MP, L"state");
+    if ((v = mpdm_get_wcs(v, L"window")) == NULL) {
+        v = mpdm_set_wcs(mpdm_get_wcs(MP, L"state"), MPDM_O(), L"window");
+        mpdm_set_wcs(v, MPDM_I(20),  L"x");
+        mpdm_set_wcs(v, MPDM_I(20),  L"y");
+        mpdm_set_wcs(v, MPDM_I(600), L"w");
+        mpdm_set_wcs(v, MPDM_I(400), L"h");
     }
 
-    move(QPoint(mpdm_ival(mpdm_hget_s(v, L"x")), mpdm_ival(mpdm_hget_s(v, L"y"))));
-    resize(QSize(mpdm_ival(mpdm_hget_s(v, L"w")), mpdm_ival(mpdm_hget_s(v, L"h"))));
+    move(QPoint(mpdm_ival(mpdm_get_wcs(v, L"x")), mpdm_ival(mpdm_get_wcs(v, L"y"))));
+    resize(QSize(mpdm_ival(mpdm_get_wcs(v, L"w")), mpdm_ival(mpdm_get_wcs(v, L"h"))));
 }
 
 
@@ -129,12 +129,12 @@ void MPWindow::save_settings(void)
 {
     mpdm_t v;
 
-    v = mpdm_hget_s(MP, L"state");
-    v = mpdm_hset_s(v, L"window", MPDM_H(0));
-    mpdm_hset_s(v, L"x", MPDM_I(pos().x()));
-    mpdm_hset_s(v, L"y", MPDM_I(pos().y()));
-    mpdm_hset_s(v, L"w", MPDM_I(size().width()));
-    mpdm_hset_s(v, L"h", MPDM_I(size().height()));
+    v = mpdm_get_wcs(MP, L"state");
+    v = mpdm_set_wcs(v, MPDM_O(), L"window");
+    mpdm_set_wcs(v, MPDM_I(pos().x()),       L"x");
+    mpdm_set_wcs(v, MPDM_I(pos().y()),       L"y");
+    mpdm_set_wcs(v, MPDM_I(size().width()),  L"w");
+    mpdm_set_wcs(v, MPDM_I(size().height()), L"h");
 }
 
 
@@ -177,7 +177,7 @@ static mpdm_t qt4_drv_alert(mpdm_t a, mpdm_t ctxt)
 {
     /* 1# arg: prompt */
     QMessageBox::information(window, "mp " VERSION,
-                             v_to_qstring(mpdm_aget(a, 0)));
+                             v_to_qstring(mpdm_get_i(a, 0)));
 
     return NULL;
 }
@@ -189,7 +189,7 @@ static mpdm_t qt4_drv_confirm(mpdm_t a, mpdm_t ctxt)
 
     /* 1# arg: prompt */
     r = QMessageBox::question(window, "mp" VERSION,
-                              v_to_qstring(mpdm_aget(a, 0)),
+                              v_to_qstring(mpdm_get_i(a, 0)),
                               QMessageBox::Yes | QMessageBox::
                               No | QMessageBox::Cancel);
 
@@ -220,7 +220,7 @@ static mpdm_t qt4_drv_openfile(mpdm_t a, mpdm_t ctxt)
 
     /* 1# arg: prompt */
     r = QFileDialog::getOpenFileName(window,
-                                     v_to_qstring(mpdm_aget(a, 0)), tmp);
+                                     v_to_qstring(mpdm_get_i(a, 0)), tmp);
 
     return qstring_to_v(r);
 }
@@ -235,7 +235,7 @@ static mpdm_t qt4_drv_savefile(mpdm_t a, mpdm_t ctxt)
 
     /* 1# arg: prompt */
     r = QFileDialog::getSaveFileName(window,
-                                     v_to_qstring(mpdm_aget(a, 0)), tmp);
+                                     v_to_qstring(mpdm_get_i(a, 0)), tmp);
 
     return qstring_to_v(r);
 }
@@ -250,7 +250,7 @@ static mpdm_t qt4_drv_openfolder(mpdm_t a, mpdm_t ctxt)
 
     /* 1# arg: prompt */
     r = QFileDialog::getExistingDirectory(window,
-                                    v_to_qstring(mpdm_aget(a, 0)),
+                                    v_to_qstring(mpdm_get_i(a, 0)),
                                     tmp,
                                     QFileDialog::ShowDirsOnly);
 
@@ -286,25 +286,25 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
 
     dialog->setModal(true);
 
-    widget_list = mpdm_aget(a, 0);
+    widget_list = mpdm_get_i(a, 0);
 
     QWidget *form = new QWidget();
     QFormLayout *fl = new QFormLayout();
 
     for (n = 0; n < (int) mpdm_size(widget_list); n++) {
-        mpdm_t w = mpdm_aget(widget_list, n);
+        mpdm_t w = mpdm_get_i(widget_list, n);
         wchar_t *type;
         mpdm_t t;
         QLabel *ql = new QLabel("");
         QWidget *qw = NULL;
 
-        type = mpdm_string(mpdm_hget_s(w, L"type"));
+        type = mpdm_string(mpdm_get_wcs(w, L"type"));
 
-        if ((t = mpdm_hget_s(w, L"label")) != NULL) {
+        if ((t = mpdm_get_wcs(w, L"label")) != NULL) {
             ql->setText(v_to_qstring(mpdm_gettext(t)));
         }
 
-        t = mpdm_hget_s(w, L"value");
+        t = mpdm_get_wcs(w, L"value");
 
         if (wcscmp(type, L"text") == 0) {
             mpdm_t h;
@@ -317,14 +317,14 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
             if (t != NULL)
                 qc->setEditText(v_to_qstring(t));
 
-            if ((h = mpdm_hget_s(w, L"history")) != NULL) {
+            if ((h = mpdm_get_wcs(w, L"history")) != NULL) {
                 int i;
 
                 /* has history; fill it */
                 h = mp_get_history(h);
 
                 for (i = 0; i < (int) mpdm_size(h); i++)
-                    qc->addItem(v_to_qstring(mpdm_aget(h, i)));
+                    qc->addItem(v_to_qstring(mpdm_get_i(h, i)));
 
                 qc->setCurrentIndex(mpdm_size(h) - 1);
             }
@@ -368,7 +368,7 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
             qtw->horizontalHeader()->setStretchLastSection(true);
             qtw->verticalHeader()->hide();
 
-            mpdm_t l = mpdm_hget_s(w, L"list");
+            mpdm_t l = mpdm_get_wcs(w, L"list");
 
             qtw->setColumnCount(2);
             qtw->setRowCount(mpdm_size(l));
@@ -377,7 +377,7 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
                 QTableWidgetItem *qtwi;
                 wchar_t *ptr1, *ptr2;
 
-                ptr1 = wcsdup(mpdm_string(mpdm_aget(l, i)));
+                ptr1 = wcsdup(mpdm_string(mpdm_get_i(l, i)));
                 if ((ptr2 = wcschr(ptr1, L'\t'))) {
                     *ptr2 = L'\0';
                     ptr2++;
@@ -430,11 +430,11 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
 
         /* fill the return values */
         for (n = 0; n < (int) mpdm_size(widget_list); n++) {
-            mpdm_t w = mpdm_aget(widget_list, n);
+            mpdm_t w = mpdm_get_i(widget_list, n);
             mpdm_t v = NULL;
             wchar_t *type;
 
-            type = mpdm_string(mpdm_hget_s(w, L"type"));
+            type = mpdm_string(mpdm_get_wcs(w, L"type"));
 
             if (wcscmp(type, L"text") == 0) {
                 mpdm_t h;
@@ -443,10 +443,10 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
                 v = mpdm_ref(qstring_to_v(ql->currentText()));
 
                 /* if it has history, add to it */
-                if (v && (h = mpdm_hget_s(w, L"history")) && mpdm_cmp_wcs(v, L"")) {
+                if (v && (h = mpdm_get_wcs(w, L"history")) && mpdm_cmp_wcs(v, L"")) {
                     h = mp_get_history(h);
 
-                    if (mpdm_cmp(v, mpdm_aget(h, -1)) != 0)
+                    if (mpdm_cmp(v, mpdm_get_i(h, -1)) != 0)
                         mpdm_push(h, v);
                 }
 
@@ -471,7 +471,7 @@ static mpdm_t qt4_drv_form(mpdm_t a, mpdm_t ctxt)
                 v = MPDM_I(ql->currentRow());
             }
 
-            mpdm_aset(r, v, n);
+            mpdm_set_i(r, v, n);
         }
     }
 
@@ -495,7 +495,7 @@ static mpdm_t qt4_drv_update_ui(mpdm_t a, mpdm_t ctxt)
 
 static mpdm_t qt4_drv_busy(mpdm_t a, mpdm_t ctxt)
 {
-    int onoff = mpdm_ival(mpdm_aget(a, 0));
+    int onoff = mpdm_ival(mpdm_get_i(a, 0));
 
     window->setCursor(onoff ? Qt::WaitCursor : Qt::ArrowCursor);
 
@@ -513,12 +513,12 @@ static mpdm_t qt4_drv_main_loop(mpdm_t a, mpdm_t ctxt)
 
 static mpdm_t qt4_drv_timer(mpdm_t a, mpdm_t ctxt)
 {
-    int msecs = mpdm_ival(mpdm_aget(a, 0));
-    mpdm_t func = mpdm_aget(a, 1);
+    int msecs = mpdm_ival(mpdm_get_i(a, 0));
+    mpdm_t func = mpdm_get_i(a, 1);
 
     window->area->timer->stop();
 
-    mpdm_hset_s(MP, L"timer_func", func);
+    mpdm_set_wcs(MP, func, L"timer_func");
 
     if (msecs)
         window->area->timer->start(msecs);
@@ -531,20 +531,20 @@ static void qt4_register_functions(void)
 {
     mpdm_t drv;
 
-    drv = mpdm_hget_s(mpdm_root(), L"mp_drv");
-    mpdm_hset_s(drv, L"main_loop",   MPDM_X(qt4_drv_main_loop));
-    mpdm_hset_s(drv, L"shutdown",    MPDM_X(qt4_drv_shutdown));
-    mpdm_hset_s(drv, L"clip_to_sys", MPDM_X(qt4_drv_clip_to_sys));
-    mpdm_hset_s(drv, L"sys_to_clip", MPDM_X(qt4_drv_sys_to_clip));
-    mpdm_hset_s(drv, L"update_ui",   MPDM_X(qt4_drv_update_ui));
-    mpdm_hset_s(drv, L"timer",       MPDM_X(qt4_drv_timer));
-    mpdm_hset_s(drv, L"busy",        MPDM_X(qt4_drv_busy));
-    mpdm_hset_s(drv, L"alert",       MPDM_X(qt4_drv_alert));
-    mpdm_hset_s(drv, L"confirm",     MPDM_X(qt4_drv_confirm));
-    mpdm_hset_s(drv, L"openfile",    MPDM_X(qt4_drv_openfile));
-    mpdm_hset_s(drv, L"savefile",    MPDM_X(qt4_drv_savefile));
-    mpdm_hset_s(drv, L"form",        MPDM_X(qt4_drv_form));
-    mpdm_hset_s(drv, L"openfolder",  MPDM_X(qt4_drv_openfolder));
+    drv = mpdm_get_wcs(mpdm_root(), L"mp_drv");
+    mpdm_set_wcs(drv, MPDM_X(qt4_drv_main_loop),   L"main_loop");
+    mpdm_set_wcs(drv, MPDM_X(qt4_drv_shutdown),    L"shutdown");
+    mpdm_set_wcs(drv, MPDM_X(qt4_drv_clip_to_sys), L"clip_to_sys");
+    mpdm_set_wcs(drv, MPDM_X(qt4_drv_sys_to_clip), L"sys_to_clip");
+    mpdm_set_wcs(drv, MPDM_X(qt4_drv_update_ui),   L"update_ui");
+    mpdm_set_wcs(drv, MPDM_X(qt4_drv_timer),       L"timer");
+    mpdm_set_wcs(drv, MPDM_X(qt4_drv_busy),        L"busy");
+    mpdm_set_wcs(drv, MPDM_X(qt4_drv_alert),       L"alert");
+    mpdm_set_wcs(drv, MPDM_X(qt4_drv_confirm),     L"confirm");
+    mpdm_set_wcs(drv, MPDM_X(qt4_drv_openfile),    L"openfile");
+    mpdm_set_wcs(drv, MPDM_X(qt4_drv_savefile),    L"savefile");
+    mpdm_set_wcs(drv, MPDM_X(qt4_drv_form),        L"form");
+    mpdm_set_wcs(drv, MPDM_X(qt4_drv_openfolder),  L"openfolder");
 }
 
 
@@ -584,9 +584,9 @@ extern "C" int qt4_drv_detect(int *argc, char ***argv)
             /* this is where it crashes if no X server */
             app = new QApplication(x11_display);
 
-            drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
-            mpdm_hset_s(drv, L"id",      MPDM_S(L"qt4"));
-            mpdm_hset_s(drv, L"startup", MPDM_X(qt4_drv_startup));
+            drv = mpdm_set_wcs(mpdm_root(), MPDM_O(), L"mp_drv");
+            mpdm_set_wcs(drv, MPDM_S(L"qt4"), L"id");
+            mpdm_set_wcs(drv, MPDM_X(qt4_drv_startup), L"startup");
         }
         else
             ret = 0;
@@ -615,9 +615,9 @@ extern "C" int qt5_drv_detect(int *argc, char ***argv)
 
             app = new QApplication(*argc, *argv);
 
-            drv = mpdm_hset_s(mpdm_root(), L"mp_drv", MPDM_H(0));
-            mpdm_hset_s(drv, L"id",      MPDM_S(L"qt5"));
-            mpdm_hset_s(drv, L"startup", MPDM_X(qt4_drv_startup));
+            drv = mpdm_set_wcs(mpdm_root(), MPDM_O(), L"mp_drv");
+            mpdm_set_wcs(drv, MPDM_S(L"qt5"), L"id");
+            mpdm_set_wcs(drv, MPDM_X(qt4_drv_startup), L"startup");
         }
         else
             ret = 0;
