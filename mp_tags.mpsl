@@ -280,11 +280,12 @@ sub mp_doc.complete(d, list, label)
                 local r = mp.form(
                     [
                         {
-                            label:  label || L("Select") + ':',
+                            label:  label || L("Completion") + ':',
                             type:   'list',
                             list:   l
                         }
-                    ]
+                    ], 
+                    { 'y' => (d.txt.y - d.txt.vy) + 1, 'lines' => 5, 'x' => d.txt.x, 'color' => mp.colors.suggest.attr }
                 );
 
                 if (r != NULL)

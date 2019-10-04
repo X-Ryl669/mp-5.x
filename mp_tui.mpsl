@@ -563,17 +563,19 @@ sub mp_drv.confirm(msg, def)
 }
 
 
-sub mp_drv.form(widgets)
+sub mp_drv.form(widgets, flags)
 {
     local r = [];
     local pos = mp.window.ty + 1 - size(widgets);
     local y = pos;
 
-    /* print first all prompts */
-    foreach (w, widgets) {
-        if (w.type != 'list') {
-            mp.tui.prompt(w.label, y);
-            y += 1;
+    if (flags == NULL) {
+        /* print first all prompts */
+        foreach (w, widgets) {
+            if (w.type != 'list') {
+                mp.tui.prompt(w.label, y);
+                y += 1;
+            }
         }
     }
 
@@ -599,7 +601,7 @@ sub mp_drv.form(widgets)
         }
         else
         if (w.type == 'list')
-            r1 = mp.tui.list(w.label, w.list, w.value);
+            r1 = mp.tui.list(w.label, w.list, w.value, flags);
 
         /* cancellation? */
         if (r1 == NULL) {

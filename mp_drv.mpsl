@@ -30,7 +30,7 @@ sub mp_drv.alert(msg)           { return NULL; }
 sub mp_drv.busy(onoff)          { return NULL; }
 sub mp_drv.clip_to_sys()        { return NULL; }
 sub mp_drv.confirm(msg)         { return NULL; }
-sub mp_drv.form(widgets)        { return NULL; }
+sub mp_drv.form(widgets, flags) { return NULL; }
 sub mp_drv.main_loop()          { return NULL; }
 sub mp_drv.menu()               { return NULL; }
 sub mp_drv.openfile(prompt)     { return NULL; }
@@ -50,6 +50,6 @@ sub mp.alert(msg)           { mp_drv.alert(msg); }
 sub mp.confirm(msg)         { mp_drv.confirm(msg); }
 sub mp.openfile(prompt)     { mp_drv.openfile(prompt); }
 sub mp.savefile(prompt)     { mp_drv.savefile(prompt); }
-sub mp.form(widgets)        { mp_drv.form(widgets); }
+sub mp.form(widgets, flags) { mp_drv.form(widgets, flags); }
 sub mp.timer(msecs,func)    { mp_drv.timer(msecs,func); }
 sub mp.busy(onoff)          { mp_drv.busy(onoff); }
