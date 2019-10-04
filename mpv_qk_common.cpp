@@ -471,7 +471,48 @@ void MPArea::keyPressEvent(QKeyEvent *event)
     if (event->modifiers() & Qt::ShiftModifier)
         mpdm_set_wcs(MP, MPDM_I(1), L"shift_pressed");
 
-    if (event->modifiers() & Qt::ControlModifier) {
+    if (event->modifiers() & Qt::ShiftModifier) {
+        switch (event->key()) {
+        case Qt::Key_F1:
+            ptr = (wchar_t *) L"shift-f1";
+            break;
+        case Qt::Key_F2:
+            ptr = (wchar_t *) L"shift-f2";
+            break;
+        case Qt::Key_F3:
+            ptr = (wchar_t *) L"shift-f3";
+            break;
+        case Qt::Key_F4:
+            ptr = (wchar_t *) L"shift-f4";
+            break;
+        case Qt::Key_F5:
+            ptr = (wchar_t *) L"shift-f5";
+            break;
+        case Qt::Key_F6:
+            ptr = (wchar_t *) L"shift-f6";
+            break;
+        case Qt::Key_F7:
+            ptr = (wchar_t *) L"shift-f7";
+            break;
+        case Qt::Key_F8:
+            ptr = (wchar_t *) L"shift-f8";
+            break;
+        case Qt::Key_F9:
+            ptr = (wchar_t *) L"shift-f9";
+            break;
+        case Qt::Key_F10:
+            ptr = (wchar_t *) L"shift-f10";
+            break;
+        case Qt::Key_F11:
+            ptr = (wchar_t *) L"shift-f11";
+            break;
+        case Qt::Key_F12:
+            ptr = (wchar_t *) L"shift-f12";
+            break;
+        }
+    }    
+
+    if (ptr == NULL && (event->modifiers() & Qt::ControlModifier)) {
         switch (event->key()) {
         case Qt::Key_Up:
             ptr = (wchar_t *) L"ctrl-cursor-up";
@@ -624,7 +665,7 @@ void MPArea::keyPressEvent(QKeyEvent *event)
         }
     }
     else
-    if (event->modifiers() & Qt::AltModifier) {
+    if (PTR == NULL && (event->modifiers() & Qt::AltModifier)) {
         switch (event->key()) {
         case Qt::Key_Up:
             ptr = (wchar_t *) L"alt-cursor-up";
@@ -779,7 +820,8 @@ void MPArea::keyPressEvent(QKeyEvent *event)
             break;
         }
     }
-    else {
+    else 
+    if (ptr == NULL) {
         switch (event->key()) {
         case Qt::Key_Up:
             ptr = (wchar_t *) L"cursor-up";

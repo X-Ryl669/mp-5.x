@@ -444,7 +444,48 @@ static void win32_vkey(int c)
     if (GetKeyState(VK_SHIFT) & 0x8000)
         mpdm_set_wcs(MP, MPDM_I(1), L"shift_pressed");
 
-    if (GetKeyState(VK_CONTROL) & 0x8000) {
+    if (GetKeyState(VK_SHIFT) & 0x8000) {
+        switch (c) {
+        case VK_F1:
+            ptr = L"shift-f1";
+            break;
+        case VK_F2:
+            ptr = L"shift-f2";
+            break;
+        case VK_F3:
+            ptr = L"shift-f3";
+            break;
+        case VK_F4:
+            ptr = L"shift-f4";
+            break;
+        case VK_F5:
+            ptr = L"shift-f5";
+            break;
+        case VK_F6:
+            ptr = L"shift-f6";
+            break;
+        case VK_F7:
+            ptr = L"shift-f7";
+            break;
+        case VK_F8:
+            ptr = L"shift-f8";
+            break;
+        case VK_F9:
+            ptr = L"shift-f9";
+            break;
+        case VK_F10:
+            ptr = L"shift-f10";
+            break;
+        case VK_F11:
+            ptr = L"shift-f11";
+            break;
+        case VK_F12:
+            ptr = L"shift-f12";
+            break;
+        }
+    }
+
+    if (ptr == NULL && (GetKeyState(VK_CONTROL) & 0x8000)) {
         switch (c) {
         case VK_UP:
             ptr = L"ctrl-cursor-up";
@@ -531,7 +572,7 @@ static void win32_vkey(int c)
         }
     }
     else
-    if (GetKeyState(VK_LMENU) & 0x8000) {
+    if (ptr == NULL && (GetKeyState(VK_LMENU) & 0x8000)) {
         switch (c) {
         case VK_UP:
             ptr = L"alt-cursor-up";
@@ -616,7 +657,8 @@ static void win32_vkey(int c)
             break;
         }
     }
-    else {
+    else 
+    if (ptr == NULL) {
         switch (c) {
         case VK_UP:
             ptr = L"cursor-up";

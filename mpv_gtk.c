@@ -913,11 +913,52 @@ static gint key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data
     if (event->state & (GDK_SHIFT_MASK))
         mpdm_set_wcs(MP, MPDM_I(1), L"shift_pressed");
 
+    if (event->state & (GDK_SHIFT_MASK)) {
+        switch (event->keyval) {
+        case MP_KEY_F1:
+            ptr = L"shift-f1";
+            break;
+        case MP_KEY_F2:
+            ptr = L"shift-f2";
+            break;
+        case MP_KEY_F3:
+            ptr = L"shift-f3";
+            break;
+        case MP_KEY_F4:
+            ptr = L"shift-f4";
+            break;
+        case MP_KEY_F5:
+            ptr = L"shift-f5";
+            break;
+        case MP_KEY_F6:
+            ptr = L"shift-f6";
+            break;
+        case MP_KEY_F7:
+            ptr = L"shift-f7";
+            break;
+        case MP_KEY_F8:
+            ptr = L"shift-f8";
+            break;
+        case MP_KEY_F9:
+            ptr = L"shift-f9";
+            break;
+        case MP_KEY_F10:
+            ptr = L"shift-f10";
+            break;
+        case MP_KEY_F11:
+            ptr = L"shift-f11";
+            break;
+        case MP_KEY_F12:
+            ptr = L"shift-f12";
+            break;
+        }
+    }
+
     /* reserve alt for menu mnemonics */
 /*  if (GDK_MOD1_MASK & event->state)
         return(0);*/
 
-    if (event->state & (GDK_CONTROL_MASK)) {
+    if (ptr == NULL && (event->state & (GDK_CONTROL_MASK))) {
         switch (event->keyval) {
         case MP_KEY_Up:
             ptr = L"ctrl-cursor-up";
@@ -1164,7 +1205,7 @@ static gint key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data
         }
     }
     else
-    if (event->state & (GDK_MOD1_MASK)) {
+    if (ptr == NULL && (event->state & (GDK_MOD1_MASK))) {
         switch (event->keyval) {
         case MP_KEY_Up:
             ptr = L"alt-cursor-up";
@@ -1413,7 +1454,8 @@ static gint key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data
             }
         }
     }
-    else {
+    else 
+    if (ptr == NULL) {
         switch (event->keyval) {
         case MP_KEY_Up:
         case GDK_KEY_KP_Up:
