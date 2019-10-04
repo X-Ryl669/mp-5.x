@@ -132,7 +132,7 @@ sub mp.clang_complete(o, d) {
         clang -fsyntax-only -Xclang -code-completion-macros -Xclang -code-completion-patterns -Xclang -code-completion-brief-comments -Xclang -code-completion-at=file:line:col <clang-build-options> <file>
        we use stdin here to avoid creating a temporary file 
     */
-    local target = sprintf("clang -x%s -fsyntax-only -Xclang -code-completion-macros -Xclang -code-completion-brief-comments -Xclang -code-completion-at=-:%d:%d %s - 2>/dev/null", extension, d.txt.y+1, d.txt.x - size(w)+1, clang_options); 
+    local target = sprintf("clang -x%s -fsyntax-only -Xclang -code-completion-macros -Xclang -code-completion-brief-comments -Xclang -code-completion-at=-:%d:%d %s - 2>./.clang_complete_error.log", extension, d.txt.y+1, d.txt.x - size(w)+1, clang_options); 
     local p, lines = [];
     if ((p = popen2(target)) != NULL) {
         /* write the document first (close is done in the function) */
@@ -143,6 +143,9 @@ sub mp.clang_complete(o, d) {
             lines->push(mp.chomp(l));
         
         pclose(p[0]);
+        /* check if we did not get error to remove the log file */
+        local s = stat("./.clang_complete_error.log");
+        if (s != NULL && s[7] == 0) unlink("./.clang_complete_error.log"); 
         /* we only keep completions that start with the current word */
         lines = lines->grep(regcomp('/^COMPLETION: ' + w + '/'))->map(sub(v) { split(v, ': '); });
     }
