@@ -137,8 +137,8 @@ mp_doc.actions['complete_with_clang'] = sub(d) {
 /** default key bindings **/
 
 mp_doc.keycodes['ctrl-t'] = "find_tag";
-mp_doc.keycodes['ctrl-u'] = "complete";
-mp_doc.keycodes['alt-u']  = "complete_with_clang";
+mp_doc.keycodes['ctrl-space'] = "complete";
+mp_doc.keycodes['ctrl-u']  = "complete_with_clang";
 
 /** action descriptions **/
 

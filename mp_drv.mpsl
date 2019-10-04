@@ -16,7 +16,7 @@ mp.actions['menu']  = sub (d) { mp_drv.menu(); };
 /** default key bindings **/
 
 mp.keycodes['ctrl-a']       = 'menu';
-mp.keycodes['ctrl-space']   = 'menu';
+mp.keycodes['shift-f10']    = 'menu';
 mp.keycodes['alt-space']    = 'menu';
 mp.keycodes['mouse-menu']   = 'menu';
 

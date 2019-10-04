@@ -420,6 +420,37 @@ static mpdm_t nc_tui_getkey(mpdm_t args, mpdm_t ctxt)
         case KEY_F(10):
             f = L"f10";
             break;
+        case KEY_F(13):
+            f = L"shift-f1";
+            break;
+        case KEY_F(14):
+            f = L"shift-f2";
+            break;
+        case KEY_F(15):
+            f = L"shift-f3";
+            break;
+        case KEY_F(16):
+            f = L"shift-f4";
+            break;
+        case KEY_F(17):
+            f = L"shift-f5";
+            break;
+        case KEY_F(18):
+            f = L"shift-f6";
+            break;
+        case KEY_F(19):
+            f = L"shift-f7";
+            break;
+        case KEY_F(20):
+            f = L"shift-f8";
+            break;
+        case KEY_F(21):
+            f = L"shift-f9";
+            break;
+        case KEY_F(22):
+            f = L"shift-f10";
+            break;
+
         case ctrl(' '):
             f = L"ctrl-space";
             break;
