@@ -109,7 +109,7 @@ sub mp.c_gather_help(word)
  * Returns 1 on success or NULL on error (in that case, it'll fallback to common word based completion)
  */
 sub mp.clang_complete(o, d) {
-    local w = d->get_word(), clang_options = "";
+    local w = d->get_word(), clang_options = mp.state.completion.c || "";
     if (size(w) == 0)
         return NULL;
 

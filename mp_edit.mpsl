@@ -172,6 +172,23 @@ mp.actions['tab_options']   = sub {
     }
 };
 
+mp.actions['complete_options']   = sub {
+    if (mp.state.completion == NULL)
+        mp.state.completion = {};
+
+    local t = mp.form( [
+        { 'label'   => L("C/C++ clang options") + ':',
+          'type'    => 'text',
+          'value'   => mp.state.completion.c || "",
+          'history' => 'c_completion' }
+    ] );
+
+    if (t != NULL) {
+        mp.state.completion.c = t[0];
+    }
+};
+
+
 mp.actions['toggle_insert'] = sub {
     mp.config.insert = !mp.config.insert;
 };
@@ -215,6 +232,7 @@ mp.actdesc['join_paragraph']        = LL("Join a paragraph in one line");
 mp.actdesc['word_wrap_paragraph']   = LL("Word-wrap a paragraph");
 mp.actdesc['line_options']          = LL("Line options...");
 mp.actdesc['tab_options']           = LL("Tab options...");
+mp.actdesc['complete_options']      = LL("Code completion options...");
 mp.actdesc['toggle_insert']         = LL("Toggle insert/overwrite mode");
 mp.actdesc['insert_page_break']     = LL("Insert page break character (FF)");
 mp.actdesc['insert_m_dash']         = LL("Insert m-dash character");

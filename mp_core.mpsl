@@ -236,7 +236,7 @@ global mp = {
             LL("&Options"), [
                 'record_macro', 'play_macro', '-',
                 'encoding', 'tab_options', 'line_options',
-                'repeated_words_options', '-',
+                'repeated_words_options', 'complete_options', '-',
                 'zoom_in', 'zoom_out', '-',
                 'pipes', '-', 'check_for_updates', 'about'
             ]
