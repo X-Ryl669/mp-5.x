@@ -145,7 +145,15 @@ sub mp.clang_complete(o, d) {
         pclose(p[0]);
         /* check if we did not get error to remove the log file */
         local s = stat("./.clang_complete_error.log");
-        if (s != NULL && s[7] == 0) unlink("./.clang_complete_error.log"); 
+        if (s != NULL && s[7] == 0) unlink("./.clang_complete_error.log");
+        else {
+            local log = open("./.clang_complete_error.log", "ab");
+            if (log != NULL) {
+                write(log, "\nwhile running:\ncat \"" + d.name + "\"|" + target);
+                close(log);
+            }
+        }
+         
         /* we only keep completions that start with the current word */
         lines = lines->grep(regcomp('/^COMPLETION: ' + w + '/'))->map(sub(v) { split(v, ': '); });
     }
